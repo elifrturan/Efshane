@@ -12,6 +12,34 @@
     transform: translate(-50%, -50%);
 }
 
+.date-picker {
+    position: relative;
+}
+
+.date-picker input[type="date"] {
+    padding-right: 30px; 
+}
+
+.custom-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    -webkit-appearance: none;
+    appearance: none;
+    transform: translateY(-50%);
+    width: 20px; 
+    height: 20px;
+    background-image: url('/logo/calendar (2).png'); 
+    background-color: #FFFFFF;
+    background-size: contain; 
+    background-repeat: no-repeat;
+    cursor: pointer; 
+}
+
+.date-picker input[type="date"]::-webkit-inner-spin-button,
+.date-picker input[type="date"]::-webkit-calendar-picker-indicator {
+    display: none; 
+}
 .subtitle{
     color: var(--theme-color);
     font-weight: bold;

@@ -13,7 +13,7 @@ function Start() {
         Favori kitaplarını keşfet, kendi hikayeni yaz, yazarları ve okuyucuları takip et, sesli kitaplarla dinleyerek keyif al...
         </p>
         <div className="mt-4 container d-flex">
-          <button className="btn-login me-2">Giriş Yap</button>
+          <Link className="btn-login me-2" to="/signin">Giriş Yap</Link>
           <Link className="btn-register" to="/signup">Kayıt Ol</Link>
         </div>
       </div>
