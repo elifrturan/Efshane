@@ -78,7 +78,6 @@ function SignUp() {
             value={birthdate}
             onChange={(e) => setBirthdate(e.target.value)} 
           />
-          <label for="birthdate" class="custom-icon"></label>
         </div>
         <div className="mb-3 input-group">
           <input
