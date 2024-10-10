@@ -34,9 +34,8 @@ function SignUp() {
       });
 
       console.log('Kayıt başarılı:', response.data);
-      alert('Kayıt başarılı!');
+      alert('Kayıt başarılı! E-postanızı kontrol edin.');
     } catch (error) {
-      console.error('Kayıt başarısız:', error);
       alert('Kayıt başarısız, lütfen tekrar deneyin.');
     }
   }
