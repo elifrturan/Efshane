@@ -111,6 +111,14 @@ function SignUp() {
           <button className='btn-register fw-bold' type="submit">Kayıt Ol</button>
         </div>
       </form>
+      <div className="mt-2 row">
+        <div className="google d-flex justify-content-center align-items-center col me-2">
+          <span className='text-white'><i class="bi bi-google me-1"></i>Google</span>
+        </div>
+        <div className="apple d-flex justify-content-center align-items center col ms-2">
+          <span className="text-white"><i class="bi bi-apple me-1"></i>Apple</span>
+        </div>
+      </div>
     </div>
   )
 }

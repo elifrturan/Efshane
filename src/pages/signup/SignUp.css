@@ -56,12 +56,10 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     border: 1px solid white;
     padding: 10px 20px;
     border-radius: 5px;
-    width: 30%;
 }
 
 .apple{
     border: 1px solid white;
     padding: 10px 20px;
     border-radius: 5px;
-    width: 30%;
 }
