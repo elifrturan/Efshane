@@ -49,6 +49,8 @@ function SignUp() {
     <div className="signup-container">
       <h1 className="text-start text-white">Kayıt Ol</h1>
       <p className='text-start text-white'>Zaten bir hesabın var mı? <Link className='subtitle text-decoration-none' to='/signin'>Giriş Yap</Link></p>
+      
+      {/* form */}
       <form onSubmit={handleSubmit}> {}
         <div className="mb-3">
           <input
@@ -111,10 +113,14 @@ function SignUp() {
             <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
           </span>
         </div>
+
+        {/* terms & conditions */}
         <div className="mb-3 form-check d-flex align-items-center">
           <input type="checkbox" name="checkbox" id="checkbox" className='form-check-input bg-transparent me-2'/>
           <label className='text-white'><span className='label-link' onClick={termsConditions}>Şartlar & Koşullar ‘ı</span> kabul ediyorum</label>
         </div>
+
+        {/* register button */}
         <div className="mb-3">
           <button className='btn-register fw-bold' type="submit">Kayıt Ol</button>
         </div>
@@ -221,7 +227,7 @@ function SignUp() {
         </div>
       )}
       
-
+      {/* registration options */}
       <div className="mt-2 row">
         <div className="google d-flex justify-content-center align-items-center col me-2">
           <span className='text-white'><i class="bi bi-google me-1"></i>Google</span>

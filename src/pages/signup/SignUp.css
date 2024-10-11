@@ -19,6 +19,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .subtitle{
     color: var(--theme-color);
     font-weight: bold;
+    cursor: pointer;
 }
 
 .form-control{
@@ -38,6 +39,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     font-weight: bold;
     color: var(--theme-color);
     text-decoration: none;
+    cursor: pointer;
 }
 
 .btn-register {
@@ -50,6 +52,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     height: 45px;
     padding: 10px 24px; 
     text-decoration: none;
+    cursor: pointer;
 }
 
 .google{
