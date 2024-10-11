@@ -35,6 +35,8 @@ function SignIn() {
     <div className="signin-container">
       <h1 className="text-start text-white">Giriş Yap</h1>
       <p className='text-start text-white'>Henüz bir hesabın yok mu? <Link className='subtitle text-decoration-none' to='/signup'>Kayıt Ol</Link></p>
+      
+      {/* form */}
       <form onSubmit={handleSubmit}> {}
         <div className="mb-3">
           <input
@@ -61,10 +63,35 @@ function SignIn() {
             <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
           </span>
         </div>
+
+        {/* remember me and forget password*/}
+        <div className="mb-3 rememberforget d-flex justify-content-between">
+          <div className="rememberMe">
+            <div className="form-check d-flex align-items-center">
+              <input type="checkbox" className='form-check-input bg-transparent me-2' id='checkbox' />
+              <label className='form-check-label text-white'>Beni Hatırla</label>
+            </div>
+          </div>
+          <div className="forgetpassword col-lg-6 col-md-6 col-xs-6 text-end">
+            <Link className='text-decoration-none text-white'>Şifremi Unuttum?</Link>
+          </div>
+        </div>
+
+        {/* button */}
         <div className="mb-3">
           <button className='btn-register fw-bold' type="submit">Giriş Yap</button>
         </div>
       </form>
+
+       {/* login options */}
+      <div className="mt-2 d-flex justify-content-between options">
+        <div className="google d-flex justify-content-center align-items-center">
+          <span className='text-white'><i class="bi bi-google me-1"></i>Google</span>
+        </div>
+        <div className="apple d-flex justify-content-center align-items center">
+          <span className="text-white"><i class="bi bi-apple me-1"></i>Apple</span>
+        </div>
+      </div>
     </div>
   )
 }

@@ -55,14 +55,54 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     cursor: pointer;
 }
 
+.options{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
 .google{
     border: 1px solid white;
     padding: 10px 20px;
     border-radius: 5px;
+    width: 100%;
+    margin-right: 10px;
 }
 
 .apple{
     border: 1px solid white;
     padding: 10px 20px;
     border-radius: 5px;
+    width: 100%;
 }
+
+/* responsive */ 
+@media (max-width: 1100px) {
+    body, html{
+     font-size: 12px;
+    }
+    .signup-container{
+     width: 45%;
+    }
+}
+
+@media (max-width: 942px) {
+    .signup-container{
+     width: 55%;
+    }
+    .options{
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 325px) {
+    body, html{
+        font-size: 10px;
+    }
+    .signup-container{
+        width: 65%;
+    }
+}
+ 
+ 

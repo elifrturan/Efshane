@@ -36,6 +36,10 @@
     text-decoration: none;
 }
 
+.forgetpassword{
+    cursor: pointer;
+}
+
 .btn-login {
     background-color: white;
     color: #593F2C;
@@ -48,16 +52,60 @@
     text-decoration: none;
 }
 
+.options{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
 .google{
     border: 1px solid white;
     padding: 10px 20px;
     border-radius: 5px;
-    width: 30%;
+    width: 100%;
+    margin-right: 10px;
 }
 
 .apple{
     border: 1px solid white;
     padding: 10px 20px;
     border-radius: 5px;
-    width: 30%;
+    width: 100%;
+}
+
+/* responsive */ 
+@media (max-width: 895px) {
+   body, html, .google, .apple{
+    font-size: 12px;
+   }
+   .signin-container{
+    width: 45%;
+   }
+}
+
+@media (max-width: 770px) {
+    .signin-container{
+     width: 50%;
+    }
+}
+
+@media (max-width: 665px) {
+    .options{
+        display: flex;
+        flex-direction: column;
+    }
+    .google, .apple{
+        width: 100%;
+        margin-bottom: 5px;
+    }
+}
+
+@media (max-width: 370px) {
+    body, html{
+        font-size: 10px;
+    }
+    .rememberforget{
+        display: flex;
+        flex-direction: column;
+    }
 }

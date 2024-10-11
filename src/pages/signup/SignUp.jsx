@@ -228,11 +228,11 @@ function SignUp() {
       )}
       
       {/* registration options */}
-      <div className="mt-2 row">
-        <div className="google d-flex justify-content-center align-items-center col me-2">
+      <div className="mt-2 d-flex justify-content-between options">
+        <div className="google d-flex justify-content-center align-items-center">
           <span className='text-white'><i class="bi bi-google me-1"></i>Google</span>
         </div>
-        <div className="apple d-flex justify-content-center align-items center col ms-2">
+        <div className="apple d-flex justify-content-center align-items center">
           <span className="text-white"><i class="bi bi-apple me-1"></i>Apple</span>
         </div>
       </div>
