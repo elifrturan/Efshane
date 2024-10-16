@@ -36,6 +36,11 @@
     text-decoration: none;
 }
 
+.rememberMe div input{
+    width: 20px;
+    height: 20px;
+}
+
 .forgetpassword{
     cursor: pointer;
 }

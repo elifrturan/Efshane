@@ -115,7 +115,7 @@ function SignUp() {
         </div>
 
         {/* terms & conditions */}
-        <div className="mb-3 form-check d-flex align-items-center">
+        <div className="mb-3 form-check d-flex flex-row align-items-center">
           <input type="checkbox" name="checkbox" id="checkbox" className='form-check-input bg-transparent me-2'/>
           <label className='text-white'><span className='label-link' onClick={termsConditions}>Şartlar & Koşullar ‘ı</span> kabul ediyorum</label>
         </div>

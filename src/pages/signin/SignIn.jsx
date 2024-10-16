@@ -67,13 +67,13 @@ function SignIn() {
         {/* remember me and forget password*/}
         <div className="mb-3 rememberforget d-flex justify-content-between">
           <div className="rememberMe">
-            <div className="form-check d-flex align-items-center">
+            <div className="form-check d-flex flex-row align-items-center">
               <input type="checkbox" className='form-check-input bg-transparent me-2' id='checkbox' />
               <label className='form-check-label text-white'>Beni Hatırla</label>
             </div>
           </div>
           <div className="forgetpassword col-lg-6 col-md-6 col-xs-6 text-end">
-            <Link className='text-decoration-none text-white'>Şifremi Unuttum?</Link>
+            <Link className='text-decoration-none text-white' to='/emailconfirm'>Şifremi Unuttum?</Link>
           </div>
         </div>
 

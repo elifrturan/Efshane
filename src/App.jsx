@@ -3,11 +3,17 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Start from './pages/start/Start';
 import SignUp from './pages/signup/SignUp';
 import SignIn from './pages/signin/SignIn';
+import EmailConfirm from './pages/password/EmailConfirm';
+import CodeVerification from './pages/password/CodeVerification';
+import PasswordRenewal from './pages/password/PasswordRenewal';
 
 const routes = createBrowserRouter([
-  { path: '/', element: <Start/>},
+  { path: '/', element: <Start/>, errorElement: <h1>Page not found</h1>},
   { path: '/signup', element: <SignUp/>},
-  { path: '/signin', element: <SignIn/>}
+  { path: '/signin', element: <SignIn/>},
+  { path: '/emailconfirm', element: <EmailConfirm/>},
+  { path: '/emailconfirm/codeverification', element: <CodeVerification/>},
+  { path: '/emailconfirm/codeverification/passwordrenewal', element: <PasswordRenewal/>},
 ])
 
 function App() {
