@@ -78,9 +78,7 @@ function SignIn() {
         </div>
 
         {/* button */}
-        <div className="mb-3">
-          <button className='btn-register fw-bold' type="submit">Giriş Yap</button>
-        </div>
+        <Link className='btn btn-login mb-2'>Giriş Yap</Link>
       </form>
 
        {/* login options */}
