@@ -47,6 +47,10 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     cursor: pointer;
 }
 
+.error-message{
+   font-size: 12px;
+}
+
 .btn-register {
     background-color: var(--theme-color);
     color: white;

@@ -14,6 +14,8 @@ function SignUp() {
   const [password, setPassword] = useState('');
   const [passwordAgain, setPasswordAgain] = useState('');
   const [showModal, setShowModal] = useState(false);
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [termsError, setTermsError] = useState('');
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -24,6 +26,14 @@ function SignUp() {
     if (password !== passwordAgain) {
       alert('Şifreler eşleşmiyor!');
       return;
+    }
+
+    if(!termsAccepted){
+      setTermsError("Şartlar ve Koşulları kabul etmelisiniz!");
+      return;
+    }
+    else{
+      setTermsError('');
     }
 
     try {
@@ -115,13 +125,21 @@ function SignUp() {
         </div>
 
         {/* terms & conditions */}
-        <div className="mb-3 form-check d-flex flex-row align-items-center">
-          <input type="checkbox" name="checkbox" id="checkbox" className='form-check-input bg-transparent me-2'/>
-          <label className='text-white'><span className='label-link' onClick={termsConditions}>Şartlar & Koşullar ‘ı</span> kabul ediyorum</label>
+        <div className="form-check d-flex flex-row align-items-center">
+          <input 
+            type="checkbox" 
+            name="checkbox" 
+            id="checkbox" 
+            className='form-check-input bg-transparent me-2'
+            checked={termsAccepted}
+            onChange={() => setTermsAccepted(!termsAccepted)}
+          />
+          <label className='text-white' for="checkbox"><span className='label-link' onClick={termsConditions}>Şartlar & Koşullar ‘ı</span> kabul ediyorum</label>
         </div>
+        {termsError && <div className="text-danger error-message">{termsError}</div>}
 
         {/* register button */}
-        <Link className='btn btn-register mb-2' onClick={handleSubmit}>Kayıt Ol</Link>
+        <Link className='btn btn-register mt-2 mb-2' onClick={handleSubmit}>Kayıt Ol</Link>
       </form>
 
       {/* terms&conditions modal */}
