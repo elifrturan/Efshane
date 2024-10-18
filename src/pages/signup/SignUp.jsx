@@ -121,7 +121,7 @@ function SignUp() {
         </div>
 
         {/* register button */}
-        <Link className='btn btn-register mb-2'>Kayıt Ol</Link>
+        <Link className='btn btn-register mb-2' onClick={handleSubmit}>Kayıt Ol</Link>
       </form>
 
       {/* terms&conditions modal */}

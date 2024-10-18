@@ -78,7 +78,7 @@ function SignIn() {
         </div>
 
         {/* button */}
-        <Link className='btn btn-login mb-2'>Giriş Yap</Link>
+        <Link className='btn btn-login mb-2' onClick={handleSubmit}>Giriş Yap</Link>
       </form>
 
        {/* login options */}
