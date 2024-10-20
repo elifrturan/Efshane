@@ -77,43 +77,45 @@ function CodeVerification() {
     };
 
     return (
-        <div className="code-container">
-            <h2 className='text-center text-white'>Doğrulama Kodu Girin</h2>
-            <p className='text-center text-white opacity-50'>
-                E-posta adresinize gönderilen doğrulama kodunu aşağıya girin. 
-                Bu adımı tamamladıktan sonra şifrenizi sıfırlayabileceksiniz.
-            </p>
-            <form onSubmit={handleSubmit}>
-                <div className='d-flex justify-content-center align-items-center mb-3'>
-                    <div className="d-flex gap-2 box">
-                        {code.map((digit, index) => (
-                            <input 
-                                key={index}
-                                type="text" 
-                                maxLength="1" 
-                                className='form-control text-center bg-transparent text-white me-2'
-                                value={digit}
-                                onChange={(e) => handleChange(e, index)}
-                                name={`code-${index}`}
-                            />
-                        ))}
+        <div className="code-page">
+            <div className="code-container">
+                <h2 className='text-center text-white'>Doğrulama Kodu Girin</h2>
+                <p className='text-center text-white opacity-50'>
+                    E-posta adresinize gönderilen doğrulama kodunu aşağıya girin. 
+                    Bu adımı tamamladıktan sonra şifrenizi sıfırlayabileceksiniz.
+                </p>
+                <form onSubmit={handleSubmit}>
+                    <div className='d-flex justify-content-center align-items-center mb-3'>
+                        <div className="d-flex gap-2 box">
+                            {code.map((digit, index) => (
+                                <input 
+                                    key={index}
+                                    type="text" 
+                                    maxLength="1" 
+                                    className='form-control text-center bg-transparent text-white me-2'
+                                    value={digit}
+                                    onChange={(e) => handleChange(e, index)}
+                                    name={`code-${index}`}
+                                />
+                            ))}
+                        </div>
                     </div>
-                </div>
-                <div className="d-flex justify-content-between align-items-center">
-                    <div>
-                        <p className='text-start text-white'>
-                            <Link className='subtitle text-white' onClick={resendCode} disabled = {isSending}>
-                            {isSending ? 'Kod gönderiliyor...' : 'Kodu tekrar gönder'}
-                            </Link>
-                        </p>
+                    <div className="d-flex justify-content-between align-items-center">
+                        <div>
+                            <p className='text-start text-white'>
+                                <Link className='subtitle text-white' onClick={resendCode} disabled = {isSending}>
+                                {isSending ? 'Kod gönderiliyor...' : 'Kodu tekrar gönder'}
+                                </Link>
+                            </p>
+                        </div>
+                        <div>
+                            <h6 className='text-white'>{formatTime(timeLeft)}</h6>
+                        </div>
                     </div>
-                    <div>
-                        <h6 className='text-white'>{formatTime(timeLeft)}</h6>
-                    </div>
-                </div>
-                
-                <Link className='btn btn-verify text-center' onClick={handleSubmit} >Kodu Doğrula</Link>
-            </form>
+                    
+                    <Link className='btn btn-verify text-center' onClick={handleSubmit} >Kodu Doğrula</Link>
+                </form>
+            </div>
         </div>
     );
 }

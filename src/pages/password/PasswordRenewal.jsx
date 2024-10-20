@@ -48,43 +48,45 @@ function PasswordRenewal() {
   }
 
   return (
-    <div className="password-container">
-      <h2 className='text-center text-white'>Şifrenizi Yenileyin</h2>
-      <p className='text-center text-white opacity-50'>
-        Güvenli bir şifre belirleyin ve şifrenizi doğrulamak için aynı şifreyi iki kez girin. 
-        Şifreniz en az 8 karakter, büyük ve küçük harf, sayı içermelidir.
-      </p>
-      <form onSubmit={handleSubmit}> {}
-      <div className="mb-3 input-group">
+    <div className="password-page">
+      <div className="password-container">
+        <h2 className='text-center text-white'>Şifrenizi Yenileyin</h2>
+        <p className='text-center text-white opacity-50'>
+          Güvenli bir şifre belirleyin ve şifrenizi doğrulamak için aynı şifreyi iki kez girin. 
+          Şifreniz en az 8 karakter, büyük ve küçük harf, sayı içermelidir.
+        </p>
+        <form onSubmit={handleSubmit}> {}
+        <div className="mb-3 input-group">
+          <input
+            type={showPassword ? "text" : "password"}
+            name='password'
+            id='password'
+            className='form-control text-white bg-transparent'
+            placeholder='Şifre'
+            value={password}
+              onChange={(e) => setPassword(e.target.value)}
+          />
+          <span className='input-group-text bg-transparent text-white' onClick={togglePasswordVisibility}>
+            <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+          </span>
+        </div>
+        <div className="mb-3 input-group">
         <input
           type={showPassword ? "text" : "password"}
-          name='password'
-          id='password'
+          name='confirmPassword' 
+          id='confirmPassword'
           className='form-control text-white bg-transparent'
-          placeholder='Şifre'
-          value={password}
-            onChange={(e) => setPassword(e.target.value)}
+          placeholder='Şifre Tekrar'
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
         />
-        <span className='input-group-text bg-transparent text-white' onClick={togglePasswordVisibility}>
-          <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
-        </span>
+          <span className='input-group-text bg-transparent text-white' onClick={togglePasswordVisibility}>
+            <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+          </span>
+        </div>
+        </form>
+        <Link className='btn btn-register' to='/signin' onClick={handleSubmit} >Şifreyi Yenile</Link>
       </div>
-      <div className="mb-3 input-group">
-      <input
-        type={showPassword ? "text" : "password"}
-        name='confirmPassword' 
-        id='confirmPassword'
-        className='form-control text-white bg-transparent'
-        placeholder='Şifre Tekrar'
-        value={confirmPassword}
-        onChange={(e) => setConfirmPassword(e.target.value)}
-      />
-        <span className='input-group-text bg-transparent text-white' onClick={togglePasswordVisibility}>
-          <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
-        </span>
-      </div>
-      </form>
-      <Link className='btn btn-register' to='/signin' onClick={handleSubmit} >Şifreyi Yenile</Link>
     </div>
   )
 }

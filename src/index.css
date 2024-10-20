@@ -2,6 +2,7 @@
 
 :root {
   --theme-color: #e18eaa; /* Tema rengi */
+  --second-color: #593F2C;
   font-family: "Inter", sans-serif;
   font-optical-sizing: auto;
   font-style: normal;

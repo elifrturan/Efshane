@@ -1,9 +1,9 @@
-body, html {
+.start-page {
   margin: 0;
   padding: 0;
-  height: 100%;
+  height: 100vh;
   background: url('/images/bg.jpg') no-repeat center center fixed;
-  background-size: 100% 100%;
+  background-size: cover;
   background-attachment: fixed;
   background-position: center;
 }
@@ -28,8 +28,7 @@ body, html {
   border: 2px solid white;
   border-radius: 8px;
   text-align: center;
-  width: 487px; 
-  height: 45px; 
+  width: 100%;
   padding: 10px 24px;
   text-decoration: none;
   cursor: pointer;
@@ -41,8 +40,7 @@ body, html {
   border: 2px solid var(--theme-color) !important;
   border-radius: 8px;
   text-align: center;
-  width: 487px; 
-  height: 45px;
+  width: 100%;
   padding: 10px 24px; 
   text-decoration: none;
   cursor: pointer;
@@ -53,10 +51,9 @@ body, html {
   .container.d-flex {
     flex-direction: column;
   }
- 
-  .container.d-flex button {
-    margin-bottom: 10px;
-    width: 100%;
+
+  .start-login{
+    margin-bottom: 8px;
   }
   
   .container.d-flex button:last-child {

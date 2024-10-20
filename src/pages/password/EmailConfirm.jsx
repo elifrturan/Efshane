@@ -24,23 +24,25 @@ function EmailConfirm() {
     };
 
     return (
-        <div className="email-container">
-            <h2 className='text-center text-white'>Şifrenizi Yenileyin</h2>
-            <p className='text-white text-center opacity-50'>E-posta adresinizi girerek şifre yenileme talebinde bulunun. 
-                Size gönderilecek doğrulama koduyla şifrenizi kolayca sıfırlayabilirsiniz.
-            </p>
-            <form onSubmit={handleSubmit}>
-                <input 
-                    type="email" 
-                    name='email' 
-                    id='email' 
-                    className='form-control bg-transparent text-white mb-3' 
-                    placeholder='Email' 
-                    value={email} 
-                    onChange={(e) => setEmail(e.target.value)} 
-                />
-                <Link className='btn btn-confirm' onClick={handleSubmit}>Şifre Sıfırlama E-Postası Gönder</Link>
-            </form>
+        <div className="confirm-page">
+            <div className="email-container">
+                <h2 className='text-center text-white'>Şifrenizi Yenileyin</h2>
+                <p className='text-white text-center opacity-50'>E-posta adresinizi girerek şifre yenileme talebinde bulunun. 
+                    Size gönderilecek doğrulama koduyla şifrenizi kolayca sıfırlayabilirsiniz.
+                </p>
+                <form onSubmit={handleSubmit}>
+                    <input 
+                        type="email" 
+                        name='email' 
+                        id='email' 
+                        className='form-control bg-transparent text-white mb-3' 
+                        placeholder='Email' 
+                        value={email} 
+                        onChange={(e) => setEmail(e.target.value)} 
+                    />
+                    <Link className='btn btn-confirm' onClick={handleSubmit}>Şifre Sıfırlama E-Postası Gönder</Link>
+                </form>
+            </div>
         </div>
     );
 }

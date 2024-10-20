@@ -1,0 +1,52 @@
+.selection-page{
+    background-color: whitesmoke;
+}
+
+.left{
+    padding: 2% 0;
+}
+
+.logo{
+    width: 5%;
+}
+
+.logo-text{
+    color: var(--second-color);
+    font-weight: bold;
+    user-select: none;
+}
+
+.ef{
+    color: var(--theme-color);
+}
+
+.title{
+    color: var(--second-color);
+}
+
+.category{
+    border: none !important;
+    border-radius: 2px;
+    background-color: whitesmoke !important;
+}
+
+.card-img-top{
+    border-radius: 2px;
+}
+
+.border-red {
+    border: 3px solid rgba(255, 0, 0, 0.4) !important;
+}
+  
+.shadow {
+    box-shadow: rgba(12, 12, 12, 0.8) 0px 22px 70px 4px;
+}
+
+.btn-category-register{
+    width: 30%;
+    background-color: var(--theme-color) !important;
+}
+
+.btn-category-register:hover{
+    background-color: palevioletred !important;
+}
