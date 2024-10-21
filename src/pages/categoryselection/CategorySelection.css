@@ -1,5 +1,6 @@
 .selection-page{
     background-color: whitesmoke;
+    height: 100vh;
 }
 
 .left{
@@ -37,7 +38,7 @@
 .border-red {
     border: 3px solid rgba(255, 0, 0, 0.4) !important;
 }
-  
+
 .shadow {
     box-shadow: rgba(12, 12, 12, 0.8) 0px 22px 70px 4px;
 }

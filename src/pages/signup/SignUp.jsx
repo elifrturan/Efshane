@@ -2,11 +2,12 @@ import React, { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import './SignUp.css'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios'; 
 
 function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate(); 
 
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
@@ -46,6 +47,7 @@ function SignUp() {
 
       console.log('Kayıt başarılı:', response.data);
       alert('Kayıt başarılı! E-postanızı kontrol edin.');
+      navigate(`/categoryselection?email=${encodeURIComponent(email)}`);
     } catch (error) {
       alert('Kayıt başarısız, lütfen tekrar deneyin.');
     }
@@ -140,7 +142,7 @@ function SignUp() {
           {termsError && <div className="text-danger error-message">{termsError}</div>}
 
           {/* register button */}
-          <Link className='btn btn-register mt-2 mb-2' onClick={handleSubmit} to="/categoryselection">Kayıt Ol</Link>
+          <Link className='btn btn-register mt-2 mb-2' onClick={handleSubmit} >Kayıt Ol</Link>
         </form>
 
         {/* terms&conditions modal */}

@@ -1,21 +1,51 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import './CategorySelection.css'
-import { Link } from 'react-router-dom';
+import axios from 'axios';
+import { Link, useNavigate, useLocation} from 'react-router-dom';
 
 function CategorySelection() {
     const [selectedCard, setSelectedCard] = useState([]);
     const [showModal, setShowModal] = useState(false);
+    const [categories, setCategories] = useState([]);
+    const navigate = useNavigate();
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const email = queryParams.get('email');
 
-    const categories = [
-        { id: 1, name: 'Roman', image: '/images/category1.jpg' },
-        { id: 2, name: 'Bilim Kurgu', image: '/images/category1.jpg' },
-        { id: 3, name: 'Klasikler', image: '/images/category1.jpg' },
-        { id: 4, name: 'Biyografi', image: '/images/category1.jpg' },
-        { id: 5, name: 'Fantastik', image: '/images/category1.jpg' },
-        { id: 6, name: 'Fantastik', image: '/images/category1.jpg' },
-        { id: 7, name: 'Fantastik', image: '/images/category1.jpg' },
-        { id: 8, name: 'Fantastik', image: '/images/category1.jpg' },
-      ];
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const response = await axios.get('http://localhost:3000/categories'); 
+                setCategories(response.data); 
+            } catch (error) {
+                console.error('Kategoriler alınamadı:', error);
+            }
+        };
+        fetchCategories();
+    }, []);
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+    
+        if (selectedCard.length < 3) {
+            setShowModal(true);
+            return;
+        }
+    
+        const selectedCategories = selectedCard.map(index => categories[index].id);
+    
+        try {
+            const response = await axios.post('http://localhost:3000/categories/user', {
+                email,
+                categoryIds: selectedCategories  
+            });
+    
+            console.log('İşlem başarılı', response.data);
+        } catch (error) {
+            console.error('Kategori seçme işlemi başarısız:', error);
+            alert('Kategori seçme işlemi başarısız, lütfen tekrar deneyin.');
+        }
+    };
 
     const handleCardClick = (index) => {
         if (selectedCard.includes(index)) {
@@ -24,14 +54,6 @@ function CategorySelection() {
             setSelectedCard([...selectedCard, index]);
         }
     };
-
-    const handleContinueClick = () => {
-        if (selectedCard.length < 3) {
-            setShowModal(true);
-        } else {
-            console.log("Continue");
-        }
-    }
 
     const handleCloseModal = () => {
         setShowModal(false);
@@ -46,7 +68,7 @@ function CategorySelection() {
                         <h5 className="ms-3 mb-0 logo-text"><span className='ef'>EF</span>shane</h5>
                     </div>
                 </div>
-               
+                
                 <div className="container-fluid mt-3">
                     <h1 className='text-center title'>
                         <span className='ef'>EF</span>shane’nin Sonsuz Kitap Dünyasına Hoş Geldin
@@ -64,7 +86,7 @@ function CategorySelection() {
                                 className={`card category ${selectedCard.includes(index) ? 'border-red shadow' : ''}`}
                                 onClick={() => handleCardClick(index)}
                             >
-                                <img src={category.image} alt={category.name} className='card-img-top' />    
+                                <img src={category.imageUrl} alt={category.name} className='card-img-top' />    
                                 <div className="card-body">
                                     <h5 className="text-center">{category.name}</h5>
                                 </div>
@@ -74,7 +96,7 @@ function CategorySelection() {
                     ))}             
                 </div>
                 <div className="d-flex justify-content-center">
-                    <Link className='btn btn-category-register text-white mt-2 mb-4' onClick={handleContinueClick}>Devam Et</Link>
+                    <Link className='btn btn-category-register text-white mt-2 mb-4' onClick={handleSubmit} >Devam Et</Link>
                 </div>
 
                 {/* Modal */ }
