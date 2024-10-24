@@ -1,0 +1,177 @@
+.new-relases{
+    padding: 8px;
+}
+
+.left-arrow{
+    position: absolute;
+    left: 2%;
+    top: 110%;
+    transform: translateY(-50%);
+    font-size: 2rem;
+    cursor: pointer;
+    z-index: 1;
+    color: var(--second-color);
+}
+
+.right-arrow{
+    position: absolute;
+    right: 2%;
+    top: 110%;
+    transform: translateY(-50%);
+    font-size: 2rem;
+    cursor: pointer;
+    z-index: 1;
+    color: var(--second-color);
+}
+
+.book1{
+    width: 150px;
+    display: inline;
+    color: var(--second-color);
+}
+
+.new-books {
+    overflow-x: auto;
+    white-space: nowrap;
+    -ms-overflow-style: none;
+    scrollbar-width: none; 
+}
+  
+.new-books::-webkit-scrollbar {
+    display: none;
+}
+
+@media (max-width: 1460px){
+    .left-arrow{
+        left: 2%;
+    }
+    .right-arrow{
+        right: 1%;
+    }
+}
+
+@media (max-width: 1400px){
+    .left-arrow{
+        left: 5%;
+    }
+    .right-arrow{
+        right: 3%;
+    }
+}
+
+@media (max-width: 1290px){
+    .left-arrow{
+        left: 3%;
+        font-size: 1.8rem;
+    }
+    .right-arrow{
+        right: 1%;
+        font-size: 1.8rem;
+    }
+}
+
+@media (max-width: 1220px){
+    .left-arrow{
+        left: 3%;
+        font-size: 1.5rem;
+    }
+    .right-arrow{
+        right: 1%;
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 1200px){
+    .left-arrow{
+        left: 4%;
+        font-size: 1.8rem;
+    }
+    .right-arrow{
+        right: 2%;
+        font-size: 1.8rem;
+    }
+}
+
+@media (max-width: 1130px){
+    .left-arrow{
+        left: 4%;
+        font-size: 2rem;
+    }
+    .right-arrow{
+        right: 4%;
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 1120px){
+    .left-arrow{
+        left: 2%;
+        font-size: 1.8rem;
+    }
+    .right-arrow{
+        right: 2%;
+        font-size: 1.8rem;
+    }
+}
+
+@media (max-width: 1050px){
+    .left-arrow{
+        left: 1%;
+    }
+    .right-arrow{
+        right: 1%;
+    }
+}
+
+@media (max-width: 990px){
+    .left-arrow{
+        top: 150%;
+        left: 5%;
+    }
+    .right-arrow{
+        top: 150%;
+        right: 5%;
+    }
+}
+
+@media (max-width: 890px){
+    .left-arrow{
+        left: 3%;
+    }
+    .right-arrow{
+        right: 3%;
+    }
+}
+
+@media (max-width: 830px){
+    .left-arrow{
+        left: 1%;
+    }
+    .right-arrow{
+        right: 1%;
+    }
+}
+
+@media (max-width: 765px){
+    .left-arrow{
+        left: 3%;
+        font-size: 1.4em;
+        top: 155%;
+    }
+    .right-arrow{
+        right: 3%;
+        font-size: 1.4em;
+        top: 155%;
+    }
+}
+
+@media (max-width: 640px){
+    .left-arrow{
+        left: 1%;
+        top: 155%;
+    }
+    .right-arrow{
+        right: 3%;
+        top: 155%;
+    }
+}

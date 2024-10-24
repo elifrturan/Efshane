@@ -7,6 +7,7 @@ import EmailConfirm from './pages/password/EmailConfirm';
 import CodeVerification from './pages/password/CodeVerification';
 import PasswordRenewal from './pages/password/PasswordRenewal';
 import CategorySelection from './pages/categoryselection/CategorySelection';
+import Home from './pages/home/Home';
 
 const routes = createBrowserRouter([
   { path: '/', element: <Start/>, errorElement: <h1>Page not found</h1>},
@@ -16,6 +17,7 @@ const routes = createBrowserRouter([
   { path: '/emailconfirm/codeverification', element: <CodeVerification/>},
   { path: '/emailconfirm/codeverification/passwordrenewal', element: <PasswordRenewal/>},
   { path: '/categoryselection', element: <CategorySelection/>},
+  { path: '/home', element: <Home/>},
 ])
 
 function App() {

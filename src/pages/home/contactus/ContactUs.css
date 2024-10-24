@@ -1,0 +1,32 @@
+.contact-us-body input, .contact-us-body textarea{
+    border: 1px solid var(--second-color);
+    color: var(--second-color) !important;
+}
+
+.btn-contact-us{
+    border: 1px solid var(--theme-color) !important;
+    width: 100%;
+    background-color: var(--theme-color) !important;
+    color: var(--bg-color) !important;
+}
+
+.btn-contact-us:hover{
+    background-color: palevioletred !important;
+}
+
+@media (max-width: 650px){
+    .contact-image{
+        width: 290px;
+        height: 200px;
+    }
+}
+
+@media (max-width: 576px){
+    .contact-us-image{
+        width: 70% !important;
+    }
+    .contact-image{
+        width: 200px;
+        height: 100px;
+    }
+}
