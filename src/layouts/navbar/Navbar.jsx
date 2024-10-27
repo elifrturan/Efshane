@@ -1,11 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Navbar.css';
 import { Link, NavLink } from 'react-router-dom';
+import axios from 'axios';
 
 function MainLayouts() {
   const [isStoryDropdownOpen, setStoryDropdownOpen] = useState(false);
   const [isProfileDropdownOpen, setProfileDropdonwOpen] = useState(false);
   const [isMenuOpen, setMenuOpen] = useState(false);
+  const [profile, setProfile] = useState(null);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await axios.get('http://localhost:3000/users', {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setProfile(response.data);
+      } catch (error) {
+        console.error("Profil bilgisi alınırken hata oluştu:", error.response?.data || error.message);
+      }
+    };
+
+    fetchProfile();
+  }, []);
 
   const toggleStoryDropdown = () => {
     setStoryDropdownOpen(!isStoryDropdownOpen);
@@ -65,7 +83,7 @@ function MainLayouts() {
                   <li>
                     <Link onClick={toggleProfileDropdown}>
                       <img
-                        src="/images/pp.jpg"
+                        src={profile?.profile_image}
                         alt="Profile"
                         width="40px"
                         height="40px"

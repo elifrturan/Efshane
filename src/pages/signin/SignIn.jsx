@@ -2,12 +2,14 @@ import React, { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import './SingIn.css'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios'; 
 
 function SignIn() {
+  const navigate = useNavigate(); 
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
+  const [error, setError] = useState(null);
   const [password, setPassword] = useState('');
 
   const togglePasswordVisibility = () => {
@@ -15,21 +17,25 @@ function SignIn() {
   }
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); 
+    e.preventDefault();
 
     try {
       const response = await axios.post('http://localhost:3000/auth/login', {
         email,
-        password
+        password,
       });
 
+      const token = response.data.accessToken;
+      localStorage.setItem('token', token);
+
       console.log('Giriş başarılı:', response.data);
-      alert('Giriş başarılı!');
+
+      navigate(`/home`);
     } catch (error) {
-      console.error('Giriş başarısız:', error);
-      alert('Giriş başarısız, lütfen tekrar deneyin.');
+      console.error('Giriş başarısız:', error.response?.data || error.message);
+      setError('Giriş başarısız, lütfen tekrar deneyin.');
     }
-  }
+  };
 
   return (
     <div className="signin-page">

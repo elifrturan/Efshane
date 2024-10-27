@@ -66,7 +66,7 @@ function CodeVerification() {
             const timer = setTimeout(() => {
                 setTimeLeft(timeLeft - 1);
             }, 1000); 
-        return () => clearTimeout(timer); // Bellek sızıntılarını önlemek için temizleme
+        return () => clearTimeout(timer); 
         }
     }, [timeLeft]);
 

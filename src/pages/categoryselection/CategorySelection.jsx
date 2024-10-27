@@ -23,6 +23,7 @@ function CategorySelection() {
         };
         fetchCategories();
     }, []);
+    
 
     const handleSubmit = async (e) => {
         e.preventDefault();

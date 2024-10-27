@@ -33,7 +33,8 @@ function Footer() {
                 <ul className="list-unstyled d-flex">
                   <li><a href="https://facebook.com" className="text-light me-3"><i class="bi bi-facebook"></i></a></li>
                   <li><a href="https://twitter.com" className="text-light me-3"><i class="bi bi-twitter-x"></i></a></li>
-                  <li><a href="https://instagram.com" className="text-light"><i class="bi bi-instagram"></i></a></li>
+                  <li><a href="https://instagram.com" className="text-light me-3"><i class="bi bi-instagram"></i></a></li>
+                  <li><a href="https://linkedin.com" className="text-light"><i class="bi bi-linkedin"></i></a></li>
                 </ul>
               </div>
     
@@ -45,7 +46,7 @@ function Footer() {
               </div>
             </div>
             <div className="text-center mt-4">
-              <p>&copy; 2024 EFshane Uygulaması. Tüm hakları saklıdır.</p>
+              <p>&copy; 2024 EFshane Tüm hakları saklıdır.</p>
             </div>
           </div>
         </footer>

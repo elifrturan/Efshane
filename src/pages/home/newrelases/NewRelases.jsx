@@ -1,21 +1,33 @@
-import React, { useRef } from 'react'
 import './NewRelases.css'
+import React, { useRef, useEffect, useState } from 'react';
+import axios from 'axios';
 
 function NewRelases() {
     const scrollRef = useRef(null);
+    const [books, setBook] = useState(null);
 
-    const books = [
-      { title: "Kiraz Mevsimi", author: "prensesingunlugu", coverImage: "/images/book.jpg", authorImage: "/images/woman-pp.jpg"},
-      { title: "Kiraz Mevsimi", author: "prensesingunlugu", coverImage: "/images/book.jpg", authorImage: "/images/woman-pp.jpg"},
-      { title: "Kiraz Mevsimi", author: "prensesingunlugu", coverImage: "/images/book.jpg", authorImage: "/images/woman-pp.jpg"},
-      { title: "Kiraz Mevsimi", author: "prensesingunlugu", coverImage: "/images/book.jpg", authorImage: "/images/woman-pp.jpg"},
-      { title: "Kiraz Mevsimi", author: "prensesingunlugu", coverImage: "/images/book.jpg", authorImage: "/images/woman-pp.jpg"},
-      { title: "Kiraz Mevsimi", author: "prensesingunlugu", coverImage: "/images/book.jpg", authorImage: "/images/woman-pp.jpg"},
-      { title: "Kiraz Mevsimi", author: "prensesingunlugu", coverImage: "/images/book.jpg", authorImage: "/images/woman-pp.jpg"},
-      { title: "Kiraz Mevsimi", author: "prensesingunlugu", coverImage: "/images/book.jpg", authorImage: "/images/woman-pp.jpg"},
-      { title: "Kiraz Mevsimi", author: "prensesingunlugu", coverImage: "/images/book.jpg", authorImage: "/images/woman-pp.jpg"},
-      { title: "Kiraz Mevsimi", author: "prensesingunlugu", coverImage: "/images/book.jpg", authorImage: "/images/woman-pp.jpg"}
-    ]
+    useEffect(() => {
+      const fetchBook = async () => {
+          try {
+              const token = localStorage.getItem('token');  
+              console.log("Token:", token); 
+              if (!token) {
+                  console.error("Token bulunamadı!");
+                  return;
+              }
+              const response = await axios.get(`http://localhost:3000/book`, {
+                  headers: {
+                      Authorization: `Bearer ${token}`, 
+                  },
+              });
+              console.log("Backend'den gelen yanıt:", response.data); 
+              setBook(response.data); 
+          } catch (error) {
+              console.error("Kitap alınırken hata oluştu:", error.response?.data || error.message);
+          }
+      };
+      fetchBook();
+  }, []);
 
     const scrollLeft = () => {
       if (scrollRef.current) {
@@ -35,18 +47,18 @@ function NewRelases() {
         <h3 className='ms-3 mb-3'>Yeni Çıkanlar</h3>
         <div className="new-books d-flex" ref={scrollRef} style={{ overflowX: 'auto', whiteSpace: 'nowrap' }}>
           <i className="left-arrow bi bi-arrow-left-circle-fill" onClick={scrollLeft}></i>
-          {books.map((book, index) => (
-            <div key={index} className="book1 d-flex flex-column align-items-center justify-content-center ms-2 me-5">
+          {books && books.map((book) => (
+            <div key={book.id} className="book1 d-flex flex-column align-items-center justify-content-center ms-2 me-5">
               <div className="new-book-cover">
-                <img src={book.coverImage} alt="" width="125px"/>
+                <img src={book.bookCover} alt="" width="125px"/>
               </div>
               <div className="new-book-content d-flex flex-column align-items-center">
                 <div className="new-book-title mt-1">
                   <h6>{book.title}</h6>
                 </div>
                 <div className="new-book-writer d-flex">
-                  <img src={book.authorImage} alt="" className='img-fuild rounded-circle' width="24px" height="24px"/>
-                  <p className='ms-1'>{book.author}</p>
+                  <img src={book.user.profile_image} alt="" className='img-fuild rounded-circle' width="24px" height="24px"/>
+                  <p className='ms-1'>{book.user.username}</p>
                 </div>
               </div>
           </div>
@@ -59,4 +71,4 @@ function NewRelases() {
   )
 }
 
-export default NewRelases
+export default NewRelases;
