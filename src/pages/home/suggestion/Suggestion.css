@@ -1,181 +1,55 @@
-.suggestion-books{
+.suggestion-books-container {
     padding: 8px;
 }
 
-.suggestion-left-arrow{
-    position: absolute;
-    left: 2%;
-    top: 218%;
-    transform: translateY(-50%);
-    font-size: 2rem;
-    cursor: pointer;
-    z-index: 1;
-    color: var(--second-color);
-}
-
-.suggestion-right-arrow{
-    position: absolute;
-    right: 2%;
-    top: 218%;
-    transform: translateY(-50%);
-    font-size: 2rem;
-    cursor: pointer;
-    z-index: 1;
-    color: var(--second-color);
-}
-
-.suggestionBook{
-    width: 150px;
-    display: inline;
-    color: var(--second-color);
-}
-
 .suggestion-books {
+    display: flex;
+    align-items: center;
+    overflow-x: auto;
+    white-space: nowrap;
+    position: relative;
+}
+
+.suggestion-left-arrow,
+.suggestion-right-arrow {
+    font-size: 2rem;
+    cursor: pointer;
+    color: var(--second-color);
+    position: sticky;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+}
+
+.suggestion-left-arrow {
+    left: 0;
+    margin-right: 10px;
+}
+
+.suggestion-right-arrow {
+    right: 0;
+    margin-left: 10px;
+}
+
+.books-list {
+    display: flex;
     overflow-x: auto;
     white-space: nowrap;
     -ms-overflow-style: none;
-    scrollbar-width: none; 
+    scrollbar-width: none;
 }
-  
-.suggestion-books::-webkit-scrollbar {
+
+.books-list::-webkit-scrollbar {
     display: none;
 }
 
-@media (max-width: 1464px){
-    .suggestion-left-arrow{
-        top: 210%;
-    }
-    .suggestion-right-arrow{
-        top: 210%;
-    }
+.suggestionBook {
+    width: 150px;
+    color: var(--second-color);
 }
 
-@media (max-width: 1395px){
-    .suggestion-left-arrow{
-        left: 6%;
-    }
-    .suggestion-right-arrow{
-        right: 3%;
-    }
-}
-
-@media (max-width: 1290px){
-    .suggestion-left-arrow{
-        font-size: 1.8rem;
-        left: 3%;
-    }
-    .suggestion-right-arrow{
-        font-size: 1.8rem;
-        right: 1%;
-    }
-}
-
-@media (max-width: 1220px){
-    .suggestion-left-arrow{
-        font-size: 1.6rem;
-        left: 3%;
-    }
-    .suggestion-right-arrow{
-        font-size: 1.6rem;
-        right: 1%;
-    }
-}
-
-@media (max-width: 1200px){
-    .suggestion-left-arrow{
-        font-size: 1.8rem;
-        left: 4%;
-    }
-    .suggestion-right-arrow{
-        font-size: 1.8rem;
-        right: 2%;
-    }
-}
-
-@media (max-width: 1126px){
-    .suggestion-left-arrow{
-        font-size: 1.8rem;
-        left: 2%;
-        top: 200%;
-    }
-    .suggestion-right-arrow{
-        font-size: 1.8rem;
-        right: 2%;
-        top: 200%;
-    }
-}
-
-@media (max-width: 1050px){
-    .suggestion-left-arrow{
-        left: 1%;
-    }
-    .suggestion-right-arrow{
-        right: 1%;
-    }
-}
-
-@media (max-width: 990px){
-    .suggestion-left-arrow{
-        top: 245%;
-        left: 6%;
-    }
-    .suggestion-right-arrow{
-        top: 245%;
-        right: 5%;
-    }
-}
-
-@media (max-width: 890px){
-    .suggestion-left-arrow{
-        left: 4%;
-    }
-    .suggestion-right-arrow{
-        right: 3%;
-    }
-}
-
-@media (max-width: 820px){
-    .suggestion-left-arrow{
-        left: 2%;
-    }
-    .suggestion-right-arrow{
-        right: 1%;
-    }
-}
-
-@media (max-width: 770px){
-    .suggestion-left-arrow{
-        left: 2%;
-        top: 245%;
-        font-size: 1.4rem;
-    }
-    .suggestion-right-arrow{
-        top: 245%;
-        right: 1%;
-        font-size: 1.4rem;
-    }
-}
-
-@media (max-width: 750px){
-    .suggestion-left-arrow{
-        left: 4%;
-        top: 250%;
-        font-size: 1.4rem;
-    }
-    .suggestion-right-arrow{
-        top: 250%;
-        right: 4%;
-        font-size: 1.4rem;
-    }
-}
-
-@media (max-width: 640px){
-    .suggestion-left-arrow{
-        left: 4%;
-        font-size: 1.4rem;
-    }
-    .suggestion-right-arrow{
-        right: 4%;
-        font-size: 1.4rem;
+@media (max-width: 768px) {
+    .suggestion-left-arrow, .suggestion-right-arrow {
+        font-size: 1.5rem;
     }
 }
