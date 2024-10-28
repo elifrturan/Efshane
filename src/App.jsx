@@ -8,6 +8,8 @@ import CodeVerification from './pages/password/CodeVerification';
 import PasswordRenewal from './pages/password/PasswordRenewal';
 import CategorySelection from './pages/categoryselection/CategorySelection';
 import Home from './pages/home/Home';
+import CategoriesList from './pages/categories/categorylist/CategoriesList';
+import CategoryDetails from './pages/categories/categorydetails/CategoryDetails';
 
 const routes = createBrowserRouter([
   { path: '/', element: <Start/>, errorElement: <h1>Page not found</h1>},
@@ -18,6 +20,8 @@ const routes = createBrowserRouter([
   { path: '/emailconfirm/codeverification/passwordrenewal', element: <PasswordRenewal/>},
   { path: '/categoryselection', element: <CategorySelection/>},
   { path: '/home', element: <Home/>},
+  { path: '/categories', element: <CategoriesList/>},
+  { path: '/categories/categoryDetails/:categoryName', element: <CategoryDetails/>}
 ])
 
 function App() {

@@ -13,12 +13,16 @@
 
 .left{
     display: flex;
-    flex: 20%;
+    flex: 10%;
     justify-content: start;
     align-items: center;
     padding: 0;
     width: 100%;
     margin: 0;
+}
+
+.logo{
+    cursor: pointer;
 }
 
 .categories-stream-nav{
@@ -47,7 +51,6 @@
     justify-content: space-evenly;
     align-items: center;
     padding: 0;
-    margin-right: 38px;
 }
 
 .menu-icon{
@@ -150,7 +153,7 @@ ul li a.dropdown-item:hover {
     background-color: gainsboro;
 }
 
-@media (max-width: 1159px) {
+@media (max-width: 1392px) {
     .left{
         flex: 15%;
     }
@@ -177,10 +180,19 @@ ul li a.dropdown-item:hover {
     }
 }
 
-@media (max-width: 715px) {
+@media (max-width: 740px) {
     .right{
         justify-content: space-between;
-        margin-left: 15px;
+    }
+    .profile-image{
+        width: 30px;
+        height: 30px;
+    }
+    .main-var{
+        font-size: 12px;
+    }
+    .center{
+        margin-right: 5px;
     }
     ul.write-story.dropdown-menu.show{
         width: 120px;

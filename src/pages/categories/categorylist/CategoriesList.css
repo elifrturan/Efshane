@@ -1,0 +1,8 @@
+.categories-page{
+    color: var(--second-color);
+    height: 100vh;
+}
+
+.category-card{
+    cursor: pointer;
+}

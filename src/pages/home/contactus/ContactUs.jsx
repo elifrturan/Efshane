@@ -70,7 +70,7 @@ function ContactUs() {
                         </div>
                     </div>
                     <div className="contact-us-image col-lg-5 col-md-6 col-sm-6 col-xs-6 ms-5 mt-3 d-flex justify-content-center align-items-center">
-                        <img src="/images/contact-us.png" alt="" className='ms-5 contact-image' width="340px" height="280px"/>
+                        <img src="/images/contact-us.png" alt="" className='ms-5 contact-image' width="400px" height="280px"/>
                     </div>
                 </div>
             </div>

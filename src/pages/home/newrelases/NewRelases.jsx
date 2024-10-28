@@ -44,7 +44,7 @@ function NewRelases() {
   return (
     <div className="new-relases mt-5 mb-3">
       <div className="container">
-        <h3 className='ms-3 mb-3'>Yeni Çıkanlar</h3>
+        <h3 className='ms-3'>Yeni Çıkanlar</h3>
         <div className="new-books d-flex align-items-center" ref={scrollRef} style={{ overflowX: 'auto', whiteSpace: 'nowrap' }}>
           <i className="left-arrow bi bi-arrow-left-circle-fill" onClick={scrollLeft}></i>
           <div className="book-list-newrelases" ref={scrollRef}>
