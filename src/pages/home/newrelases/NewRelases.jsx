@@ -45,9 +45,9 @@ function NewRelases() {
     <div className="new-relases mt-5 mb-3">
       <div className="container">
         <h3 className='ms-3'>Yeni Çıkanlar</h3>
-        <div className="new-books d-flex align-items-center" ref={scrollRef} style={{ overflowX: 'auto', whiteSpace: 'nowrap' }}>
-          <i className="left-arrow bi bi-arrow-left-circle-fill" onClick={scrollLeft}></i>
-          <div className="book-list-newrelases" ref={scrollRef}>
+        <div className="new-books d-flex align-items-center" style={{ overflowX: 'auto', whiteSpace: 'nowrap' }}>
+          <i className="left-arrow bi bi-arrow-left-circle-fill" onClick={scrollLeft} ></i>
+          <div className="book-list-newrelases" ref={scrollRef} >
             {books && books.map((book) => (
               <div key={book.id} className="book1 d-flex flex-column align-items-center justify-content-center ms-2 me-5">
                 <div className="new-book-cover">

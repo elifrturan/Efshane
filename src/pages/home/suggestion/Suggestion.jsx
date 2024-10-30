@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import './Suggestion.css';
 import axios from 'axios';
 
+
 function Suggestion() {
     const scrollRef = useRef(null);
     const [books, setBooks] = useState([]);
@@ -43,7 +44,7 @@ function Suggestion() {
         <div className="suggestion-books-container mt-5 mb-3">
             <div className="container">
                 <h3 className='ms-3 mb-3'>Beğenebileceklerin</h3>
-                <div className="suggestion-books d-flex align-items-center" ref={scrollRef}>
+                <div className="suggestion-books d-flex align-items-center">
                     <i className="suggestion-left-arrow bi bi-arrow-left-circle-fill" onClick={scrollLeft}></i>
                     <div className="books-list d-flex" ref={scrollRef}>
                         {books && books.map((book) => (

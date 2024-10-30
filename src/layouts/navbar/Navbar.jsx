@@ -112,36 +112,36 @@ function MainLayouts() {
               <div className="write-story">
                 <div className="dropdown-center">
                   <Link 
-                  class="write-dropdown-toggle "
+                  className="write-dropdown-toggle "
                   onClick={toggleStoryDropdown}
                   aria-expanded={isStoryDropdownOpen}>
                     Hikaye Yaz
                   </Link>
                   <ul className={`write-story dropdown-menu ${isStoryDropdownOpen ? 'show' : ''}`} aria-labelledby="storyDropdown">
                     <div className="story-dropdown-arrow"></div>
-                    <li><a class="dropdown-item" href="#">Hikaye Oluştur</a></li>
-                    <li className='myStories'><a class="dropdown-item" href="#">Hikayelerim</a></li>
+                    <li><a className="dropdown-item" href="#">Hikaye Oluştur</a></li>
+                    <li className='myStories'><a className="dropdown-item" href="#">Hikayelerim</a></li>
                   </ul>
                 </div>
               </div>
               <div className="notification">
-                <i class="bi bi-bell-fill"></i>
+                <i className="bi bi-bell-fill"></i>
               </div>
               <div className="profile-dropdown">
                 <div className="dropdown-center">
                     <Link 
-                    class="profile-dropdown-toggle"
+                    className="profile-dropdown-toggle"
                     onClick={toggleProfileDropdown}
                     aria-expanded={isProfileDropdownOpen}>
                       <img src="/images/pp.jpg" alt="40x40" width="40px" height="40px" className='profile-image img-fuild rounded-circle'/>
                     </Link>
                     <ul className={`profile-dropdown dropdown-menu ${isProfileDropdownOpen ? 'show' : ''}`} aria-labelledby="profileDropdown">
                       <div className="profile-dropdown-arrow"></div>
-                      <li><a class="dropdown-item" href="#">Profilim</a></li>
-                      <li><a class="dropdown-item" href="#">Mesajlar</a></li>
-                      <li><a class="dropdown-item" href="#">Kitaplık</a></li>
-                      <li><a class="dropdown-item" href="#">Ayarlar</a></li>
-                      <li><a class="dropdown-item" href="#">Çıkış Yap</a></li>
+                      <li><a className="dropdown-item" href="#">Profilim</a></li>
+                      <li><a className="dropdown-item" href="#">Mesajlar</a></li>
+                      <li><a className="dropdown-item" href="#">Kitaplık</a></li>
+                      <li><a className="dropdown-item" href="#">Ayarlar</a></li>
+                      <li><a className="dropdown-item" href="#">Çıkış Yap</a></li>
                     </ul>
                 </div>
               </div>

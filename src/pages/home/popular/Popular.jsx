@@ -44,7 +44,7 @@ function Popular() {
         <div className="popular-books mt-5 mb-3">
             <div className="container">
                 <h3 className='ms-3 mb-3'>Popülerler</h3>
-                <div className="popular-books-wrapper d-flex align-items-center" ref={scrollRef} style={{ overflowX: 'auto', whiteSpace: 'nowrap' }}>
+                <div className="popular-books-wrapper d-flex align-items-center" style={{ overflowX: 'auto', whiteSpace: 'nowrap' }}>
                     <i className="popular-left-arrow bi bi-arrow-left-circle-fill" onClick={scrollLeft}></i>
                     <div className="book-list-popular" ref={scrollRef}>
                         {books && books.map((book) => (

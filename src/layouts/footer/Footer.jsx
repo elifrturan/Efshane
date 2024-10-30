@@ -20,9 +20,9 @@ function Footer() {
               <div className="col-md-2">
                 <h5>Hızlı Linkler</h5>
                 <ul className="footer-links list-unstyled">
-                  <li><a href="/"><i class="bi bi-house-heart-fill"></i> Ana Sayfa</a></li>
-                  <li><a href="/about"><i class="bi bi-at"></i> Hakkımızda</a></li>
-                  <li><a href="/contact"><i class="bi bi-headset"></i> İletişim</a></li>
+                  <li><a href="/"><i className="bi bi-house-heart-fill"></i> Ana Sayfa</a></li>
+                  <li><a href="/about"><i className="bi bi-at"></i> Hakkımızda</a></li>
+                  <li><a href="/contact"><i className="bi bi-headset"></i> İletişim</a></li>
                   <li><a href="/terms"><i className='bi bi-info-circle-fill'></i> Kullanım Şartları</a></li>
                 </ul>
               </div>
@@ -31,10 +31,10 @@ function Footer() {
               <div className="col-md-3">
                 <h5>Sosyal Medya</h5>
                 <ul className="list-unstyled d-flex">
-                  <li><a href="https://facebook.com" className="text-light me-3"><i class="bi bi-facebook"></i></a></li>
-                  <li><a href="https://twitter.com" className="text-light me-3"><i class="bi bi-twitter-x"></i></a></li>
-                  <li><a href="https://instagram.com" className="text-light me-3"><i class="bi bi-instagram"></i></a></li>
-                  <li><a href="https://linkedin.com" className="text-light"><i class="bi bi-linkedin"></i></a></li>
+                  <li><a href="https://facebook.com" className="text-light me-3"><i className="bi bi-facebook"></i></a></li>
+                  <li><a href="https://twitter.com" className="text-light me-3"><i className="bi bi-twitter-x"></i></a></li>
+                  <li><a href="https://instagram.com" className="text-light me-3"><i className="bi bi-instagram"></i></a></li>
+                  <li><a href="https://linkedin.com" className="text-light"><i className="bi bi-linkedin"></i></a></li>
                 </ul>
               </div>
     
