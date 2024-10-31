@@ -124,8 +124,8 @@ function MainLayouts() {
                   </ul>
                 </div>
               </div>
-              <div className="notification">
-                <i className="bi bi-bell-fill"></i>
+              <div className="nav-notification">
+                <Link to="/notifications"><i className="bi bi-bell-fill"></i></Link>
               </div>
               <div className="profile-dropdown">
                 <div className="dropdown-center">

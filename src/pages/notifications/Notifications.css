@@ -1,0 +1,60 @@
+.notifications-page{
+    color: var(--second-color);
+    height: 100vh;
+}
+
+.notification{
+    border-bottom: 1px solid gainsboro;
+    padding: 24px 12px;
+}
+
+.notification-subtitle{
+    font-size: 14px;
+}
+
+.delete-button i{
+    color: var(--second-color);
+    font-size: 18px;
+}
+
+.delete-button i::before{
+    display: flex;
+    justify-content: end;
+}
+
+.notification-time{
+    font-size: 14px;
+}
+
+.notification-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.centered-title {
+    margin-top: auto;
+    text-align: center;
+}
+
+.pagination button{
+    background: none;
+    border: none;
+}
+
+.pagination i{
+    font-size: 28px;
+    color: var(--second-color);
+}
+
+.pagination button:disabled {
+    color: gray;
+    opacity: 0.6;
+    cursor: default;
+}
+
+@media (max-width: 770px) {
+    .notification p, div{
+        font-size: 12px !important;
+    }
+}

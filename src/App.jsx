@@ -10,6 +10,7 @@ import CategorySelection from './pages/categoryselection/CategorySelection';
 import Home from './pages/home/Home';
 import CategoriesList from './pages/categories/categorylist/CategoriesList';
 import CategoryDetails from './pages/categories/categorydetails/CategoryDetails';
+import Notifications from './pages/notifications/Notifications';
 
 const routes = createBrowserRouter([
   { path: '/', element: <Start/>, errorElement: <h1>Page not found</h1>},
@@ -21,7 +22,8 @@ const routes = createBrowserRouter([
   { path: '/categoryselection', element: <CategorySelection/>},
   { path: '/home', element: <Home/>},
   { path: '/categories', element: <CategoriesList/>},
-  { path: '/categories/categoryDetails/:categoryName', element: <CategoryDetails/>}
+  { path: '/categories/categoryDetails/:categoryName', element: <CategoryDetails/>},
+  { path: '/notifications', element: <Notifications/>}
 ])
 
 function App() {

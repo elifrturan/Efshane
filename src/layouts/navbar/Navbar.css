@@ -106,7 +106,7 @@ ul li a.dropdown-item:hover {
     background-color: gainsboro;
 }
 
-.notification i{
+.nav-notification i{
     color: var(--bg-color);
     font-size: 20px;
 }
@@ -226,14 +226,14 @@ ul li a.dropdown-item:hover {
         width: 35px;
         height: 45px;
     }
-    .notification i{
+    .nav-notification i{
         font-size: 16px;
     }
     
 }
 
 @media (max-width: 600px) {
-    .categories-stream, .write-story, .notification, .profile-dropdown{
+    .categories-stream, .write-story, .nav-notification, .profile-dropdown{
         display: none;
     }
     .center{
