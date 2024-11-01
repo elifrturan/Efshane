@@ -17,10 +17,16 @@
     color: whitesmoke;
 }
 
+.message-container{
+    text-decoration: none;
+    color: var(--second-color);    
+}
+
 .message{
     padding: 24px 12px;
     border-bottom: 1px solid gainsboro;
     cursor: pointer;
+    text-decoration: none;
 }
 
 .message-time{
