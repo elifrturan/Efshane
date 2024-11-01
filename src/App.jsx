@@ -11,6 +11,7 @@ import Home from './pages/home/Home';
 import CategoriesList from './pages/categories/categorylist/CategoriesList';
 import CategoryDetails from './pages/categories/categorydetails/CategoryDetails';
 import Notifications from './pages/notifications/Notifications';
+import Messages from './pages/messages/Messages';
 
 const routes = createBrowserRouter([
   { path: '/', element: <Start/>, errorElement: <h1>Page not found</h1>},
@@ -23,7 +24,8 @@ const routes = createBrowserRouter([
   { path: '/home', element: <Home/>},
   { path: '/categories', element: <CategoriesList/>},
   { path: '/categories/categoryDetails/:categoryName', element: <CategoryDetails/>},
-  { path: '/notifications', element: <Notifications/>}
+  { path: '/notifications', element: <Notifications/>},
+  { path: '/messages', element: <Messages/>}
 ])
 
 function App() {

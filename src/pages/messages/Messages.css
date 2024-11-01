@@ -1,0 +1,44 @@
+.messages-page{
+    color: var(--second-color);
+    height: 100vh;
+}
+
+.btn-new-message-create{
+    border: 1px solid var(--theme-color) !important;
+    border-radius: 8px;
+    text-decoration: none;
+    padding: 8px 12px;
+    color: var(--second-color);
+    transition: background-color 0.4s, color 0.4s;
+}
+
+.btn-new-message-create:hover{
+    background-color: #a04747dc;
+    color: whitesmoke;
+}
+
+.message{
+    padding: 24px 12px;
+    border-bottom: 1px solid gainsboro;
+    cursor: pointer;
+}
+
+.message-time{
+    font-size: 14px;
+}
+
+.pagination-messages button{
+    background: none;
+    border: none;
+}
+
+.pagination-messages i{
+    font-size: 28px;
+    color: var(--second-color);
+}
+
+.pagination-messages button:disabled {
+    color: gray;
+    opacity: 0.6;
+    cursor: default;
+}

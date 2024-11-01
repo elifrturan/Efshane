@@ -138,7 +138,7 @@ function MainLayouts() {
                     <ul className={`profile-dropdown dropdown-menu ${isProfileDropdownOpen ? 'show' : ''}`} aria-labelledby="profileDropdown">
                       <div className="profile-dropdown-arrow"></div>
                       <li><a className="dropdown-item" href="#">Profilim</a></li>
-                      <li><a className="dropdown-item" href="#">Mesajlar</a></li>
+                      <li><Link className="dropdown-item" to="/messages">Mesajlar</Link></li>
                       <li><a className="dropdown-item" href="#">Kitaplık</a></li>
                       <li><a className="dropdown-item" href="#">Ayarlar</a></li>
                       <li><a className="dropdown-item" href="#">Çıkış Yap</a></li>
