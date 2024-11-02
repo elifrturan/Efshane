@@ -13,6 +13,7 @@ import CategoryDetails from './pages/categories/categorydetails/CategoryDetails'
 import Notifications from './pages/notifications/Notifications';
 import Messages from './pages/messages/Messages';
 import MessageDetails from './pages/messages/MessageDetails';
+import NewMessage from './pages/messages/NewMessage';
 
 const routes = createBrowserRouter([
   { path: '/', element: <Start/>, errorElement: <h1>Page not found</h1>},
@@ -27,11 +28,12 @@ const routes = createBrowserRouter([
   { path: '/categories/categoryDetails/:categoryName', element: <CategoryDetails/>},
   { path: '/notifications', element: <Notifications/>},
   { path: '/messages', element: <Messages/>},
-  { path: '/messages/:username', element: <MessageDetails/>}
+  { path: '/messages/:username', element: <MessageDetails/>},
+  { path: '/newmessage', element: <NewMessage/>}
 ])
 
 function App() {
-
+  
   return (
     <RouterProvider router={routes}/>
   )

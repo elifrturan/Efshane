@@ -11,6 +11,20 @@ function Messages() {
     const [messages, setMessages] = useState([
         { id: 1, senderImage: "/images/woman-pp.jpg", senderUsername: "pamukprenses", message: "Naber, görüşmeyeli nasılsın?", sendDate: "2024-10-16 16:49:00"},
         { id: 2, senderImage: "/images/woman-pp.jpg", senderUsername: "zehirlielma", message: "Naber, görüşmeyeli nasılsın?", sendDate: "2024-11-01 10:50:00"},  
+        { id: 3, senderImage: "/images/pp.jpg", senderUsername: "oylesinebiri", message: "Yeni bölüm ekleyecek misin?", sendDate: "2024-11-02 10:50:00"},  
+        { id: 4, senderImage: "/images/woman-pp.jpg", senderUsername: "abc", message: "Bi de bayıl feriha", sendDate: "2024-11-02 12:50:00"},  
+        { id: 5, senderImage: "/images/pp.jpg", senderUsername: "def", message: "komik mi?", sendDate: "2024-11-02 13:50:00"},  
+        { id: 6, senderImage: "/images/woman-pp.jpg", senderUsername: "aaaaaaaa", message: "Naber, görüşmeyeli nasılsın?", sendDate: "2024-11-01 10:50:00"},  
+        { id: 7, senderImage: "/images/pp.jpg", senderUsername: "yokartik", message: "Naber, görüşmeyeli nasılsın?", sendDate: "2024-11-01 10:50:00"},  
+        { id: 8, senderImage: "/images/woman-pp.jpg", senderUsername: "hepisimmibulcaz", message: "Naber, görüşmeyeli nasılsın?", sendDate: "2024-11-01 10:50:00"},  
+        { id: 9, senderImage: "/images/pp.jpg", senderUsername: "merhababenyazar", message: "yeni bölüm 1 hafta sonra gelecek", sendDate: "2024-11-02 10:30:00"},  
+        { id: 10, senderImage: "/images/woman-pp.jpg", senderUsername: "benfatmanur", message: "sana bir çarparım", sendDate: "2024-11-02 18:50:00"},  
+        { id: 11, senderImage: "/images/pp.jpg", senderUsername: "bendeelif", message: "herkesten nefret ediyorum", sendDate: "2024-11-02 18:20:00"},  
+        { id: 12, senderImage: "/images/woman-pp.jpg", senderUsername: "deayrı", message: "tdk mısın birader?", sendDate: "2024-11-02 17:50:00"},  
+        { id: 13, senderImage: "/images/woman-pp.jpg", senderUsername: "duduturan", message: "namazını kıldın mı", sendDate: "2024-11-02 16:50:00"},  
+        { id: 14, senderImage: "/images/woman-pp.jpg", senderUsername: "fatmaozcetin", message: "sizi döveceğim", sendDate: "2024-11-02 16:50:00"},  
+        { id: 15, senderImage: "/images/woman-pp.jpg", senderUsername: "elifturan", message: "fronttan içim şişti", sendDate: "2024-11-02 16:50:00"},  
+        { id: 16, senderImage: "/images/woman-pp.jpg", senderUsername: "oyleiste", message: "Naber, görüşmeyeli nasılsın?", sendDate: "2024-11-01 10:50:00"},  
     ]);
 
     useEffect(() => {
@@ -72,7 +86,7 @@ function Messages() {
             <h2 className="text-center mt-5 mb-5">Mesajlar</h2>
             <div className="d-flex justify-content-between align-items-center mb-5">
                 <p className='m-0'>Toplam <b>{messages.length}</b> adet mesaj</p>
-                <Link className='btn-new-message-create'>Yeni Mesaj Oluştur <i class="bi bi-pencil-square ms-2"></i></Link>
+                <Link className='btn-new-message-create' to="/newmessage">Yeni Mesaj Oluştur <i class="bi bi-pencil-square ms-2"></i></Link>
             </div>
             {currentMessages.map(message => (
                 <Link className="message-container" to={`/messages/${message.senderUsername}`}>
