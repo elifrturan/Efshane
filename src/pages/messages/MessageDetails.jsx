@@ -2,27 +2,120 @@ import React, { useEffect, useRef, useState } from 'react';
 import './MessageDetails.css';
 import Navbar from "../../layouts/navbar/Navbar";
 import { useParams } from 'react-router-dom';
+import axios from 'axios';
 
 function MessageDetails() {
     const { username } = useParams();
-    const [messages, setMessages] = useState([
-        { id: 1, senderImage: "/images/woman-pp.jpg", sender: username, content: "Naber, görüşmeyeli nasılsın?", sentByCurrentUser: false, sendDate: "2024-10-16 16:49:00"  },
-        { id: 2, receiverImage: "/images/pp.jpg", sender: "currentUser", content: "Merhaba! İyiyim, teşekkürler. Sen nasılsın?", sentByCurrentUser: true, sendDate: new Date().toISOString() },
-    ]);
+    const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState("");
     const chatEndRef = useRef(null);
 
-    const handleSendMessage = (e) => {
+    const handleSendMessage = async (e) => {
         e.preventDefault();
         if (newMessage.trim() === "") return;
 
-        const newMsg = { id: messages.length + 1, receiverImage: "/images/pp.jpg", sender: "currentUser", content: newMessage, sentByCurrentUser: true, sendDate: new Date().toISOString() };
-        setMessages([...messages, newMsg]);
-        setNewMessage("");
+        try {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                console.error("Token bulunamadı!");
+                return;
+            }
+
+            const response = await axios.post(`http://localhost:3000/message/send`, {
+                receiverUserName: username,
+                content: newMessage,
+                date: new Date().toISOString(),
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            console.log("Mesaj gönderildi:", response.data);
+
+            setMessages((prevMessages) => [
+                ...prevMessages,
+                {
+                    ...response.data,
+                    date: new Date(response.data.sendDate),
+                    profileImage: response.data.senderImage,
+                    sentByCurrentUser: true,
+                }
+            ]);
+
+            setNewMessage("");
+        } catch (error) {
+            console.error("Mesaj gönderilirken hata oluştu:", error.message);
+        }
     };
 
     useEffect(() => {
-        chatEndRef.current?.scrollIntoView({behavior: "smooth"});
+        const fetchChat = async () => {
+            try {
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    console.error("Token bulunamadı!");
+                    return;
+                }
+    
+                const response = await axios.get(`http://localhost:3000/message/conversation/${username}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+    
+                const updatedMessages = response.data.map((message) => {
+                    console.log("Message Object:", message);
+                    return {
+                        ...message,
+                        sentByCurrentUser: message.username !== username,
+                    };
+                });
+    
+                setMessages(updatedMessages);
+    
+                const unreadMessageIds = updatedMessages
+                    .filter((msg) => msg.otherUsername !== username && !msg.isRead)
+                    .map((msg) => msg.id);
+    
+                if (unreadMessageIds.length > 0) {
+                    await markAsRead(unreadMessageIds);
+                }
+            } catch (error) {
+                console.error("Mesajlar alınırken hata oluştu:", error.message);
+            }
+        };
+    
+        const markAsRead = async (messageIds) => {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                console.error("Token bulunamadı!");
+                return;
+            }
+    
+            try {
+                await axios.put(`http://localhost:3000/message/markAsRead`, { messageIds }, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+    
+                setMessages((prevMessages) =>
+                    prevMessages.map((msg) =>
+                        messageIds.includes(msg.id) ? { ...msg, isRead: true } : msg
+                    )
+                );
+                console.log("Mesajlar okundu olarak işaretlendi");
+            } catch (error) {
+                console.error("Mesajlar okundu olarak işaretlenirken hata oluştu:", error.message);
+            }
+        };
+        fetchChat(); 
+    
+    }, [username]);
+
+    useEffect(() => {
+        chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [messages]);
 
     return (
@@ -33,23 +126,22 @@ function MessageDetails() {
 
                 <div className="chat-messages mt-4">
                     {messages.map((message) => (
-                        <div 
-                            key={message.id} 
-                            className={`message-details ${message.sentByCurrentUser ? 'sent' : 'received'}`}
+                        <div
+                            key={message.id}
+                            className={`message-details ${message.sentByCurrentUser ? 'sent' : 'received'} mb-3`}
                         >
-                            {!message.sentByCurrentUser && (
-                                <img src={message.senderImage} alt={`${username} profile`} className="profile-pic" />
-                            )}
+                            <img
+                                src={message.profileImage}
+                                alt={`${message.sentByCurrentUser ? 'Your' : message.otherUsername} profile`}
+                                className="profile-pic"
+                            />
                             <p className="message-content-details">{message.content}</p>
-                            <p className={`message-time ${message.sentByCurrentUser ? 'time-left' : 'time-right'}`}>
-                                {new Date(message.sendDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                            <p className="message-time time-right">
+                                {new Date(message.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                             </p>
-                            {message.sentByCurrentUser && (
-                                <img src={message.receiverImage} alt="Your profile" className="profile-pic" />
-                            )}
                         </div>
                     ))}
-                     <div ref={chatEndRef} />
+                    <div ref={chatEndRef} />
                 </div>
 
                 <form onSubmit={handleSendMessage} className="message-input mt-3">

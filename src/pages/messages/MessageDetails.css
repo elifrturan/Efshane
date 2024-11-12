@@ -45,7 +45,7 @@
 
 .message-details.sent {
     align-self: flex-end;
-    flex-direction: row;
+    flex-direction: row-reverse;
     justify-content: flex-end;
     display: flex;
     align-items: end;
@@ -61,33 +61,29 @@
 
 .message-content-details {
     background-color: #e5e5e5;
-    padding: 10px;
-    border-radius: 15px;
+    padding: 8px;
+    border-radius: 10px;
     margin: 0;
-    font-size: 14px;
+    font-size: 13px;
     max-width: 80%;
     word-wrap: break-word;
     white-space: pre-wrap;
 }
 
 .message-details.sent .message-content-details {
-    background-color: #CD6688;
-    color: whitesmoke;
+    background-color: #ffc107   ;
+    color: var(--second-color);
 }
 
 .message-time {
-    font-size: 12px;
+    font-size: 10px;
     color: gray;
     margin: 0;
 }
 
 .message-time.time-right {
     margin-left: 5px;
-}
-
-.message-time.time-left {
     margin-right: 5px;
-    order: -2;
 }
 
 .message-input {
@@ -120,7 +116,7 @@
 }
 
 .message-input button:hover {
-    background-color: #7c3737;
+    background-color: #7c3030;
 }
 
 .message-input input:focus{

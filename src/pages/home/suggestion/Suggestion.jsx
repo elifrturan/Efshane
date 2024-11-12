@@ -33,7 +33,7 @@ function Suggestion() {
             scrollRef.current.scrollBy({ left: -300, behavior: 'smooth' });
         }
     };
-  
+
     const scrollRight = () => {
         if (scrollRef.current) {
             scrollRef.current.scrollBy({ left: 300, behavior: 'smooth' });

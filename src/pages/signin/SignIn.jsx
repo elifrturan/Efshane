@@ -91,10 +91,10 @@ function SignIn() {
         {/* login options */}
         <div className="mt-2 d-flex justify-content-between options">
           <div className="google d-flex justify-content-center align-items-center">
-            <span className='text-white'><i class="bi bi-google me-1"></i>Google</span>
+            <span className='text-white'><i className="bi bi-google me-1"></i>Google</span>
           </div>
           <div className="apple d-flex justify-content-center align-items center">
-            <span className="text-white"><i class="bi bi-apple me-1"></i>Apple</span>
+            <span className="text-white"><i className="bi bi-apple me-1"></i>Apple</span>
           </div>
         </div>
       </div>

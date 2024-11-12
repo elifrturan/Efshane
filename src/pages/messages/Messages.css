@@ -1,6 +1,8 @@
 .messages-page{
     color: var(--second-color);
     height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 .btn-new-message-create{
@@ -27,6 +29,13 @@
     border-bottom: 1px solid gainsboro;
     cursor: pointer;
     text-decoration: none;
+}
+
+.delete-button .bi-trash3-fill{
+    display: flex;
+    justify-content: end;
+    text-decoration: none;
+    color: var(--second-color);
 }
 
 .message-time{

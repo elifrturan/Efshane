@@ -42,6 +42,7 @@ function CategorySelection() {
             });
     
             console.log('İşlem başarılı', response.data);
+            navigate(`/home`);
         } catch (error) {
             console.error('Kategori seçme işlemi başarısız:', error);
             alert('Kategori seçme işlemi başarısız, lütfen tekrar deneyin.');
