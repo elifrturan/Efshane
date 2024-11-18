@@ -14,6 +14,7 @@ import Notifications from './pages/notifications/Notifications';
 import Messages from './pages/messages/Messages';
 import MessageDetails from './pages/messages/MessageDetails';
 import NewMessage from './pages/messages/NewMessage';
+import CreateStory from './pages/storyWrite/createStory';
 
 const routes = createBrowserRouter([
   { path: '/', element: <Start/>, errorElement: <h1>Page not found</h1>},
@@ -29,7 +30,8 @@ const routes = createBrowserRouter([
   { path: '/notifications', element: <Notifications/>},
   { path: '/messages', element: <Messages/>},
   { path: '/messages/:username', element: <MessageDetails/>},
-  { path: '/newmessage', element: <NewMessage/>}
+  { path: '/newmessage', element: <NewMessage/>},
+  { path: '/createstory', element: <CreateStory/>},
 ])
 
 function App() {

@@ -44,6 +44,10 @@ function MainLayouts() {
     navigate("/home");
   }
 
+  const handleCreateStoryClick = () => {
+    navigate("/createstory");
+  }
+
   return (
       <div className="nav-row">
         <div className="container">
@@ -119,7 +123,7 @@ function MainLayouts() {
                   </Link>
                   <ul className={`write-story dropdown-menu ${isStoryDropdownOpen ? 'show' : ''}`} aria-labelledby="storyDropdown">
                     <div className="story-dropdown-arrow"></div>
-                    <li><a className="dropdown-item" href="#">Hikaye Oluştur</a></li>
+                    <li onClick={handleCreateStoryClick}><a className="dropdown-item" href="">Hikaye Oluştur</a></li>
                     <li className='myStories'><a className="dropdown-item" href="#">Hikayelerim</a></li>
                   </ul>
                 </div>

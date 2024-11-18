@@ -154,10 +154,17 @@ return (
                 </Link>            
                 ))}
             </div>
-            <div className="pagination-messages d-flex justify-content-center mt-3 mb-3">
-                <button onClick={handlePreviousPage} disabled={currentPage === 1}><i className="bi bi-arrow-left-square-fill"></i></button>
-                <button onClick={handleNextPage} disabled={currentPage === totalPages}><i className="bi bi-arrow-right-square-fill"></i></button>
+            {messages.length > 0 && (
+                <div className="pagination-messages d-flex justify-content-center mt-3 mb-3">
+                <button onClick={handlePreviousPage} disabled={currentPage === 1}>
+                    <i className="bi bi-arrow-left-square-fill"></i>
+                </button>
+                <button onClick={handleNextPage} disabled={currentPage === totalPages}>
+                    <i className="bi bi-arrow-right-square-fill"></i>
+                </button>
             </div>
+            )}
+            
         </div>
     </div>
     )
