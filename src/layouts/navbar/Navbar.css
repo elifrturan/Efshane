@@ -118,7 +118,7 @@ ul li a.dropdown-item:hover {
 
 ul.profile-dropdown.dropdown-menu.show{
     position: absolute;
-    transform: translateX(-40%); 
+    transform: translateX(35%); 
     padding: 0;
     width: 150px;
     margin: 15px 0 0 0;

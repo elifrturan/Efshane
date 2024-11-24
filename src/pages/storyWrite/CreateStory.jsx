@@ -20,6 +20,34 @@ function CreateStory() {
     const [ageRange, setAgeRange] = useState("");
     const [isAudioBook, setIsAudioBook] = useState(null);
 
+    const formatTitleForUrl = (title) => {
+        const charMap = {
+            'ç': 'c',
+            'ğ': 'g',
+            'ı': 'i',
+            'ö': 'o',
+            'ş': 's',
+            'ü': 'u',
+            'Ç': 'c',
+            'Ğ': 'g',
+            'İ': 'i',
+            'Ö': 'o',
+            'Ş': 's',
+            'Ü': 'u',
+          };
+        
+          const sanitizedTitle = title
+            .split('')
+            .map(char => charMap[char] || char)
+            .join('');
+        
+          return sanitizedTitle
+            .trim()
+            .toLowerCase()
+            .replace(/[^a-z0-9\s-]/g, '') 
+            .replace(/\s+/g, '-');
+    };      
+
     const handleImageUpload = (e) => {
         const file = e.target.files[0];
         if(file){
@@ -81,11 +109,13 @@ function CreateStory() {
         }
         setShowErrorAlert(false);
         setShowSuccessAlert(true);
-
         window.scrollTo(0, 0);
+
+        const formattedTitle = formatTitleForUrl(bookTitle);
+
         setTimeout(() => {
             setShowSuccessAlert(false);
-            navigate('/book-name');
+            navigate(`/addsection/${formattedTitle}`);
         }, 3000);
 
     }

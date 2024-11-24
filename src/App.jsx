@@ -15,6 +15,7 @@ import Messages from './pages/messages/Messages';
 import MessageDetails from './pages/messages/MessageDetails';
 import NewMessage from './pages/messages/NewMessage';
 import CreateStory from './pages/storyWrite/createStory';
+import AddSection from './pages/addsection/AddSection';
 
 const routes = createBrowserRouter([
   { path: '/', element: <Start/>, errorElement: <h1>Page not found</h1>},
@@ -32,6 +33,7 @@ const routes = createBrowserRouter([
   { path: '/messages/:username', element: <MessageDetails/>},
   { path: '/newmessage', element: <NewMessage/>},
   { path: '/createstory', element: <CreateStory/>},
+  { path: '/addsection/:bookTitle', element: <AddSection/>},
 ])
 
 function App() {

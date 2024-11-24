@@ -147,6 +147,14 @@ function Notifications() {
             subtitle: "Size bir çarparım görürsünüz.",
             sentDate: "2024-10-26 16:29:00"
         },
+        { 
+            id: 16,
+            username: "sabitturan",
+            image: "/images/pp.jpg", 
+            title: " yeni bir duyuru yayınladı",
+            subtitle: "Hayırlı Cumalar.",
+            sentDate: "2024-11-22 23:35:00"
+        },
     ]);
 
     useEffect(() => {
