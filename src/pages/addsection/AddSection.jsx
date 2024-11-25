@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import './AddSection.css'
+import { useNavigate } from 'react-router-dom';
 
 function AddSection() {
     const [image, setImage] = useState('/images/book2.jpeg');
@@ -12,6 +13,7 @@ function AddSection() {
     const [dropdownVisible, setDropdownVisible] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [sectionToDelete, setSectionToDelete] = useState(null);
+    const navigate = useNavigate();
 
     const [sections, setSections] = useState ([
         {
@@ -39,6 +41,34 @@ function AddSection() {
     const [selectedCategory, setSelectedCategory] = useState("Dram");
     const [selectedAgeRange, setSelectedAgeRange] = useState("13-17");
     const [copyright, setCopyright] = useState("book-own");
+
+    const formatTitleForUrl = (title) => {
+        const charMap = {
+            'ç': 'c',
+            'ğ': 'g',
+            'ı': 'i',
+            'ö': 'o',
+            'ş': 's',
+            'ü': 'u',
+            'Ç': 'c',
+            'Ğ': 'g',
+            'İ': 'i',
+            'Ö': 'o',
+            'Ş': 's',
+            'Ü': 'u',
+          };
+        
+          const sanitizedTitle = title
+            .split('')
+            .map(char => charMap[char] || char)
+            .join('');
+        
+          return sanitizedTitle
+            .trim()
+            .toLowerCase()
+            .replace(/[^a-z0-9\s-]/g, '') 
+            .replace(/\s+/g, '-');
+    };      
 
     const handleTabClick = (tab) => {
         setActiveTab(tab);
@@ -126,6 +156,11 @@ function AddSection() {
         setSectionToDelete(null);
     };
 
+    const handleNewSectionButtonClick = () => {
+        const formattedTitle = formatTitleForUrl(bookTitle);
+        navigate(`/addsection/${formattedTitle}/newsection`);
+    }
+
   return (
     <div className="addsection-page">
         <div className="container">
@@ -151,7 +186,7 @@ function AddSection() {
                     </i>
                 </div>
                 <div className="add-section-right">
-                    {/* Sekmeler */}
+                    {/* Tabs */}
                     <div className="tabs">
                         <button
                             className={`tab-button ${activeTab === 'details' ? 'active' : ''}`}
@@ -166,7 +201,7 @@ function AddSection() {
                             Bölümler
                         </button>
                     </div>
-                    {/* İçerik */}
+                    {/* Content */}
                     <div className="tab-content">
                         {/* Details */}
                         {activeTab === 'details' && (
@@ -273,11 +308,12 @@ function AddSection() {
                                 </form>
                             </div>
                         )}
+                        { /* Sections */ }
                         {activeTab === 'sections' && (
                             <div id="sections" className={`tab-pane ${activeTab === 'sections' ? 'active' : ''}`}>
                                 <div className="d-flex justify-content-between align-items-center mb-3">
                                     <h6>{sections.length} adet bölüm</h6>
-                                    <button className='add-new-section-btn'>Yeni Bölüm Ekle</button>
+                                    <button className='add-new-section-btn' onClick={handleNewSectionButtonClick}>Yeni Bölüm Ekle</button>
                                 </div>
                                 {sections.map(section => (
                                     <div className="section-row d-flex justify-content-between align-items-center" key={section.id}>
@@ -331,11 +367,13 @@ function AddSection() {
                 </div>
             </div>
         </div>
+        {/* Errors */}
         {tagError && (
             <div className="error-message-cover error-message-bottom-left">
                 {tagError}
             </div>
         )}
+        { /* Modal */ }
         <div className={`modal fade ${showModal ? 'show d-block' : ''}`} tabIndex="-1" role="dialog">
             <div className="modal-dialog" role="document">
                 <div className="modal-content">
