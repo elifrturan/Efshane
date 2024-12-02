@@ -26,7 +26,7 @@ function SignIn() {
       });
 
       const token = response.data.accessToken;
-      localStorage.setItem('token', token);
+      localStorage.setItem('token', typeof token === "object" ? JSON.stringify(token) : token);
 
       console.log('Giriş başarılı:', response.data);
 

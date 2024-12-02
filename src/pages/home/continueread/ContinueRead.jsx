@@ -8,19 +8,19 @@ function ContinueRead() {
 
   useEffect(() => {
     const fetchLastReadBook = async () => {
+      const token = localStorage.getItem('token');
+      const parsedToken = token && token.startsWith('{') ? JSON.parse(token) : token;
+      if (!parsedToken) {
+          console.error("Token bulunamadı!");
+          return;
+      }
         try {
-            const token = localStorage.getItem('token');  
-            console.log("Token:", token); 
-            if (!token) {
-                console.error("Token bulunamadı!");
-                return;
-            }
             const response = await axios.get(`http://localhost:3000/book-case/last`, {
                 headers: {
-                    Authorization: `Bearer ${token}`, 
+                    Authorization: `Bearer ${parsedToken}`, 
                 },
             });
-            console.log("Backend'den gelen yanıt:", response.data); 
+
             setLastReadBook(response.data); 
         } catch (error) {
             console.error("Kitap alınırken hata oluştu:", error.response?.data || error.message);

@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect} from 'react'
 import './CreateStory.css'
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios'; 
 
 function CreateStory() {
     const [image, setImage] = useState(null);
@@ -12,14 +13,18 @@ function CreateStory() {
     const [showErrorAlert, setShowErrorAlert] = useState(false);
     const [showCopyrightAlert, setShowCopyrightAlert] = useState(false);
     const [contentChoice, setContentChoice] = useState("");
+    const [copyrightStatuses, setCopyrightStatuses] = useState([]);
     const navigate = useNavigate();
-
     const [bookTitle, setBookTitle] = useState("");
     const [bookSummary, setBookSummary] = useState("");
-    const [category, setCategory] = useState("");
-    const [ageRange, setAgeRange] = useState("");
+    const [category, setCategory] = useState([]);
+    const [selectedCategory, setSelectedCategory] = useState('');
+    const [ageRanges, setAgeRange] = useState([]); 
+    const [selectedAgeRange, setSelectedAgeRange] = useState('');
     const [isAudioBook, setIsAudioBook] = useState(null);
 
+    const defaultImage = "/images/default-book-cover.webp";
+    
     const formatTitleForUrl = (title) => {
         const charMap = {
             'ç': 'c',
@@ -34,30 +39,28 @@ function CreateStory() {
             'Ö': 'o',
             'Ş': 's',
             'Ü': 'u',
-          };
+        };
         
-          const sanitizedTitle = title
+        const sanitizedTitle = title
             .split('')
             .map(char => charMap[char] || char)
             .join('');
         
-          return sanitizedTitle
+        return sanitizedTitle
             .trim()
             .toLowerCase()
             .replace(/[^a-z0-9\s-]/g, '') 
             .replace(/\s+/g, '-');
     };      
 
-    const handleImageUpload = (e) => {
+    const handleImageUpload = async (e) => {
         const file = e.target.files[0];
-        if(file){
+        if (file) {
             const img = new Image();
-            img.onload = () => {
-                if(img.width > 200 || img.height > 281){
+            img.onload = async () => {
+                if (img.width > 200 || img.height > 281) {
                     setError("Görsel boyutu 200x281 pikselden büyük olamaz.");
-                    setTimeout(() => {
-                        setError("");
-                    }, 5000);
+                    setTimeout(() => setError(""), 5000);
                 } else {
                     setError("");
                     const reader = new FileReader();
@@ -65,12 +68,26 @@ function CreateStory() {
                         setImage(reader.result);
                     };
                     reader.readAsDataURL(file);
+                    try {
+                        const base64Image = await convertToBase64(file); 
+                        setImage(base64Image);
+                    } catch (error) {
+                        console.error("Görsel dönüştürme hatası:", error);
+                    }
                 }
             };
-            img.src = URL.createObjectURL(file);            
-        }    
-    }
-
+            img.src = URL.createObjectURL(file);
+        }
+    };
+    const convertToBase64 = (file) => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = (error) => reject(error);
+        });
+    };
+    
     const handleAddTag = () => {
         if(currentTag && !tags.includes(currentTag)){
             if(tags.length < 8){
@@ -90,51 +107,145 @@ function CreateStory() {
     const handleKeyDown = (e) => {
         if(e.key === 'Enter'){
             e.preventDefault();
+            console.log("down");
             handleAddTag();
         }
     }
 
     const handleRemoveTag = (tagToRemove) => {
+        console.log("remove");
         setTags(tags.filter(tag => tag !== tagToRemove));
     } 
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const response = await axios.get('http://localhost:3000/categories');
+                if (Array.isArray(response.data)) {
+                    setCategory(response.data); 
+                } else {
+                    console.error('Kategori verisi beklenmeyen formatta:', response.data);
+                    setCategory([]); 
+                }
+            } catch (error) {
+                console.error('Kategorileri çekerken hata oluştu:', error);
+                setCategory([]);
+            }
+        };
+        fetchCategories();
+    }, []);
 
-        if (!bookTitle || !bookSummary || !category || !ageRange || isAudioBook === null || !contentChoice) {
+    const handleCategoryChange = (e) => {
+        setSelectedCategory(e.target.value);
+    };
+
+    useEffect(() => {
+        const fetchAgeRanges = async () => {
+            try {
+                const response = await axios.get('http://localhost:3000/book/ageRange');
+                if (response.data) setAgeRange(response.data);
+                console.log(response.data);
+            } catch (error) {
+                console.error('Yaş aralıklarını çekerken hata oluştu:', error);
+            }
+        };
+        fetchAgeRanges();
+    }, []);
+
+    const handleRangeChange = (e) => {
+        setSelectedAgeRange(e.target.value);
+    };
+    
+    useEffect(() => {
+        axios.get('http://localhost:3000/book/copyright')
+            .then(response => {
+                if (Array.isArray(response.data)) {
+                    setCopyrightStatuses(response.data);
+                } else {
+                    console.error("Beklenmeyen veri formatı:", response.data);
+                }
+            })
+            .catch(error => {
+                console.error('Veri alırken hata oluştu:', error);
+            });
+    }, []);    
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+            if (!bookTitle || !bookSummary || !selectedCategory || !selectedAgeRange || isAudioBook === null || !contentChoice) {
             setShowErrorAlert(true);
             setShowSuccessAlert(false);
-            window.scrollTo(0,0);
+            window.scrollTo(0, 0);
             return;
         }
+    
+        const bookCover = image || defaultImage;
+    
         setShowErrorAlert(false);
         setShowSuccessAlert(true);
         window.scrollTo(0, 0);
-
+    
         const formattedTitle = formatTitleForUrl(bookTitle);
-
-        setTimeout(() => {
+    
+        try {
+            const response = await axios.post(
+                'http://localhost:3000/book',
+                {
+                    title: bookTitle,
+                    summary: bookSummary,
+                    bookCover,
+                    isAudioBook,
+                    hashtags: tags,
+                    categories: selectedCategory,
+                    ageRange: selectedAgeRange,
+                    bookCopyright: contentChoice,
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
+                }
+            );
+    
+            if (response.status === 201) {
+                setTimeout(() => {
+                    setShowSuccessAlert(false);
+                    navigate(`/addsection/${formattedTitle}`, {
+                        state: {
+                            bookTitle,
+                            bookSummary,
+                            image: bookCover,
+                            isAudioBook,
+                            tags,
+                            selectedCategory,
+                            selectedAgeRange,
+                            contentChoice,
+                        },
+                    });
+                }, 3000);
+            }
+        } catch (error) {
+            setShowErrorAlert(true);
             setShowSuccessAlert(false);
-            navigate(`/addsection/${formattedTitle}`);
-        }, 3000);
-
-    }
-
+            window.scrollTo(0, 0);
+        }
+    };
+    
     const handleContentChoiceChange = (e) => {
         const selectedValue = e.target.value;
         setContentChoice(selectedValue);
-        if (selectedValue === "book-own") {
+        if (selectedValue === "1") {
             setShowCopyrightAlert(true);
         } else {
             setShowCopyrightAlert(false);
         }
-    }
+    };
 
-  return (
+return (
     <div className='create-story-page'>
         {showSuccessAlert && (
             <div className="alert alert-success d-flex" role="alert">
-                <i class="bi bi-check-circle-fill me-3"></i>
+                <i className="bi bi-check-circle-fill me-3"></i>
                 <div>
                     Kitap oluşturma işlemi başarılı. Yönlendiriliyorsunuz...
                 </div>
@@ -158,18 +269,18 @@ function CreateStory() {
             <div className="create-story-main mt-5">
                 <div className="create-left">
                     {image ? (
-                      <img src={image} alt="uploaded" width="200px" height="281px" />
+                        <img src={image} alt="uploaded" width="200px" height="281px" />
                     ) : (
-                      <img src="/images/upload-image.svg" alt="upload-image" width="200px" height="281px" />
+                        <img src="/images/upload-image.svg" alt="upload-image" width="200px" height="281px" />
                     )}
                     <input
-                      type="file"
-                      accept="image/*"
-                      id="image-upload"
-                      style={{ display: 'none' }}
-                      onChange={handleImageUpload}
+                        type="file"
+                        accept="image/*"
+                        id="image-upload"
+                        style={{ display: 'none' }}
+                        onChange={handleImageUpload}
                     />
-                    <button onClick={() => document.getElementById('image-upload').click()}>Görsel Yükle <i class="bi bi-cloud-arrow-up-fill ms-1"></i></button>
+                    <button onClick={() => document.getElementById('image-upload').click()}>Görsel Yükle <i className="bi bi-cloud-arrow-up-fill ms-1"></i></button>
                     {error && <p className='error-message-cover'>{error}</p>}
                     <i className='left-description'>Kitabınız için bir kapak resmi yükleyin. 
                         Bu, kitabınızın daha çekici görünmesini sağlayacaktır.
@@ -187,14 +298,21 @@ function CreateStory() {
                         </div>
                         <div className="form-group mb-3">
                             <label className='form-label'>Kategori</label>
-                            <select className='form-select form-select-sm form-select-create' value={category} onChange={(e) => setCategory(e.target.value)}>
-                                <option selected>Kategori Seçiniz...</option>
-                                <option value="Romantik">Romantik</option>
-                                <option value="Korku">Korku</option>
-                                <option value="Mizah">Mizah</option>
-                                <option value="Tarih">Tarih</option>
-                                <option value="Bilim Kurgu">Bilim Kurgu</option>
-                                <option value="Fantastik">Fantastik</option>
+                            <select
+                                className="form-select form-select-sm form-select-create"
+                                value={selectedCategory}  
+                                onChange={handleCategoryChange} 
+                            >
+                                <option value="">Kategori Seçiniz...</option>
+                                {Array.isArray(category) && category.length > 0 ? (
+                                    category.map((categories) => (
+                                        <option key={categories.id} value={categories.id}>
+                                            {categories.name}
+                                        </option>
+                                    ))
+                                ) : (
+                                    <option disabled>Yükleniyor...</option>
+                                )}
                             </select>
                         </div>
                         <label className='form-label'>Sesli kitap mı?</label>
@@ -231,26 +349,44 @@ function CreateStory() {
                         </div>
                         <div className="mb-3">
                             <label className='form-label'>Yaş Aralığı</label>
-                            <select className='form-select form-select-sm form-select-create' value={ageRange} onChange={(e) => setAgeRange(e.target.value)}>
-                                <option selected>Yaş Aralığı Seçiniz...</option>
-                                <option value="0-12">0-12 Yaş</option>
-                                <option value="13-17">13-17 Yaş</option>
-                                <option value="18-35">18-35 Yaş</option>
-                                <option value="35+">35+ Yaş</option>
+                            <select
+                                className="form-select form-select-sm form-select-create"
+                                value={selectedAgeRange} 
+                                onChange={handleRangeChange} 
+                            >
+                                <option value="">Yaş Aralığı Seçiniz...</option>
+                                {Array.isArray(ageRanges) && ageRanges.length > 0 ? (
+                                    ageRanges.map((range) => (
+                                        <option key={range.id} value={range.id}>
+                                            {range.range}
+                                        </option>
+                                    ))
+                                ) : (
+                                    <option disabled>Yükleniyor...</option>
+                                )}
                             </select>
                         </div>
-                        <div className="mb-3">
-                            <label className='form-label'>Telif Hakkı</label>
-                            <select className='form-select form-select-sm form-select-create' value={contentChoice} onChange={handleContentChoiceChange}>
-                                <option value="" selected>Seçiniz...</option>
-                                <option value="book-own">© Kitabın içeriği tamamen bana aittir. Hiçbir dış kaynaktan alıntı yapılmamıştır.</option>
-                                <option value="book-own-quotes">Kitap içeriği bana aittir, ancak bazı bölümler başka bir kaynaktan alıntı yapılmıştır. Alıntı yapılan kaynaklara gerekli atıflar yapılmıştır.</option>
-                                <option value="book-copied-permission">Kitap içeriği başkalarından kopyalanmıştır, ancak kopyalanan içerikler için gerekli izinler alınmıştır.</option>
-                                <option value="book-public-source">Kitap içeriği tamamen bana aittir, ancak bazı kısımlar kamuya açık kaynaklardan alınmış ve kaynakları belirtilmiştir.</option>
-                                <option value="book-others-wrote">Kitap içeriği başka bir yazar tarafından yazılmıştır, ancak kullanmak için gerekli izinler alınmıştır.</option>
-                            </select>
-                        </div>
-                        {showCopyrightAlert && contentChoice === "book-own" && (
+                        {showCopyrightAlert && (
+                                <div className="alert alert-warning d-flex" role="alert">
+                                    <i className="bi bi-exclamation-triangle-fill me-3"></i>
+                                    <div>
+                                        Lütfen yasal uyarıyı kontrol ettiğinizden emin olun.
+                                    </div>
+                                </div>
+                            )}
+                            <div className="form-group mb-3">
+                                <label className='form-label'>Telif Hakkı</label>
+                                <select className="form-select form-select-sm form-select-create" value={contentChoice} onChange={handleContentChoiceChange}>
+                                    <option value="" selected>Seçiniz...</option>
+                                    {copyrightStatuses.map((status) => (
+                                        <option key={status.id} value={status.id}>
+                                            {status.copyright}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                            
+                            {showCopyrightAlert && contentChoice === "1" && (
                             <div className="alert alert-danger d-flex align-items-start" role="alert">
                                 <i className="bi bi-exclamation-triangle-fill me-2"></i>
                                 <div>
@@ -262,7 +398,7 @@ function CreateStory() {
                                     size ait olacaktır.
                                 </div>
                             </div>
-                        )}
+                        )} 
                         <button className='create-story-btn' type='submit'>Kaydet</button>
                     </form>
                 </div>
@@ -274,7 +410,6 @@ function CreateStory() {
             </div>
         )}
     </div>
-  )
+    )
 }
-
 export default CreateStory

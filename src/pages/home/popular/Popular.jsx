@@ -8,16 +8,21 @@ function Popular() {
 
     useEffect(() => {
         const fetchBook = async () => {
+            const token = localStorage.getItem('token');
+            const parsedToken = token && token.startsWith('{') ? JSON.parse(token) : token;
+            if (!parsedToken) {
+                console.error("Token bulunamadı!");
+                return;
+            }
             try {
                 const token = localStorage.getItem('token');  
-                console.log("Token:", token); 
                 if (!token) {
                     console.error("Token bulunamadı!");
                     return;
                 }
                 const response = await axios.get(`http://localhost:3000/book/trend`, {
                     headers: {
-                        Authorization: `Bearer ${token}`, 
+                        Authorization: `Bearer ${parsedToken}`, 
                     },
                 });
                 console.log("Backend'den gelen yanıt:", response.data); 

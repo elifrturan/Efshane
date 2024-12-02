@@ -14,8 +14,13 @@ function MainLayouts() {
     const fetchProfile = async () => {
       try {
         const token = localStorage.getItem('token');
+        const parsedToken = token && token.startsWith('{') ? JSON.parse(token) : token;
+        if (!parsedToken) {
+          console.error("Token bulunamadı!");
+          return;
+        }
         const response = await axios.get('http://localhost:3000/users', {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: { Authorization: `Bearer ${parsedToken}` },
         });
         setProfile(response.data);
       } catch (error) {

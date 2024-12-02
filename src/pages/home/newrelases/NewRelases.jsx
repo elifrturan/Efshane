@@ -7,27 +7,30 @@ function NewRelases() {
     const [books, setBook] = useState(null);
 
     useEffect(() => {
+      const token = localStorage.getItem('token');
+      const parsedToken = token && token.startsWith('{') ? JSON.parse(token) : token;
+    
+      if (!parsedToken) {
+        console.error("Token bulunamadı!");
+        return;
+      }
+    
       const fetchBook = async () => {
-          try {
-              const token = localStorage.getItem('token');  
-              console.log("Token:", token); 
-              if (!token) {
-                  console.error("Token bulunamadı!");
-                  return;
-              }
-              const response = await axios.get(`http://localhost:3000/book`, {
-                  headers: {
-                      Authorization: `Bearer ${token}`, 
-                  },
-              });
-              console.log("Backend'den gelen yanıt:", response.data); 
-              setBook(response.data); 
-          } catch (error) {
-              console.error("Kitap alınırken hata oluştu:", error.response?.data || error.message);
-          }
+        try {
+          const response = await axios.get(`http://localhost:3000/book`, {
+            headers: {
+              Authorization: `Bearer ${parsedToken}`,
+            },
+          });
+          console.log("Backend'den gelen yanıt:", response.data);
+          setBook(response.data);
+        } catch (error) {
+          console.error("Kitap alınırken hata oluştu:", error.response?.data || error.message);
+        }
       };
+    
       fetchBook();
-  }, []);
+    }, []);
 
     const scrollLeft = () => {
       if (scrollRef.current) {
