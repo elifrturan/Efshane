@@ -1,0 +1,107 @@
+.contact-us h1{
+    color: var(--second-color) !important;
+}
+
+.contact-us-main{
+    display: flex;
+}
+
+.contact-us-left {
+    padding: 2%;
+    flex: 50%;
+}
+
+.contact-us-right {
+    padding: 2%;
+    flex: 50%;
+}
+
+.contact-us-title p, .contact-us-frame-title span {
+    font-size: 0.8rem;
+    opacity: 75%;
+}
+
+.contact-us-body Form.Control, .contact-us-body Form.Control{
+    border: 1px solid var(--second-color);
+    color: var(--second-color) !important;
+    font-size: 0.9rem !important;
+}
+
+.contact-us-body Form.Label {
+    font-size: 0.9rem !important;
+}
+
+.btn-contact-us {
+    display: flex;
+    justify-content: center;
+}
+
+.btn-contact-us Button{
+    border: 1px solid #b85c5c !important;
+    width: 50%;
+    background-color: #b85c5c !important;
+    color: var(--bg-color) !important;
+}
+
+.contact-us-frame-title  {
+    display: flex;
+    flex-direction: column;
+    text-align: start;
+    font-size: 0.9rem;
+}
+
+.contact-us-frame-title h5{
+    font-weight: 600;
+    color: #212529BF;
+    font-size: large;
+}
+
+.contact-us-frame-row{
+    font-size: 0.9rem;
+    color: #212529BF;
+}
+
+@media (max-width: 1120px){
+    .contact-us-frame-row iframe{
+        width: 350px;
+    }
+}
+
+@media (max-width: 1000px){
+    .contact-us-main {
+        flex-direction: column;
+    }
+    .contact-us-right {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+    }
+    .contact-us-frame-row iframe{
+        width: 420px;
+    }
+}
+
+@media (max-width: 545px) {
+    .contact-us-frame-row iframe{
+        width: 350px;
+    }
+}
+
+@media (max-width: 490px) {
+    .contact-us-frame-row iframe{
+        width: 300px;
+    }
+}
+
+@media (max-width: 440px) {
+    .contact-us-frame-row iframe{
+        width: 280px;
+    }
+}
+
+@media (max-width: 390px) {
+    .contact-us-frame-row iframe{
+        width: 220px;
+    }
+}

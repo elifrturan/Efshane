@@ -1,10 +1,50 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+@import "slick-carousel/slick/slick.css";
+@import "slick-carousel/slick/slick-theme.css";
+
+@font-face {
+  font-family: 'SF Pro Display';
+  src: url('./fonts/SFPRODISPLAYREGULAR.otf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'SF Pro Display';
+  src: url('./fonts/SFPRODISPLAYBOLD.otf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+
 
 :root {
-  --theme-color: #A04747; /* Tema rengi */
+  --theme-color: #3568b6; /* Tema rengi */
   --second-color: #593F2C;
   --bg-color: #f5f5f5;
-  font-family: "Inter", sans-serif !important;
+  font-family: 'SF Pro Display', sans-serif;;
   font-optical-sizing: auto;
   font-style: normal;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+body{
+  font-family: 'SF Pro Display', sans-serif;
+  line-height: 1.2;
+  letter-spacing: -0.4px;
+}
+
+body input{
+  font-size: 0.9rem;
+}
+
+main{
+  flex: 1;
 }

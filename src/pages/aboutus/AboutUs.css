@@ -1,0 +1,73 @@
+.about-us-page {
+    color: #212529BF;
+}
+
+.about-us-page h2{
+    color:rgb(65, 63, 63);
+    font-weight: 600;
+}
+
+.about-us-content {
+    font-size: 1rem;
+    opacity: 50%;
+}
+
+.about-story-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.about-story-text p{
+    font-size: 1rem;
+    color: #212529BF;
+}
+
+.slick-slide {
+    pointer-events: none;
+}
+
+.slick-slide div {
+    transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+}
+
+.slick-slide img {
+    max-height: 300px;
+    object-fit: cover;
+    width: 100%;
+    border-radius: 8px;
+}
+
+.slick-center .feature-img {
+    transform: scale(1.1);
+    transition: transform 0.5s ease;
+    border-radius: 8px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+  
+.slick-center div {
+    margin-top: 2%;
+    transform: scale(1);
+    opacity: 1;
+}
+  
+.slick-slide:not(.slick-center) div {
+    transform: scale(0.9);
+    opacity: 0.5;
+}
+
+.slick-slide:not(.slick-center) .feature-img {
+    transform: scale(0.9);
+    opacity: 0.7;
+}
+
+.slick-slide .feature-content {
+    padding: 10px;
+}
+
+.slick-slide p {
+    font-size: 14px;
+    line-height: 1.5;
+    margin-top: 10px;
+}
+  

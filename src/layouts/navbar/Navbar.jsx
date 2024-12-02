@@ -1,164 +1,62 @@
-import React, { useState, useEffect } from 'react';
-import './Navbar.css';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import React from 'react';
+import './Navbar.css'
+import { Navbar, Nav, Dropdown, Container } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-function MainLayouts() {
-  const [isStoryDropdownOpen, setStoryDropdownOpen] = useState(false);
-  const [isProfileDropdownOpen, setProfileDropdonwOpen] = useState(false);
-  const [isMenuOpen, setMenuOpen] = useState(false);
-  const [profile, setProfile] = useState(null);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const token = localStorage.getItem('token');
-        const parsedToken = token && token.startsWith('{') ? JSON.parse(token) : token;
-        if (!parsedToken) {
-          console.error("Token bulunamadı!");
-          return;
-        }
-        const response = await axios.get('http://localhost:3000/users', {
-          headers: { Authorization: `Bearer ${parsedToken}` },
-        });
-        setProfile(response.data);
-      } catch (error) {
-        console.error("Profil bilgisi alınırken hata oluştu:", error.response?.data || error.message);
-      }
-    };
-
-    fetchProfile();
-  }, []);
-
-  const toggleStoryDropdown = () => {
-    setStoryDropdownOpen(!isStoryDropdownOpen);
-    setProfileDropdonwOpen(false);
-  };
-
-  const toggleProfileDropdown = () => {
-    setProfileDropdonwOpen(!isProfileDropdownOpen);
-    setStoryDropdownOpen(false);
-  };
-
-  const toggleMenu = () => {
-    setMenuOpen(!isMenuOpen);
-  };
-  
-  const handleLogoClick = () => {
-    navigate("/home");
-  }
-
-  const handleCreateStoryClick = () => {
-    navigate("/createstory");
-  }
-
+function CustomNavbar() {
   return (
-      <div className="nav-row">
-        <div className="container">
-          <div className="main-nav nav">
-          <div className="left">
-            <div className="logo p-0 m-0">
-              <img src="/logo/logo.svg" alt="logo" width="55px" height="55px" onClick={handleLogoClick}/>
-            </div>
-            <div className="categories-stream ms-5">
-              <NavLink className="categories-stream-nav" to="/categories">Kategoriler</NavLink>
-              <NavLink className="categories-stream-nav">Akış</NavLink>
-            </div>
-          </div>
-          <div className="center">
-            <input type="search" className='form-control bg-transparent search' placeholder='Ara...'/>
-          </div>
-          <div className="right">
-              <div className="menu-icon">
-                <i className="bi bi-list" onClick={toggleMenu}></i>
-              </div>
-
-              {isMenuOpen && (
-                <div className="dropdown-menu-custom">
-                  <ul>
-                    <li>
-                      <NavLink to="/categories">Kategoriler</NavLink>
-                    </li>
-                    <li>
-                      <NavLink to="/stream">Akış</NavLink>
-                    </li>
-                    <li>
-                      <Link onClick={toggleStoryDropdown}>Hikaye Yaz</Link>
-                      {isStoryDropdownOpen && (
-                        <ul>
-                          <li><a href="#">Hikaye Oluştur</a></li>
-                          <li className='myStories'><a href="#">Hikayelerim</a></li>
-                        </ul>
-                      )}
-                    </li>
-                    <li>
-                      <a href="">Bildirimler</a>
-                    </li>
-                    <li>
-                      <Link onClick={toggleProfileDropdown}>
-                        <img
-                          src={profile?.profile_image}
-                          alt="Profile"
-                          width="40px"
-                          height="40px"
-                          className="img-fuild rounded-circle"
-                        />
-                      </Link>
-                      {isProfileDropdownOpen && (
-                        <ul>
-                          <li><a href="#">Profilim</a></li>
-                          <li><a href="#">Mesajlar</a></li>
-                          <li><a href="#">Kitaplık</a></li>
-                          <li><a href="#">Ayarlar</a></li>
-                          <li><a href="#">Çıkış Yap</a></li>
-                        </ul>
-                      )}
-                    </li>
-                  </ul>
-                </div>
-              )}
-              <div className="write-story">
-                <div className="dropdown-center">
-                  <Link 
-                  className="write-dropdown-toggle "
-                  onClick={toggleStoryDropdown}
-                  aria-expanded={isStoryDropdownOpen}>
-                    Hikaye Yaz
-                  </Link>
-                  <ul className={`write-story dropdown-menu ${isStoryDropdownOpen ? 'show' : ''}`} aria-labelledby="storyDropdown">
-                    <div className="story-dropdown-arrow"></div>
-                    <li onClick={handleCreateStoryClick}><a className="dropdown-item" href="">Hikaye Oluştur</a></li>
-                    <li className='myStories'><a className="dropdown-item" href="#">Hikayelerim</a></li>
-                  </ul>
-                </div>
-              </div>
-              <div className="nav-notification">
-                <Link to="/notifications"><i className="bi bi-bell-fill"></i></Link>
-              </div>
-              <div className="profile-dropdown">
-                <div className="dropdown-center">
-                    <Link 
-                    className="profile-dropdown-toggle"
-                    onClick={toggleProfileDropdown}
-                    aria-expanded={isProfileDropdownOpen}>
-                      <img src="/images/pp.jpg" alt="40x40" width="40px" height="40px" className='profile-image img-fuild rounded-circle'/>
-                    </Link>
-                    <ul className={`profile-dropdown dropdown-menu ${isProfileDropdownOpen ? 'show' : ''}`} aria-labelledby="profileDropdown">
-                      <div className="profile-dropdown-arrow"></div>
-                      <li><a className="dropdown-item" href="#">Profilim</a></li>
-                      <li><Link className="dropdown-item" to="/messages">Mesajlar</Link></li>
-                      <li><a className="dropdown-item" href="#">Kitaplık</a></li>
-                      <li><a className="dropdown-item" href="#">Ayarlar</a></li>
-                      <li><a className="dropdown-item" href="#">Çıkış Yap</a></li>
-                    </ul>
-                </div>
-              </div>
-          </div>
-          </div>
-        </div>
-      </div>
+    <>
+      <Navbar expand="lg" className="px-4 custom-navbar">
+        <Container>
+          <Navbar.Brand href="/home" className='my-auto w-25'>
+            <img
+              src="/logo/logo.svg"
+              alt="Logo"
+              className="me-2"
+              style={{ height: '40px' }}
+            />
+            <span className="fw-bold fs-5 ms-2">
+              <span className="navbar-ef">EF</span>shane
+            </span>
+          </Navbar.Brand>
+          <Navbar.Toggle aria-controls="navbar-nav" />
+          <Navbar.Collapse id="navbar-nav">
+            <Nav className='mx-auto'>
+                <Nav.Link href="/categories" className='mx-2'>Kategoriler</Nav.Link>
+                <Nav.Link href="/feed" className='mx-2'>Akış</Nav.Link>
+                <Nav.Link href="/createstory" className='mx-2'>Hikaye Oluştur</Nav.Link>
+                <Nav.Link href="/mystories" className='mx-2'>Hikayelerim</Nav.Link>
+            </Nav>
+            <Nav className="ms-auto">
+              <Nav.Link href="/notifications" className="mx-2">
+                <i className="bi bi-bell fs-5"></i>
+              </Nav.Link>
+              <Dropdown align="end">
+                <Dropdown.Toggle as="a" className="nav-link p-0 mx-2">
+                  <img
+                    src="/images/pp.jpg"
+                    alt="Profil"
+                    className="rounded-circle"
+                    style={{ height: '40px', width: '40px', objectFit: 'cover' }}
+                  />
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  <Dropdown.Item href="/profile" className="text-muted"><i className="bi bi-person me-2"></i>Profilim</Dropdown.Item>
+                  <Dropdown.Item href="/messages" className="text-muted"><i className="bi bi-chat me-2"></i>Mesajlar</Dropdown.Item>
+                  <Dropdown.Item href="/library" className="text-muted"><i className="bi bi-book me-2"></i>Kitaplık</Dropdown.Item>
+                  <Dropdown.Item href="/settings" className="text-muted"><i className="bi bi-gear me-2"></i>Ayarlar</Dropdown.Item>
+                  <Dropdown.Item href="/contact-us" className="text-muted"><i className="bi bi-question-circle me-2"></i>Bize Ulaşın</Dropdown.Item>
+                  <Dropdown.Item href="/logout" className="text-danger logout">
+                    <i className="bi bi-box-arrow-left me-2"></i>Çıkış Yap
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+            </Nav>
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
+    </>
   );
 }
 
-export default MainLayouts;
+export default CustomNavbar;

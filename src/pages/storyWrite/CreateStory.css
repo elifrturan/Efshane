@@ -1,8 +1,20 @@
-.create-story-page{
-    color: var(--second-color);
+* {
+    box-sizing: border-box;
+}
+
+html, body {
     background-color: whitesmoke;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    color: var(--second-color);
+}
+
+.create-story-page{
     display: flex;
     flex-direction: column;
+    min-height: 100vh;
+    padding: 0 15%;
 }
 
 .create-story-title{
@@ -118,6 +130,10 @@
     color: whitesmoke;
     border: none;
     border-radius: 0.375rem;
+}
+
+.create-story-btn:hover {
+    background-color: indianred;
 }
 
 .form-select-create{

@@ -2,6 +2,7 @@ import React, { useState, useEffect} from 'react'
 import './CreateStory.css'
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios'; 
+import { Button, Form, InputGroup } from 'react-bootstrap';
 
 function CreateStory() {
     const [image, setImage] = useState(null);
@@ -210,18 +211,22 @@ function CreateStory() {
             if (response.status === 201) {
                 setTimeout(() => {
                     setShowSuccessAlert(false);
-                    navigate(`/addsection/${formattedTitle}`, {
-                        state: {
-                            bookTitle,
-                            bookSummary,
-                            image: bookCover,
-                            isAudioBook,
-                            tags,
-                            selectedCategory,
-                            selectedAgeRange,
-                            contentChoice,
-                        },
-                    });
+                    if (isAudioBook) {
+                        navigate(`/add-voice-section/${formattedTitle}`);
+                    } else {
+                        navigate(`/addsection/${formattedTitle}`, {
+                            state: {
+                                bookTitle,
+                                bookSummary,
+                                image: bookCover,
+                                isAudioBook,
+                                tags,
+                                selectedCategory,
+                                selectedAgeRange,
+                                contentChoice,
+                            },
+                        });
+                    }
                 }, 3000);
             }
         } catch (error) {
@@ -242,21 +247,22 @@ function CreateStory() {
     };
 
 return (
+    <>
+    {showSuccessAlert && (
+        <div className="alert alert-success d-flex" role="alert">
+            <i className="bi bi-check-circle-fill me-3"></i>
+            <div>
+                Kitap oluşturma işlemi başarılı. Yönlendiriliyorsunuz...
+            </div>
+        </div>
+    )}
+    {showErrorAlert && (
+        <div className="alert alert-danger d-flex" role="alert">
+            <i className="bi bi-exclamation-triangle-fill me-3"></i>
+            <div>Lütfen tüm alanları doldurun.</div>
+        </div>
+    )}
     <div className='create-story-page'>
-        {showSuccessAlert && (
-            <div className="alert alert-success d-flex" role="alert">
-                <i className="bi bi-check-circle-fill me-3"></i>
-                <div>
-                    Kitap oluşturma işlemi başarılı. Yönlendiriliyorsunuz...
-                </div>
-            </div>
-        )}
-        {showErrorAlert && (
-            <div className="alert alert-danger d-flex" role="alert">
-                <i className="bi bi-exclamation-triangle-fill me-3"></i>
-                <div>Lütfen tüm alanları doldurun.</div>
-            </div>
-        )}
         <div className="container mt-5 mb-5">
             <div className="create-story-title">
                 <h2 className='text-center'>Hikaye Oluştur</h2>
@@ -287,19 +293,20 @@ return (
                     </i>
                 </div>
                 <div className="create-right">
-                    <form onSubmit={handleSubmit}>
-                        <div className="form-group mb-3">
-                            <label className='form-label'>Kitap Adı</label>
-                            <input type="text" className='form-control' value={bookTitle} onChange={(e) => setBookTitle(e.target.value)}/>
-                        </div>
-                        <div className="form-group mb-3">
-                            <label className='form-label'>Kitap Özeti</label>
-                            <textarea rows="4" className='form-control' value={bookSummary} onChange={(e) => setBookSummary(e.target.value)}/>
-                        </div>
-                        <div className="form-group mb-3">
-                            <label className='form-label'>Kategori</label>
-                            <select
-                                className="form-select form-select-sm form-select-create"
+                    <Form onSubmit={handleSubmit}>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Kitap Adı</Form.Label>
+                            <Form.Control type="text" className='bg-transparent' value={bookTitle} onChange={(e) => setBookTitle(e.target.value)}/>
+                        </Form.Group>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Kitap Özeti</Form.Label>
+                            <Form.Control className='bg-transparent' as="textarea" rows={4} value={bookSummary} onChange={(e) => setBookSummary(e.target.value)}/>
+                        </Form.Group>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Kategori</Form.Label>
+                            <Form.Select 
+                                size='sm' 
+                                className='form-select-create bg-transparent'
                                 value={selectedCategory}  
                                 onChange={handleCategoryChange} 
                             >
@@ -313,21 +320,27 @@ return (
                                 ) : (
                                     <option disabled>Yükleniyor...</option>
                                 )}
-                            </select>
-                        </div>
-                        <label className='form-label'>Sesli kitap mı?</label>
-                        <div className="form-group d-flex mb-3">
-                            <div className="form-check">
-                                <input type="radio" className='form-check-input' name="flexRadioDefault" id="flexRadioDefault1" checked={isAudioBook === true} onChange={() => setIsAudioBook(true)}/>
-                                <label className='form-check-label'>Evet</label>
-                            </div>
-                            <div className="form-check">
-                                <input type="radio" className='form-check-input ms-1'  name="flexRadioDefault" id="flexRadioDefault2" checked={isAudioBook === false} onChange={() => setIsAudioBook(false)}/>
-                                <label className='form-check-label'>Hayır</label>
-                            </div>
-                        </div>
-                        <div className="form-group mb-3">
-                            <label className='form-label'>Etiketler</label>
+                            </Form.Select>
+                        </Form.Group>
+                        <Form.Label>Sesli kitap mı?</Form.Label>
+                        <Form.Group className="d-flex align-items-center mb-3">
+                            <Form.Check
+                                type='radio'
+                                label='Evet'
+                                className='d-flex align-items-center gap-2 m-0 me-3 bg-transparent'
+                                checked={isAudioBook === true} 
+                                onChange={() => setIsAudioBook(true)}    
+                            />
+                            <Form.Check
+                                type='radio'
+                                label='Hayır'
+                                className='d-flex align-items-center gap-2 m-0 bg-transparent'
+                                checked={isAudioBook === false} 
+                                onChange={() => setIsAudioBook(false)}
+                            />
+                        </Form.Group>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Etiketler</Form.Label>
                             <div className="tags-container">
                                 {tags.map((tag, index) => (
                                     <div className="tag-item" key={index}>
@@ -336,21 +349,21 @@ return (
                                     </div>
                                 ))}
                             </div>
-                            <div className="input-group">
-                                <input  
-                                    className='form-control'
+                            <InputGroup>
+                                <Form.Control
+                                    className='bg-transparent'
                                     value={currentTag}
                                     onChange={(e) => setCurrentTag(e.target.value)}
                                     onKeyDown={handleKeyDown}
-                                    placeholder='Etiket ekleyiniz...'
                                 />
                                 <span className='input-group-text span-plus' onClick={handleAddTag}>+</span>
-                            </div>
-                        </div>
-                        <div className="mb-3">
-                            <label className='form-label'>Yaş Aralığı</label>
-                            <select
-                                className="form-select form-select-sm form-select-create"
+                            </InputGroup>
+                        </Form.Group>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Yaş Aralığı</Form.Label>
+                            <Form.Select
+                                size='sm' 
+                                className='form-select-create bg-transparent'
                                 value={selectedAgeRange} 
                                 onChange={handleRangeChange} 
                             >
@@ -364,8 +377,8 @@ return (
                                 ) : (
                                     <option disabled>Yükleniyor...</option>
                                 )}
-                            </select>
-                        </div>
+                            </Form.Select>
+                        </Form.Group>
                         {showCopyrightAlert && (
                                 <div className="alert alert-warning d-flex" role="alert">
                                     <i className="bi bi-exclamation-triangle-fill me-3"></i>
@@ -374,17 +387,17 @@ return (
                                     </div>
                                 </div>
                             )}
-                            <div className="form-group mb-3">
-                                <label className='form-label'>Telif Hakkı</label>
-                                <select className="form-select form-select-sm form-select-create" value={contentChoice} onChange={handleContentChoiceChange}>
+                            <Form.Group className="mb-4">
+                                <Form.Label>Telif Hakkı</Form.Label>
+                                <Form.Select size='sm' className='form-select-create bg-transparent' value={contentChoice} onChange={handleContentChoiceChange}>
                                     <option value="" selected>Seçiniz...</option>
                                     {copyrightStatuses.map((status) => (
                                         <option key={status.id} value={status.id}>
                                             {status.copyright}
                                         </option>
                                     ))}
-                                </select>
-                            </div>
+                                </Form.Select>
+                            </Form.Group>
                             
                             {showCopyrightAlert && contentChoice === "1" && (
                             <div className="alert alert-danger d-flex align-items-start" role="alert">
@@ -399,8 +412,8 @@ return (
                                 </div>
                             </div>
                         )} 
-                        <button className='create-story-btn' type='submit'>Kaydet</button>
-                    </form>
+                        <Button className='create-story-btn' type='submit'>Kaydet</Button>
+                    </Form>
                 </div>
             </div>
         </div>
@@ -410,6 +423,7 @@ return (
             </div>
         )}
     </div>
+    </>
     )
 }
 export default CreateStory
