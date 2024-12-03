@@ -80,67 +80,77 @@ function NewSection() {
         }
     }, [content]);
 
-    const fetchChatGPTResponse = async (userInput, currentContent) => {
-        const apiKey = process.env.REACT_APP_OPENAI_API_KEY;
-        const apiUrl = 'https://api.openai.com/v1/chat/completions';
+    const typeMessage = async (message) => {
+        if (contentRef.current) {
+            const currentContent = contentRef.current.innerHTML;
+
+            let newContent = ' ';
     
-        const payload = {
-            model: 'gpt-3.5-turbo', 
-            prompt: [
-                { role: 'system', content: 'You are a helpful assistant for creative writing.' },
-                { role: 'user', content: `Content so far: ${currentContent}. User input: ${userInput}. Please continue writing.` }
-            ],            
-            max_tokens: 200, 
-            temperature: 0.7 
-        };
-    
-        try {
-            await new Promise((resolve) => setTimeout(resolve, 1000));
-    
-            const response = await axios.post(apiUrl, payload, {
-                headers: {
-                    Authorization: `Bearer ${apiKey}`,
-                    'Content-Type': 'application/json'
-                }
-            });
-    
-            return response.data.choices[0].message.content;
-        } catch (error) {
-            console.error('Error fetching response from ChatGPT:', error.response?.data || error.message);
-    
-            return error.response?.data?.error?.message || 'Bir hata oluştu.';
+            for (let i = 0; i < message.length; i++) {
+                newContent += message[i]; 
+                contentRef.current.innerHTML = `${currentContent}${newContent}`;
+                await new Promise((resolve) => setTimeout(resolve, 20)); 
+            }
         }
     };
 
-    const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
-
+    const processResponse = (responseText, currentContent) => {
+        if (responseText.startsWith(currentContent)) {
+            return responseText.replace(currentContent, ' ').trim();
+        }
+        return responseText;
+    };
+    
     const handleSendMessage = async () => {
+        const apiUrl = 'http://localhost:3000/openai';
+
         if (!inputValue.trim()) return;
-        if (loading) return;
 
         setMessages((prevMessages) => [...prevMessages, { text: inputValue, sender: 'user' }]);
-        setLoading(true);
 
-        await delay(1000); 
+        const MAX_TOKENS = 3500;
+        const trimmedContent = content.length > MAX_TOKENS 
+            ? content.substring(content.length - MAX_TOKENS) 
+            : content;
 
         try {
-            const botResponse = await fetchChatGPTResponse(inputValue, content);
-            setMessages((prevMessages) => [...prevMessages, { text: botResponse, sender: 'bot' }]);
-            setContent((prevContent) => `${prevContent} ${botResponse}`);
-        } catch (error) {
-            console.error('Error handling bot response:', error.response?.data || error.message);
-        } finally {
-            setLoading(false);
-        }
-        setInputValue('');
-    };
+            const response = await axios.post(
+                apiUrl,
+                {
+                    input: inputValue,
+                    content: trimmedContent,
+                },
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }
+            );
+            if (response.status === 201) {
+                const updatedContent = response.data.updatedContent;
+    
+                setInputValue('');
 
+                const newContent = processResponse(updatedContent, content);
+
+                await typeMessage(newContent);
+
+                setContent((prevContent) => `${prevContent} ${newContent}`);
+            } else {
+                console.error('Error:', response.data.error);
+            }
+        } catch (error) {
+            console.error('Request error:', error.message);
+        }
+    };    
+    
     const handleInputChange = (e) => {
         setInputValue(e.target.value);
     };
     
     const handleKeyDown = (e) => {
         if (e.key === 'Enter') {
+            e.preventDefault(); 
             handleSendMessage();
         }
     };

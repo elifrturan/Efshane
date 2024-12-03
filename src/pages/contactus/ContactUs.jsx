@@ -68,7 +68,7 @@ function ContactUs() {
                                                 <Form.Label>Açıklama</Form.Label>
                                                 <Form.Control as="textarea" rows={4} value={description} onChange={(e) => setDescription(e.target.value)}></Form.Control>
                                             </Form.Group>
-                                            <div className="mb-5 mt-5 btn-contact-us">
+                                            <div className="mb-4 mt-4 btn-contact-us">
                                                 <Button type="submit">Gönder</Button>
                                             </div>
                                             {error && <div className="alert alert-danger">{error}</div>}

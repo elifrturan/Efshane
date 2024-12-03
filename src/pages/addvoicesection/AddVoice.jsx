@@ -203,7 +203,7 @@ function AddVoice() {
   return (
     <div className="add-voice-section-page">
         <div className="container">
-            <h2 className='text-center mt-5 mb-5'>Kitap Detay Sayfasına Hoş Geldiniz</h2>
+            <h2 className='text-center mt-5 mb-5'>Sesli Kitap Detay Sayfasına Hoş Geldiniz</h2>
             <div className="add-voice-section-main">
                 <div className="add-voice-section-left">
                     {image ? (
@@ -228,18 +228,18 @@ function AddVoice() {
                 <div className="add-voice-section-right">
                     {/* Tabs */}
                     <div className="voice-tabs">
-                        <Button
+                        <button
                             className={`voice-tab-button ${activeTab === 'details' ? 'active' : ''}`}
                             onClick={() => handleTabClick('details')}
                         >
                         Detay
-                        </Button>
-                        <Button
+                        </button>
+                        <button
                             className={`voice-tab-button ${activeTab === 'sections' ? 'active' : ''}`}
                             onClick={() => handleTabClick('sections')}
                         >
                             Bölümler
-                        </Button>
+                        </button>
                     </div>
                     {/* Content */}
                     <div className="voice-tab-content">
