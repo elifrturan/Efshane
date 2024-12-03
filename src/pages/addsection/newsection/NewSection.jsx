@@ -26,6 +26,9 @@ function NewSection() {
     const [messages, setMessages] = useState([]);
     const [inputValue, setInputValue] = useState('');
     const [loading, setLoading] = useState(false);
+    const [dangerShow, setDangerShow] = useState(false);
+
+    const handleDangerClose = () => setDangerShow(false);
 
     const handleImageUpload = async (e) => {
         const file = e.target.files[0];
@@ -161,6 +164,10 @@ function NewSection() {
         }
     }, [messages, isChatOpen]);
 
+    useEffect(() => {
+        setDangerShow(true);
+    }, []);
+
     const saveChapter = async () => {
         if (!title.trim() || !content.trim()) {
             alert('Lütfen başlık ve içerik alanlarını doldurun.');
@@ -225,6 +232,23 @@ function NewSection() {
 
     return (
         <div className='new-section-page'>
+            <Modal show={dangerShow} onHide={handleDangerClose} className='danger-modal' centered backdrop='static'>
+                <Modal.Header closeButton>
+                    <Modal.Title>İlham Yolculuğunda Yalnız Değilsin</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    Her yaratıcı yolculukta bazen mola vermek gerekebilir. <br /><br />İlhamın azaldığını hissettiğinde, 
+                    yalnız olmadığını unutma! <br /><br /> <b>'Yardım Al'</b>  butonuna tıklayarak sana özel ipuçları ve desteklerle 
+                    yeniden yola koyulabilirsin. Amacımız, ilhamını koruyarak hayallerine ulaşmana yardımcı olmak. 
+                    <br /><br />Seni ve yaratıcılığını önemsiyoruz; ilhamın hep seninle olsun! <br /><br />
+                    <b>EFshane Ekibi ✨</b>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleDangerClose}>
+                        Anladım
+                    </Button>
+                </Modal.Footer>
+            </Modal>
             <div className="fixed-header">
                 <div className="header-buttons">
                 <button className="save" onClick={saveChapter} disabled={loading}>
@@ -234,17 +258,19 @@ function NewSection() {
                     {loading ? 'Yayınlanıyor...' : 'Yayınla'}
                 </button>
                 </div>
-                <button className='help' onClick={() => setIsChatOpen(!isChatOpen)}>Yardım Al</button>
+                <button className='help' onClick={() => setIsChatOpen(!isChatOpen)}><i class="bi bi-question-circle me-2"></i>Yardım Al</button>
             </div>
 
             {/* Chatbot modal */}
             <div className={`chat-modal ${isChatOpen ? 'active' : ''}`}>
                 <div className="chat-modal-header">Yardım Al</div>
                 <div className="chat-modal-body" ref={chatBodyRef}>
-                    Merhaba! Sana hikayeni yazarken destek olmak için buradayım. 
-                    Eğer yazdığın bölümde bir yerde takılı kaldıysan ya da hikayene 
-                    nasıl devam edeceğini bilemiyorsan, lütfen aşağıya neye ihtiyacın olduğunu yaz. 
-                    İster yeni fikirler ister olay örgüsü önerileri olsun, sana yardımcı olmaktan mutluluk duyarım!
+                    <p>
+                        Merhaba! Sana hikayeni yazarken destek olmak için buradayım. 
+                        Eğer yazdığın bölümde bir yerde takılı kaldıysan ya da hikayene 
+                        nasıl devam edeceğini bilemiyorsan, lütfen aşağıya neye ihtiyacın olduğunu yaz. 
+                        İster yeni fikirler ister olay örgüsü önerileri olsun, sana yardımcı olmaktan mutluluk duyarım!
+                    </p>
                     {messages.map((message, index) => (
                         <div
                             key={index}

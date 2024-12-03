@@ -6,6 +6,43 @@
     min-height: 100vh;
 }
 
+.danger-modal .modal-content{
+    border: #dfdfdf;
+    width: 500px;
+    border-radius: 5px;
+}
+
+.danger-modal .modal-header .btn-close {
+    font-size: 0.6rem;
+    color: #fff;
+}
+
+.danger-modal .modal-title {
+    color: black;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.danger-modal .modal-body {
+    font-size: 0.85rem;
+    color: #333;
+    opacity: 85%;
+}
+
+.danger-modal .modal-footer button {
+    font-size: 0.8rem;
+    padding: 6px 24px;
+    background: none;
+    border: 1px solid #007bff;
+    color: #007bff;
+}
+
+.danger-modal .modal-footer button:hover {
+    background-color: #007bff;
+    border: 1px solid #007bff;
+    color: #fff;
+}
+
 .image-upload-area{
     position: relative;
     width: 100%;
@@ -151,8 +188,9 @@
 }
 
 .fixed-header button.save{
-    background-color: #28a745;
-    color: white;
+    border: 1px solid #007bff;
+    background-color: #fff;
+    color: #007bff;
 }
 
 .fixed-header button.publish{
@@ -194,6 +232,7 @@
     padding: 10px;
     font-weight: bold;
     text-align: center;
+    font-size: 0.9rem;
 }
 
 .chat-modal-body{
@@ -204,6 +243,11 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
+    font-size: 0.8rem;
+}
+
+.chat-modal-body p {
+    opacity: 60%;
 }
 
 .chat-message{
@@ -220,13 +264,7 @@
     background-color: #007bff;
     color: white;
     border-top-right-radius: 0;
-}
-
-.chat-message.bot{
-    align-self: flex-start;
-    background-color: #f1f1f1;
-    color: #333;
-    border-top-left-radius: 0;
+    font-size: 0.8rem;
 }
 
 .chat-modal-footer{
@@ -245,11 +283,13 @@
 }
 
 .chat-modal-footer button{
-    padding: 8px 10px;
+    padding: 6px 10px;
     border: none;
     background-color: #007bff;
     color: white;
     border-radius: 5px;
+    font-size: 0.8rem;
+    margin-left: 1%;
     cursor: pointer;
     transition: background-color 0.3s;
 }
