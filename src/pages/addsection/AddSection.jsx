@@ -1,28 +1,18 @@
 import React, { useState, useEffect } from 'react'
 import './AddSection.css'
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 
 function AddSection() {
-    const location = useLocation();
-    const {
-        bookTitle,
-        bookSummary,
-        image,
-        isAudioBook,
-        tags,
-        selectedCategory,
-        selectedAgeRange,
-        contentChoice,
-    } = location.state || {};
+    const { bookTitle: encodedBookTitle } = useParams();
 
-    const [bookImage, setImage] = useState(image); //kitaba ait resim
-    const [bookTags, setTags] = useState(tags); 
-    const [bookContentChoice, setContentChoice] = useState(contentChoice); //kitabın ait olduğu haklar
-    const [title, setBookTitle] = useState(bookTitle); //kitaba ait başlık
-    const [summary, setBookSummary] = useState(bookSummary); //kitaba ait özet
-    const [bookCategory, setSelectedCategory] = useState(selectedCategory); //kitabın ait olduğu category
-    const [ageRange, setSelectedAgeRange] = useState(selectedAgeRange); //kitabın ait olduğu yaş aralığı
+    const [bookImage, setImage] = useState(""); //kitaba ait resim
+    const [bookTags, setTags] = useState([]); 
+    const [bookContentChoice, setContentChoice] = useState(""); //kitabın ait olduğu haklar
+    const [title, setBookTitle] = useState(""); //kitaba ait başlık
+    const [summary, setBookSummary] = useState(""); //kitaba ait özet
+    const [bookCategory, setSelectedCategory] = useState(""); //kitabın ait olduğu category
+    const [ageRange, setSelectedAgeRange] = useState(""); //kitabın ait olduğu yaş aralığı
     const [sections, setSections] = useState ([]); // kitaba ait bölümler
     const [loadingSections, setLoadingSections] = useState(false); 
     const [error, setError] = useState("");
@@ -68,6 +58,45 @@ function AddSection() {
             .replace(/[^a-z0-9\s-]/g, '') 
             .replace(/\s+/g, '-');
     };      
+
+    useEffect(() => {
+        const fetchBookDetails = async () => {
+            try {
+                const normalizeTitle = (title) => {
+                    return title.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+                };
+                
+                const decodedTitle = encodedBookTitle.replace(/-/g, ' ');
+                const normalizedTitle = normalizeTitle(decodedTitle);
+                
+                console.log('Frontend Normalized Title:', normalizedTitle);
+
+                const response = await axios.get(
+                    `http://localhost:3000/book/${encodeURIComponent(normalizedTitle)}`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem("token")}`,
+                        },
+                    }
+                );
+
+                console.log('API Yanıtı:', response.data.title);
+                const data = response.data;
+
+                setBookTitle(data.title || '');
+                setBookSummary(data.summary || '');
+                setImage(data.bookCover || '');
+                setTags(data.hashtags || []);
+                setSelectedCategory(data.categories || '');
+                setSelectedAgeRange(data.ageRange || '');
+                setContentChoice(data.bookCopyright || '');
+            } catch (error) {
+                console.error('Kitap bilgilerini çekerken hata oluştu:', error);
+            }
+        };
+
+        fetchBookDetails();
+    }, [encodedBookTitle]);
 
     const handleTabClick = (tab) => {
         setActiveTab(tab); 
@@ -173,11 +202,11 @@ function AddSection() {
     };
 
     const handleNewSectionButtonClick = () => {
-        const formattedTitle = formatTitleForUrl(bookTitle);
+        const formattedTitle = formatTitleForUrl(title);
         navigate(`/addsection/${formattedTitle}/newsection`, {
-            state: {bookTitle},
+            state: {title},
         });
-        console.log(bookTitle);
+        console.log(title);
     }
 
     useEffect(() => {
@@ -185,7 +214,7 @@ function AddSection() {
             try {
                 const response = await axios.get('http://localhost:3000/categories');
                 if (Array.isArray(response.data)) {
-                    setCategory(response.data); 
+                    setCategory(response.data || []); 
                 } else {
                     console.error('Kategori verisi beklenmeyen formatta:', response.data);
                     setCategory([]); 
@@ -206,7 +235,7 @@ function AddSection() {
         const fetchAgeRanges = async () => {
             try {
                 const response = await axios.get('http://localhost:3000/book/ageRange');
-                if (response.data) setAgeRange(response.data);
+                if (response.data) setAgeRange(response.data || []);
             } catch (error) {
                 console.error('Yaş aralıklarını çekerken hata oluştu:', error);
             }
@@ -222,7 +251,7 @@ function AddSection() {
         axios.get('http://localhost:3000/book/copyright')
             .then(response => {
                 if (Array.isArray(response.data)) {
-                    setCopyrightStatuses(response.data);
+                    setCopyrightStatuses(response.data || []);
                 } else {
                     console.error("Beklenmeyen veri formatı:", response.data);
                 }
@@ -238,7 +267,7 @@ function AddSection() {
                 setLoadingSections(true); 
                 try {
                     const response = await axios.get(
-                        `http://localhost:3000/chapter/${bookTitle}`, 
+                        `http://localhost:3000/chapter/${title}`, 
                         {
                             headers: {
                                 Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -263,7 +292,7 @@ function AddSection() {
 
     const togglePublish = async (chapterId, chapterTitle) => {
         try {
-            const encodedTitle = encodeURIComponent(bookTitle);
+            const encodedTitle = encodeURIComponent(title);
             const encodedChapterTitle = encodeURIComponent(chapterTitle);
             const url = `http://localhost:3000/chapter/${encodedTitle}/${encodedChapterTitle}`;
             const response = await axios.put(
@@ -297,7 +326,7 @@ function AddSection() {
         }
     
         try {
-            const encodedTitle = encodeURIComponent(bookTitle);
+            const encodedTitle = encodeURIComponent(title);
             const encodedChapterTitle = encodeURIComponent(sectionToDelete.title);
             const url = `http://localhost:3000/chapter/${encodedTitle}/${encodedChapterTitle}`;
     
@@ -320,62 +349,48 @@ function AddSection() {
     
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const encodedTitle = encodeURIComponent(bookTitle);
-    
-        if (!bookTitle || !summary || !bookImage || !bookCategory || !ageRange || isAudioBook === null || !bookContentChoice) {
+
+        if (!title || !summary || !bookImage || !bookCategory || !ageRange || bookContentChoice === '') {
             setShowErrorAlert(true);
             setShowSuccessAlert(false);
-            window.scrollTo(0, 0);
             return;
         }
-    
+
         try {
-            const token = localStorage.getItem("token");
-    
-            if (!token) {
-                alert("Oturum süreniz dolmuş olabilir. Lütfen tekrar giriş yapın.");
-                return;
-            }
-    
-            console.log("Payload Sent to Backend:", {
-                title: bookTitle,
-                summary,
-                categories: bookCategory,
-                ageRange: ageRange,
-                bookCopyright: bookContentChoice,
-                isAudioBook,
-                bookCover: typeof bookImage === 'string' ? bookImage : null,
-                hashtags: Array.isArray(bookTags) ? bookTags : [],
-            });
-
-            const url = `http://localhost:3000/book/${encodedTitle}`;
-
-            const response = await axios.put(url,
+            const decodedTitle = encodedBookTitle.replace(/-/g, ' ');
+            const response = await axios.put(
+                `http://localhost:3000/book/${encodeURIComponent(decodedTitle)}`,
                 {
-                    title: bookTitle,
+                    title,
                     summary,
                     categories: bookCategory,
                     ageRange: ageRange,
                     bookCopyright: bookContentChoice,
-                    isAudioBook,
                     bookCover: typeof bookImage === 'string' ? bookImage : null,
-                    hashtags: Array.isArray(bookTags) ? bookTags : [],
+                    hashtags: bookTags,
                 },
                 {
                     headers: {
-                        Authorization: `Bearer ${localStorage.getItem('token')}`,
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
                     },
                 }
             );
-            
-            console.log(response.data);
+
+            const updatedData = response.data;
+            setBookTitle(updatedData.title);
+            setBookSummary(updatedData.summary);
+            setSelectedCategory(updatedData.categories);
+            setSelectedAgeRange(updatedData.ageRange);
+            setTags(updatedData.hashtags || []);
+            setImage(updatedData.bookCover || '');
+
             setShowSuccessAlert(true);
             setTimeout(() => setShowSuccessAlert(false), 3000);
         } catch (error) {
-            console.error("Kitap güncelleme işlemi başarısız oldu:", error);
+            console.error('Kitap güncelleme işlemi başarısız oldu:', error);
             setShowErrorAlert(true);
         }
-    };    
+    };
 
 return (
     <div className="addsection-page">

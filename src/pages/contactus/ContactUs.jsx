@@ -3,6 +3,7 @@ import './ContactUs.css'
 import Navbar from "../../layouts/navbar/Navbar"
 import Footer from "../../layouts/footer/Footer"
 import { Button, Form } from 'react-bootstrap';
+import axios from 'axios';
 
 function ContactUs() {
     const [email, setEmail] = useState('');
@@ -14,19 +15,17 @@ function ContactUs() {
         e.preventDefault();
     
         try {
-            const token = localStorage.getItem('token'); // Token'ı localStorage'dan al
+            const token = localStorage.getItem('token');
             const response = await axios.post('http://localhost:3000/mail/contactUs', {
                 email,
                 title,
                 description
             }, {
                 headers: {
-                    Authorization: `Bearer ${token}` // Token'ı gönder
+                    Authorization: `Bearer ${token}`
                 }
             });
-    
-            console.log('Mail gönderme işlemi başarılı:', response.data);
-            alert("Mail başarıyla gönderildi!");
+                alert("Mailiniz başarıyla gönderildi!");
             setEmail('');
             setTitle('');
             setDescription('');

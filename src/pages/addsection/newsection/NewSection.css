@@ -277,7 +277,8 @@
 
 .chat-modal-footer input {
     flex: 1;
-    padding: 8px;
+    padding: 6px 10px;
+    font-size: 0.8rem;
     border: 1px solid #ccc;
     border-radius: 5px;
 }

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import './NewSection.css'
 import { useLocation } from 'react-router-dom';
+import { Button, Modal } from 'react-bootstrap';
 import axios from 'axios';
 
 function NewSection() {
