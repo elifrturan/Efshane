@@ -1,9 +1,20 @@
-.addsection-page{
-    color: var(--second-color);
+* {
+    box-sizing: border-box;
+}
+
+html, body {
     background-color: whitesmoke;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    color: var(--second-color);
+}
+
+.addsection-page {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    padding: 0 15%;
 }
 
 .add-section-main{
@@ -34,7 +45,7 @@
 }
 
 .bi-cloud-arrow-up-fill::before{
-    font-size: 14px;
+    font-size: 0.9rem;
     margin-left: 3px;
     color: whitesmoke;
 }
@@ -45,6 +56,7 @@
     background-color: cornflowerblue;
     border-radius: 0 0 3px 3px;
     color: whitesmoke;
+    font-size: 0.9rem;
     padding: 8px;
     display: flex;
     justify-content: center;
@@ -60,7 +72,7 @@
     justify-content: space-around;
     margin-bottom: 20px;
 }
-
+  
 .tab-button {
     flex: 1;
     padding: 10px;
@@ -109,7 +121,7 @@
 }
  
 .add-section-btn{
-    width: 100%;
+    width: 25%;
     padding: 10px;
     background-color: var(--theme-color);
     color: whitesmoke;
@@ -187,7 +199,4 @@
 
 .dropdown-item-section:hover {
     background-color: #f8f9fa;
-}
-
-
-  
+} 

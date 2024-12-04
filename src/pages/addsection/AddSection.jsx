@@ -189,11 +189,17 @@ function AddSection() {
         setDropdownVisible(prev => (prev === id ? null : id));
     };
 
-    const handleAction = (action, section) => {
+    const handleAction = (action, sectionId) => {
         if (action === "delete") {
-            setSectionToDelete(section);
+            setSectionToDelete(sectionId);
             setShowModal(true);
-        }
+        } else if (action === "edit") {
+            const section = sections.find((sec) => sec.id === sectionId);
+            if (section) {
+                const formattedSectionName = formatTitleForUrl(section.sectionName);
+                navigate(`/addsection/edit/${formattedSectionName}`);
+            }
+        } 
     };    
 
     const handleDeleteCancel = () => {
@@ -392,6 +398,14 @@ function AddSection() {
         }
     };
 
+    const handleBookSection = (sectionId) => {
+        const section = sections.find((sec) => sec.id === sectionId);
+        if (section) {
+            const formattedSectionName = formatTitleForUrl(section.sectionName);
+            navigate(`/addsection/edit/${formattedSectionName}`);
+        }
+    }
+
 return (
     <div className="addsection-page">
         {showSuccessAlert && (
@@ -572,7 +586,12 @@ return (
                                     <button className='add-new-section-btn' onClick={handleNewSectionButtonClick}>Yeni Bölüm Ekle</button>
                                 </div>
                                 {sections.map(section => (
-                                    <div className="section-row d-flex justify-content-between align-items-center" key={section.id}>
+                                    <div 
+                                        className="section-row d-flex justify-content-between align-items-center" 
+                                        key={section.id} 
+                                        onClick={() => handleBookSection(section.id)}
+                                        style={{ cursor: 'pointer' }}
+                                    >
                                         <span>{section.title}</span>
                                         <div className="istatistic d-flex me-3">
                                         {section.analysis && section.analysis.length > 0 ? (

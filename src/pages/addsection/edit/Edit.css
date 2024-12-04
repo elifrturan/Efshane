@@ -9,7 +9,7 @@
     }
 }
 
-.new-section-page{
+.edit-section-page{
     color: var(--second-color);
     background-color: whitesmoke;
     display: flex;
@@ -17,44 +17,7 @@
     min-height: 100vh;
 }
 
-.danger-modal .modal-content{
-    border: #dfdfdf;
-    width: 500px;
-    border-radius: 5px;
-}
-
-.danger-modal .modal-header .btn-close {
-    font-size: 0.6rem;
-    color: #fff;
-}
-
-.danger-modal .modal-title {
-    color: black;
-    font-size: 1rem;
-    font-weight: 600;
-}
-
-.danger-modal .modal-body {
-    font-size: 0.85rem;
-    color: #333;
-    opacity: 85%;
-}
-
-.danger-modal .modal-footer button {
-    font-size: 0.8rem;
-    padding: 6px 24px;
-    background: none;
-    border: 1px solid #007bff;
-    color: #007bff;
-}
-
-.danger-modal .modal-footer button:hover {
-    background-color: #007bff;
-    border: 1px solid #007bff;
-    color: #fff;
-}
-
-.image-upload-area{
+.edit-image-upload-area{
     position: relative;
     margin: 0 10%;
     height: 250px;
@@ -68,7 +31,7 @@
     overflow: hidden;
 }
 
-.image-upload-label{
+.edit-image-upload-label{
     position: absolute;
     top: 50%;
     left: 50%;
@@ -84,17 +47,17 @@
     height: 100%;
 }
 
-.image-upload-input{
+.edit-image-upload-input{
     display: none;
 }
 
-.uploaded-image{
+.edit-uploaded-image{
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
 
-.overlay{
+.edit-overlay{
     position: absolute;
     margin: 0 10%;
     width: 100%;
@@ -110,15 +73,15 @@
     transition: opacity 0.3s ease;
 }
 
-.image-upload-area:hover .overlay{
+.edit-image-upload-area:hover .overlay{
     opacity: 1;
 }
 
-.container form {
+.edit-section-page .container form {
     margin: 0 10%;
 }
 
-.section-title{
+.edit-section-title{
     font-size: 18px !important;
     color: var(--second-color) !important;
     border: none !important;
@@ -128,12 +91,12 @@
     text-align: center;
 }
 
-.section-title::placeholder{
+.edit-section-title::placeholder{
     color: var(--second-color) !important;
     font-size: 16px;
 }
 
-.section-content{
+.edit-section-content{
     position: relative;
     resize: none !important;
     min-height: 300px;
@@ -147,7 +110,7 @@
     width: 100%;
 }
 
-.content-toolbar {
+.edit-content-toolbar {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -155,7 +118,7 @@
     gap: 15px;
 }
 
-.content-toolbar button {
+.edit-content-toolbar button {
     background: none;
     border: none;
     font-size: 20px;
@@ -166,17 +129,17 @@
     justify-content: center;
 }
 
-.content-toolbar button:hover {
+.edit-content-toolbar button:hover {
     color: #007bff;
 }
 
-.content-toolbar button.active {
+.edit-content-toolbar button.active {
     background-color: #007bff;
     color: #fff;
     border-radius: 4px;
 }
 
-.fixed-header {
+.edit-fixed-header {
     position: fixed;
     top: 0;
     left: 0;
@@ -191,12 +154,12 @@
     z-index: 1000;
 }
 
-.fixed-header .header-buttons {
+.edit-fixed-header .edit-header-buttons {
     display: flex;
     gap: 10px;
 }
 
-.fixed-header button {
+.edit-fixed-header button {
     padding: 10px 15px;
     font-size: 14px;
     cursor: pointer;
@@ -205,18 +168,18 @@
     transition: background-color 0.3s;
 }
 
-.fixed-header button.save{
+.edit-fixed-header button.save{
     border: 1px solid #007bff;
     background-color: #fff;
     color: #007bff;
 }
 
-.fixed-header button.publish{
+.edit-fixed-header button.publish{
     background-color: #007bff;
     color: white;
 }
 
-.robot {
+.edit-robot {
     position: fixed;
     bottom: 5%; 
     right: 5%;
@@ -228,14 +191,7 @@
     animation: fadeIn 0.5s ease-in;
 }
 
-.robot p {
-    color: #000;
-    opacity: 0.8;
-    font-size: 0.6rem;
-    text-shadow: 2px 2px 5px rgba(255, 193, 7, 0.5);
-}
-
-button.help{
+button.edit-help{
     width: 60px;
     height: 60px;
     font-size: 2rem;
@@ -247,21 +203,21 @@ button.help{
     transition: transform 0.2s ease, box-shadow 0.3s ease;
 }
 
-button.help:hover {
+button.edit-help:hover {
     transform: scale(1.1);
     box-shadow: 0 8px 20px rgba(255, 193, 7, 0.1), inset 0 -5px 10px rgba(255, 255, 255, 0.6);
 }
 
-button.help:active {
+button.edit-help:active {
     transform: scale(0.95);
     box-shadow: 0 3px 8px rgba(255, 193, 7, 0.3), inset 0 -2px 5px rgba(255, 255, 255, 0.3);
 }
 
-.fixed-header button:hover{
+.edit-fixed-header button:hover{
     opacity: 0.8;
 }
 
-.chat-modal {
+.edit-chat-modal {
     position: fixed;
     bottom: 14%;
     right: 20px;
@@ -276,11 +232,11 @@ button.help:active {
     animation: fadeIn 0.3s ease;
 }
 
-.chat-modal.active{
+.edit-chat-modal.active{
     display: flex;
 }
 
-.chat-modal-header{
+.edit-chat-modal-header{
     background-color: #007bff;
     color: white;
     padding: 10px;
@@ -288,11 +244,11 @@ button.help:active {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     border-radius: 10px 10px 0 0;
 }
 
-.chat-modal-header .close-btn {
+.edit-chat-modal-header .edit-close-btn {
     background: none;
     border: none;
     font-size: 1.2rem;
@@ -300,7 +256,7 @@ button.help:active {
     cursor: pointer;
 }
 
-.chat-modal-body{
+.edit-chat-modal-body{
     flex: 1;
     padding: 15px;
     overflow-y: auto;
@@ -311,11 +267,11 @@ button.help:active {
     line-height: 1.5;
 }
 
-.chat-modal-body p {
+.edit-chat-modal-body p {
     opacity: 60%;
 }
 
-.chat-message{
+.edit-chat-message{
     max-width: 70%;
     padding: 10px;
     border-radius: 10px;
@@ -324,7 +280,7 @@ button.help:active {
     margin-bottom: 10px;
 }
 
-.chat-message.user{
+.edit-chat-message.user{
     align-self: flex-end;
     background-color: #007bff;
     color: white;
@@ -332,7 +288,7 @@ button.help:active {
     font-size: 0.8rem;
 }
 
-.chat-message.bot{
+.edit-chat-message.bot{
     align-self: flex-start;
     background-color: #f1f1f1;
     color: #333;
@@ -340,14 +296,14 @@ button.help:active {
     font-size: 0.8rem;
 }
 
-.chat-modal-footer{
+.edit-chat-modal-footer{
     padding: 10px;
     border-top: 1px solid #ddd;
     display: flex;
     gap: 2px;
 }
 
-.chat-modal-footer input {
+.edit-chat-modal-footer input {
     width: 100%;
     padding: 8px;
     border: 1px solid #ccc;
@@ -357,7 +313,7 @@ button.help:active {
 }
 
 
-.chat-modal-footer button{
+.edit-chat-modal-footer button{
     padding: 6px 10px;
     border: none;
     background-color: #007bff;
@@ -369,32 +325,32 @@ button.help:active {
     transition: background-color 0.3s;
 }
 
-.chat-modal-footer button:hover{
+.edit-chat-modal-footer button:hover{
     opacity: 80%;
 }
 
 @media (max-width: 500px) {
-    .chat-modal {
+    .edit-chat-modal {
         width: 90%;
         right: 5%;
         width: 150px;
     }
     
-    .chat-modal-body{
+    .edit-chat-modal-body{
         padding: 5px;
     }
 
-    .chat-modal-footer{
+    .edit-chat-modal-footer{
         padding: 5px;
     }
     
-    .chat-modal-footer input {
+    .edit-chat-modal-footer input {
         flex: 1;
         width: 50px;
         padding: 6px;
     }
     
-    .chat-modal-footer button{
+    .edit-chat-modal-footer button{
         padding: 6px;
     }
 }

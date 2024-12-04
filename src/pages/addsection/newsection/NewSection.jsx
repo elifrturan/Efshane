@@ -259,38 +259,6 @@ function NewSection() {
                     {loading ? 'Yayınlanıyor...' : 'Yayınla'}
                 </button>
                 </div>
-                <button className='help' onClick={() => setIsChatOpen(!isChatOpen)}><i class="bi bi-question-circle me-2"></i>Yardım Al</button>
-            </div>
-
-            {/* Chatbot modal */}
-            <div className={`chat-modal ${isChatOpen ? 'active' : ''}`}>
-                <div className="chat-modal-header">Yardım Al</div>
-                <div className="chat-modal-body" ref={chatBodyRef}>
-                    <p>
-                        Merhaba! Sana hikayeni yazarken destek olmak için buradayım. 
-                        Eğer yazdığın bölümde bir yerde takılı kaldıysan ya da hikayene 
-                        nasıl devam edeceğini bilemiyorsan, lütfen aşağıya neye ihtiyacın olduğunu yaz. 
-                        İster yeni fikirler ister olay örgüsü önerileri olsun, sana yardımcı olmaktan mutluluk duyarım!
-                    </p>
-                    {messages.map((message, index) => (
-                        <div
-                            key={index}
-                            className={`chat-message ${message.sender === 'user' ? 'user' : 'bot'}`}
-                        >
-                            {message.text}
-                        </div>
-                    ))}
-                </div>
-                <div className="chat-modal-footer">
-                    <input
-                        type="text"
-                        placeholder="Mesajınızı yazın..."
-                        value={inputValue}
-                        onChange={handleInputChange}
-                        onKeyDown={handleKeyDown}
-                    />
-                    <button onClick={handleSendMessage}>Gönder</button>
-                </div>
             </div>
 
             <div className="container">
@@ -370,6 +338,44 @@ function NewSection() {
                     >
                     </div>
                 </form>
+            </div>
+            {/* Chatbot modal */}
+            <div className={`chat-modal ${isChatOpen ? 'active' : ''}`}>
+                <div className="chat-modal-header">
+                    <i class="bi bi-chat-left-text"></i> Yardım Al
+                    <button className="close-btn" onClick={toggleChat}>&times;</button>
+                </div>
+                <div className="chat-modal-body" ref={chatBodyRef}>
+                    <p>
+                        Merhaba! Sana hikayeni yazarken destek olmak için buradayım. 
+                        Eğer yazdığın bölümde bir yerde takılı kaldıysan ya da hikayene 
+                        nasıl devam edeceğini bilemiyorsan, lütfen aşağıya neye ihtiyacın olduğunu yaz. 
+                        İster yeni fikirler ister olay örgüsü önerileri olsun, sana yardımcı olmaktan mutluluk duyarım!
+                    </p>
+                    {messages.map((message, index) => (
+                        <div
+                            key={index}
+                            className={`chat-message ${message.sender === 'user' ? 'user' : 'bot'}`}
+                        >
+                            {message.text}
+                        </div>
+                    ))}
+                </div>
+                <div className="chat-modal-footer">
+                    <input
+                        type="text"
+                        placeholder="Mesajınızı yazın..."
+                        value={inputValue}
+                        onChange={handleInputChange}
+                        onKeyDown={handleKeyDown}
+                    />
+                    <button onClick={handleSendMessage}>Gönder</button>
+                </div>
+            </div>
+            <div className="robot">
+                <button className='help d-flex justify-content-center align-items-center' onClick={toggleChat}>
+                    <i class="bi bi-robot"></i>
+                </button>
             </div>
         </div>
     );

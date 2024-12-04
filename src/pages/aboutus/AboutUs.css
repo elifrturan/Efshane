@@ -8,7 +8,7 @@
 }
 
 .about-us-content {
-    font-size: 1rem;
+    font-size: 0.9rem;
     opacity: 50%;
 }
 
@@ -19,8 +19,15 @@
 }
 
 .about-story-text p{
-    font-size: 1rem;
+    font-size: 0.9rem;
+    opacity: 90%;
     color: #212529BF;
+}
+
+.about-features h2 {
+    font-size: 1.8rem;
+    margin-top: 3% !important;
+    margin-bottom: 3% !important;
 }
 
 .slick-slide {
@@ -70,4 +77,19 @@
     line-height: 1.5;
     margin-top: 10px;
 }
-  
+
+.about-team h2 {
+    margin-top: 2%;
+    font-size: 1.8rem;
+}
+ 
+.team-member .line-wrapper {
+    display: block;
+    width: 455px;
+    line-height: 1.6;
+    word-break: break-all;
+}
+
+.member-degree {
+    font-size: 0.8rem;
+}

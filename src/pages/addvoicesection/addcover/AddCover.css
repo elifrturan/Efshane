@@ -1,0 +1,31 @@
+.voice-left-description{
+    margin-top: 3%;
+    text-align: center;
+    font-size: 12px;
+    opacity: 50%;
+}
+
+.add-voice-section-left img{
+    border: 1px solid gainsboro;
+    border-bottom: none;
+    border-radius: 3px 3px 0px 0;
+}
+
+.bi-cloud-arrow-up-fill::before{
+    font-size: 0.9rem;
+    margin-left: 3px;
+    color: whitesmoke;
+}
+
+.add-voice-section-left button{
+    width: 200px;
+    border: none;
+    background-color: cornflowerblue;
+    border-radius: 0 0 3px 3px;
+    color: whitesmoke;
+    font-size: 0.9rem;
+    padding: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

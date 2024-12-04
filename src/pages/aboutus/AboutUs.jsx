@@ -15,45 +15,73 @@ function AboutUs() {
     },
     {
       id: 2,
+      title: "Yapay Zeka ile Seslendirme",
+      description:
+        "Sesli kitap oluştururken kendi sesinizi kullanmak istemezseniz yapay zeka desteğiyle metinlerinizi profesyonelce seslendirebilirsiniz.",
+      image: "/images/voice-ai.jpg",
+    },
+    {
+      id: 3,
+      title: "Yapay Zeka Sistemi ile Yaratıcılığı Destekleyen Öneriler",
+      description:
+        "Hikayeleriniz için ilham eksikliği yaşadığınızda yapay zeka aracımız size bölümünüzü yazarken eksik kaldığınız noktalarda önerilerde bulunur ve yaratıcılığınızı destekler.",
+      image: "/images/advice-system.png",
+    },
+    {
+      id: 4,
+      title: "Yapay Zeka ile Kitap Kapak Tasarımı",
+      description:
+        "Yapay zeka desteğiyle hikayelerinizin kitap kapağını; kitap adına ve özetine uygun şekilde zahmetsizce oluşturabilirsiniz.",
+      image: "/images/book-cover-ai.png",
+    },
+    {
+      id: 5,
       title: "Kitap Okuma/Oluşturma",
       description:
         "Dilediğiniz türde kitaplar oluşturabilir bu kitapları düzenleyebilir veya zevkinize uygun şekilde kolayca okuyabilirsiniz.",
       image: "/images/read-book.jpg",
     },
     {
-      id: 3,
+      id: 6,
       title: "Sesli Kitap Dinleme",
       description:
         "Sesli kitapları dinleyerek hem farklı bir okuma deneyimi yaşayabilir hem de hikayelerin keyfini çıkarabilirsiniz.",
       image: "/images/listen-book.jpg",
     },
     {
-      id: 4,
+      id: 7,
       title: "Kitap Listesi Oluşturma",
       description:
         "Kendinize özel ve sınırsız kişisel kitap listeleri oluşturup favori eserlerinizi düzenli bir şekilde saklayabilirsiniz.",
       image: "/images/book-list.jpg",
     },
     {
-      id: 5,
+      id: 8,
       title: "Takip Etme",
       description:
         "Beğendiğiniz yazarları veya diğer okuyucuları takip ederek ilham alabilir ve yeni içeriklere hızlıca ulaşabilirsiniz.",
       image: "/images/add-friend.jpg",
     },
     {
-      id: 6,
+      id: 9,
       title: "Akış",
       description:
         "Akışta dilediğiniz kitaplardan alıntılar paylaşabilir, takip ettiğiniz kişilerin paylaşımlarına akış üzerinden kolayca erişebilirsiniz.",
       image: "/images/feed.jpg",
     },
     {
-      id: 7,
+      id: 10,
       title: "Mesajlaşma",
       description:
         "Diğer okuyucularla anlık mesajlaşarak etkili ve eğlenceli bir iletişim kurabilir, kitaplar hakkında sohbet edebilirsiniz.",
       image: "/images/chat.jpg",
+    },
+    {
+      id: 11,
+      title: "Güvenli ve Kullanıcı Dostu Tasarım",
+      description:
+        "Tüm cihazlardan kolayca erişilebilir olan kullanıcı dostu arayüzümüz, güvenli ve konforlu bir deneyim sunar.",
+      image: "/images/efshane-device.png",
     }
   ]
 
@@ -82,7 +110,7 @@ function AboutUs() {
       </section>
       <section className="about-story py-5 mb-5">
         <div className="container">
-            <div className="row">
+            <div className="row mx-5">
                 <div className="col-md-6 about-story-text">
                     <h4 className='mb-3 fw-bold'>Biz Kimiz?</h4>
                     <p className="lead">
@@ -108,7 +136,7 @@ function AboutUs() {
                     </p>
                 </div>
                 <div className="col-md-6">
-                    <img src="/images/aboutus.jpg" className="img-fluid" alt="Developers" />
+                  <img src="/images/aboutus.jpg" className="img-fluid" alt="Developers" width="510"/>
                 </div>
             </div>
         </div>
@@ -135,20 +163,34 @@ function AboutUs() {
         <div className="container">
             <h2 className="text-center mb-4 fw-">Ekibimiz</h2>
             <div className="row">
-                <div className="col-md-6 col-lg-6 col-sm-12">
-                    <div className="team-member text-center">
-                        <h4 className="mt-4 mb-3">Elif Rümeysa TURAN</h4>
-                        <p>Ön Yüz Geliştirici</p>
-                        <p>React.js ile modern ve kullanıcı dostu web uygulamaları geliştiriyorum.</p>
+              <div className="col-md-6 col-lg-6 col-sm-12">
+                    <div className="team-member text-center d-flex flex-column justify-content-center align-items-center">
+                      <h4 className="mt-4 mb-3">Elif Rümeysa TURAN</h4>
+                      <p className='opacity-50 member-degree'>Ön Yüz Geliştirici ve UI/UX Tasarımcısı</p>
+                      <p className='line-wrapper'>
+                        Bu projede, uygulamanın her bir detayını titizlikle tasarladım ve kullanıcı dostu 
+                        bir deneyim oluşturmak için özen gösterdim. React.js ve Bootstrap gibi modern teknolojileri 
+                        kullanarak, hem fonksiyonel hem de estetik açıdan güçlü bir uygulama geliştirdim. Tasarım 
+                        sürecinde, kullanıcıların kolayca gezinebileceği, işlevsel ve erişilebilir bir arayüz sunmayı 
+                        hedefledim. Her aşamada kullanıcı geri bildirimlerini dikkate alarak, uygulamanın performansını 
+                        ve kullanıcı deneyimini en üst düzeye çıkarmaya odaklandım.
+                      </p>
                     </div>
+              </div>
+              <div className="col-md-6 col-lg-6 col-sm-12">
+                <div className="team-member text-center d-flex flex-column justify-content-center align-items-center">
+                  <h4 className="mt-4 mb-3">Fatmanur ÖZÇETİN</h4>
+                  <p className='opacity-50 member-degree'>Arka Plan Geliştiricisi ve Veri Bilimci</p>
+                  <p className='line-wrapper'>
+                    Bu projede, güçlü ve verimli arka plan altyapıları kurarak API geliştirme, veritabanı yönetimi 
+                    ve güvenlik sağlama alanlarında önemli katkılarda bulundum. Node.js ve Nest.js gibi modern 
+                    teknolojilerle güvenli ve hızlı API'ler oluşturdum, veritabanı yönetimini etkin şekilde gerçekleştirdim.
+                    Aynı zamanda uygulamanın güvenliğini sağlamak için gerekli önlemleri alarak, veri güvenliğini 
+                    ön planda tuttum. Yapay zeka kısımlarını geliştirerek, uygulamanın daha akıllı ve etkileşimli 
+                    hale gelmesini sağladım.
+                  </p>
                 </div>
-                <div className="col-md-6 col-lg-6 col-sm-12">
-                    <div className="team-member text-center">
-                        <h4 className="mt-4 mb-3">Fatmanur ÖZÇETİN</h4>
-                        <p>Arka Plan Geliştirici</p>
-                        <p>API geliştirme ve veritabanı yönetimi konularında güçlü altyapılar kuruyorum.</p>
-                    </div>
-                </div>
+              </div>
             </div>
         </div>
       </section>
