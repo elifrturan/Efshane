@@ -56,7 +56,7 @@ function Details() {
     <>
         {activeTab === 'details' && (
             <div id="details" className={`voice-tab-pane ${activeTab === 'details' ? 'active' : ''}`}>
-                <form>
+                <form className='m-0'>
                     <div className="form-group mb-3">
                         <label className='form-label'>Kitap Adı</label>
                         <input 

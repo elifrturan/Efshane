@@ -63,11 +63,6 @@ html, body {
     transform: translateY(10px);
     transition: opacity 0.5s ease-out, transform 0.5s ease-out;
 }
-
-.voice-tab-content .voice-tab-pane.active {
-    opacity: 1;
-    transform: translateY(0);
-}
   
 .voice-tab-pane h3 {
     margin-bottom: 10px;

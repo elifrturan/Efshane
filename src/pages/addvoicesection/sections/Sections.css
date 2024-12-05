@@ -14,6 +14,11 @@
     padding: 6px;
 }
 
+.selected-button {
+    border: 1px solid #333 !important;
+    font-weight: bold;
+}
+
 .voice-section-row{
     border-bottom: 1px solid gainsboro;
     padding: 24px 12px;
@@ -49,7 +54,7 @@
     transition-delay: 0s;
 }
 
-.modal-section-title {
+.modal-section-title, .edit-modal-section-title {
     border: none !important;
     font-weight: 600;
     color: #3e4444 !important;
@@ -57,40 +62,148 @@
     border-radius: 0 !important;
 }
 
-.modal-section-title::placeholder {
+.modal-section-title::placeholder, .edit-modal-section-title::placeholder {
     color: #3e4444 !important;
 }
 
-.modal-section-title:focus {
+.modal-section-title:focus,  .edit-modal-section-title:focus{
     outline: none;
     box-shadow: none;
 }
 
-.add-voice-file label, .add-text-file label, .add-voice-image label{
+.add-voice-file label, 
+.add-voice-save label, 
+.add-text-file label, 
+.add-voice-image label,
+.edit-voice-image label,
+.edit-voice-file label, 
+.edit-voice-save label,
+.edit-text-file label  {
     font-size: 0.8rem;
     opacity: 75%;
     color: #000;
 }
 
-.add-voice-file input, .add-text-file input, .image-modal {
+.add-voice-file input, .add-text-file input, .image-modal, .edit-image-modal, .edit-voice-file, .edit-text-file {
     font-size: 0.8rem;
 }
 
-.audio-player {
+.save-voice button, .edit-save-voice button {
+    background: none !important;
+    border: none;
+    padding: 0;
+    text-align: center;
+    margin-bottom: 2%;
+}
+
+.play-voice p, .stop-voice p, .pause-voice p, .resume-voice p, .restart-voice p {
+    font-size: 0.6rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 0;
+    opacity: 50%;
+    color: #000;
+}
+
+.play-voice i {
+    color: #007bff !important;
+    font-size: 1.1rem;
+}
+
+.play-voice {
+    border: 1px solid #007bff23 !important;
+    width: 50px;
+    height: 50px;
+    background-color: #007bff23;
+    border-radius: 55px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+.stop-voice i {
+    color: red !important;
+    font-size: 1.1rem;
+    margin-bottom: 0;
+}
+
+.stop-voice {
+    border: 1px solid rgba(255, 0, 0, 0.137) !important;
+    width: 50px;
+    height: 50px;
+    background-color: rgba(255, 0, 0, 0.137);
+    border-radius: 55px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+.pause-voice i {
+    color: #3e4444 !important;
+    font-size: 1.1rem;
+    margin-bottom: 0;
+}
+
+.pause-voice {
+    border: 1px solid #3333331a !important;
+    width: 50px;
+    height: 50px;
+    background-color: #3333331a;
+    border-radius: 55px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+.resume-voice i {
+    color: #3e4444 !important;
+    font-size: 1.1rem;
+    margin-bottom: 0;
+}
+
+.resume-voice {
+    border: 1px solid #3333331a !important;
+    width: 50px;
+    height: 50px;
+    background-color: #3333331a;
+    border-radius: 55px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+.restart-voice i {
+    color: #ffae00 !important;
+    font-size: 1.1rem;
+    margin-bottom: 0;
+}
+
+.restart-voice {
+    border: 1px solid #ffae002d !important;
+    width: 50px;
+    height: 50px;
+    background-color: #ffae002d !important;
+    border-radius: 55px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+.save-voice-player, .edit-save-voice-player {
     margin-top: 10px;
 }
 
-.audio-player audio {
+.save-voice-player audio, .edit-save-voice-player audio {
+    width: 100%;
+    height: 41px;
+}
+
+.audio-player, .edit-voice-file .audio-player {
+    margin-top: 15px;
+}
+
+.audio-player audio, .edit-voice-file audio {
     width: 100%;
     height: 40px;
 }
 
-.modal-file-buttons {
+.modal-file-buttons, .edit-file-buttons {
     display: flex;
     justify-content: start;
 }
 
-.modal-file-buttons button {
+.modal-file-buttons button, .edit-file-buttons button {
     font-size: 0.7rem;
     display: flex;
     align-items: center;
@@ -103,13 +216,13 @@
     border-radius: 3px;
 }
 
-.modal-file-buttons button:hover{
+.modal-file-buttons button:hover, .edit-file-buttons button:hover{
     border: 1px solid #ddd;
     color: rgb(104, 104, 104);
     background-color: #ebebeb !important;
 }
 
-.btn-modal-save {
+.btn-modal-save, .edit-modal-save {
     background: none;
     color: #3e4444;
     padding: 6px 12px;
@@ -121,13 +234,13 @@
     border: 1px solid #ddd;
 }
 
-.btn-modal-save:hover {
+.btn-modal-save:hover, .edit-modal-save:hover {
     background-color: #f5f5f5;
     color: #3e4444;
     border: 1px solid #ddd;
 }
 
-.btn-modal-publish {
+.btn-modal-publish, .edit-modal-publish {
     background-color: #e6e6e6;
     color: #3e4444;
     padding: 6px 36px;
@@ -139,19 +252,84 @@
     border: 1px solid #ddd;
 }
 
-.btn-modal-publish:hover {
+.btn-modal-publish:hover, .edit-modal-publish:hover {
     background-color: #dfdfdf;
     color: #3e4444;
     border: 1px solid #ddd;
 }
 
-.custom-modal-header .btn-close {
+.btn-modal-cancel, .edit-modal-cancel {
+    background-color: #ffc64a;
+    color: #fff;
+    padding: 6px 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.8rem;
+    font-weight: 500;
+    border: 1px solid #ffc64a;
+}
+
+.btn-modal-cancel:hover, .edit-modal-cancel:hover {
+    color: #fff;
+    background-color: #ffae00ea;
+    border: 1px solid #ffae00;
+}
+
+.custom-modal-header .btn-close, .edit-modal-header .btn-close {
     font-size: 0.6rem;
     width: 1rem;
     height: 1rem;
 }
 
-.custom-modal-header .btn-close:hover {
+.custom-modal-header .btn-close:hover, .edit-modal-header .btn-close:hover {
     outline: none;
     box-shadow: none;
+}
+
+.custom-modal-header i {
+    cursor: pointer;
+}
+
+.voice-help-modal .modal-header button:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.voice-help-modal .modal-content{
+    border: #dfdfdf;
+    width: 500px;
+    border-radius: 5px;
+}
+
+.voice-help-modal .modal-header .btn-close {
+    font-size: 0.6rem;
+    color: #fff;
+}
+
+.voice-help-modal .modal-title {
+    color: black;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.voice-help-modal .modal-body {
+    line-height: 1.2;
+    font-size: 0.85rem;
+    color: #333;
+    opacity: 85%;
+}
+
+.voice-help-modal .modal-footer button {
+    font-size: 0.8rem;
+    padding: 6px 24px;
+    background: none;
+    border: 1px solid #007bff;
+    color: #007bff;
+}
+
+.voice-help-modal .modal-footer button:hover {
+    background-color: #007bff;
+    border: 1px solid #007bff;
+    color: #fff;
 }
