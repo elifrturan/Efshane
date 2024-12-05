@@ -1,15 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react'
 import './NewSection.css'
-import { useLocation } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { Button, Modal } from 'react-bootstrap';
 import axios from 'axios';
 
 function NewSection() {
-    const location = useLocation();
-    const { bookTitle } = location.state || {};
-
+    const { bookTitle: encodedBookTitle } = useParams();
     useEffect(() => {
-    }, [bookTitle]);
+    }, [encodedBookTitle]);
 
     const [image, setImage] = useState(null);
     const [content, setContent] = useState('');
@@ -174,7 +172,8 @@ function NewSection() {
             alert('Lütfen başlık ve içerik alanlarını doldurun.');
             return;
         }
-        const encodedTitle = encodeURIComponent(bookTitle);
+        const encodedTitle = encodeURIComponent(encodedBookTitle);
+        console.log(encodedTitle);
     
         const url = `http://localhost:3000/chapter/${encodedTitle}`;
         const payload = {
@@ -182,7 +181,6 @@ function NewSection() {
             content,
             image: image || null,
         };
-        console.log(payload);
     
         setLoading(true);
         try {
@@ -200,6 +198,10 @@ function NewSection() {
             setLoading(false);
         }
     };
+
+    const toggleChat = () => {
+        setIsChatOpen(!isChatOpen);
+    };
     
     const publishChapter = async () => {
         if (!title.trim() || !content.trim()) {
@@ -207,7 +209,7 @@ function NewSection() {
             return;
         }
     
-        const url = `http://localhost:3000/chapter/publish/${bookTitle}`;
+        const url = `http://localhost:3000/chapter/publish/${encodedBookTitle}`;
         const payload = {
             title,
             content,

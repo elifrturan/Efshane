@@ -208,11 +208,9 @@ function AddSection() {
     };
 
     const handleNewSectionButtonClick = () => {
-        const formattedTitle = formatTitleForUrl(title);
-        navigate(`/addsection/${formattedTitle}/newsection`, {
-            state: {title},
-        });
-        console.log(title);
+        const formattedTitle = formatTitleForUrl(encodedBookTitle);
+        navigate(`/addsection/${formattedTitle}/newsection`);
+        console.log(encodedBookTitle);
     }
 
     useEffect(() => {
@@ -363,9 +361,8 @@ function AddSection() {
         }
 
         try {
-            const decodedTitle = encodedBookTitle.replace(/-/g, ' ');
             const response = await axios.put(
-                `http://localhost:3000/book/${encodeURIComponent(decodedTitle)}`,
+                `http://localhost:3000/book/${encodeURIComponent(encodedBookTitle)}`,
                 {
                     title,
                     summary,
