@@ -1,0 +1,118 @@
+.add-post {
+    display: flex;
+    align-items: flex-start;
+    border: 1px solid #eee;
+    padding: 12px;
+    border-radius: 8px 8px 0 0;
+}
+
+.add-post-left {
+    padding: 12px 0 0;
+    margin: 0 8px 0 0;
+    flex-shrink: 0;
+}
+
+.add-post-right {
+    flex: 1;
+    padding: 12px 0 0 0;
+    margin-left: 1%;
+}
+
+.add-post-right textarea {
+    resize: none;
+    border: none;
+    background: none !important;
+    padding: 1% 1%;
+    width: 100%;
+    border-radius: 4px;
+    min-height: 30px;
+    cursor: text;
+    white-space: normal; 
+    overflow-wrap: break-word;
+    word-break: break-word;
+    font-size: 1rem;
+    color: #000;
+    opacity: 0.8;
+}
+
+.add-post-right textarea:focus {
+    outline: none;
+}
+
+.add-post-right hr {
+    color: #ccc;
+}
+
+.add-post-right .down {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.add-post-right .down i::before {
+    font-size: 1.1rem;
+    margin-top: 1% !important;
+    cursor: pointer;
+}
+
+.add-post-right .down p {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.add-post-right .down p span{
+    font-size: 0.9rem;
+    opacity: 0.6;
+    cursor: pointer;
+}
+
+.add-post-right .down input {
+    display: none;
+}
+
+.add-post-right .upload-image-div {
+    display: inline-block;
+    margin-bottom: 2%;
+    position: relative;
+}
+
+.add-post-right .upload-image {
+    width: 80px;
+    height: 100px;
+    object-fit: cover;
+    border: 1px solid #aaa;
+}
+
+.add-post-right .remove-image-button {
+    position: absolute;
+    top: 4%;
+    right: 2%;
+    padding: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease;
+}
+
+.add-post-right .down button {
+    font-size: 0.9rem;
+    padding: 6px 12px;
+    border-radius: 25px;
+    background-color: #333;
+    border: none;
+    opacity: 0.8;
+    transition: all 0.3s ease-in;
+}
+
+.add-post-right .down button:hover {
+    opacity: 0.9;
+}

@@ -1,0 +1,352 @@
+@keyframes pop {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.6);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.feed-page .feed-page-main {
+    padding: 0 8%;
+}
+
+.feed-post {
+    padding: 16px 16px 0 16px;
+    border: 1px solid #eee;
+    border-top: none;
+    display: flex;
+    align-items: flex-start;
+}
+
+.feed-post .feed-post-left {
+    padding: 12px 0 0;
+    margin: 0 8px 0 0;
+    flex-shrink: 0;
+}
+
+.feed-post .feed-post-right {
+    flex: 1;
+    padding: 18px 0 0 0;
+    margin-left: 1%;
+}
+
+.feed-post .feed-post-right .user-info p {
+    margin: 0 !important;
+    font-size: 0.95rem;
+    font-weight: bold;
+}
+
+.feed-post .feed-post-right .user-info p span {
+    font-size: 0.85rem;
+    opacity: 0.5;
+    font-weight: lighter;
+}
+
+.feed-post .feed-post-right .user-info .dropdown-toggle {
+    background: none;
+    border: none;
+    color: #333;
+    padding: 1% 0;
+    margin-right: 2%;
+    font-size: 1.2rem;
+}
+
+.feed-post .feed-post-right .user-info .dropdown-menu.show {
+    font-size: 0.9rem;
+    padding-bottom: 0;
+}
+
+.feed-post .feed-post-right .user-info a.dropdown-item {
+    opacity: 0.9;
+    display: flex;
+}
+
+.feed-post .feed-post-right .content {
+    font-size: 0.95rem;
+    opacity: 0.9;
+    margin-bottom: 2%;
+}
+
+.feed-post .feed-post-right .post-image img{
+    border-radius: 2px;
+    width: 200px;
+    height: 150px;
+    object-fit: cover;
+}
+
+.feed-post .feed-post-right .interaction {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.feed-post .feed-post-right .interaction, .feed-post .feed-post-right .interaction i {
+    color: #333 !important;
+    opacity: 0.9;
+    font-size: 0.9rem;
+}
+
+.feed-post .feed-post-right .interaction i:last-child {
+    cursor: pointer;
+}
+
+.feed-post .feed-post-right .interaction .left {
+    width: 35%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.feed-post .feed-post-right .interaction .bi-chat:hover{
+    color: black !important;
+    transform: scale(1.2);
+}
+
+.feed-post .feed-post-right .interaction .bi-heart::before {
+    cursor: pointer;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.feed-post .feed-post-right .interaction .bi-heart:hover::before {
+    transform: scale(1.2);
+}
+
+.feed-post .feed-post-right .interaction .bi-heart-fill::before{
+    color: red;
+    animation: pop 0.3s ease;
+    cursor: pointer;
+}
+
+.feed-post .feed-post-right .interaction .bi-repeat::before {
+    cursor: pointer;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.feed-post .feed-post-right .interaction .bi-repeat:hover::before {
+    transform: scale(1.2);
+}
+
+.feed-post .feed-post-right .interaction .bi-repeat.active::before {
+    color: #084208 !important;
+    font-weight: 600 !important;
+    animation: pop 0.3s ease;
+    cursor: pointer;
+}
+
+.comment-section .comment-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.comment-item-left {
+    flex: 1;
+    display: flex;
+}
+
+.comment-item-right {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.comment-item-left .reply-input input {
+    font-size: 0.8rem !important;
+    border: 1px solid #aaa;
+    width: 100%;
+    padding: 2%;
+    margin-top: 3%;
+    border-radius: 5px;
+    background: transparent;
+    opacity: 0.6;
+    color: #333;
+}
+
+.comment-item-left .reply-input input:focus {
+    outline: none;
+    opacity: 0.8;
+}
+
+.comment-section .comment-item p span{
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #000;
+    opacity: 0.9;
+}
+
+.comment-section .comment-item p {
+    font-size: 0.9rem;
+    opacity: 0.9;
+    color: #333;
+}
+
+.comment-section .comment-item div small {
+    font-size: 0.75rem;
+    opacity: 0.6;
+}
+
+.comment-section .show-more-comments {
+    text-decoration: none;
+    font-size: 0.8rem;
+    width: 100%;
+}
+
+.comment-section .comment-item .comment-item-right .bi-heart::before {
+    cursor: pointer;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.comment-section .comment-item .comment-item-right .bi-heart:hover::before {
+    transform: scale(1.2);
+}
+
+.comment-section .comment-item .comment-item-right .bi-heart-fill::before {
+    color: red;
+    animation: pop 0.3s ease;
+    cursor: pointer;
+}
+
+.comment-input input {
+    flex: 1;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    opacity: 0.5;
+    font-size: 0.9rem;
+    background: transparent;
+}
+
+.comment-input input::placeholder {
+    color: #000 !important;
+    font-size: 0.8rem;
+}
+
+.comment-input input:focus {
+    background: transparent;
+    opacity: 0.8;
+    outline: none;
+    font-size: 0.9rem;
+    border: 1px solid #ccc;
+}
+
+.comment-input button {
+    font-size: 0.8rem;
+    padding: 2px 16px;
+    background-color: #333;
+    border: #333;
+    opacity: 0.8;
+}
+
+.feed-post .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.feed-post .modal-content {
+    position: relative;
+    max-width: 90%;
+    max-height: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+}
+
+.feed-post .modal-content img {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.feed-post .close-modal {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: transparent;
+    color: white;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+    border-radius: 50%;
+    z-index: 1001;
+}
+
+.close-modal:hover {
+    background-color: #333;
+}
+
+.feed-page-main .follow-other {
+    display: flex;
+    justify-content: flex-end;
+}
+
+@media (min-width: 768px) {
+    .feed-page .feed-page-main {
+        display: flex;
+        justify-content: flex-start;
+        gap: 3%;
+    }
+  
+    .feed-page .feed-page-main .posts {
+        flex: 2;
+    }
+
+    .feed-page .feed-page-main .follow-other {
+        flex: 1;
+        margin-right: 10px;
+    }
+
+    .feed-post .feed-post-right .interaction {
+        gap: 50%;
+    }
+
+    .feed-post .feed-post-right .interaction .left p{
+        display: flex;
+        margin-right: 25%;
+    }
+
+    .feed-post .feed-post-right .interaction .bi.bi-share::before {
+        float: right;
+    }
+}
+  
+@media (max-width: 767px) {
+    .feed-page .feed-page-main {
+        display: block;
+    }
+
+    .feed-page .feed-page-main .posts {
+        width: 100%;
+    }
+
+    .feed-page .feed-page-main .follow-other {
+        display: none;
+    }
+
+    .feed-post .feed-post-right .interaction {
+        gap: 50%;
+    }
+
+    .feed-post .feed-post-right .interaction .left p{
+        margin-right: 25%;
+    }
+
+    .feed-post .feed-post-right .interaction .bi.bi-share::before {
+        float: right;
+    }
+}
+  
