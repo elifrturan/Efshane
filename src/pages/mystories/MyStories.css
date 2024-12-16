@@ -1,0 +1,63 @@
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    background-color: whitesmoke;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    color: var(--second-color);
+}
+
+.my-stories-page {
+    display: flex;
+    flex-direction: column;
+}
+
+.my-stories-page button {
+    border-radius: 0 !important;
+}
+
+.my-stories-tabs {
+    display: flex;
+    justify-content: space-around;
+    padding: 0 15%;
+    margin-bottom: 20px;
+}
+
+.stories-tab-button {
+    flex: 1;
+    padding: 10px;
+    background-color: #f8f9fa !important;
+    border: none !important;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease-out;
+    color: var(--second-color);
+}
+
+.stories-tab-button.active {
+    border-bottom: 3px solid #0A58CA !important;
+    color: #0A58CA;
+    font-weight: bold;
+}
+
+.stories-tab-button:hover {
+    color: #333;
+    background-color: #f0f0f0 !important;
+}
+
+.my-stories-tabs-content {
+    padding: 0 15%;
+}
+
+.my-stories-tabs-content .stories-tab-pane.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+#books {
+    display: block;
+    opacity: 1;
+}
