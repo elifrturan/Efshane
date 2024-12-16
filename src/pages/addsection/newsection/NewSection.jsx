@@ -376,7 +376,7 @@ function NewSection() {
             </div>
             <div className="robot">
                 <button className='help d-flex justify-content-center align-items-center' onClick={toggleChat}>
-                    <i class="bi bi-robot"></i>
+                    <i className="bi bi-robot"></i>
                 </button>
             </div>
         </div>

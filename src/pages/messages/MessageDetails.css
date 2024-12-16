@@ -116,8 +116,9 @@
 }
 
 .message-input button:hover {
-    background-color: #7c3030;
+    background-color: #3568b6;
 }
+
 
 .message-input input:focus{
     border: 1px solid var(--second-color) !important;

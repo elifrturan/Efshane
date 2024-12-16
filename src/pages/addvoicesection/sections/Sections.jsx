@@ -1,16 +1,22 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import './Sections.css'
 import { Button, Dropdown, Form, Modal } from 'react-bootstrap';
+import { useNavigate, useParams } from 'react-router-dom';
+import axios from 'axios';
 
 function Sections() {
+    const { bookTitle: encodedAudioBookTitle } = useParams();
     const [activeTab, setActiveTab] = useState('sections');
-    const [showModal, setShowModal] = useState(false);
-    const [isOpen, setIsOpen] = useState(false);
-    const [selectedButton, setSelectedButton] = useState(null);
-    const [sectionToDelete, setSectionToDelete] = useState(null);
-    const [sectionImage, setSectionImage] = useState('');
+    const [uploadedAudioPath, setUploadedAudioPath] = useState(null);
     const [audioFile, setAudioFile] = useState(null);
     const [textFile, setTextFile] = useState(null);
+    const [imageFile, setImageFile] = useState(null);
+    const [showModal, setShowModal] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
+    const [title, setBookTitle] = useState(""); //kitaba ait başlık
+    const [selectedButton, setSelectedButton] = useState(null);
+    const [sectionToDelete, setSectionToDelete] = useState(null);
+    const [error, setError] = useState("");
     const [audioDurationError, setAudioDurationError] = useState(false);
     const [audioPlayerVisible, setAudioPlayerVisible] = useState(false);
     const [fileType, setFileType] = useState(null);
@@ -25,9 +31,68 @@ function Sections() {
     const [showNewRecordingButton, setShowNewRecordingButton] = useState(false);
     const intervalIdRef = useRef(null);
     const [showEditModal, setShowEditModal] = useState(false);
+    const [sections, setSections] = useState ([]); 
+
+    useEffect(() => {
+        const fetchSections = async () => {
+            if (activeTab === "sections") { 
+                try {
+                    const response = await axios.get(
+                        `http://localhost:3000/episode/${encodedAudioBookTitle}`, 
+                        {
+                            headers: {
+                                Authorization: `Bearer ${localStorage.getItem("token")}`,
+                            },
+                        }
+                    );
+                    if (response.data) {
+                        setSections(response.data); 
+                    } else {
+                        console.error("Bölüm verisi beklenmeyen formatta:", response.data);
+                    }
+                } catch (error) {
+                    console.error("Bölümleri çekerken hata oluştu:", error);
+                }
+            }
+        };
+    
+        fetchSections();
+    }, [activeTab]);
+
+    const formatTitleForUrl = (title) => {
+        const charMap = {
+            'ç': 'c',
+            'ğ': 'g',
+            'ı': 'i',
+            'ö': 'o',
+            'ş': 's',
+            'ü': 'u',
+            'Ç': 'c',
+            'Ğ': 'g',
+            'İ': 'i',
+            'Ö': 'o',
+            'Ş': 's',
+            'Ü': 'u',
+        };
+        
+        const sanitizedTitle = title
+            .split('') 
+            .map(char => charMap[char] || char)
+            .join('');
+        
+        return sanitizedTitle
+            .trim()
+            .toLowerCase()
+            .replace(/[^a-z0-9\s-]/g, '') 
+            .replace(/\s+/g, '-'); 
+    };  
 
     const handleClose = () => setShowNewSectionModal(false);
-    const handleShow = () => setShowNewSectionModal(true);
+
+    const handleShow = () => {
+        setBookTitle("");
+        setShowNewSectionModal(true);
+    };
 
     const handleInfoClose = () => setShowInfoModal(false);
     const handleInfoShow = () => setShowInfoModal(true);
@@ -41,27 +106,6 @@ function Sections() {
         setFileType(type);
     };
 
-    const [sections, setSections] = useState ([
-        {
-            id: 1,
-            sectionName: "1. Bölüm",
-            readCount: "1.5K",
-            likeCount: "500",
-            commentCount: "12",
-            onPublished: true,
-            duration: 820
-        },
-        {
-            id: 2,
-            sectionName: "2. Bölüm",
-            readCount: "1.3K",
-            likeCount: "430",
-            commentCount: "20",
-            onPublished: false,
-            duration: 900
-        }
-    ]); 
-
     const handleToggle = (sectionId) => {
         setIsOpen((prevState) => ({
             ...prevState,
@@ -69,23 +113,63 @@ function Sections() {
         }));
     }
 
-    const handleDeleteConfirm = () => {
-        setSections(sections.filter((section) => section.id !== sectionToDelete));
-        setShowModal(false);
-        setSectionToDelete(null);
-    };
-    
-    const handleDeleteCancel = () => {
-        setShowModal(false);
-        setSectionToDelete(null);
-    };
-
     const handleAction = (action, sectionId) => {
         if (action === "delete") {
             setSectionToDelete(sectionId);
             setShowModal(true);
         } 
     };
+
+    const handleDeleteCancel = () => {
+        setShowModal(false);
+        setSectionToDelete(null);
+    };
+
+    useEffect(() => {
+        if (encodedAudioBookTitle) {
+            setBookTitle(decodeURIComponent(encodedAudioBookTitle));
+        }
+    }, [encodedAudioBookTitle]);
+    
+    const handleDeleteConfirm = async () => {
+        if (!title || !sectionToDelete || !sectionToDelete.title) {
+            console.error("Eksik bilgi nedeniyle silme işlemi başarısız!");
+            alert("Eksik bilgi nedeniyle silme işlemi yapılamıyor.");
+            return;
+        }
+    
+        try {
+            const encodedTitle = encodeURIComponent(title);
+            const formattedAudioBookTitle = formatTitleForUrl(sectionToDelete.title);
+            const url = `http://localhost:3000/episode/${encodedTitle}/${formattedAudioBookTitle}`;
+    
+            await axios.delete(url, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+            });
+    
+            setSections(sections.filter((section) => section.id !== sectionToDelete.id));
+            setShowModal(false);
+            setSectionToDelete(null);
+    
+            alert("Bölüm başarıyla silindi!");
+        } catch (error) {
+            console.error("Hata detayları:", error.response || error.message);
+            alert("Bölüm silinirken bir hata oluştu.");
+        }
+    };    
+
+    const handleBookSection = (sectionId) => {
+        const section = sections.find((sec) => sec.id === sectionId);
+        if (section && section.title) {
+            const chapterTitlee = section.title;
+            const formattedSectionName = formatTitleForUrl(chapterTitlee); 
+            const formattedAudioBookTitle = formatTitleForUrl(encodedAudioBookTitle);
+        } else {
+            console.error("Section or sectionName is undefined:", section);
+        }
+    };  
 
     const formatDuration = (seconds) => {
         const minutes = Math.floor(seconds / 60);
@@ -108,7 +192,7 @@ function Sections() {
 
     const handleCancel = () => {
         setFileType(null);
-        setSectionImage(null);
+        setImageFile(null);
         setAudioUrl(null);
         setAudioFile(null);
         setAudioDuration(0);
@@ -119,12 +203,13 @@ function Sections() {
         setTextFile(null);
         setShowNewRecordingButton(false);
         setSelectedButton(null);
+        setBookTitle(" ");
         handleClose();
     }
 
     const handleEditCancel = () => {
         setFileType(null);
-        setSectionImage(null);
+        setImageFile(null);
         setAudioUrl(null);
         setAudioFile(null);
         setAudioDuration(0);
@@ -138,41 +223,141 @@ function Sections() {
         handleEditClose();
     }
 
-    const handleSectionImageUpload = (e) => {
-        const file = e.target.files[0];
-        setSectionImage(URL.createObjectURL(file));
+    const handleAudioFileSelect = (e) => {
+        setAudioFile(e.target.files[0]);
+    };
+    
+    const handleImageFileSelect = (e) => {
+        setImageFile(e.target.files[0]);
     };
 
-    const handleAudioUpload = (e) => {
+    const handleTextFileSelect = (e) => {
+        setTextFile(e.target.files[0]);
+    };
+
+    const handleImageUpload = async (e) => {
         const file = e.target.files[0];
         if (file) {
-            const audio = new Audio(URL.createObjectURL(file));
-            audio.onloadedmetadata = () => {
-                const duration = audio.duration / 60;
-                if (duration > 20) {
-                    setAudioDurationError(true);
-                    setAudioFile(null);
-                    setAudioPlayerVisible(false);
-                    e.target.value = "";
-                    setTimeout(() => {
-                        setAudioDurationError(false);
-                    }, 5000);
-                } else {
-                    setAudioFile(file);
-                    setAudioDurationError(false);
-                    setAudioPlayerVisible(true);
-                }
+            try {
+                const formData = new FormData();
+                formData.append("image", file);
+    
+                const response = await axios.post(
+                    `http://localhost:3000/episode/uploadImage`, 
+                    formData,
+                    {
+                        headers: {
+                            "Content-Type": "multipart/form-data",
+                            Authorization: `Bearer ${localStorage.getItem("token")}`,
+                        },
+                    });
+                    if (response.status === 201) {
+                        const data = response.data;
+                        setImageFile(data.filePath);
+                        console.log("Path:", data.filePath);
+                        console.log("Görsel başarıyla yüklendi:", data);
+                    } else {
+                        throw new Error("Görsel yüklenemedi")
+                    }
+            } catch (error) {
+                console.error("Error uploading image:", error);
             };
         }
-    };
+    };    
 
-    const handleTextFileUpload = (e) => {
+    const handleAudioUpload = async (e) => {
         const file = e.target.files[0];
         if (file) {
-            setTextFile(file);
+            const maxSizeInMB = 10;
+            if (file.size > maxSizeInMB * 1024 * 1024) {
+                setError(`Ses dosyası ${maxSizeInMB} MB'den büyük olamaz.`);
+                setTimeout(() => setError(""), 5000);
+                return;
+            }
+    
+            const audio = new Audio(URL.createObjectURL(file));
+            audio.onloadedmetadata = async () => {
+                const maxDurationInSeconds = 20 * 60;
+                if (audio.duration > maxDurationInSeconds) {
+                    setError("Ses dosyasının süresi 20 dakikadan uzun olamaz.");
+                    setTimeout(() => setError(""), 5000);
+                    return;
+                }
+    
+                setError("");
+    
+                try {
+                    const formData = new FormData();
+                    formData.append('audioFile', file);
+                    console.log("Uploading audio file...");
+
+                    const response = await axios.post(
+                        `http://localhost:3000/episode/upload`, 
+                        formData,
+                        {
+                            headers: {
+                                "Content-Type": "multipart/form-data",
+                                Authorization: `Bearer ${localStorage.getItem("token")}`,
+                            },
+                        }
+                    );
+    
+                    if (response.status === 201) {
+                        const data = response.data;
+                        setUploadedAudioPath(data.filePath);
+                        console.log("Path:", data.filePath);
+                        console.log("Ses dosyası başarıyla yüklendi:", data);
+                    } else {
+                        throw new Error('Dosya yüklenemedi');
+                    }
+                } catch (error) {
+                    console.error("Ses dosyası yükleme hatası:", error);
+                }
+            };
+    
+            audio.onerror = () => {
+                setError("Geçersiz ses dosyası. Lütfen geçerli bir dosya seçin.");
+                setTimeout(() => setError(""), 5000);
+            };
+        }
+    };      
+
+    const handleTextFileUpload = async (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            if (file.type !== "text/plain") {
+                alert("Yalnızca .txt dosyaları yüklenebilir.");
+                return;
+            }
+    
+            try {
+                const formData = new FormData();
+                formData.append("textFile", file);
+    
+                const response = await axios.post(
+                    `http://localhost:3000/episode/uploadText`,
+                    formData,
+                    {
+                        headers: {
+                            "Content-Type": "multipart/form-data",
+                            Authorization: `Bearer ${localStorage.getItem("token")}`,
+                        },
+                    }
+                );
+    
+                if (response.status === 201) {
+                    const data = response.data;
+                    setTextFile(data);
+                    console.log("Path:", data.filePath);
+                } else {
+                    throw new Error("Metin dosyası yüklenemedi");
+                }
+            } catch (error) {
+                console.error("Metin dosyası yükleme hatası:", error);
+            }
         }
     };
-
+    //canlı ses kaydetme sıkıntıııı
     const startRecording = () => {
         if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
             navigator.mediaDevices.getUserMedia( {audio: true})
@@ -186,11 +371,13 @@ function Sections() {
                 }
 
                 recorder.onstop = () => {
-                    const audioBlob = new Blob(chunks, { type: 'audio/wav'});
+                    const audioBlob = new Blob(chunks, { type: 'audio/wav' });
+                    const audioFile = new File([audioBlob], 'recorded-audio.wav', { type: 'audio/wav' });
+                    setAudioFile(audioFile); 
                     const audioUrl = URL.createObjectURL(audioBlob);
+                    console.log("Audio Url:",audioUrl);
                     setAudioUrl(audioUrl);
-                    setAudioChunks(chunks);
-                }
+                };
 
                 recorder.start();
                 setIsRecording(true);
@@ -214,6 +401,35 @@ function Sections() {
             })
         }
     }
+
+    const uploadAudioBlob = async (audioUrl) => {
+        try {
+            const blob = await fetch(audioUrl).then((response) => response.blob());
+    
+            const audioFile = new File([blob], 'audioFile.wav', { type: 'audio/wav' });
+    
+            const formData = new FormData();
+            formData.append('audioFile', audioFile);
+
+            const response = await axios.post('http://localhost:3000/upload', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+            });
+    
+            if (response.status === 201) {
+                console.log('Audio uploaded successfully:', response.data.filePath);
+                return response.data.filePath; 
+            } else {
+                console.error('Audio upload failed:', response);
+                return null;
+            }
+        } catch (error) {
+            console.error('Error uploading audio blob:', error);
+            return null;
+        }
+    };
 
     const pauseRecording = () => {
         if (mediaRecorder && mediaRecorder.state === 'recording') {
@@ -245,20 +461,13 @@ function Sections() {
             setIsRecording(false);
             setIsPaused(false);
             setShowNewRecordingButton(true);
+    
+            if (intervalIdRef.current) {
+                clearInterval(intervalIdRef.current);
+                intervalIdRef.current = null;
+            }
         }
-
-        if (intervalIdRef.current) {
-            clearInterval(intervalIdRef.current);
-            intervalIdRef.current = null;
-        }
-
-        mediaRecorder.onstop = () => {
-            const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
-            const audioFile = new File([audioBlob], 'recording.wav', { type: 'audio/wav' });
-            setAudioFile(audioFile); 
-            setAudioUrl(URL.createObjectURL(audioBlob)); 
-        };
-    }
+    };
 
     const startNewRecording = () => {
         stopRecording();
@@ -268,8 +477,218 @@ function Sections() {
         startRecording();
         setIsPaused(true);
     };
+
+    const formatNumber = (num) => {
+        if (num >= 1000000) {
+            return (num / 1000000).toFixed(1) + 'M'; 
+        } else if (num >= 1000) {
+            return (num / 1000).toFixed(1) + 'K'; 
+        }
+        return num.toString(); 
+    };
+
+    const handlePublishSection = async (publish = true) => {
+        if (!title) {
+            alert("Bölüm başlığı gerekli!");
+            return;
+        }
     
-  return (
+        const formData = new FormData();
+    
+        let audioUrl = null;
+        if (audioChunks && audioChunks.length > 0) {
+            audioUrl = await uploadAudioBlob(audioChunks);
+            if (!audioUrl) {
+                alert("Ses kaydı yüklenemedi. Lütfen tekrar deneyin.");
+                return;
+            }
+            formData.append("audioFile", audioUrl);
+
+        } else if (audioFile instanceof File) {
+            formData.append("audioFile", audioFile);
+
+        } else if (uploadedAudioPath) {
+            formData.append("audioFile", uploadedAudioPath);
+        }
+    
+        if (typeof imageFile === "string") {
+            formData.append("image", imageFile);
+            
+        } else if (imageFile instanceof File) {
+            formData.append("image", imageFile);
+        }
+    
+        if (typeof textFile === "string") {
+            formData.append("textFilePath", textFile);
+            
+        } else if (textFile instanceof File) {
+            const textUploadFormData = new FormData();
+            textUploadFormData.append("textFile", textFile);
+    
+            try {
+                const textResponse = await axios.post(
+                    "http://localhost:3000/episode/uploadText",
+                    textUploadFormData,
+                    {
+                        headers: {
+                            "Content-Type": "multipart/form-data",
+                            Authorization: `Bearer ${localStorage.getItem("token")}`,
+                        },
+                    }
+                );
+    
+                if (textResponse.status === 201) {
+                    formData.append("textFilePath", textResponse.data.filePath);
+                } else {
+                    throw new Error("Text dosyası yüklenemedi.");
+                }
+            } catch (error) {
+                console.error("Text dosyası yükleme hatası:", error);
+                return;
+            }
+        }
+    
+        formData.append("title", title);
+        formData.append("duration", audioDuration.toString());
+        formData.append("publish", publish.toString());
+        formData.append("normalizedTitle", formatTitleForUrl(encodedAudioBookTitle));
+    
+        try {
+            const response = await axios.post(
+                `http://localhost:3000/episode/publish/${formatTitleForUrl(encodedAudioBookTitle)}`,
+                formData,
+                {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
+                }
+            );
+    
+            if (response.data.success) {
+                alert("Bölüm başarıyla eklendi!");
+                setSections([...sections, response.data.episode]);
+            } else if (response.data.offensive) {
+                alert("Bölüm küfürlü içerik içerdiği için yayınlanamıyor.");
+            }
+        } catch (error) {
+            console.error("Bölüm ekleme hatası:", error);
+            alert("Bölüm eklenirken bir hata oluştu.");
+        }
+    };    
+
+    const handleSaveSection = async (publish = false) => {
+        if (!title) {
+            alert("Bölüm başlığı gerekli!");
+            return;
+        }
+    
+        const formData = new FormData();
+        
+        let audioUrl = null;
+        if (audioChunks && audioChunks.length > 0) {
+            audioUrl = await uploadAudioBlob(audioChunks); 
+            if (!audioUrl) {
+                alert("Ses kaydı yüklenemedi. Lütfen tekrar deneyin.");
+                return;
+            }
+            formData.append("audioFile", audioUrl);
+        }else if (audioFile instanceof File) {
+            formData.append("audioFile", audioFile);
+        } 
+        
+        if (textFile instanceof File) {
+            const formData = new FormData();
+            formData.append("textFile", textFile);
+        }
+
+        try {
+            const textResponse = await axios.post(
+                "http://localhost:3000/episode/uploadText",
+                formData,
+                {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
+                }
+            );
+
+            if (textResponse.status === 201) {
+                formData.append("textFile", textResponse.data);
+            } else {
+                throw new Error("Text dosyası yüklenemedi.");
+            }
+        } catch (error) {
+            console.error("Text dosyası yükleme hatası:", error);
+            return;
+        }
+
+        if (Image instanceof File) {
+            const formData = new FormData();
+            formData.append("image", imageFile);
+        }
+
+        try {
+            const imageResponse = await axios.post(
+                "http://localhost:3000/episode/uploadImage",
+                formData,
+                {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
+                }
+            );
+
+            if (imageResponse.status === 201) {
+                formData.append("image", imageResponse.data);
+            } else {
+                throw new Error("Text dosyası yüklenemedi.");
+            }
+        } catch (error) {
+            console.error("Image dosyası yükleme hatası:", error);
+            return;
+        }
+    
+        formData.append("title", title);
+        formData.append("duration", audioDuration.toString());
+        formData.append("publish", publish.toString());
+        formData.append("normalizedTitle", formatTitleForUrl(encodedAudioBookTitle));
+    
+        console.log("FormData içerikleri:");
+        for (const pair of formData.entries()) {
+            console.log(pair[0], pair[1]);
+        }
+
+        try {
+            const response = await axios.post(
+                `http://localhost:3000/episode/save/${formatTitleForUrl(encodedAudioBookTitle)}`,
+                formData,
+                {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
+                }
+            );
+    
+            if (response.status === 201) {
+                alert("Bölüm başarıyla eklendi!");
+                setSections([...sections, response.data]);
+                handleCancel();
+            } else {
+                console.error("Beklenmeyen yanıt:", response);
+                alert("Bölüm eklenirken bir hata oluştu.");
+                handleCancel();
+            }
+        } catch (error) {
+            console.error("Bölüm ekleme hatası:", error);
+            alert("Bölüm eklenirken bir hata oluştu.");
+        }
+    };
+    
+return (
     <>
         {activeTab === 'sections' && (
             <div id="sections" className={`voice-tab-pane ${activeTab === 'sections' ? 'active' : ''}`}>
@@ -284,7 +703,7 @@ function Sections() {
                 <Modal show={showNewSectionModal} onHide={handleClose} className='custom-modal' centered backdrop='static'>
                     <Modal.Header closeButton className='custom-modal-header'>
                         <Modal.Title className='fs-6 text-dark me-2'>Yeni Bölüm Ekle</Modal.Title>
-                        <i class="bi bi-question-circle-fill" onClick={handleInfoShow}></i>
+                        <i className="bi bi-question-circle-fill" onClick={handleInfoShow}></i>
                         {/* Info Modal */}
                         <Modal show={showInfoModal} onHide={handleInfoClose} className='voice-help-modal'>
                             <Modal.Header closeButton>
@@ -355,20 +774,20 @@ function Sections() {
                     </Modal.Header>
                     <Modal.Body>
                         <Form>
-                            <Form.Control size="sm" type="text" placeholder="Bir bölüm başlığı girin..." className='modal-section-title mb-4' />
+                            <Form.Control size="sm" type="text" placeholder="Bir bölüm başlığı girin..." className='modal-section-title mb-4' value={title || ""} onChange={(e) => setBookTitle(e.target.value)} />
                         </Form>
                         {/* Görsel Yükleme */}
                         {fileType === 'image' && (
                             <div className='add-voice-image'>
                                 <Form.Group className='mt-4 mb-4 d-flex flex-column'>
-                                    {sectionImage && <img src={sectionImage} className='img-fluid mb-4'  alt="Bölüm Görseli" width="300" height="200"/>}
+                                    {imageFile && <img src={imageFile} className='img-fluid mb-4'  alt="Bölüm Görseli" width="300" height="200"/>}
                                     <Form.Label>Bölüm görselinizi yükleyin</Form.Label>
-                                   <Form.Control
+                                    <Form.Control
                                         type="file"
                                         accept="image/*"
                                         size='sm'
                                         className='opacity-75 image-modal'
-                                        onChange={handleSectionImageUpload}
+                                        onChange={handleImageUpload}
                                     />
                                 </Form.Group>
                             </div>
@@ -386,12 +805,12 @@ function Sections() {
                                             >
                                                 {!isRecording ? (
                                                     <div className='play-voice d-flex flex-column align-items-center justify-content-center me-2'>
-                                                        <i class="bi bi-mic-fill"></i>
+                                                        <i className="bi bi-mic-fill"></i>
                                                         <p>Başlat</p>
                                                     </div>
                                                 ) : (
                                                     <div className="stop-voice d-flex flex-column align-items-center justify-content-center me-2">
-                                                        <i class="bi bi-stop-fill"></i>
+                                                        <i className="bi bi-stop-fill"></i>
                                                         <p>Bitir</p>
                                                     </div>
                                                 )}
@@ -402,12 +821,12 @@ function Sections() {
                                                     <Button variant="secondary" onClick={isPaused ? resumeRecording : pauseRecording}>
                                                         {!isPaused ? (
                                                             <div className="pause-voice me-2">
-                                                                <i class="bi bi-pause-fill"></i>
+                                                                <i className="bi bi-pause-fill"></i>
                                                                 <p>Duraklat</p>
                                                             </div>
                                                         ) : (
                                                             <div className="resume-voice me-2">
-                                                                <i class="bi bi-play-fill"></i>
+                                                                <i className="bi bi-play-fill"></i>
                                                                 <p>Devam</p>
                                                             </div>
                                                         )}
@@ -456,7 +875,7 @@ function Sections() {
                                         accept="audio/*"
                                         size='sm'
                                         className='opacity-75'
-                                        onChange={handleAudioUpload}
+                                        onChange={handleAudioUpload }
                                     />
                                 </Form.Group>
                             </div>
@@ -474,7 +893,7 @@ function Sections() {
                                     </Form.Label>
                                     <Form.Control
                                         type="file"
-                                        accept=".txt"
+                                        accept="*.txt"
                                         size='sm'
                                         className='opacity-75'
                                         onChange={handleTextFileUpload}
@@ -502,22 +921,35 @@ function Sections() {
                             İptal
                         </Button>
                         <div className='d-flex gap-2'>
-                            <Button variant="secondary" className='btn-modal-save' onClick={handleClose}>
+                            <Button variant="secondary" className='btn-modal-save' onClick={() => handleSaveSection(false)}>
                                 Kaydet
                             </Button>
-                            <Button variant="primary" className='btn-modal-publish' onClick={handleClose}>
+                            <Button variant="primary" className='btn-modal-publish' onClick={() => handlePublishSection(true)}>
                                 Yayınla
                             </Button>
                         </div>
                     </Modal.Footer>
                 </Modal>
                 {sections.map(section => (
-                    <div className="voice-section-row d-flex justify-content-between align-items-center" key={section.id}>
-                        <span>{section.sectionName}</span>
+                    <div 
+                        className="voice-section-row d-flex justify-content-between align-items-center" 
+                        key={section.id} 
+                        onClick={() => handleBookSection(section.id)}
+                        style={{ cursor: 'pointer' }}
+                    >
+                        <span>{section.title}</span>
                         <div className="voice-istatistic d-flex me-3">
-                            <p><i className="bi bi-eye-fill me-1"></i>{section.readCount}</p>
-                            <p><i className="bi bi-balloon-heart-fill ms-4 me-1"></i>{section.likeCount}</p>
-                            <p><i className="bi bi-chat-heart-fill ms-4 me-1"></i>{section.commentCount}</p>
+                        {section.analysis && section.analysis.length > 0 ? (
+                            section.analysis.map((stat, index) => (
+                                <span key={index} className="d-flex align-items-center me-4">
+                                    <p><i className="bi bi-eye-fill me-1"></i>{formatNumber(stat.read_count)}</p>
+                                    <p><i className="bi bi-balloon-heart-fill ms-4 me-1"></i>{formatNumber(stat.like_count)}</p>
+                                    <p><i className="bi bi-chat-heart-fill ms-4 me-1"></i>{formatNumber(stat.comment_count)}</p>
+                                </span>
+                            ))
+                        ) : (
+                            <p className="no-analysis mb-0">Bu bölüm için analiz verisi yok.</p>
+                        )}
                         </div>
                         <div className='d-flex justify-content-center align-items-center'>
                             <span className="section-duration me-3">{formatDuration(section.duration)}</span>
@@ -549,7 +981,7 @@ function Sections() {
                                                             accept="image/*"
                                                             size='sm'
                                                             className='opacity-75 edit-image-modal'
-                                                            onChange={handleSectionImageUpload}
+                                                            onChange={handleImageFileSelect}
                                                     />
                                                     </Form.Group>
                                                 </div>
@@ -567,12 +999,12 @@ function Sections() {
                                                                 >
                                                                     {!isRecording ? (
                                                                         <div className='play-voice d-flex flex-column align-items-center justify-content-center me-2'>
-                                                                            <i class="bi bi-mic-fill"></i>
+                                                                            <i className="bi bi-mic-fill"></i>
                                                                             <p>Başlat</p>
                                                                         </div>
                                                                     ) : (
                                                                         <div className="stop-voice d-flex flex-column align-items-center justify-content-center me-2">
-                                                                            <i class="bi bi-stop-fill"></i>
+                                                                            <i className="bi bi-stop-fill"></i>
                                                                             <p>Bitir</p>
                                                                         </div>
                                                                     )}
@@ -583,12 +1015,12 @@ function Sections() {
                                                                         <Button variant="secondary" onClick={isPaused ? resumeRecording : pauseRecording}>
                                                                             {!isPaused ? (
                                                                                 <div className="pause-voice me-2">
-                                                                                    <i class="bi bi-pause-fill"></i>
+                                                                                    <i className="bi bi-pause-fill"></i>
                                                                                     <p>Duraklat</p>
                                                                                 </div>
                                                                             ) : (
                                                                                 <div className="resume-voice me-2">
-                                                                                    <i class="bi bi-play-fill"></i>
+                                                                                    <i className="bi bi-play-fill"></i>
                                                                                     <p>Devam</p>
                                                                                 </div>
                                                                             )}
@@ -637,7 +1069,7 @@ function Sections() {
                                                             accept="audio/*"
                                                             size='sm'
                                                             className='opacity-75'
-                                                            onChange={handleAudioUpload}
+                                                            onChange={handleAudioFileSelect}
                                                         />
                                                     </Form.Group>
                                                 </div>
@@ -658,7 +1090,7 @@ function Sections() {
                                                             accept=".txt"
                                                             size='sm'
                                                             className='opacity-75'
-                                                            onChange={handleTextFileUpload}
+                                                            onChange= {handleTextFileSelect}
                                                         />
                                                     </Form.Group>
                                                 </div>
@@ -692,12 +1124,33 @@ function Sections() {
                                             </div>
                                         </Modal.Footer>
                                     </Modal>
-                                    {section.onPublished ? (
+                                    {section.publish ? (
+                                                        <button
+                                                            className="dropdown-item dropdown-item-section"
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                togglePublish(section.id, section.title);
+                                                            }}
+                                                        >
+                                                            Yayından Kaldır
+                                                        </button>
+                                                        ) : (
+                                                        <button
+                                                            className="dropdown-item dropdown-item-section"
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                togglePublish(section.id, section.title);
+                                                            }}
+                                                        >
+                                                            Yayınla
+                                                        </button>
+                                                    )}
+                                    {/* {section.onPublished ? (
                                         <Dropdown.Item href=''>Yayından Kaldır</Dropdown.Item>
                                         ) : (
                                         <Dropdown.Item href=''>Yayınla</Dropdown.Item>
-                                    )}
-                                    <Dropdown.Item href='' onClick={() => handleAction('delete', section.id)}>Sil</Dropdown.Item>
+                                    )} */}
+                                    <Dropdown.Item href='' onClick={() => handleAction('delete', section)}>Sil</Dropdown.Item>
                                 </Dropdown.Menu>
                             </Dropdown>
                         </div>
@@ -746,7 +1199,7 @@ function Sections() {
             </div>
         </div>
     </>
-  )
+)
 }
 
 export default Sections

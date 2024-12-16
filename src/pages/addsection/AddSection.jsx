@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 
 function AddSection() {
+
     const { bookTitle: encodedBookTitle } = useParams();
 
     const [bookImage, setImage] = useState(""); //kitaba ait resim
@@ -48,7 +49,7 @@ function AddSection() {
         };
         
         const sanitizedTitle = title
-            .split('')
+            .split('') 
             .map(char => charMap[char] || char)
             .join('');
         
@@ -56,45 +57,39 @@ function AddSection() {
             .trim()
             .toLowerCase()
             .replace(/[^a-z0-9\s-]/g, '') 
-            .replace(/\s+/g, '-');
-    };      
+            .replace(/\s+/g, '-'); 
+    };    
 
     useEffect(() => {
         const fetchBookDetails = async () => {
             try {
-                const normalizeTitle = (title) => {
-                    return title.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-                };
+                const encodeBookTitle = encodeURIComponent(encodedBookTitle);
+                console.log('Frontend Encoded Title:', encodeBookTitle); 
                 
-                const decodedTitle = encodedBookTitle.replace(/-/g, ' ');
-                const normalizedTitle = normalizeTitle(decodedTitle);
-                
-                console.log('Frontend Normalized Title:', normalizedTitle);
-
                 const response = await axios.get(
-                    `http://localhost:3000/book/${encodeURIComponent(normalizedTitle)}`,
+                    `http://localhost:3000/book/${encodeBookTitle}`,
                     {
                         headers: {
                             Authorization: `Bearer ${localStorage.getItem("token")}`,
                         },
                     }
-                );
-
-                console.log('API Yanıtı:', response.data.title);
+                );    
                 const data = response.data;
-
-                setBookTitle(data.title || '');
-                setBookSummary(data.summary || '');
-                setImage(data.bookCover || '');
-                setTags(data.hashtags || []);
-                setSelectedCategory(data.categories || '');
-                setSelectedAgeRange(data.ageRange || '');
-                setContentChoice(data.bookCopyright || '');
+                console.log(data);
+                
+                setBookTitle(data.title); 
+                setBookSummary(data.summary);
+                setImage(data.bookCover);
+                setSelectedCategory(data.categories && data.categories[0].categoryId);
+                setSelectedAgeRange(data.ageRange && data.ageRange[0].rangeId );
+                setContentChoice(data.bookCopyright && data.bookCopyright[0].bookCopyrightId);
+                setTags(data.hashtags ? data.hashtags.map(tag => tag.hashtag.name) : []);
+                
             } catch (error) {
                 console.error('Kitap bilgilerini çekerken hata oluştu:', error);
             }
         };
-
+    
         fetchBookDetails();
     }, [encodedBookTitle]);
 
@@ -138,7 +133,6 @@ function AddSection() {
         });
     };
     
-
     const formatNumber = (num) => {
         if (num >= 1000000) {
             return (num / 1000000).toFixed(1) + 'M'; 
@@ -196,12 +190,15 @@ function AddSection() {
         } else if (action === "edit") {
             const section = sections.find((sec) => sec.id === sectionId);
             if (section) {
-                const formattedSectionName = formatTitleForUrl(section.sectionName);
-                navigate(`/addsection/edit/${formattedSectionName}`);
+                console.log("Sections:", sections);
+                const chapterTitlee = section.title;
+                const formattedChapterName = formatTitleForUrl(chapterTitlee); 
+                const formattedBookTitle = formatTitleForUrl(encodedBookTitle);
+                navigate(`/addsection/edit/${formattedBookTitle}/${formattedChapterName}`);
             }
-        } 
-    };    
-
+        }
+    };
+    
     const handleDeleteCancel = () => {
         setShowModal(false);
         setSectionToDelete(null);
@@ -218,7 +215,7 @@ function AddSection() {
             try {
                 const response = await axios.get('http://localhost:3000/categories');
                 if (Array.isArray(response.data)) {
-                    setCategory(response.data || []); 
+                    setCategory(response.data); 
                 } else {
                     console.error('Kategori verisi beklenmeyen formatta:', response.data);
                     setCategory([]); 
@@ -239,7 +236,9 @@ function AddSection() {
         const fetchAgeRanges = async () => {
             try {
                 const response = await axios.get('http://localhost:3000/book/ageRange');
-                if (response.data) setAgeRange(response.data || []);
+                if (response.data) {
+                    setAgeRange(response.data);
+                }
             } catch (error) {
                 console.error('Yaş aralıklarını çekerken hata oluştu:', error);
             }
@@ -255,7 +254,8 @@ function AddSection() {
         axios.get('http://localhost:3000/book/copyright')
             .then(response => {
                 if (Array.isArray(response.data)) {
-                    setCopyrightStatuses(response.data || []);
+                    console.log(response.data);
+                    setCopyrightStatuses(response.data);
                 } else {
                     console.error("Beklenmeyen veri formatı:", response.data);
                 }
@@ -271,7 +271,7 @@ function AddSection() {
                 setLoadingSections(true); 
                 try {
                     const response = await axios.get(
-                        `http://localhost:3000/chapter/${title}`, 
+                        `http://localhost:3000/chapter/${encodedBookTitle}`, 
                         {
                             headers: {
                                 Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -298,6 +298,7 @@ function AddSection() {
         try {
             const encodedTitle = encodeURIComponent(title);
             const encodedChapterTitle = encodeURIComponent(chapterTitle);
+
             const url = `http://localhost:3000/chapter/${encodedTitle}/${encodedChapterTitle}`;
             const response = await axios.put(
                 url,
@@ -324,7 +325,6 @@ function AddSection() {
 
     const handleDeleteConfirm = async () => {
         if (!sectionToDelete || !sectionToDelete.id || !sectionToDelete.title) {
-            console.error("Silinecek bölüm bilgileri eksik!");
             alert("Silinecek bölüm bilgileri eksik!");
             return;
         }
@@ -353,55 +353,74 @@ function AddSection() {
     
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        if (!title || !summary || !bookImage || !bookCategory || !ageRange || bookContentChoice === '') {
+    
+        if (!title.trim() || !summary.trim() || !bookCategory || !ageRange || bookContentChoice === '') {
             setShowErrorAlert(true);
             setShowSuccessAlert(false);
+            window.scrollTo(0, 0);
             return;
         }
-
+    
+        const payload = {
+            title: title.trim(),
+            summary: summary.trim(),
+            bookCover: typeof bookImage === 'string' ? bookImage : null,
+            categories: String(bookCategory),
+            ageRange: String(ageRange),
+            bookCopyright: String(bookContentChoice),
+            hashtags: Array.isArray(bookTags) ? bookTags.map(tag => String(tag)) : [],
+        };
+    
+        console.log("Gönderilen Payload:", payload);
+    
         try {
             const response = await axios.put(
-                `http://localhost:3000/book/${encodeURIComponent(encodedBookTitle)}`,
-                {
-                    title,
-                    summary,
-                    categories: bookCategory,
-                    ageRange: ageRange,
-                    bookCopyright: bookContentChoice,
-                    bookCover: typeof bookImage === 'string' ? bookImage : null,
-                    hashtags: bookTags,
-                },
+                `http://localhost:3000/book/${encodedBookTitle}`,
+                payload,
                 {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem("token")}`,
                     },
                 }
             );
-
+    
             const updatedData = response.data;
+            console.log("Güncellenen Veri:", updatedData);
+    
             setBookTitle(updatedData.title);
             setBookSummary(updatedData.summary);
-            setSelectedCategory(updatedData.categories);
-            setSelectedAgeRange(updatedData.ageRange);
-            setTags(updatedData.hashtags || []);
             setImage(updatedData.bookCover || '');
-
+            setSelectedCategory(updatedData.categories || '');
+            setSelectedAgeRange(
+                updatedData.ageRange && updatedData.ageRange.length > 0 ? updatedData.ageRange[0].rangeId : ''
+            );
+            setContentChoice(
+                updatedData.bookCopyright && updatedData.bookCopyright.length > 0
+                    ? updatedData.bookCopyright[0].bookCopyrightId
+                    : ''
+            );
+            setTags(updatedData.hashtags ? updatedData.hashtags.map(tag => tag.hashtag.name) : []);
+    
             setShowSuccessAlert(true);
+            setShowErrorAlert(false);
             setTimeout(() => setShowSuccessAlert(false), 3000);
-        } catch (error) {
-            console.error('Kitap güncelleme işlemi başarısız oldu:', error);
+        } catch (error) {    
             setShowErrorAlert(true);
+            setShowSuccessAlert(false);
         }
     };
 
     const handleBookSection = (sectionId) => {
         const section = sections.find((sec) => sec.id === sectionId);
-        if (section) {
-            const formattedSectionName = formatTitleForUrl(section.sectionName);
-            navigate(`/addsection/edit/${formattedSectionName}`);
+        if (section && section.title) {
+            const chapterTitlee = section.title;
+            const formattedChapterName = formatTitleForUrl(chapterTitlee); 
+            const formattedBookTitle = formatTitleForUrl(encodedBookTitle);
+            navigate(`/addsection/edit/${formattedBookTitle}/${formattedChapterName}`);
+        } else {
+            console.error("Section or sectionName is undefined:", section);
         }
-    }
+    };    
 
 return (
     <div className="addsection-page">
@@ -420,7 +439,7 @@ return (
             </div>
         )}
         <div className="container">
-            <h2 className='text-center mt-5 mb-5'>Kitap Detay Sayfasına Hoş Geldiniz</h2>
+            <h2 className='text-center mt-5 mb-5'> Kitap Detay Sayfasına Hoş Geldiniz</h2>
             <div className="add-section-main">
                 <div className="add-section-left">
                     {bookImage ? (
@@ -435,7 +454,7 @@ return (
                         style={{ display: 'none' }}
                         onChange={handleImageUpload}
                     />
-                    <button onClick={() => document.getElementById('image-upload').click()}>Görsel Yükle <i class="bi bi-cloud-arrow-up-fill ms-1"></i></button>
+                    <button onClick={() => document.getElementById('image-upload').click()}>Görsel Yükle <i className="bi bi-cloud-arrow-up-fill ms-1"></i></button>
                     {error && <p className='error-message-cover'>{error}</p>}
                     <i className='left-description'>Kitabınız kapağını değiştirmek istiyorsanız
                         görsel yükle butonuna tıklamanız yeterli olacaktır.
@@ -462,7 +481,7 @@ return (
                         {/* Details */}
                         {activeTab === 'details' && (
                             <div id="details" className={`tab-pane ${activeTab === 'details' ? 'active' : ''}`}>
-                                <form onSubmit={handleSubmit}>
+                                <form className = 'm-0' onSubmit={handleSubmit}>
                                     <div className="form-group mb-3">
                                         <label className='form-label'>Kitap Adı</label>
                                         <input 
@@ -487,26 +506,24 @@ return (
                                             onChange={handleCategoryChange} 
                                         >
                                             <option value="">Kategori Seçiniz...</option>
-                                            {Array.isArray(category) ? (
+                                            {Array.isArray(category) && (
                                                 category.map((categories) => (
                                                     <option key={categories.id} value={categories.id}>
                                                     {categories.name}
                                                     </option>
                                                 ))
-                                            ) : (
-                                                <option disabled>Kategori yüklenemedi</option>
                                             )}
                                         </select>
                                     </div>
                                     <div className="form-group mb-3">
                                     <label className='form-label'>Etiketler</label>
                                     <div className="tags-container">
-                                        {bookTags.map((bookTag, index) => (
-                                            <div className="tag-item" key={index}>
-                                                <span className="tag-text">{bookTag}</span>
-                                                <span className="remove-tag" onClick={() => handleRemoveTag(bookTag)}>x</span>
-                                            </div>
-                                        ))}
+                                    {Array.isArray(bookTags) && bookTags.map((bookTag, index) => (
+                                        <div className="tag-item" key={index}>
+                                            <span className="tag-text">{bookTag}</span>
+                                            <span className="remove-tag" onClick={() => handleRemoveTag(bookTag)}>x</span>
+                                        </div>
+                                    ))}
                                     </div>
                                     <div className="input-group">
                                         <input  
@@ -527,14 +544,12 @@ return (
                                             onChange={handleRangeChange} 
                                         >
                                             <option value="">Yaş Aralığı Seçiniz...</option>
-                                            {Array.isArray(ageRanges) ? (
+                                            {Array.isArray(ageRanges) && (
                                                 ageRanges.map((range) => (
                                                     <option key={range.id} value={range.id}>
                                                     {range.range}
                                                     </option>
                                                 ))
-                                            ) : (
-                                                <option disabled>Yaş aralıkları yüklenemedi</option>
                                             )}
                                         </select>
                                     </div>
@@ -548,16 +563,19 @@ return (
                                     )}
                                     <div className="form-group mb-3">
                                         <label className='form-label'>Telif Hakkı</label>
-                                        <select className="form-select form-select-sm form-select-create" value={bookContentChoice} onChange={handleContentChoiceChange}>
+                                        <select className="form-select form-select-sm form-select-create" 
+                                        value={bookContentChoice} 
+                                        onChange={handleContentChoiceChange}
+                                        >
                                             <option value="" selected>Seçiniz...</option>
-                                            {copyrightStatuses.map((status) => (
+                                            {Array.isArray(copyrightStatuses) && 
+                                            copyrightStatuses.map(status => (
                                                 <option key={status.id} value={status.id}>
                                                     {status.copyright}
                                                 </option>
                                             ))}
                                         </select>
                                     </div>
-                            
                                     {showCopyrightAlert && bookContentChoice === "1" && (
                                     <div className="alert alert-danger d-flex align-items-start" role="alert">
                                         <i className="bi bi-exclamation-triangle-fill me-2"></i>
@@ -606,7 +624,10 @@ return (
                                         <div className="dropdown dropdown-section">
                                             <i
                                                 className="bi bi-three-dots-vertical"
-                                                onClick={() => toggleDropdown(section.id)}
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    toggleDropdown(section.id);
+                                                }}
                                                 style={{ cursor: 'pointer' }}
                                             ></i>
                                             {dropdownVisible === section.id && (
@@ -615,21 +636,30 @@ return (
                                                     {section.publish ? (
                                                         <button
                                                             className="dropdown-item dropdown-item-section"
-                                                            onClick={() => togglePublish(section.id, section.title)}
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                togglePublish(section.id, section.title);
+                                                            }}
                                                         >
                                                             Yayından Kaldır
                                                         </button>
                                                         ) : (
                                                         <button
                                                             className="dropdown-item dropdown-item-section"
-                                                            onClick={() => togglePublish(section.id, section.title)}
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                togglePublish(section.id, section.title);
+                                                            }}
                                                         >
                                                             Yayınla
                                                         </button>
                                                     )}
                                                     <button 
                                                         className="dropdown-item dropdown-item-section" 
-                                                        onClick={() => handleAction('delete', section)} 
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            handleAction('delete', section);
+                                                        }} 
                                                     >
                                                         Sil
                                                     </button>

@@ -144,8 +144,8 @@ function CreateStory() {
         const fetchAgeRanges = async () => {
             try {
                 const response = await axios.get('http://localhost:3000/book/ageRange');
-                if (response.data) setAgeRange(response.data);
-                console.log(response.data);
+                if (response.data) 
+                    setAgeRange(response.data);
             } catch (error) {
                 console.error('Yaş aralıklarını çekerken hata oluştu:', error);
             }
@@ -181,18 +181,35 @@ function CreateStory() {
         }
     
         const bookCover = image || defaultImage;
-    
+        const normalizedTitle = bookTitle.toLowerCase().trim()
+
         setShowErrorAlert(false);
         setShowSuccessAlert(true);
         window.scrollTo(0, 0);
     
         const formattedTitle = formatTitleForUrl(bookTitle);
+        const defaultDuration = "0";
     
         try {
-            const response = await axios.post(
-                'http://localhost:3000/book',
-                {
+            let url, payload;
+            if(isAudioBook) {
+                url = 'http://localhost:3000/audio-book';
+                payload = {
                     title: bookTitle,
+                    normalizedTitle,
+                    summary: bookSummary,
+                    bookCover,
+                    duration: defaultDuration,
+                    hashtags: tags,
+                    categories: selectedCategory,
+                    ageRange: selectedAgeRange,
+                    bookCopyright: contentChoice,
+                };
+            } else {
+                url = 'http://localhost:3000/book';
+                payload = {
+                    title: bookTitle,
+                    normalizedTitle,
                     summary: bookSummary,
                     bookCover,
                     isAudioBook,
@@ -200,7 +217,13 @@ function CreateStory() {
                     categories: selectedCategory,
                     ageRange: selectedAgeRange,
                     bookCopyright: contentChoice,
-                },
+                    duration: "0",
+                };
+            }
+
+            const response = await axios.post(
+                url,
+                payload,
                 {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -214,18 +237,7 @@ function CreateStory() {
                     if (isAudioBook) {
                         navigate(`/add-voice-section/${formattedTitle}`);
                     } else {
-                        navigate(`/addsection/${formattedTitle}`, {
-                            state: {
-                                bookTitle,
-                                bookSummary,
-                                image: bookCover,
-                                isAudioBook,
-                                tags,
-                                selectedCategory,
-                                selectedAgeRange,
-                                contentChoice,
-                            },
-                        });
+                        navigate(`/addsection/${formattedTitle}`);
                     }
                 }, 3000);
             }

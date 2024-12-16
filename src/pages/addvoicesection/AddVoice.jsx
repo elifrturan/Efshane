@@ -6,12 +6,41 @@ import Sections from './sections/Sections';
 
 function AddVoice() {
     const [activeTab, setActiveTab] = useState('details');
-    
     const handleTabClick = (tab) => {
         setActiveTab(tab);
     };
 
-  return (
+    const formatNumber = (num) => {
+        if (num >= 1000000) {
+            return (num / 1000000).toFixed(1) + 'M'; 
+        } else if (num >= 1000) {
+            return (num / 1000).toFixed(1) + 'K'; 
+        }
+        return num.toString(); 
+    };
+
+    //düzenle kısmı için ama pop-up
+    const handleAction = (action, sectionId) => {
+        if (action === "delete") {
+            setSectionToDelete(sectionId);
+            setShowModal(true);
+        } else if (action === "edit") {
+            const section = sections.find((sec) => sec.id === sectionId);
+            console.log("edit yapıcaz.");
+        }
+    };
+
+    const handleDeleteCancel = () => {
+        setShowModal(false);
+        setSectionToDelete(null);
+    };
+
+    //yeni bölüm ekle kısmı için ama pop-up
+    const handleNewSectionButtonClick = () => {
+        console.log("yeni bölüm eklemek istersen");
+    }
+
+return (
     <div className="add-voice-section-page">
         <div className="container">
             <h2 className='text-center mt-5 mb-5'>Sesli Kitap Detay Sayfasına Hoş Geldiniz</h2>
@@ -47,7 +76,7 @@ function AddVoice() {
             </div>
         </div>
     </div>
-  )
+)
 }
 
 export default AddVoice

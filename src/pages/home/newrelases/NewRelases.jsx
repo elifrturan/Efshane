@@ -22,7 +22,6 @@ function NewRelases() {
               Authorization: `Bearer ${parsedToken}`,
             },
           });
-          console.log("Backend'den gelen yanıt:", response.data);
           setBook(response.data);
         } catch (error) {
           console.error("Kitap alınırken hata oluştu:", error.response?.data || error.message);

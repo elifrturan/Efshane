@@ -40,7 +40,7 @@ const routes = createBrowserRouter([
   { path: '/createstory', element: <CreateStory/>},
   { path: '/addsection/:bookTitle', element: <AddSection/>},
   { path: '/addsection/:bookTitle/newsection', element: <NewSection/>},
-  { path: '/addsection/edit/:sectionName', element: <Edit/>},
+  { path: '/addsection/edit/:bookTitle/:chapterTitle', element: <Edit /> },
   { path: '/contact-us', element: <ContactUs/>},
   { path: '/about-us', element: <AboutUs/>},
   { path: '/add-voice-section/:bookTitle', element: <AddVoice/>}

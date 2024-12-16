@@ -1,9 +1,18 @@
 import React, { useRef, useState, useEffect } from 'react'
 import './Edit.css'
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
 
 function Edit() {
-    const [image, setImage] = useState(null);
-    const [content, setContent] = useState('');
+    const { bookTitle, chapterTitle } = useParams();
+
+    useEffect(() => {
+    }, [bookTitle, chapterTitle]);
+    
+    const [title, setTitle] = useState('');
+    const [image, setImage] = useState('');
+    const [content, setContent] = useState('');    
+    const [loading, setLoading] = useState(false);
     const [activeStyle, setActiveStyle] = useState({
         bold: false, 
         italic: false, 
@@ -17,19 +26,57 @@ function Edit() {
     const [messages, setMessages] = useState([]);
     const [inputValue, setInputValue] = useState('');
 
-    const sectionContent = [
-        {
-            id: 1,
-            media: "/images/bg4.jpg",
-            title: "Bölüm başlığı burada",
-            content: "Bugün hava çok güzeldi. Kuşlar cıvıldıyordu. Prenses Elif sarayında çok mutluydu."
-        }
-    ]
+    useEffect(() => {
+        const fetchChapterDetails = async () => {
+            try {
+                const encodedBookTitle = encodeURIComponent(bookTitle);
+                const encodedChapterTitle = encodeURIComponent(chapterTitle);
+
+                const url = `http://localhost:3000/chapter/get/${encodedBookTitle}/${encodedChapterTitle}`;
+                const response = await axios.get(
+                    url,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem('token')}`,
+                        },
+                    }
+                );
+
+                const data = response.data;
+                setTitle(data.title);
+                setImage(data.image);
+                setContent(data.content);
+            } catch (error) {
+                console.error('Chapter bilgileri alınamadı:', error);
+            }
+        };
+
+        fetchChapterDetails();
+    }, [bookTitle, chapterTitle]);
+    
+    const convertToBase64 = (file) => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = (error) => reject(error);
+        });
+    };
 
     const handleImageUpload = (e) => {
         const file = e.target.files[0];
-        if(file){
-            setImage(URL.createObjectURL(file));
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setImage(reader.result);
+            };
+            reader.readAsDataURL(file);
+            try {
+                const base64Image = convertToBase64(file); 
+                setImage(base64Image);
+            } catch (error) {
+                console.error("Görsel dönüştürme hatası:", error);
+            }
         }
     };
 
@@ -79,19 +126,69 @@ function Edit() {
         setIsChatOpen(!isChatOpen);
     };
 
-    const handleSendMessage = () => {
-        if (!inputValue.trim()) return;
+    const typeMessage = async (message) => {
+        if (contentRef.current) {
+            const currentContent = contentRef.current.innerHTML;
+
+            let newContent = ' ';
     
-        const newMessage = { text: inputValue, sender: 'user' };
-        setMessages((prevMessages) => [...prevMessages, newMessage]);
-    
-        const botResponse = { text: 'Bu bir bot cevabıdır.', sender: 'bot' };
-        setTimeout(() => {
-          setMessages((prevMessages) => [...prevMessages, botResponse]);
-        }, 1000);
-    
-        setInputValue('');
+            for (let i = 0; i < message.length; i++) {
+                newContent += message[i]; 
+                contentRef.current.innerHTML = `${currentContent}${newContent}`;
+                await new Promise((resolve) => setTimeout(resolve, 20)); 
+            }
+        }
     };
+
+    const processResponse = (responseText, currentContent) => {
+        if (responseText.startsWith(currentContent)) {
+            return responseText.replace(currentContent, ' ').trim();
+        }
+        return responseText;
+    };
+    
+    const handleSendMessage = async () => {
+        const apiUrl = 'http://localhost:3000/openai';
+
+        if (!inputValue.trim()) return;
+
+        setMessages((prevMessages) => [...prevMessages, { text: inputValue, sender: 'user' }]);
+
+        const MAX_TOKENS = 3500;
+        const trimmedContent = content.length > MAX_TOKENS 
+            ? content.substring(content.length - MAX_TOKENS) 
+            : content;
+
+        try {
+            const response = await axios.post(
+                apiUrl,
+                {
+                    input: inputValue,
+                    content: trimmedContent,
+                },
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }
+            );
+            if (response.status === 201) {
+                const updatedContent = response.data.updatedContent;
+    
+                setInputValue('');
+
+                const newContent = processResponse(updatedContent, content);
+
+                await typeMessage(newContent);
+
+                setContent((prevContent) => `${prevContent} ${newContent}`);
+            } else {
+                console.error('Error:', response.data.error);
+            }
+        } catch (error) {
+            console.error('Request error:', error.message);
+        }
+    }; 
 
     const handleInputChange = (e) => {
         setInputValue(e.target.value);
@@ -99,22 +196,96 @@ function Edit() {
     
     const handleKeyDown = (e) => {
         if (e.key === 'Enter') {
-          handleSendMessage();
+            handleSendMessage();
         }
     };
 
-  return (
+    useEffect(() => {
+        if (chatBodyRef.current) {
+            chatBodyRef.current.scrollTop = chatBodyRef.current.scrollHeight;
+        }
+    }, [messages, isChatOpen]);
+
+    const saveChapter = async () => {
+        if (!title.trim() || !content.trim()) {
+            alert('Lütfen başlık ve içerik alanlarını doldurun.');
+            return;
+        }
+        const encodedTitle = encodeURIComponent(bookTitle);
+        const encodedChapterTitle = encodeURIComponent(chapterTitle);
+    
+        const url = `http://localhost:3000/chapter/save/${encodedTitle}/${encodedChapterTitle}`;
+        const payload = {
+            title,
+            content,
+            image: image || null,
+        };
+    
+        setLoading(true);
+        try {
+            const response = await axios.put(url, payload, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+            });
+            alert('Bölüm kaydedildi!');
+            console.log(response.data);
+        } catch (error) {
+            console.error(error);
+            alert('Bölüm kaydedilirken bir hata oluştu. Lütfen tekrar deneyin.');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const publishChapter = async () => {
+        if (!title.trim() || !content.trim()) {
+            alert('Lütfen başlık ve içerik alanlarını doldurun.');
+            return;
+        }
+
+        const encodedTitle = encodeURIComponent(bookTitle);
+        const encodedChapterTitle = encodeURIComponent(chapterTitle);
+    
+        const url = `http://localhost:3000/chapter/update/publish/${encodedTitle}/${encodedChapterTitle}`;
+        const payload = {
+            title,
+            content,
+            image: image || null,
+        };
+    
+        setLoading(true);
+        try {
+            const response = await axios.put(url, payload, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+            });
+            alert('Bölüm yayınlandı!');
+            console.log(response.data);
+        } catch (error) {
+            console.error(error);
+            alert('Bölüm yayınlanırken bir hata oluştu. Lütfen tekrar deneyin.');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+return (
     <div className='edit-section-page'>
         <div className="edit-fixed-header">
             <div className="edit-header-buttons">
-                <button className="save">Kaydet</button>
-                <button className="publish">Yayınla</button>
+                <button className="save" onClick={saveChapter} disabled={loading}>
+                    {loading ? 'Kaydediliyor...' : 'Kaydet'}
+                </button>
+                <button className="publish" onClick={publishChapter} disabled={loading}>
+                    {loading ? 'Yayınlanıyor...' : 'Yayınla'}
+                </button>
             </div>
         </div>
         <div className="container">
             {/* Add Image */}
-            {sectionContent.map((section) => (
-                <div className='m-0' key={section.id}>
+                <div className='m-0'>
                     <div className="edit-image-upload-area" onClick={triggerFileInput}>
                         <form>
                             <label className='form-label edit-image-upload-label'>
@@ -126,7 +297,7 @@ function Edit() {
                                         </div>    
                                     </>
                                 ) : (
-                                    <img src={section.media} className='edit-uploaded-image'/>
+                                    <img src={image} className='edit-uploaded-image'/>
                                 )}
                             </label>
                             <input
@@ -144,7 +315,7 @@ function Edit() {
                             type="text"
                             className='form-control edit-section-title'
                             placeholder='Bir başlık ekleyin...'  
-                            value={section.title}  
+                            value={title}  
                         />
                         <hr />
                         {/* Add Content */ }
@@ -168,35 +339,35 @@ function Edit() {
                                 type='button'
                                 onClick={() => handleFormat('left')}
                                 className={activeStyle.left ? 'active' : ''}
-                            ><i class="bi bi-text-left"></i></button>
+                            ><i className="bi bi-text-left"></i></button>
                             <button
                                 type='button'
                                 onClick={() => handleFormat('center')}
                                 className={activeStyle.center ? 'active' : ''}
-                            ><i class="bi bi-text-center"></i></button>
+                            ><i className="bi bi-text-center"></i></button>
                             <button
                                 type='button'
                                 onClick={() => handleFormat('right')}
                                 className={activeStyle.right ? 'active' : ''}
-                            ><i class="bi bi-text-right"></i></button>
+                            ><i className="bi bi-text-right"></i></button>
                         </div>
                         <div
                             ref={contentRef} 
                             className='form-control edit-section-content'
                             contentEditable="true"
+                            value={content}
                             onInput={handleContentChange}
                             placeholder='Bölümünüzü buraya yazın...'
                         >
-                            {section.content}
+                            {/* {content} */}
                         </div>
                     </form>
                 </div>
-            ))}
         </div>
         {/* Chatbot modal */}
         <div className={`chat-modal ${isChatOpen ? 'active' : ''}`}>
             <div className="edit-chat-modal-header">
-                <i class="bi bi-chat-left-text"></i> Yardım Al
+                <i className="bi bi-chat-left-text"></i> Yardım Al
                 <button className="edit-close-btn" onClick={toggleChat}>&times;</button>
             </div>
             <div className="edit-chat-modal-body" ref={chatBodyRef}>
@@ -228,11 +399,11 @@ function Edit() {
         </div>
         <div className="edit-robot">
             <button className='edit-help d-flex justify-content-center align-items-center' onClick={toggleChat}>
-                <i class="bi bi-robot"></i>
+                <i className="bi bi-robot"></i>
             </button>
         </div>
     </div>
-  )
+)
 }
 
 export default Edit
