@@ -251,6 +251,13 @@ function Sections() {
             clearInterval(intervalIdRef.current);
             intervalIdRef.current = null;
         }
+
+        mediaRecorder.onstop = () => {
+            const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+            const audioFile = new File([audioBlob], 'recording.wav', { type: 'audio/wav' });
+            setAudioFile(audioFile); 
+            setAudioUrl(URL.createObjectURL(audioBlob)); 
+        };
     }
 
     const startNewRecording = () => {
