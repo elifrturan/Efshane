@@ -23,6 +23,8 @@ import AddVoice from './pages/addvoicesection/AddVoice';
 import Edit from './pages/addsection/edit/Edit';
 import MyStories from './pages/mystories/MyStories';
 import Feed from './pages/feed/Feed';
+import Profile from './pages/profile/Profile';
+import UserProfile from './pages/userprofile/UserProfile';
 
 const routes = createBrowserRouter([
   { path: '/', element: <Start/>, errorElement: <h1>Page not found</h1>},
@@ -47,7 +49,9 @@ const routes = createBrowserRouter([
   { path: '/about-us', element: <AboutUs/>},
   { path: '/add-voice-section/:bookTitle', element: <AddVoice/>},
   { path: '/my-stories', element: <MyStories/>},
-  { path: '/feed', element: <Feed/>}
+  { path: '/feed', element: <Feed/>},
+  { path: '/profile/:username', element: <Profile/>},
+  { path: '/user/:userName', element: <UserProfile/>}
 ])
 
 function App() {

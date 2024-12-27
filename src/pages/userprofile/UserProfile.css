@@ -1,0 +1,595 @@
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    background-color: whitesmoke;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    color: var(--second-color);
+}
+
+.profile2-page {
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.profile2-page .profile2-page-up .cover-photo img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-bottom: 2px solid #ddd;
+    cursor: pointer;
+}
+
+.profile2-details {
+    display: flex;
+    align-items: center;
+    margin-top: -50px;
+    position: relative;
+}
+
+.profile2-details .profile-photo {
+    border: 4px solid #fff;
+    border-radius: 50%;
+    overflow: hidden;
+    width: 140px;
+    height: 140px;
+    margin-left: 20px;
+    cursor: pointer;
+}
+
+.profile2-details .profile-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile2-details .unfollow-btn{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 5%;
+    margin-left: auto;
+    margin-right: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #333;
+    border: 1px solid #aaa;
+    border-radius: 25px;
+    background: transparent;
+    transition: all 0.3 ease-in-out;
+    opacity: 0.8;
+    cursor: pointer;
+    width: 120px;
+}
+
+.profile2-details .unfollow-btn:hover {
+    color: red;
+    border: 1px solid red;
+    background-color: rgba(255, 0, 0, 0.082);
+    opacity: 0.9;
+}
+
+.profile2-details .follow-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 5%;
+    margin-left: auto;
+    margin-right: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #fff;
+    border: 1px solid #aaa;
+    border-radius: 25px;
+    background: #333;
+    transition: all 0.3 ease-in-out;
+    opacity: 1;
+    cursor: pointer;
+    width: 100px;
+}
+
+.profile2-details .follow-btn:hover {
+    color: #fff;
+    border: 1px solid #333;
+    background-color: #333;
+    opacity: 0.9;
+}
+
+.profile2-modal .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.profile2-modal .modal-content {
+    position: relative;
+    width: 50%;
+    max-width: 500px;
+    max-height: 80%;
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.profile2-modal .modal-content img {
+    width: 100%;
+    height: auto;
+}
+
+.profile2-modal .close-modal {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    top: 10px;
+    right: 10px;
+    background: transparent;
+    color: white;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+    border-radius: 50%;
+    z-index: 1001;
+    transition: all 0.3s;
+}
+
+.profile2-modal .close-modal:hover {
+    background-color: #99999950;
+}
+
+.profile2-user-details {
+    margin-top: 4%;
+    margin-left: 1%;
+}
+
+.profile2-user-details .username-name p:first-child {
+    font-weight: 600;
+    font-size: 1.25rem;
+    margin: 0;
+    color: #333;
+}
+
+.profile2-user-details .username-name span {
+    font-size: 0.9rem;
+    font-weight: lighter;
+    color: #536471;
+    opacity: 0.7;
+    letter-spacing: 0.3px;
+}
+
+.profile2-user-details .about-section {
+    margin-top: 3%;
+    font-size: 0.95rem;
+    color: #333;
+}
+
+.profile2-user-details .attend-date {
+    margin-top: 3%;
+    font-size: 0.95rem;
+    font-weight: 400;
+    color: #536471;
+}
+
+.profile2-user-details .follower-statistics {
+    display: flex;
+    gap: 25px;
+}
+
+.profile2-user-details .follower-statistics span {
+    opacity: 0.7;
+    margin: 1px;
+    cursor: pointer;
+}
+
+.profile2-user-details .follower-statistics p:hover {
+    border-bottom: 1px solid #aaa;
+    cursor: pointer;
+}
+
+.profile2-page-down {
+    display: flex;
+    align-items: flex-start;
+    margin-top: 2%;
+}
+
+.profile2-page-down .left {
+    flex: 1;
+    padding: 0;
+    margin-right: 2%;
+}
+
+.profile2-page-down .right {
+    padding: 0;
+    flex: 2;
+    border-left: 1px solid #ddd;
+}
+
+.profile2-page-down .right .right-main {
+    margin-left: 5%;
+}
+
+.profile2-page-down .left p, .profile2-page-down .right p {
+    font-size: 1rem;
+}
+
+
+.profile2-page-down .left .stories, .profile2-page-down .left .my-read-list {
+    max-width: 400px;
+    background-color: #ececec62;
+    padding: 8px;
+    border-radius: 4px;
+}
+
+.profile2-page-down .left .stories p, .profile2-page-down .left .my-read-list p {
+    margin: 0;
+}
+
+.profile2-page-down .left .stories .stories-title, 
+.profile2-page-down .left .my-read-list .read-list-title {
+    position: relative;
+    padding: 8px;
+    border-radius: 4px;
+}
+
+.profile2-page-down .left .stories .stories-title .story-controls, 
+.profile2-page-down .left .my-read-list .read-list-title .read-list-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-left: 2%;
+}
+
+.profile2-page-down .left .stories .stories-title .story-controls .scroll-btn, 
+.profile2-page-down .left .my-read-list .read-list-title .read-list-controls .scroll-btn {
+    background: transparent;
+    border: none;
+    font-size: 0.75rem;
+    cursor: pointer;
+    color: #333;
+    opacity: 0.5;
+    transition: color 0.2s ease;
+    padding: 0;
+}
+
+.scroll-btn:hover {
+    color: #000;
+}
+
+.profile2-page-down .left .stories .stories-title .story-controls i.bi.bi-chevron-left::before, 
+.profile2-page-down .left .stories .stories-title .story-controls i.bi.bi-chevron-right::before  {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.75rem;
+}
+
+.profile2-page-down .left .stories .story-list,
+.profile2-page-down .left .my-read-list .read-story-list {
+    display: flex;
+    gap: 20px;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    padding: 10px 0;
+}
+
+.profile2-page-down .left .stories .story img,
+.profile2-page-down .left .my-read-list .read-story-list .story img {
+    border-radius: 4px;
+}
+
+.profile2-page-down .left .stories .story span,
+.profile2-page-down .left .my-read-list .story span {
+    font-size: 0.75rem;
+    font-weight: 500;
+    width: 100%;
+    text-align: center;
+}
+
+.profile2-page-down .left .stories .story,
+.profile2-page-down .left .my-read-list .story {
+    display: flex;
+    flex-direction: column;
+    width: 100px;
+    transition: all 0.4s ease-in-out;
+    border-radius: 4px;
+}
+
+.profile2-page-down .left .stories .story:hover,
+.profile2-page-down .left .my-read-list .story:hover {
+    transform: scale(1.04);
+    border-radius: 4px;
+}
+
+.profile2-page-down .left .stories .story .statistics p,
+.profile2-page-down .left .my-read-list .story .statistics p {
+    font-size: 0.6rem !important;
+    color: #333;
+    opacity: 0.6;
+    font-weight: 500;
+}
+
+
+.profile2-announcement {
+    padding: 16px;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    display: flex;
+    align-items: flex-start;
+    margin-top: 5%;
+}
+
+.profile2-announcement .profile2-announcement-left {
+    padding: 12px 0 0;
+    margin: 0 8px 0 0;
+    flex-shrink: 0;
+}
+
+.profile2-announcement .profile2-announcement-right {
+    flex: 1;
+    padding: 18px 0 0 0;
+    margin-left: 1%;
+}
+
+.profile2-announcement .profile2-announcement-right .user-info p {
+    margin: 0 !important;
+    font-size: 0.95rem;
+    font-weight: bold;
+}
+
+.profile2-announcement .profile2-announcement-right .user-info p span {
+    font-size: 0.85rem;
+    opacity: 0.5;
+    font-weight: lighter;
+}
+
+.profile2-announcement .profile2-announcement-right .content {
+    font-size: 0.95rem;
+    opacity: 0.9;
+    margin-bottom: 2%;
+}
+
+.profile2-announcement .profile2-announcement-right .interaction {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.profile2-announcement .profile2-announcement-right .interaction, 
+.profile2-announcement .profile2-announcement-right .interaction i {
+    color: #333 !important;
+    opacity: 0.9;
+    font-size: 0.8rem;
+}
+
+.profile2-announcement .profile2-announcement-right .interaction i:last-child {
+    cursor: pointer;
+}
+
+.profile2-announcement .profile2-announcement-right .interaction .left {
+    width: 35%;
+    display: flex;
+    gap: 15px;
+}
+
+.profile2-announcement .profile2-announcement-right .interaction .left p {
+    font-size: 0.8rem;
+}
+
+.profile2-announcement .profile2-announcement-right .interaction .bi-chat:hover{
+    color: black !important;
+    transform: scale(1.2);
+}
+
+.profile2-announcement .profile2-announcement-right .interaction .bi-heart::before {
+    cursor: pointer;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.profile2-announcement .profile2-announcement-right .interaction .bi-heart:hover::before {
+    transform: scale(1.2);
+}
+
+.profile2-announcement .profile2-announcement-right .interaction .bi-heart-fill::before{
+    color: red;
+    animation: pop 0.3s ease;
+    cursor: pointer;
+}
+
+.profile2-comment-section .comment-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.profile2-comment-section .comment-item-left {
+    flex: 1;
+    display: flex;
+}
+
+.profile2-comment-section .comment-item-right {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile2-comment-section .comment-item-left .reply-input input {
+    font-size: 0.8rem !important;
+    border: 1px solid #aaa;
+    width: 100%;
+    padding: 2%;
+    margin-top: 3%;
+    border-radius: 5px;
+    background: transparent;
+    opacity: 0.6;
+    color: #333;
+}
+
+.profile2-comment-section .comment-item-left .reply-input input:focus {
+    outline: none;
+    opacity: 0.8;
+}
+
+.profile2-comment-section .comment-item p span{
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #000;
+    opacity: 0.9;
+}
+
+.profile2-comment-section .comment-item p {
+    font-size: 0.9rem;
+    opacity: 0.9;
+    color: #333;
+}
+
+.profile2-comment-section .comment-item div small {
+    font-size: 0.75rem;
+    opacity: 0.6;
+}
+
+.profile2-comment-section .show-more-comments {
+    text-decoration: none;
+    font-size: 0.8rem;
+    width: 100%;
+}
+
+.profile2-comment-section .comment-item .comment-item-right .bi-heart::before {
+    cursor: pointer;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.profile2-comment-section .comment-item .comment-item-right .bi-heart:hover::before {
+    transform: scale(1.2);
+}
+
+.profile2-comment-section .comment-item .comment-item-right .bi-heart-fill::before {
+    color: red;
+    animation: pop 0.3s ease;
+    cursor: pointer;
+}
+
+.profile2-comment-section .comment-input input {
+    flex: 1;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    opacity: 0.5;
+    font-size: 0.9rem;
+    background: transparent;
+}
+
+.profile2-comment-section .comment-input input::placeholder {
+    color: #000 !important;
+    font-size: 0.8rem;
+}
+
+.profile2-comment-section .comment-input input:focus {
+    background: transparent;
+    opacity: 0.8;
+    outline: none;
+    font-size: 0.9rem;
+    border: 1px solid #ccc;
+}
+
+.profile2-comment-section .comment-input button {
+    font-size: 0.8rem;
+    padding: 2px 16px;
+    background-color: #333;
+    border: #333;
+    opacity: 0.8;
+}
+
+@media (max-width: 480px) {
+    .profile2-details {
+        flex-direction: column;
+        align-items: center;
+        margin-top: -60px;
+    }
+
+    .profile2-details .profile-photo {
+        width: 120px;
+        height: 120px;
+        margin-left: 0;
+        margin-top: 10px;
+    }
+
+    .profile2-details .follow-btn, .profile2-details .unfollow-btn {
+        width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+        margin-top: 10px;
+        font-size: 0.85rem;
+    }
+
+    .profile2-user-details {
+        margin-left: 0;
+        margin-top: 10px;
+        padding: 0 10px;
+    }
+
+    .profile2-user-details .username-name p:first-child {
+        font-size: 1.2rem;
+    }
+
+    .profile2-user-details .about-section {
+        font-size: 0.9rem;
+    }
+
+    .profile2-user-details .attend-date {
+        font-size: 0.9rem;
+    }
+
+    .profile2-user-details .follower-statistics {
+        display: block;
+        text-align: center;
+        margin-top: 10px;
+    }
+
+    .profile2-user-details .follower-statistics span {
+        display: inline-block;
+        margin-right: 10px;
+    }
+
+    .profile2-user-details .follower-statistics p {
+        margin-top: 5px;
+    }
+
+    .profile2-modal .modal-content {
+        width: 80%;
+        max-width: 400px;
+    }
+
+    .profile2-modal .modal-content img {
+        height: 200px;
+        object-fit: cover;
+    }
+
+    .profile2-modal .close-modal {
+        font-size: 1.5rem;
+    }
+
+    .profile2-page-down {
+        flex-direction: column;
+    }
+
+    .profile2-page-down .left,
+    .profile2-page-down .right {
+        width: 100%;
+    }
+}

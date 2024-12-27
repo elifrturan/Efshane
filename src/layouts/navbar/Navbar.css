@@ -1,5 +1,5 @@
 .navbar-ef{
-    color: palevioletred;
+    color: var(--theme-color);
 }
 
 .logout{
@@ -8,4 +8,8 @@
 
 .custom-navbar{
     border-bottom: 1px solid #f0f0f0;
+}
+
+.navbar-dropdown .dropdown-item:focus {
+    background: none;
 }

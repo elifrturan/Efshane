@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
 import './Feed.css'
 import Navbar from "../../layouts/navbar/Navbar"
+import Footer from "../../layouts/footer/Footer"
 import { Button, Dropdown } from 'react-bootstrap';
 import AddPost from './addpost/AddPost';
 import FollowOthers from './followothers/FollowOthers';
+import { useNavigate } from 'react-router-dom';
 
 function Feed() {
     const [likedPosts, setLikedPosts] = useState([]);
@@ -13,6 +15,12 @@ function Feed() {
     const [showAllComments, setShowAllComments] = useState(false);
     const [showComments, setShowComments] = useState(null);
     const [likedComments, setLikedComments] = useState([]);
+    const navigate = useNavigate();
+    const username = "prensesingunlugu";
+
+    const handleProfileClick = () => {
+        navigate(`/user/${username}`);
+    }
 
     const openModal = (imageSrc) => {
         setModalImage(imageSrc);
@@ -284,7 +292,8 @@ function Feed() {
                                         alt="" 
                                         width="40" 
                                         height="40" 
-                                        className='rounded-circle object-fit-cover'/>
+                                        className='rounded-circle object-fit-cover'
+                                        onClick={handleProfileClick}/>
                                 </div>
                                 <div className="feed-post-right">
                                     <div className="user-info d-flex justify-content-between">
@@ -497,6 +506,7 @@ function Feed() {
 
             </div>
         </div>
+        <Footer/>
     </div>
   )
 }

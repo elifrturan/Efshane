@@ -1,0 +1,736 @@
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    background-color: whitesmoke;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    color: var(--second-color);
+}
+
+.profile-page {
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+}
+  
+.cover-photo img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-bottom: 2px solid #ddd;
+    cursor: pointer;
+}
+  
+.profile-details {
+    display: flex;
+    align-items: center;
+    margin-top: -50px; 
+    position: relative;
+}
+  
+.profile-photo {
+    border: 4px solid #fff;
+    border-radius: 50%;
+    overflow: hidden;
+    width: 140px;
+    height: 140px;
+    margin-left: 20px;
+    cursor: pointer;
+}
+  
+.profile-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+  
+.edit-profile-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 5%;
+    margin-left: auto;
+    margin-right: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #333;
+    border: 1px solid #aaa;
+    border-radius: 25px;
+    background: transparent !important;
+    transition: all 0.3s ease;
+    opacity: 0.8;
+    cursor: pointer;
+}
+  
+.edit-profile-btn:hover {
+    color: #333;
+    border: 1px solid #aaa;
+    opacity: 0.9;
+}
+
+.profile-user-details {
+    margin-top: 4%;
+    margin-left: 1%;
+}
+
+.profile-user-details .username-name p:first-child {
+    font-weight: 600;
+    font-size: 1.25rem;
+    margin: 0;
+    color: #333;
+}
+
+.profile-user-details .username-name span {
+    font-size: 0.9rem;
+    font-weight: lighter;
+    color: #536471;
+    opacity: 0.7;
+    letter-spacing: 0.3px;
+}
+
+.profile-user-details .about-section {
+    margin-top: 3%;
+    font-size: 0.95rem;
+    color: #333;
+}
+
+.profile-user-details .attend-date {
+    margin-top: 3%;
+    font-size: 0.95rem;
+    font-weight: 400;
+    color: #536471;
+}
+
+.profile-user-details .follower-statistics {
+    display: flex;
+    gap: 25px;
+}
+
+.profile-user-details .follower-statistics span {
+    opacity: 0.7;
+    margin-left: 1px;
+    cursor: pointer;
+}
+
+.profile-user-details .follower-statistics p:hover {
+    border-bottom: 1px solid #aaa;
+    cursor: pointer;
+}
+  
+.user-profile-model .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+  
+.user-profile-model .modal-content {
+    position: relative;
+    width: 50%;
+    max-width: 500px;
+    max-height: 80%;
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+  
+.user-profile-model .modal-content img {
+    width: 100%;
+    height: auto;
+}
+  
+.user-profile-model .close-modal {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    top: 10px;
+    right: 10px;
+    background: transparent;
+    color: white;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+    border-radius: 50%;
+    z-index: 1001;
+    transition: all 0.3s;
+}
+  
+.user-profile-model .close-modal:hover {
+    background-color: #99999950;
+}
+
+.profile-edit-modal .modal-content {
+    border: #dfdfdf;
+    border-radius: 5px;
+}
+
+.profile-edit-modal .modal-header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.profile-edit-modal .close {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.profile-edit-modal .modal-title {
+    color: #333;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.profile-edit-modal .modal-header button {
+    font-size: 0.8rem;
+    padding: 6px 20px;
+    background-color: #333;
+    border: 1px solid #333;
+    border-radius: 25px;
+}
+
+.profile-edit-modal .modal-body {
+    padding: 0;
+}
+
+.profile-edit-modal .clickable-photo{
+    border-radius: 50%;
+    object-fit: cover;
+    width: 140px;
+    height: 140px;
+}
+
+.profile-edit-modal .modal-body form {
+    padding: 0 50px;
+    margin-top: 5%;
+    margin-bottom: 8%;
+}
+
+.profile-edit-modal .modal-body form .form-control {
+    padding: 15px 10px;
+}
+
+.profile-edit-modal .modal-body form textarea.form-control {
+    resize: none;
+}
+
+.profile-page-down {
+    display: flex;
+    align-items: flex-start;
+    margin-top: 2%;
+}
+
+.profile-page-down .left {
+    flex: 1;
+    padding: 0;
+    margin-right: 2%;
+}
+
+.profile-page-down .right {
+    padding: 0;
+    flex: 2;
+    border-left: 1px solid #ddd;
+}
+
+.profile-page-down .right .right-main {
+    margin-left: 5%;
+}
+
+.profile-page-down .left p, .profile-page-down .right p {
+    font-size: 1rem;
+}
+
+.profile-page-down .left .stories p, .profile-page-down .left .my-read-list p {
+    margin: 0;
+}
+
+.profile-page-down .left .stories, .profile-page-down .left .my-read-list {
+    max-width: 400px;
+    background-color: #ececec62;
+    padding: 8px;
+    border-radius: 4px;
+}
+
+.profile-page-down .left .stories .stories-title, 
+.profile-page-down .left .my-read-list .read-list-title {
+    position: relative;
+    padding: 8px;
+    border-radius: 4px;
+}
+
+.profile-page-down .left .stories .stories-title .story-controls, 
+.profile-page-down .left .my-read-list .read-list-title .read-list-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-left: 2%;
+}
+
+.profile-page-down .left .stories .stories-title .story-controls .scroll-btn, 
+.profile-page-down .left .my-read-list .read-list-title .read-list-controls .scroll-btn {
+    background: transparent;
+    border: none;
+    font-size: 0.75rem;
+    cursor: pointer;
+    color: #333;
+    opacity: 0.5;
+    transition: color 0.2s ease;
+    padding: 0;
+}
+
+.scroll-btn:hover {
+    color: #000;
+}
+
+.profile-page-down .left .stories .stories-title .story-controls i.bi.bi-chevron-left::before, 
+.profile-page-down .left .stories .stories-title .story-controls i.bi.bi-chevron-right::before  {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.75rem;
+}
+
+.profile-page-down .left .stories .story-list,
+.profile-page-down .left .my-read-list .read-story-list {
+    display: flex;
+    gap: 20px;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    padding: 10px 0;
+}
+
+.profile-page-down .left .stories .story img,
+.profile-page-down .left .my-read-list .read-story-list .story img {
+    border-radius: 4px;
+}
+
+.profile-page-down .left .stories .story span,
+.profile-page-down .left .my-read-list .story span {
+    font-size: 0.75rem;
+    font-weight: 500;
+    width: 100%;
+    text-align: center;
+}
+
+.profile-page-down .left .stories .story,
+.profile-page-down .left .my-read-list .story {
+    display: flex;
+    flex-direction: column;
+    width: 100px;
+    transition: all 0.4s ease-in-out;
+    border-radius: 4px;
+}
+
+.profile-page-down .left .stories .story:hover,
+.profile-page-down .left .my-read-list .story:hover {
+    transform: scale(1.04);
+    border-radius: 4px;
+}
+
+.profile-page-down .left .stories .story .statistics p,
+.profile-page-down .left .my-read-list .story .statistics p {
+    font-size: 0.6rem !important;
+    color: #333;
+    opacity: 0.6;
+    font-weight: 500;
+}
+
+.add-announcement {
+    display: flex;
+    align-items: flex-start;
+    border: 1px solid #eee;
+    padding: 12px;
+    border-radius: 8px;
+}
+
+.add-announcement .add-announcement-left {
+    padding: 12px 0 0;
+    margin: 0 8px 0 0;
+    flex-shrink: 0;
+}
+
+.add-announcement .add-announcement-right {
+    flex: 1;
+    padding: 12px 0 0 0;
+    margin-left: 1%;
+}
+
+.add-announcement .add-announcement-right textarea {
+    resize: none;
+    border: none;
+    background: none !important;
+    padding: 1% 1%;
+    width: 100%;
+    border-radius: 4px;
+    min-height: 30px;
+    cursor: text;
+    white-space: normal; 
+    overflow-wrap: break-word;
+    word-break: break-word;
+    font-size: 1rem;
+    color: #000;
+    opacity: 0.8;
+}
+
+.add-announcement .add-announcement-right textarea::placeholder {
+    color: #333 !important;
+}
+
+.add-announcement .add-announcement-right textarea:focus {
+    outline: none;
+}
+
+.add-announcement .add-announcement-right button {
+    font-size: 0.8rem;
+    padding: 6px 12px;
+    border-radius: 25px;
+    background-color: #333;
+    border: none;
+    opacity: 0.8;
+    transition: all 0.3s ease-in;
+}
+
+.add-announcement .add-announcement-right button:hover {
+    opacity: 0.9;
+}
+
+.add-announcement .add-announcement-right .announcement-buttons .form-check-input {
+    background-color: transparent;
+    border: 1px solid #333;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.add-announcement .add-announcement-right .announcement-buttons .form-check-input:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.add-announcement .add-announcement-right .announcement-buttons .form-check-input:checked {
+    background-color: #333;
+    border: 1px solid #333;
+}
+
+.add-announcement .add-announcement-right .announcement-buttons label {
+    opacity: 0.8;
+    color: #333;
+}
+
+.char-count {
+    font-size: 0.8rem;
+    margin-top: 5px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+}
+
+.char-count.text-danger {
+    color: red;
+}
+
+.profile-announcement {
+    padding: 16px;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    display: flex;
+    align-items: flex-start;
+    margin-top: 5%;
+}
+
+.profile-announcement .profile-announcement-left {
+    padding: 12px 0 0;
+    margin: 0 8px 0 0;
+    flex-shrink: 0;
+}
+
+.profile-announcement .profile-announcement-right {
+    flex: 1;
+    padding: 18px 0 0 0;
+    margin-left: 1%;
+}
+
+.profile-announcement .profile-announcement-right .user-info p {
+    margin: 0 !important;
+    font-size: 0.95rem;
+    font-weight: bold;
+}
+
+.profile-announcement .profile-announcement-right .user-info p span {
+    font-size: 0.85rem;
+    opacity: 0.5;
+    font-weight: lighter;
+}
+
+.profile-announcement .profile-announcement-right .user-info .dropdown-toggle {
+    background: none;
+    border: none;
+    color: #333;
+    padding: 1% 0;
+    margin-right: 2%;
+    font-size: 1.2rem;
+}
+
+.profile-announcement .profile-announcement-right a.dropdown-item:hover {
+    background-color: red;
+    color: #fff;
+}
+
+.profile-announcement .profile-announcement-right .user-info .dropdown-menu.show {
+    font-size: 0.9rem;
+    padding-bottom: 0;
+}
+
+.profile-announcement .profile-announcement-right .user-info a.dropdown-item {
+    opacity: 0.9;
+    display: flex;
+}
+
+.profile-announcement .profile-announcement-right .content {
+    font-size: 0.95rem;
+    opacity: 0.9;
+    margin-bottom: 2%;
+}
+
+.profile-announcement .profile-announcement-right .interaction {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.profile-announcement .profile-announcement-right .interaction, .profile-announcement .profile-announcement-right .interaction i {
+    color: #333 !important;
+    opacity: 0.9;
+    font-size: 0.8rem;
+}
+
+.profile-announcement .profile-announcement-right .interaction i:last-child {
+    cursor: pointer;
+}
+
+.profile-announcement .profile-announcement-right .interaction .left {
+    width: 35%;
+    display: flex;
+    gap: 15px;
+}
+
+.profile-announcement .profile-announcement-right .interaction .left p {
+    font-size: 0.8rem;
+}
+
+.profile-announcement .profile-announcement-right .interaction .bi-chat:hover{
+    color: black !important;
+    transform: scale(1.2);
+}
+
+.profile-announcement .profile-announcement-right .interaction .bi-heart::before {
+    cursor: pointer;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.profile-announcement .profile-announcement-right .interaction .bi-heart:hover::before {
+    transform: scale(1.2);
+}
+
+.profile-announcement .profile-announcement-right .interaction .bi-heart-fill::before{
+    color: red;
+    animation: pop 0.3s ease;
+    cursor: pointer;
+}
+
+.profile-comment-section .comment-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.profile-comment-section .comment-item-left {
+    flex: 1;
+    display: flex;
+}
+
+.profile-comment-section .comment-item-right {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-comment-section .comment-item-left .reply-input input {
+    font-size: 0.8rem !important;
+    border: 1px solid #aaa;
+    width: 100%;
+    padding: 2%;
+    margin-top: 3%;
+    border-radius: 5px;
+    background: transparent;
+    opacity: 0.6;
+    color: #333;
+}
+
+.profile-comment-section .comment-item-left .reply-input input:focus {
+    outline: none;
+    opacity: 0.8;
+}
+
+.profile-comment-section .comment-item p span{
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #000;
+    opacity: 0.9;
+}
+
+.profile-comment-section .comment-item p {
+    font-size: 0.9rem;
+    opacity: 0.9;
+    color: #333;
+}
+
+.profile-comment-section .comment-item div small {
+    font-size: 0.75rem;
+    opacity: 0.6;
+}
+
+.profile-comment-section .show-more-comments {
+    text-decoration: none;
+    font-size: 0.8rem;
+    width: 100%;
+}
+
+.profile-comment-section .comment-item .comment-item-right .bi-heart::before {
+    cursor: pointer;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.profile-comment-section .comment-item .comment-item-right .bi-heart:hover::before {
+    transform: scale(1.2);
+}
+
+.profile-comment-section .comment-item .comment-item-right .bi-heart-fill::before {
+    color: red;
+    animation: pop 0.3s ease;
+    cursor: pointer;
+}
+
+.profile-comment-section .comment-input input {
+    flex: 1;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    opacity: 0.5;
+    font-size: 0.9rem;
+    background: transparent;
+}
+
+.profile-comment-section .comment-input input::placeholder {
+    color: #000 !important;
+    font-size: 0.8rem;
+}
+
+.profile-comment-section .comment-input input:focus {
+    background: transparent;
+    opacity: 0.8;
+    outline: none;
+    font-size: 0.9rem;
+    border: 1px solid #ccc;
+}
+
+.profile-comment-section .comment-input button {
+    font-size: 0.8rem;
+    padding: 2px 16px;
+    background-color: #333;
+    border: #333;
+    opacity: 0.8;
+}
+
+@media (max-width: 480px) {
+    .profile-details {
+        flex-direction: column;
+        align-items: center;
+        margin-top: -60px;
+    }
+
+    .profile-photo {
+        width: 120px;
+        height: 120px;
+        margin-left: 0;
+        margin-top: 10px;
+    }
+
+    .edit-profile-btn {
+        width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+        margin-top: 10px;
+        font-size: 0.85rem;
+    }
+
+    .profile-user-details {
+        margin-left: 0;
+        margin-top: 10px;
+        padding: 0 10px;
+    }
+
+    .profile-user-details .username-name p:first-child {
+        font-size: 1.2rem;
+    }
+
+    .profile-user-details .about-section {
+        font-size: 0.9rem;
+    }
+
+    .profile-user-details .attend-date {
+        font-size: 0.9rem;
+    }
+
+    .profile-user-details .follower-statistics {
+        display: block;
+        text-align: center;
+        margin-top: 10px;
+    }
+
+    .profile-user-details .follower-statistics span {
+        display: inline-block;
+        margin-right: 10px;
+    }
+
+    .profile-user-details .follower-statistics p {
+        margin-top: 5px;
+    }
+
+    .user-profile-model .modal-content {
+        width: 80%;
+        max-width: 400px;
+    }
+
+    .user-profile-model .modal-content img {
+        height: 200px;
+        object-fit: cover;
+    }
+
+    .user-profile-model .close-modal {
+        font-size: 1.5rem;
+    }
+    
+    .profile-page-down {
+        flex-direction: column;
+    }
+
+    .profile-page-down .left,
+    .profile-page-down .right {
+        width: 100%;
+    }
+}

@@ -1,8 +1,15 @@
 import React from 'react'
 import './FollowOthers.css'
 import { Button } from 'react-bootstrap'
+import { useNavigate } from 'react-router-dom';
 
 function FollowOthers() {
+    const navigate = useNavigate();
+    const username = "prensesingunlugu";
+
+    const handleProfileClick = () => {
+        navigate(`/user/${username}`);
+    }
     const users = [
         {
             id: 1,
@@ -37,7 +44,7 @@ function FollowOthers() {
             {users.map((user) => (
                 <div className="user" key={user.id}>
                     <div className="user-left d-flex gap-2">
-                        <img src={user.image} alt="" width="40" height="40" className='rounded-circle object-fit-cover'/>
+                        <img src={user.image} alt="" width="40" height="40" className='rounded-circle object-fit-cover' onClick={handleProfileClick}/>
                         <div className="user-info d-flex flex-column">
                             <span className='fw-bold'>{user.name}</span>
                             <span>@{user.username}</span>

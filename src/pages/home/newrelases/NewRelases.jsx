@@ -1,10 +1,17 @@
 import './NewRelases.css'
 import React, { useRef, useEffect, useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 function NewRelases() {
     const scrollRef = useRef(null);
     const [books, setBook] = useState(null);
+    const navigate = useNavigate();
+    const username = "prensesingunlugu";
+
+    const handleProfileClick = () => {
+        navigate(`/user/${username}`);
+    }
 
     useEffect(() => {
       const token = localStorage.getItem('token');
@@ -47,9 +54,9 @@ function NewRelases() {
     <div className="new-relases mt-5 mb-3">
       <div className="container">
         <h3 className='ms-3'>Yeni Çıkanlar</h3>
-        <div className="new-books d-flex align-items-center" style={{ overflowX: 'auto', whiteSpace: 'nowrap' }}>
+        <div className="new-books d-flex align-items-center">
           <i className="left-arrow bi bi-arrow-left-circle-fill" onClick={scrollLeft} ></i>
-          <div className="book-list-newrelases" ref={scrollRef} >
+          <div className="book-list-newrelases" ref={scrollRef} style={{ overflowX: 'auto', whiteSpace: 'nowrap' }}>
             {books && books.map((book) => (
               <div key={book.id} className="book1 d-flex flex-column align-items-center justify-content-center ms-2 me-5">
                 <div className="new-book-cover">
@@ -60,7 +67,7 @@ function NewRelases() {
                     <h6>{book.title}</h6>
                   </div>
                   <div className="new-book-writer d-flex">
-                    <img src={book.user.profile_image} alt="" className='img-fuild rounded-circle' width="24px" height="24px"/>
+                    <img src={book.user.profile_image} alt="" className='img-fuild rounded-circle' width="24px" height="24px" onClick={handleProfileClick}/>
                     <p className='ms-1'>{book.user.username}</p>
                   </div>
                 </div>

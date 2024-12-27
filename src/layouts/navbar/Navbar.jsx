@@ -2,8 +2,16 @@ import React from 'react';
 import './Navbar.css'
 import { Navbar, Nav, Dropdown, Container } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { useNavigate } from 'react-router-dom';
 
 function CustomNavbar() {
+  const navigate = useNavigate();
+  const username = "elifturan";
+
+  const handleProfileClick = () => {
+    navigate(`/profile/${username}`);
+  }
+
   return (
     <>
       <Navbar expand="lg" className="px-4 custom-navbar">
@@ -40,8 +48,8 @@ function CustomNavbar() {
                     style={{ height: '40px', width: '40px', objectFit: 'cover' }}
                   />
                 </Dropdown.Toggle>
-                <Dropdown.Menu>
-                  <Dropdown.Item href="/profile" className="text-muted"><i className="bi bi-person me-2"></i>Profilim</Dropdown.Item>
+                <Dropdown.Menu className='navbar-dropdown'>
+                  <Dropdown.Item href="/profile" className="text-muted" onClick={handleProfileClick}><i className="bi bi-person me-2"></i>Profilim</Dropdown.Item>
                   <Dropdown.Item href="/messages" className="text-muted"><i className="bi bi-chat me-2"></i>Mesajlar</Dropdown.Item>
                   <Dropdown.Item href="/library" className="text-muted"><i className="bi bi-book me-2"></i>Kitaplık</Dropdown.Item>
                   <Dropdown.Item href="/settings" className="text-muted"><i className="bi bi-gear me-2"></i>Ayarlar</Dropdown.Item>

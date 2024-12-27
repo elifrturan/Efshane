@@ -5,8 +5,6 @@
 .new-books {
     display: flex;
     align-items: center;
-    overflow-x: auto;
-    white-space: nowrap;
     position: relative;
 }
 
@@ -14,28 +12,25 @@
     font-size: 2rem;
     cursor: pointer;
     color: var(--second-color);
-    position: sticky;
+    position: absolute;
     top: 50%;
     transform: translateY(-50%);
     z-index: 1;
 }
 
 .left-arrow {
-    left: 0;
-    margin-right: 10px;
+    left: -50px;
 }
 
 .right-arrow {
-    right: 0;
-    margin-left: 10px;
+    right: -50px;
 }
 
 .book-list-newrelases {
     display: flex;
     overflow-x: auto;
     white-space: nowrap;
-    -ms-overflow-style: none;
-    scrollbar-width: none;
+    scroll-behavior: smooth;
 }
 
 .book-list-newrelases::-webkit-scrollbar {
