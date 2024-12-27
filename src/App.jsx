@@ -21,6 +21,8 @@ import ContactUs from './pages/contactus/ContactUs';
 import AboutUs from './pages/aboutus/AboutUs';
 import AddVoice from './pages/addvoicesection/AddVoice';
 import Edit from './pages/addsection/edit/Edit';
+import MyStories from './pages/mystories/MyStories';
+import Feed from './pages/feed/Feed';
 
 const routes = createBrowserRouter([
   { path: '/', element: <Start/>, errorElement: <h1>Page not found</h1>},
@@ -43,7 +45,9 @@ const routes = createBrowserRouter([
   { path: '/addsection/edit/:bookTitle/:chapterTitle', element: <Edit /> },
   { path: '/contact-us', element: <ContactUs/>},
   { path: '/about-us', element: <AboutUs/>},
-  { path: '/add-voice-section/:bookTitle', element: <AddVoice/>}
+  { path: '/add-voice-section/:bookTitle', element: <AddVoice/>},
+  { path: '/my-stories', element: <MyStories/>},
+  { path: '/feed', element: <Feed/>}
 ])
 
 function App() {

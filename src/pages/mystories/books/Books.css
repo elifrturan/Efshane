@@ -1,0 +1,137 @@
+.book-card  {
+    display: flex;
+    justify-content: space-between;
+    padding: 2% 3%;
+    background-color: #f0f0f0;
+}
+
+.stories-left-right {
+    gap: 1;
+    padding: 1% 0;
+}
+
+.stories-left-right .stories-name {
+    font-size: 1rem;
+}
+
+.stories-left-right .stories-date {
+    color: #000;
+    font-size: 0.75rem;
+    opacity: 0.3;
+}
+
+.stories-left-right .stories-istatistic {
+    display: flex;
+    gap: 1%;
+    width: 100%;
+    font-size: 0.8rem;
+    color: #000;
+    opacity: 0.50;
+}
+
+.stories-left-right .stories-istatistic p {
+    display: flex;
+}
+
+.stories-left-right button {
+    background-color: var(--second-color);
+    border: none;
+    padding: 3px 10px;
+    font-size: 0.75rem;
+    opacity: 1;
+    border-radius: 3px !important;
+    transition: all 0.2s ease-in;
+}
+
+.stories-left-right button:hover {
+    background-color: var(--second-color);
+    opacity: 0.9;
+}
+
+.stories-left-right button:active {
+    background-color: var(--second-color) !important;
+    opacity: 0.8;
+    transform: scale(0.9);
+}
+
+.my-stories-book-right .dropdown-toggle {
+    background: none;
+    border: none;
+    color: #333;
+    padding: 1% 0;
+    font-size: 1.2rem;
+}
+
+.no-toggle::after {
+    display: none;
+}
+
+.my-stories-book-right .no-toggle:focus {
+    background: none;
+    border: none;
+    color: var(--second-color);
+}
+
+.my-stories-book-right div.dropdown-menu.show {
+    font-size: 0.95rem;
+    padding-bottom: 0;
+}
+
+.my-stories-book-right a.dropdown-item {
+    opacity: 0.9;
+    display: flex;
+}
+
+.my-stories-book-right a.dropdown-item:nth-child(1):hover {
+    background-color: #eee;
+    color: #000;
+}
+
+.my-stories-book-right a.dropdown-item:nth-child(2):hover {
+    background-color: red;
+    color: #fff;
+}
+
+.my-stories-book-right a.dropdown-item:nth-child(3):hover {
+    background-color: #eee;
+    color: #000;
+}
+
+.my-stories-book-right a.dropdown-item:active {
+    opacity: 0.9;
+    transform: scale(0.95);
+}
+
+.stories-delete-modal .modal-content {
+    border: #dfdfdf;
+    border-radius: 5px;
+}
+
+.stories-delete-modal .modal-header .btn-close {
+    font-size: 0.6rem;
+}
+
+.stories-delete-modal .modal-title {
+    color: #000;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.stories-delete-modal .modal-body {
+    color: #000;
+    font-size: 0.85rem;
+    opacity: 0.75;
+}
+
+.stories-delete-modal .modal-footer button:nth-child(1) {
+    font-size: 0.8rem;
+    background: none;
+    border: 1px solid #0A58CA;
+    color: #0A58CA;
+}
+
+.stories-delete-modal .modal-footer button:nth-child(2) {
+    font-size: 0.8rem;
+    background-color: #0A58CA;
+    border: 1px solid #0A58CA;
+}

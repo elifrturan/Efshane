@@ -1,0 +1,128 @@
+.audio-book-card {
+    display: flex;
+    justify-content: space-between;
+    padding: 2% 3%;
+    background-color: #f0f0f0;
+}
+
+.audio-book-left-right {
+    gap: 1;
+    padding: 1% 0;
+}
+
+.audio-book-left-right .audio-book-name {
+    font-size: 1rem;
+}
+
+.audio-book-left-right .audio-book-date {
+    color: #000;
+    font-size: 0.75rem;
+    opacity: 0.3;
+}
+
+.audio-book-left-right .audio-book-istatistic {
+    display: flex;
+    gap: 2%;
+    width: 100%;
+    font-size: 0.8rem;
+    color: #000;
+    opacity: 0.5;
+}
+
+.audio-book-left-right .audio-book-istatistic p {
+    display: flex;
+}
+
+.audio-book-left-right .audio-book-total-time {
+    background-color: var(--second-color);
+    border: none;
+    padding: 3px 10px;
+    font-size: 0.75rem;
+    opacity: 0.9;
+    border-radius: 3px !important;
+    transition: all 0.2s ease-in;
+    color: #f0f0f0;
+    cursor: default;
+}
+
+.audio-book-left-right .audio-book-total-time:hover {
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+}
+
+.audio-book-right .dropdown-toggle {
+    background: none;
+    border: none;
+    color: #333;
+    padding: 1% 0;
+    font-size: 1.2rem;
+}
+
+.audio-book-right .no-toggle:focus {
+    background: none;
+    border: none;
+    color: var(--second-color);
+}
+
+.audio-book-right div.dropdown-menu.show {
+    font-size: 0.95rem;
+    padding-bottom: 0;
+}
+
+.audio-book-right a.dropdown-item {
+    opacity: 0.9;
+    display: flex;
+}
+
+.audio-book-right a.dropdown-item:nth-child(1):hover {
+    background-color: #eee;
+    color: #000;
+}
+
+.audio-book-right a.dropdown-item:nth-child(2):hover {
+    background-color: red;
+    color: #fff;
+}
+
+.audio-book-right a.dropdown-item:nth-child(3):hover {
+    background-color: #eee;
+    color: #000;
+}
+
+.audio-book-right a.dropdown-item:active {
+    opacity: 0.9;
+    transform: scale(0.95);
+}
+
+.audio-book-delete-modal .modal-content {
+    border: #dfdfdf;
+    border-radius: 5px;
+}
+
+.audio-book-delete-modal .modal-header .btn-close {
+    font-size: 0.6rem;
+}
+
+.audio-book-delete-modal .modal-title {
+    color: #000;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.audio-book-delete-modal .modal-body {
+    color: #000;
+    font-size: 0.85rem;
+    opacity: 0.75;
+}
+
+.audio-book-delete-modal .modal-footer button:nth-child(1) {
+    font-size: 0.8rem;
+    background: none;
+    border: 1px solid #0A58CA;
+    color: #0A58CA;
+}
+
+.audio-book-delete-modal .modal-footer button:nth-child(2) {
+    font-size: 0.8rem;
+    background-color: #0A58CA;
+    border: 1px solid #0A58CA;
+}

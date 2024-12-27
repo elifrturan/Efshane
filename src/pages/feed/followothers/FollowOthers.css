@@ -1,0 +1,53 @@
+.follow-others {
+    width: 350px;
+    height: 350px;
+    border: 1px solid #eee;
+    display: flex;
+    flex-direction: column;
+    border-radius: 8px;
+}
+
+.follow-others h5 {
+    font-weight: bold;
+    font-size: 1.3rem;
+    padding: 4% 5%;
+}
+
+.follow-others .user {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    padding: 4% 5%;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.follow-others .user-info {
+    display: flex;
+    justify-content: center;
+}
+
+.follow-others .user .user-info span {
+    font-size: 0.9rem;
+}
+
+.follow-others .user .user-info span:nth-child(2) {
+   opacity: 0.6;
+}
+
+.follow-others .user button{
+    background: #333;
+    border: 1px solid rgba(0, 0, 0, 0);
+    font-size: 0.9rem;
+    padding: 3px 16px;
+    border-radius: 30px;
+}
+
+.follow-others .user button:hover{
+    opacity: 0.9;
+}
+
+.follow-others .user:hover {
+    background-color: #eee;
+}

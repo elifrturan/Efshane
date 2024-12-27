@@ -25,7 +25,7 @@ function CustomNavbar() {
                 <Nav.Link href="/categories" className='mx-2'>Kategoriler</Nav.Link>
                 <Nav.Link href="/feed" className='mx-2'>Akış</Nav.Link>
                 <Nav.Link href="/createstory" className='mx-2'>Hikaye Oluştur</Nav.Link>
-                <Nav.Link href="/mystories" className='mx-2'>Hikayelerim</Nav.Link>
+                <Nav.Link href="/my-stories" className='mx-2'>Hikayelerim</Nav.Link>
             </Nav>
             <Nav className="ms-auto">
               <Nav.Link href="/notifications" className="mx-2">
