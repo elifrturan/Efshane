@@ -1,16 +1,16 @@
 import React, { useRef, useState, useEffect } from 'react'
 import './Sections.css'
-import { Button, Dropdown, Form, Modal } from 'react-bootstrap';
+import { Button, Dropdown, Form, Modal, Spinner } from 'react-bootstrap';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 
 function Sections() {
     const { bookTitle: encodedAudioBookTitle } = useParams();
     const [activeTab, setActiveTab] = useState('sections');
-    const [uploadedAudioPath, setUploadedAudioPath] = useState(null);
     const [audioFile, setAudioFile] = useState(null);
     const [textFile, setTextFile] = useState(null);
     const [imageFile, setImageFile] = useState(null);
+    const [imageFilePath, setImageFilePath] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
     const [title, setBookTitle] = useState(""); //kitaba ait başlık
@@ -32,6 +32,12 @@ function Sections() {
     const intervalIdRef = useRef(null);
     const [showEditModal, setShowEditModal] = useState(false);
     const [sections, setSections] = useState ([]); 
+    const [showWarningModal, setShowWarningModal] = useState(false);
+    const [warningMessage, setWarningMessage] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
+    const [showSuccessModal, setShowSuccessModal] = useState(false);
+    const handleSuccessModalClose = () => setShowSuccessModal(false);
+
 
     useEffect(() => {
         const fetchSections = async () => {
@@ -100,7 +106,6 @@ function Sections() {
     const handleEditClose = () => setShowEditModal(false);
     const handleEditShow = () => setShowEditModal(true);
 
-
     const handleFileSelect = (type) => {
         setSelectedButton(type);
         setFileType(type);
@@ -119,6 +124,37 @@ function Sections() {
             setShowModal(true);
         } 
     };
+
+    const togglePublish = async (sectionId, episodeTitle) => {
+        try {
+            const encodedTitle = encodeURIComponent(encodedAudioBookTitle);
+            const encodedEpisodeTitle = encodeURIComponent(episodeTitle);
+    
+            const url = `http://localhost:3000/episode/toggle/${encodedTitle}/${encodedEpisodeTitle}`;
+            const response = await axios.put(
+                url,
+                {}, 
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    },
+                }
+            );
+    
+            const updatedEpisode = response.data;
+    
+            setSections((prevSections) =>
+                prevSections.map((section) =>
+                    section.id === sectionId
+                        ? { ...section, publish: updatedEpisode.publish }
+                        : section
+                )
+            );
+        } catch (error) {
+            console.error('Yayın durumu değiştirilirken hata oluştu:', error);
+            alert('Bir hata oluştu. Lütfen tekrar deneyin.');
+        }
+    };    
 
     const handleDeleteCancel = () => {
         setShowModal(false);
@@ -228,7 +264,9 @@ function Sections() {
     };
     
     const handleImageFileSelect = (e) => {
-        setImageFile(e.target.files[0]);
+        const file = e.target.files[0];
+        console.log("Selected Image File:", file); 
+        setImageFile(file);
     };
 
     const handleTextFileSelect = (e) => {
@@ -243,27 +281,30 @@ function Sections() {
                 formData.append("image", file);
     
                 const response = await axios.post(
-                    `http://localhost:3000/episode/uploadImage`, 
+                    `http://localhost:3000/episode/uploadImage`,
                     formData,
                     {
                         headers: {
                             "Content-Type": "multipart/form-data",
                             Authorization: `Bearer ${localStorage.getItem("token")}`,
                         },
-                    });
-                    if (response.status === 201) {
-                        const data = response.data;
-                        setImageFile(data.filePath);
-                        console.log("Path:", data.filePath);
-                        console.log("Görsel başarıyla yüklendi:", data);
-                    } else {
-                        throw new Error("Görsel yüklenemedi")
                     }
+                );
+    
+                if (response.status === 201) {
+                    const data = response.data;
+                    console.log("Backend'den dönen data:", data);
+                    setImageFile(file); 
+                    const uploadedImage = response.data.imagePath;
+                    setImageFilePath(uploadedImage);
+                } else {
+                    throw new Error("Görsel yüklenemedi");
+                }
             } catch (error) {
-                console.error("Error uploading image:", error);
-            };
+                console.error("Görsel yüklenirken hata oluştu:", error);
+            }
         }
-    };    
+    };
 
     const handleAudioUpload = async (e) => {
         const file = e.target.files[0];
@@ -304,8 +345,7 @@ function Sections() {
     
                     if (response.status === 201) {
                         const data = response.data;
-                        setUploadedAudioPath(data.filePath);
-                        console.log("Path:", data.filePath);
+                        setAudioFile(file);
                         console.log("Ses dosyası başarıyla yüklendi:", data);
                     } else {
                         throw new Error('Dosya yüklenemedi');
@@ -347,8 +387,8 @@ function Sections() {
     
                 if (response.status === 201) {
                     const data = response.data;
-                    setTextFile(data);
-                    console.log("Path:", data.filePath);
+                    console.log("Backend'den dönen data:", data);
+                    setTextFile(file);
                 } else {
                     throw new Error("Metin dosyası yüklenemedi");
                 }
@@ -357,7 +397,7 @@ function Sections() {
             }
         }
     };
-    //canlı ses kaydetme sıkıntıııı
+
     const startRecording = () => {
         if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
             navigator.mediaDevices.getUserMedia( {audio: true})
@@ -401,35 +441,6 @@ function Sections() {
             })
         }
     }
-
-    const uploadAudioBlob = async (audioUrl) => {
-        try {
-            const blob = await fetch(audioUrl).then((response) => response.blob());
-    
-            const audioFile = new File([blob], 'audioFile.wav', { type: 'audio/wav' });
-    
-            const formData = new FormData();
-            formData.append('audioFile', audioFile);
-
-            const response = await axios.post('http://localhost:3000/upload', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                    Authorization: `Bearer ${localStorage.getItem('token')}`,
-                },
-            });
-    
-            if (response.status === 201) {
-                console.log('Audio uploaded successfully:', response.data.filePath);
-                return response.data.filePath; 
-            } else {
-                console.error('Audio upload failed:', response);
-                return null;
-            }
-        } catch (error) {
-            console.error('Error uploading audio blob:', error);
-            return null;
-        }
-    };
 
     const pauseRecording = () => {
         if (mediaRecorder && mediaRecorder.state === 'recording') {
@@ -488,64 +499,23 @@ function Sections() {
     };
 
     const handlePublishSection = async (publish = true) => {
+        console.log("publish");
         if (!title) {
             alert("Bölüm başlığı gerekli!");
             return;
         }
-    
+
         const formData = new FormData();
-    
-        let audioUrl = null;
-        if (audioChunks && audioChunks.length > 0) {
-            audioUrl = await uploadAudioBlob(audioChunks);
-            if (!audioUrl) {
-                alert("Ses kaydı yüklenemedi. Lütfen tekrar deneyin.");
-                return;
-            }
-            formData.append("audioFile", audioUrl);
-
-        } else if (audioFile instanceof File) {
+        if (imageFile instanceof File) {
+            formData.append("image", imageFile); 
+        }
+        
+        if (textFile instanceof File) {
+            formData.append("textFile", textFile); 
+        }
+        
+        if (audioFile instanceof File) {
             formData.append("audioFile", audioFile);
-
-        } else if (uploadedAudioPath) {
-            formData.append("audioFile", uploadedAudioPath);
-        }
-    
-        if (typeof imageFile === "string") {
-            formData.append("image", imageFile);
-            
-        } else if (imageFile instanceof File) {
-            formData.append("image", imageFile);
-        }
-    
-        if (typeof textFile === "string") {
-            formData.append("textFilePath", textFile);
-            
-        } else if (textFile instanceof File) {
-            const textUploadFormData = new FormData();
-            textUploadFormData.append("textFile", textFile);
-    
-            try {
-                const textResponse = await axios.post(
-                    "http://localhost:3000/episode/uploadText",
-                    textUploadFormData,
-                    {
-                        headers: {
-                            "Content-Type": "multipart/form-data",
-                            Authorization: `Bearer ${localStorage.getItem("token")}`,
-                        },
-                    }
-                );
-    
-                if (textResponse.status === 201) {
-                    formData.append("textFilePath", textResponse.data.filePath);
-                } else {
-                    throw new Error("Text dosyası yüklenemedi.");
-                }
-            } catch (error) {
-                console.error("Text dosyası yükleme hatası:", error);
-                return;
-            }
         }
     
         formData.append("title", title);
@@ -553,6 +523,8 @@ function Sections() {
         formData.append("publish", publish.toString());
         formData.append("normalizedTitle", formatTitleForUrl(encodedAudioBookTitle));
     
+        setIsLoading(true);
+
         try {
             const response = await axios.post(
                 `http://localhost:3000/episode/publish/${formatTitleForUrl(encodedAudioBookTitle)}`,
@@ -565,100 +537,49 @@ function Sections() {
                 }
             );
     
-            if (response.data.success) {
-                alert("Bölüm başarıyla eklendi!");
-                setSections([...sections, response.data.episode]);
-            } else if (response.data.offensive) {
-                alert("Bölüm küfürlü içerik içerdiği için yayınlanamıyor.");
+            if (response.status === 201) {
+                const newSection = response.data; 
+                setSections((prevSections) => [...prevSections, newSection]);
+                setShowSuccessModal(true); 
+                handleClose(); 
             }
         } catch (error) {
-            console.error("Bölüm ekleme hatası:", error);
-            alert("Bölüm eklenirken bir hata oluştu.");
+            if (error.response && error.response.status === 400) {
+                const { message } = error.response.data;
+                setShowNewSectionModal(false);
+                setWarningMessage(message || "Bu bölüm küfür ve argo içerdiği için yayınlanamaz.");
+                setShowWarningModal(true);
+            } else {
+                console.error("Beklenmeyen hata oluştu:", error);
+            } 
+        } finally {
+            setIsLoading(false); 
         }
     };    
 
     const handleSaveSection = async (publish = false) => {
+        console.log("save");
         if (!title) {
             alert("Bölüm başlığı gerekli!");
             return;
         }
-    
+
         const formData = new FormData();
-        
-        let audioUrl = null;
-        if (audioChunks && audioChunks.length > 0) {
-            audioUrl = await uploadAudioBlob(audioChunks); 
-            if (!audioUrl) {
-                alert("Ses kaydı yüklenemedi. Lütfen tekrar deneyin.");
-                return;
-            }
-            formData.append("audioFile", audioUrl);
-        }else if (audioFile instanceof File) {
-            formData.append("audioFile", audioFile);
-        } 
-        
-        if (textFile instanceof File) {
-            const formData = new FormData();
-            formData.append("textFile", textFile);
-        }
 
-        try {
-            const textResponse = await axios.post(
-                "http://localhost:3000/episode/uploadText",
-                formData,
-                {
-                    headers: {
-                        "Content-Type": "multipart/form-data",
-                        Authorization: `Bearer ${localStorage.getItem("token")}`,
-                    },
-                }
-            );
-
-            if (textResponse.status === 201) {
-                formData.append("textFile", textResponse.data);
-            } else {
-                throw new Error("Text dosyası yüklenemedi.");
-            }
-        } catch (error) {
-            console.error("Text dosyası yükleme hatası:", error);
-            return;
-        }
-
-        if (Image instanceof File) {
-            const formData = new FormData();
-            formData.append("image", imageFile);
-        }
-
-        try {
-            const imageResponse = await axios.post(
-                "http://localhost:3000/episode/uploadImage",
-                formData,
-                {
-                    headers: {
-                        "Content-Type": "multipart/form-data",
-                        Authorization: `Bearer ${localStorage.getItem("token")}`,
-                    },
-                }
-            );
-
-            if (imageResponse.status === 201) {
-                formData.append("image", imageResponse.data);
-            } else {
-                throw new Error("Text dosyası yüklenemedi.");
-            }
-        } catch (error) {
-            console.error("Image dosyası yükleme hatası:", error);
-            return;
-        }
-    
         formData.append("title", title);
         formData.append("duration", audioDuration.toString());
         formData.append("publish", publish.toString());
-        formData.append("normalizedTitle", formatTitleForUrl(encodedAudioBookTitle));
-    
-        console.log("FormData içerikleri:");
-        for (const pair of formData.entries()) {
-            console.log(pair[0], pair[1]);
+
+        if (imageFile instanceof File) {
+            formData.append("image", imageFile); 
+        }
+        
+        if (textFile instanceof File) {
+            formData.append("textFile", textFile); 
+        }
+        
+        if (audioFile instanceof File) {
+            formData.append("audioFile", audioFile);
         }
 
         try {
@@ -674,22 +595,69 @@ function Sections() {
             );
     
             if (response.status === 201) {
-                alert("Bölüm başarıyla eklendi!");
-                setSections([...sections, response.data]);
-                handleCancel();
+                const newSection = response.data; 
+                setSections((prevSections) => [...prevSections, newSection]);
+                setShowSuccessModal(true); 
+                handleClose(); 
             } else {
-                console.error("Beklenmeyen yanıt:", response);
-                alert("Bölüm eklenirken bir hata oluştu.");
-                handleCancel();
+                console.error("Unexpected response:", response);
             }
         } catch (error) {
-            console.error("Bölüm ekleme hatası:", error);
-            alert("Bölüm eklenirken bir hata oluştu.");
+            console.error("Error while saving section:", error);
         }
-    };
+    };    
+
+    const handleUpdateSaveSection = async (publish = false) => {
+        console.log("update save");
+        console.log("Title:", sectionToDelete.title)
+        const formData = new FormData();
+
+        formData.append("title", title);
+        formData.append("duration", audioDuration.toString());
+        formData.append("publish", publish.toString());
+
+        if (imageFile instanceof File) {
+            formData.append("image", imageFile); 
+        }
+        
+        if (textFile instanceof File) {
+            formData.append("textFile", textFile); 
+        }
+        
+        if (audioFile instanceof File) {
+            formData.append("audioFile", audioFile);
+        }
+
+        try {
+            const response = await axios.put(
+            `http://localhost:3000/episode/save/${formatTitleForUrl(encodedAudioBookTitle)}/${title}`,
+            formData,
+            {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    'Content-Type': 'multipart/form-data',
+                },
+            },
+        );
     
+            if (response.status === 201) {
+                alert("Bölüm başarıyla güncellendi!");
+            } else {
+                console.error("Unexpected response:", response);
+            }
+        } catch (error) {
+            console.error("Error while saving section:", error);
+        }
+    }; 
+
 return (
     <>
+        {isLoading && (
+            <div className="loading-overlay">
+                <Spinner animation="border" variant="primary" />
+                <p>Lütfen bekleyin... Bölümünüz analiz ediliyor...</p>
+            </div>
+        )}
         {activeTab === 'sections' && (
             <div id="sections" className={`voice-tab-pane ${activeTab === 'sections' ? 'active' : ''}`}>
                 <div className="d-flex justify-content-between align-items-center mb-3">
@@ -741,7 +709,6 @@ return (
                                         Kendi sesinizi kullanmak istemiyorsanız, yapay zeka aracımız sizin 
                                         yerinize bölümü seslendirebilir. Bunun için kitabınızın bölümünü 
                                         içeren bir .txt dosyasını yükleyin ve <b><i>Metin Dosyası </i></b> butonuna tıklayın.
-
                                     </li>
                                     <li>
                                         <b>Süre Sınırları: </b>
@@ -775,132 +742,129 @@ return (
                     <Modal.Body>
                         <Form>
                             <Form.Control size="sm" type="text" placeholder="Bir bölüm başlığı girin..." className='modal-section-title mb-4' value={title || ""} onChange={(e) => setBookTitle(e.target.value)} />
-                        </Form>
-                        {/* Görsel Yükleme */}
-                        {fileType === 'image' && (
-                            <div className='add-voice-image'>
-                                <Form.Group className='mt-4 mb-4 d-flex flex-column'>
-                                    {imageFile && <img src={imageFile} className='img-fluid mb-4'  alt="Bölüm Görseli" width="300" height="200"/>}
-                                    <Form.Label>Bölüm görselinizi yükleyin</Form.Label>
-                                    <Form.Control
-                                        type="file"
-                                        accept="image/*"
-                                        size='sm'
-                                        className='opacity-75 image-modal'
-                                        onChange={handleImageUpload}
-                                    />
-                                </Form.Group>
-                            </div>
-                        )}
-                        {/* Ses Kayıt Etme */}
-                        {fileType === 'save' && (
-                            <div className="add-voice-save">
-                                <Form.Group className='mb-4'>
-                                    <div className='save-voice'>
-                                        <div className='save-voice-buttons'>
-                                            <Button 
-                                                variant={isRecording ? 'danger' : 'primary'} 
-                                                onClick={isRecording ? stopRecording : startRecording}
-                                                disabled={audioUrl}
-                                            >
-                                                {!isRecording ? (
-                                                    <div className='play-voice d-flex flex-column align-items-center justify-content-center me-2'>
-                                                        <i className="bi bi-mic-fill"></i>
-                                                        <p>Başlat</p>
-                                                    </div>
-                                                ) : (
-                                                    <div className="stop-voice d-flex flex-column align-items-center justify-content-center me-2">
-                                                        <i className="bi bi-stop-fill"></i>
-                                                        <p>Bitir</p>
-                                                    </div>
-                                                )}
-                                            </Button>
-
-                                            {isRecording && (
-                                                <>
-                                                    <Button variant="secondary" onClick={isPaused ? resumeRecording : pauseRecording}>
-                                                        {!isPaused ? (
-                                                            <div className="pause-voice me-2">
-                                                                <i className="bi bi-pause-fill"></i>
-                                                                <p>Duraklat</p>
-                                                            </div>
-                                                        ) : (
-                                                            <div className="resume-voice me-2">
-                                                                <i className="bi bi-play-fill"></i>
-                                                                <p>Devam</p>
-                                                            </div>
-                                                        )}
-                                                    </Button>
-                                                </>
-                                            )}
-
-                                            {showNewRecordingButton && (
-                                                <Button onClick={startNewRecording}>
-                                                    <div className='restart-voice'>
-                                                        <i className="bi bi-arrow-clockwise"></i>
-                                                        <p>Yeni</p>
-                                                    </div>
+                            {/* Görsel Yükleme */}
+                            {fileType === 'image' && (
+                                <div className='add-voice-image'>
+                                    <Form.Group className='mt-4 mb-4 d-flex flex-column'>
+                                        {imageFile && <img src={imageFile} className='img-fluid mb-4'  alt="Bölüm Görseli" width="300" height="200"/>}
+                                        <Form.Label>Bölüm görselinizi yükleyin</Form.Label>
+                                        <Form.Control
+                                            type="file"
+                                            accept="image/*"
+                                            size='sm'
+                                            className='opacity-75 image-modal'
+                                            onChange={handleImageUpload}
+                                        />
+                                    </Form.Group>
+                                </div>
+                            )}
+                            {/* Ses Kayıt Etme */}
+                            {fileType === 'save' && (
+                                <div className="add-voice-save">
+                                    <Form.Group className='mb-4'>
+                                        <div className='save-voice'>
+                                            <div className='save-voice-buttons'>
+                                                <Button 
+                                                    variant={isRecording ? 'danger' : 'primary'} 
+                                                    onClick={isRecording ? stopRecording : startRecording}
+                                                    disabled={audioUrl}
+                                                >
+                                                    {!isRecording ? (
+                                                        <div className='play-voice d-flex flex-column align-items-center justify-content-center me-2'>
+                                                            <i className="bi bi-mic-fill"></i>
+                                                            <p>Başlat</p>
+                                                        </div>
+                                                    ) : (
+                                                        <div className="stop-voice d-flex flex-column align-items-center justify-content-center me-2">
+                                                            <i className="bi bi-stop-fill"></i>
+                                                            <p>Bitir</p>
+                                                        </div>
+                                                    )}
                                                 </Button>
-                                            )}
-                                            <p style={{fontSize: '0.7rem', opacity: '0.9'}} className='mt-1'>Kaydın Süresi: {Math.floor(audioDuration / 60)}:{(audioDuration % 60).toString().padStart(2, '0')}</p>
-                                        </div>
-
-                                        {audioUrl && (
-                                            <div className='save-voice-player'>
-                                                <audio controls>
-                                                    <source src={audioUrl} type="audio/wav" />
-                                                    Tarayıcınız bu dosya türünü desteklemiyor.
-                                                </audio>
+                                                {isRecording && (
+                                                    <>
+                                                        <Button variant="secondary" onClick={isPaused ? resumeRecording : pauseRecording}>
+                                                            {!isPaused ? (
+                                                                <div className="pause-voice me-2">
+                                                                <i className="bi bi-pause-fill"></i>
+                                                                    <p>Duraklat</p>
+                                                                </div>
+                                                            ) : (
+                                                                <div className="resume-voice me-2">
+                                                                    <i className="bi bi-play-fill"></i>
+                                                                    <p>Devam</p>
+                                                                </div>
+                                                            )}
+                                                        </Button>
+                                                    </>
+                                                )}
+                                                {showNewRecordingButton && (
+                                                    <Button onClick={startNewRecording}>
+                                                        <div className='restart-voice'>
+                                                            <i className="bi bi-arrow-clockwise"></i>
+                                                            <p>Yeni</p>
+                                                        </div>
+                                                    </Button>
+                                                )}
+                                                <p style={{fontSize: '0.7rem', opacity: '0.9'}} className='mt-1'>Kaydın Süresi: {Math.floor(audioDuration / 60)}:{(audioDuration % 60).toString().padStart(2, '0')}</p>
                                             </div>
-                                        )}
-                                    </div>
-                                </Form.Group>
-                            </div>
-                        )}
-                        {/* Ses Dosyası Yükleme */}
-                        {fileType === 'audio' && (
-                            <div className='add-voice-file'>
-                                <Form.Group className='mb-4'>
-                                    <Form.Label>Ses dosyanızı yükleyin</Form.Label>
-                                    {audioFile && !audioDurationError && audioPlayerVisible && (
-                                        <div className="audio-player mb-4">
-                                            <audio controls>
-                                                <source src={URL.createObjectURL(audioFile)} />
-                                                Tarayıcınız yüklediğiniz dosya uzantısını çalıştırmıyor.
-                                            </audio>
+                                            {audioUrl && (
+                                                <div className='save-voice-player'>
+                                                    <audio controls>
+                                                        <source src={audioUrl} type="audio/wav" />
+                                                        Tarayıcınız bu dosya türünü desteklemiyor.
+                                                    </audio>
+                                                </div>
+                                            )}
                                         </div>
-                                    )}
-                                    <Form.Control
-                                        type="file"
-                                        accept="audio/*"
-                                        size='sm'
-                                        className='opacity-75'
-                                        onChange={handleAudioUpload }
-                                    />
-                                </Form.Group>
-                            </div>
-                        )}
-                        {/* Metin Dosyası Yükleme */}
-                        {fileType === 'text' && (
-                            <div className="add-text-file">
-                                <Form.Group className="mb-4">
-                                    <Form.Label>
-                                        Metin dosyanızı yükleyin
-                                        <span className="text-danger" style={{ fontSize: '0.8rem' }}>
-                                            {' '}
-                                            (bu dosyanın uzantısı .txt olmalıdır)
-                                        </span>
-                                    </Form.Label>
-                                    <Form.Control
-                                        type="file"
-                                        accept="*.txt"
-                                        size='sm'
-                                        className='opacity-75'
-                                        onChange={handleTextFileUpload}
-                                    />
-                                </Form.Group>
-                            </div>
-                        )}
+                                    </Form.Group>
+                                </div>
+                            )}
+                            {/* Ses Dosyası Yükleme */}
+                            {fileType === 'audio' && (
+                                <div className='add-voice-file'>
+                                        <Form.Group className='mb-4'>
+                                            <Form.Label>Ses dosyanızı yükleyin</Form.Label>
+                                            {audioFile && !audioDurationError && audioPlayerVisible && (
+                                                <div className="audio-player mb-4">
+                                                    <audio controls>
+                                                        <source src={URL.createObjectURL(audioFile)} />
+                                                        Tarayıcınız yüklediğiniz dosya uzantısını çalıştırmıyor.
+                                                    </audio>
+                                                </div>
+                                            )}
+                                            <Form.Control
+                                                type="file"
+                                                accept="audio/*"
+                                                size='sm'
+                                                className='opacity-75'
+                                                onChange={handleAudioUpload }
+                                            />
+                                        </Form.Group>
+                                </div>
+                            )}
+                            {/* Metin Dosyası Yükleme */}
+                            {fileType === 'text' && (
+                                <div className="add-text-file">
+                                        <Form.Group className="mb-4">
+                                            <Form.Label>
+                                                Metin dosyanızı yükleyin
+                                                <span className="text-danger" style={{ fontSize: '0.8rem' }}>
+                                                    {' '}
+                                                    (bu dosyanın uzantısı .txt olmalıdır)
+                                                </span>
+                                            </Form.Label>
+                                            <Form.Control
+                                                type="file"
+                                                accept="*.txt"
+                                                size='sm'
+                                                className='opacity-75'
+                                                onChange={handleTextFileUpload}
+                                            />
+                                        </Form.Group>
+                                </div>
+                            )}
+                        </Form>
                         <div className='modal-file-buttons'>
                             <Button variant="outline-secondary" className={selectedButton === 'image' ? 'selected-button' : ''} onClick={() => handleFileSelect('image')}>
                                 Bölüm Görseli
@@ -968,133 +932,140 @@ return (
                                         </Modal.Header>
                                         <Modal.Body>
                                             <Form>
-                                                <Form.Control size="sm" type="text" placeholder="Bir bölüm başlığı girin..." className='edit-modal-section-title mb-4' value="1. Bölüm"/>
-                                            </Form>
-                                            {/* Görsel Yükleme */}
-                                            {fileType === 'image' && (
-                                                <div className='edit-voice-image'>
-                                                    <Form.Group className='mt-4 mb-4 d-flex flex-column'>
-                                                        <img src="/images/bg.jpg" className='img-fluid mb-4'  alt="Bölüm Görseli" width="300" height="200"/>
-                                                        <Form.Label>Bölüm görselinizi yükleyin</Form.Label>
-                                                    <Form.Control
-                                                            type="file"
-                                                            accept="image/*"
-                                                            size='sm'
-                                                            className='opacity-75 edit-image-modal'
-                                                            onChange={handleImageFileSelect}
-                                                    />
-                                                    </Form.Group>
-                                                </div>
-                                            )}
-                                            {/* Ses Kayıt Etme */}
-                                            {fileType === 'save' && (
-                                                <div className="edit-voice-save">
-                                                    <Form.Group className='mb-4'>
-                                                        <div className='edit-save-voice'>
-                                                            <div className='edit-save-voice-buttons'>
-                                                                <Button 
-                                                                    variant={isRecording ? 'danger' : 'primary'} 
-                                                                    onClick={isRecording ? stopRecording : startRecording}
-                                                                    disabled={audioUrl}
-                                                                >
-                                                                    {!isRecording ? (
-                                                                        <div className='play-voice d-flex flex-column align-items-center justify-content-center me-2'>
-                                                                            <i className="bi bi-mic-fill"></i>
-                                                                            <p>Başlat</p>
-                                                                        </div>
-                                                                    ) : (
-                                                                        <div className="stop-voice d-flex flex-column align-items-center justify-content-center me-2">
-                                                                            <i className="bi bi-stop-fill"></i>
-                                                                            <p>Bitir</p>
-                                                                        </div>
-                                                                    )}
-                                                                </Button>
-
-                                                                {isRecording && (
-                                                                    <>
-                                                                        <Button variant="secondary" onClick={isPaused ? resumeRecording : pauseRecording}>
-                                                                            {!isPaused ? (
-                                                                                <div className="pause-voice me-2">
-                                                                                    <i className="bi bi-pause-fill"></i>
-                                                                                    <p>Duraklat</p>
+                                                <Form.Control size="sm" type="text" placeholder="Bir bölüm başlığı girin..." className='edit-modal-section-title mb-4' value={section.title || ""} onChange={(e) => setBookTitle(e.target.value)}/>
+                                                {/* Görsel Yükleme */}
+                                                {fileType === 'image' && (
+                                                    <div className='edit-voice-image'>
+                                                        <Form.Group className='mt-4 mb-4 d-flex flex-column'>
+                                                            {section.image && (
+                                                                <img 
+                                                                    src={imageFilePath} 
+                                                                    className='img-fluid mb-4'  
+                                                                    alt="Bölüm Görseli" 
+                                                                    width="300" 
+                                                                    height="200"
+                                                                />
+                                                            )}
+                                                            <Form.Label>Bölüm görselinizi yükleyin</Form.Label>
+                                                            <Form.Control
+                                                                type="file"
+                                                                accept="image/*"
+                                                                size='sm'
+                                                                className='opacity-75 image-modal'
+                                                                onChange={handleImageFileSelect}
+                                                            />
+                                                        </Form.Group>
+                                                    </div>
+                                                )}
+                                                {/* Ses Kayıt Etme */}
+                                                {fileType === 'save' && (
+                                                    <div className="edit-voice-save">
+                                                            <Form.Group className='mb-4'>
+                                                                <div className='edit-save-voice'>
+                                                                    <div className='edit-save-voice-buttons'>
+                                                                        <Button 
+                                                                            variant={isRecording ? 'danger' : 'primary'} 
+                                                                            onClick={isRecording ? stopRecording : startRecording}
+                                                                            disabled={audioUrl}
+                                                                        >
+                                                                            {!isRecording ? (
+                                                                                <div className='play-voice d-flex flex-column align-items-center justify-content-center me-2'>
+                                                                                    <i className="bi bi-mic-fill"></i>
+                                                                                    <p>Başlat</p>
                                                                                 </div>
                                                                             ) : (
-                                                                                <div className="resume-voice me-2">
-                                                                                    <i className="bi bi-play-fill"></i>
-                                                                                    <p>Devam</p>
+                                                                                <div className="stop-voice d-flex flex-column align-items-center justify-content-center me-2">
+                                                                                    <i className="bi bi-stop-fill"></i>
+                                                                                    <p>Bitir</p>
                                                                                 </div>
                                                                             )}
                                                                         </Button>
-                                                                    </>
-                                                                )}
-
-                                                                {showNewRecordingButton && (
-                                                                    <Button onClick={startNewRecording}>
-                                                                        <div className='restart-voice'>
-                                                                            <i className="bi bi-arrow-clockwise"></i>
-                                                                            <p>Yeni</p>
+                                                                        {isRecording && (
+                                                                            <>
+                                                                                <Button variant="secondary" onClick={isPaused ? resumeRecording : pauseRecording}>
+                                                                                    {!isPaused ? (
+                                                                                        <div className="pause-voice me-2">
+                                                                                            <i className="bi bi-pause-fill"></i>
+                                                                                            <p>Duraklat</p>
+                                                                                        </div>
+                                                                                    ) : (
+                                                                                        <div className="resume-voice me-2">
+                                                                                            <i className="bi bi-play-fill"></i>
+                                                                                            <p>Devam</p>
+                                                                                        </div>
+                                                                                    )}
+                                                                                </Button>
+                                                                            </>
+                                                                        )}
+                                                                        {showNewRecordingButton && (
+                                                                            <Button onClick={startNewRecording}>
+                                                                                <div className='restart-voice'>
+                                                                                    <i className="bi bi-arrow-clockwise"></i>
+                                                                                    <p>Yeni</p>
+                                                                                </div>
+                                                                            </Button>
+                                                                        )}
+                                                                        <p style={{fontSize: '0.7rem', opacity: '0.9'}} className='mt-1'>Kaydın Süresi: {Math.floor(audioDuration / 60)}:{(audioDuration % 60).toString().padStart(2, '0')}</p>
+                                                                    </div>
+                                                                    {audioUrl && (
+                                                                        <div className='edit-save-voice-player'>
+                                                                            <audio controls>
+                                                                                <source src={audioUrl} type="audio/wav" />
+                                                                                Tarayıcınız bu dosya türünü desteklemiyor.
+                                                                            </audio>
                                                                         </div>
-                                                                    </Button>
-                                                                )}
-                                                                <p style={{fontSize: '0.7rem', opacity: '0.9'}} className='mt-1'>Kaydın Süresi: {Math.floor(audioDuration / 60)}:{(audioDuration % 60).toString().padStart(2, '0')}</p>
-                                                            </div>
-
-                                                            {audioUrl && (
-                                                                <div className='edit-save-voice-player'>
-                                                                    <audio controls>
-                                                                        <source src={audioUrl} type="audio/wav" />
-                                                                        Tarayıcınız bu dosya türünü desteklemiyor.
-                                                                    </audio>
+                                                                    )}
                                                                 </div>
-                                                            )}
-                                                        </div>
-                                                    </Form.Group>
-                                                </div>
-                                            )}
-                                            {/* Ses Dosyası Yükleme */}
-                                            {fileType === 'audio' && (
-                                                <div className='edit-voice-file'>
-                                                    <Form.Group className='mb-4'>
-                                                        <Form.Label>Ses dosyanızı yükleyin</Form.Label>
-                                                        {!audioPlayerVisible && (
-                                                            <div className="audio-player mb-4">
-                                                                <audio controls>
-                                                                    <source src="/voice/deneme-masal.m4a" type='audio/mpeg'/>
-                                                                    Tarayıcınız yüklediğiniz dosya uzantısını çalıştırmıyor.
-                                                                </audio>
-                                                            </div>
-                                                        )}
-                                                        <Form.Control
-                                                            type="file"
-                                                            accept="audio/*"
-                                                            size='sm'
-                                                            className='opacity-75'
-                                                            onChange={handleAudioFileSelect}
-                                                        />
-                                                    </Form.Group>
-                                                </div>
-                                            )}
-                                            {/* Metin Dosyası Yükleme */}
-                                            {fileType === 'text' && (
-                                                <div className="edit-text-file">
-                                                    <Form.Group className="mb-4">
-                                                        <Form.Label>
-                                                            Metin dosyanızı yükleyin
-                                                            <span className="text-danger" style={{ fontSize: '0.8rem' }}>
-                                                                {' '}
-                                                                (bu dosyanın uzantısı .txt olmalıdır)
-                                                            </span>
-                                                        </Form.Label>
-                                                        <Form.Control
-                                                            type="file"
-                                                            accept=".txt"
-                                                            size='sm'
-                                                            className='opacity-75'
-                                                            onChange= {handleTextFileSelect}
-                                                        />
-                                                    </Form.Group>
-                                                </div>
-                                            )}
+                                                            </Form.Group>
+                                                    </div>
+                                                )}
+                                                {/* Ses Dosyası Yükleme */}
+                                                {fileType === 'audio' && (
+                                                    <div className='edit-voice-file'>
+                                                            <Form.Group className='mb-4'>
+                                                                <Form.Label>Ses dosyanızı yükleyin</Form.Label>
+                                                                {section.audioFile ? (
+                                                                    <div className="audio-player mb-4">
+                                                                        <audio controls>
+                                                                            <source src={section.audioFile} type="audio/mpeg" />
+                                                                            Tarayıcınız yüklediğiniz dosya uzantısını çalıştırmıyor.
+                                                                        </audio>
+                                                                    </div>
+                                                                ) : (
+                                                                    <p>Bu bölüm için ses dosyası bulunamadı.</p>
+                                                                )}
+                                                                <Form.Control
+                                                                    type="file"
+                                                                    accept="audio/*"
+                                                                    size='sm'
+                                                                    className='opacity-75'
+                                                                    onChange={handleAudioFileSelect}
+                                                                />
+                                                            </Form.Group>
+                                                    </div>
+                                                )}
+                                                {/* Metin Dosyası Yükleme */}
+                                                {fileType === 'text' && (
+                                                    <div className="edit-text-file">
+                                                            <Form.Group className="mb-4">
+                                                                <Form.Label>
+                                                                    Metin dosyanızı yükleyin
+                                                                    <span className="text-danger" style={{ fontSize: '0.8rem' }}>
+                                                                        {' '}
+                                                                        (bu dosyanın uzantısı .txt olmalıdır)
+                                                                    </span>
+                                                                </Form.Label>
+                                                                <Form.Control
+                                                                    type="file"
+                                                                    accept=".txt"
+                                                                    size='sm'
+                                                                    className='opacity-75'
+                                                                    onChange= {handleTextFileSelect}
+                                                                />
+                                                            </Form.Group>
+                                                    </div>
+                                                )}
+                                            </Form>
                                             <div className='edit-file-buttons'>
                                                 <Button variant="outline-secondary" className={selectedButton === 'image' ? 'selected-button' : ''} onClick={() => handleFileSelect('image')}>
                                                     Bölüm Görseli
@@ -1115,41 +1086,36 @@ return (
                                                 İptal
                                             </Button>
                                             <div className='d-flex gap-2'>
-                                                <Button variant="secondary" className='edit-modal-save' onClick={handleClose}>
-                                                    Kaydet
-                                                </Button>
-                                                <Button variant="primary" className='edit-modal-publish' onClick={handleClose}>
-                                                    Yayınla
-                                                </Button>
+                                            <Button variant="secondary" className='btn-modal-save' onClick={() => handleUpdateSaveSection(false)}>
+                                                Kaydet
+                                            </Button>
+                                            <Button variant="primary" className='btn-modal-publish' onClick={() => handlePublishSection(true)}>
+                                                Yayınla
+                                            </Button>
                                             </div>
                                         </Modal.Footer>
                                     </Modal>
                                     {section.publish ? (
-                                                        <button
-                                                            className="dropdown-item dropdown-item-section"
-                                                            onClick={(e) => {
-                                                                e.stopPropagation();
-                                                                togglePublish(section.id, section.title);
-                                                            }}
-                                                        >
-                                                            Yayından Kaldır
-                                                        </button>
-                                                        ) : (
-                                                        <button
-                                                            className="dropdown-item dropdown-item-section"
-                                                            onClick={(e) => {
-                                                                e.stopPropagation();
-                                                                togglePublish(section.id, section.title);
-                                                            }}
-                                                        >
-                                                            Yayınla
-                                                        </button>
-                                                    )}
-                                    {/* {section.onPublished ? (
-                                        <Dropdown.Item href=''>Yayından Kaldır</Dropdown.Item>
-                                        ) : (
-                                        <Dropdown.Item href=''>Yayınla</Dropdown.Item>
-                                    )} */}
+                                        <button
+                                            className="dropdown-item dropdown-item-section"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                togglePublish(section.id, section.title);
+                                            }}
+                                                >
+                                                    Yayından Kaldır
+                                                </button>
+                                            ) : (
+                                                <button
+                                                    className="dropdown-item dropdown-item-section"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        togglePublish(section.id, section.title);
+                                                }}
+                                                >
+                                                    Yayınla
+                                                </button>
+                                            )}
                                     <Dropdown.Item href='' onClick={() => handleAction('delete', section)}>Sil</Dropdown.Item>
                                 </Dropdown.Menu>
                             </Dropdown>
@@ -1163,6 +1129,32 @@ return (
                     Maksimum 20 dakika süreli ses dosyası yükleyebilirsiniz.
                 </div>
         )}
+        {/* Uyarı Modalı */}
+        <Modal show={showWarningModal} onHide={() => setShowWarningModal(false)}>
+            <Modal.Header closeButton>
+                <Modal.Title>Uyarı</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>{warningMessage}</Modal.Body>
+            <Modal.Footer>
+                <Button variant="secondary" onClick={() => setShowWarningModal(false)}>
+                    Kapat
+                </Button>
+            </Modal.Footer>
+        </Modal>
+        { /* Success Modal */ }
+        <Modal show={showSuccessModal} onHide={handleSuccessModalClose} centered>
+            <Modal.Header closeButton>
+                <Modal.Title>Başarılı</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <p>Bölüm başarıyla eklendi!</p>
+            </Modal.Body>
+            <Modal.Footer>
+                <Button variant="success" onClick={handleSuccessModalClose}>
+                    Tamam
+                </Button>
+            </Modal.Footer>
+        </Modal>
         { /* Delete Modal */ }
         <div className={`modal fade ${showModal ? 'show d-block' : ''}`} tabIndex="-1" role="dialog">
             <div className="modal-dialog" role="document">

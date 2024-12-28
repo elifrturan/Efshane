@@ -13,7 +13,7 @@ function MyStories() {
         setActiveTab(tab);
     }
 
-  return (
+return (
     <div className="my-stories-page">
         <Navbar/>
         <div className="container">
@@ -43,7 +43,7 @@ function MyStories() {
         </div>
         <Footer/>
     </div>
-  )
+)
 }
 
 export default MyStories
