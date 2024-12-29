@@ -20,10 +20,12 @@
 
 .left-arrow {
     left: -50px;
+    margin-right: 10px;
 }
 
 .right-arrow {
     right: -50px;
+    margin-left: 10px;
 }
 
 .book-list-newrelases {
@@ -33,13 +35,35 @@
     scroll-behavior: smooth;
 }
 
+.book-list-newrelases .book1 {
+    width: 150px;
+    color: var(--second-color);
+    transition: all 0.3s ease-in-out;
+}
+
+.book-list-newrelases .book1 img:hover {
+    border-radius: 4px;
+}
+
+.book-list-newrelases .book1:hover {
+    transform: scale(1.05);
+}
+
 .book-list-newrelases::-webkit-scrollbar {
     display: none;
 }
 
-.book1 {
-    width: 150px;
-    color: var(--second-color);
+.book-list-newrelases .new-book-writer {
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+    align-items: center;
+}
+
+.book-list-newrelases .new-book-writer p{
+    font-size: 0.8rem;
+    opacity: 0.9;
+    margin: 0;
 }
 
 @media (max-width: 768px) {

@@ -17,6 +17,7 @@ function UserProfile() {
     const [stories, setStories] = useState([]);
     const [books, setBooks] = useState([]);
     const [anons, setAnons] = useState([]);
+    const bookName = "Aşk ve Gurur";
 
     useEffect(() => {
         const fetchUserProfile = async () => {
@@ -232,6 +233,25 @@ function UserProfile() {
         return num.toString();
     }
 
+    function formatBookNameForURL(bookName) {
+        return bookName
+          .toLowerCase()
+          .replace(/ğ/g, "g")
+          .replace(/ü/g, "u")
+          .replace(/ş/g, "s")
+          .replace(/ı/g, "i")
+          .replace(/ö/g, "o")
+          .replace(/ç/g, "c")
+          .replace(/[^a-z0-9\s-]/g, "")
+          .trim()
+          .replace(/\s+/g, "-");
+    }
+    
+    const handleBookClick = () => {
+        const formattedBookName = formatBookNameForURL(bookName);
+        navigate(`/book-details/${formattedBookName}`)
+    }
+
     return (
         <>
             <div className="profile2-page">
@@ -318,7 +338,7 @@ function UserProfile() {
                             <div className="story-list" ref={storyScrollRef}>
                                 {stories.map((story) => (
                                     <div className="story mt-1" key={story.id}>
-                                        <img src={story.bookCover} alt="" width="100px" height="140px" className='object-fit-cover'/>
+                                        <img src={story.bookCover} alt="" width="100px" height="140px" className='object-fit-cover' onClick={handleBookClick}/>
                                         <span className='mt-1'>{story.title}</span>
                                         <div className="statistics d-flex justify-content-between mt-1">
                                             <p className='d-flex'><i className="bi bi-eye me-1"></i>{formatNumber(story.analysis?.[0]?.read_count ?? 0)}</p>
@@ -344,7 +364,7 @@ function UserProfile() {
                             <div className="read-story-list" ref={readListScrollRef}>
                                 {books.map((book) => (
                                     <div className="story mt-1" key={book.id}>
-                                        <img src={book.bookCover} alt="" width="100px" height="140px" className='object-fit-cover'/>
+                                        <img src={book.bookCover} alt="" width="100px" height="140px" className='object-fit-cover' onClick={handleBookClick}/>
                                         <span className='mt-1'>{book.title}</span>
                                         <div className="statistics d-flex justify-content-between mt-1">
                                             <p className='d-flex'><i className="bi bi-eye me-1"></i>{formatNumber(book.analysis?.[0]?.read_count ?? 0)}</p>

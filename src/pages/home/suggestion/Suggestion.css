@@ -34,13 +34,35 @@
     scroll-behavior: smooth;
 }
 
+.books-list .suggestionBook {
+    width: 150px;
+    color: var(--second-color);
+    transition: all 0.3s ease-in-out;
+}
+
+.books-list .suggestionBook img:hover {
+    border-radius: 4px;
+}
+
+.books-list .suggestionBook:hover {
+    transform: scale(1.05);
+}
+
 .books-list::-webkit-scrollbar {
     display: none;
 }
 
-.suggestionBook {
-    width: 150px;
-    color: var(--second-color);
+.books-list .suggestion-book-writer {
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+    align-items: center;
+}
+
+.books-list .suggestion-book-writer p{
+    font-size: 0.8rem;
+    opacity: 0.9;
+    margin: 0;
 }
 
 @media (max-width: 768px) {

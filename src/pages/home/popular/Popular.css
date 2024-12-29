@@ -3,7 +3,6 @@
 }
 
 .popular-books-wrapper {
-    width: 100%;
     display: flex;
     align-items: center;
     position: relative;
@@ -35,14 +34,36 @@
     scroll-behavior: smooth;
 }
 
+.book-list-popular .populerBook {
+    width: 150px;
+    color: var(--second-color);
+    transition: all 0.3s ease-in-out;
+}
+
+.book-list-popular .populerBook img:hover {
+    border-radius: 4px;
+}
+
+.book-list-popular .populerBook:hover {
+    transform: scale(1.05);
+}
+
+
 .book-list-popular::-webkit-scrollbar {
     display: none;
 }
 
-.populerBook {
-    width: 150px;
-    min-width: 150px;
-    color: var(--second-color);
+.book-list-popular .popular-book-writer {
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+    align-items: center;
+}
+
+.book-list-popular .popular-book-writer p{
+    font-size: 0.8rem;
+    opacity: 0.9;
+    margin: 0;
 }
 
 @media (max-width: 768px) {

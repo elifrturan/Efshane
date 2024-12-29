@@ -1,8 +1,121 @@
 .categories-page{
     color: var(--second-color);
-    height: 100vh;
+    height: auto;
 }
 
 .category-card{
     cursor: pointer;
+}
+
+.categories-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    justify-content: center;
+    padding: 20px;
+}
+
+.categories-list .category-card {
+    transition: all 0.3s ease-in-out;
+    background: transparent;
+    border-radius: 2px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;
+    overflow: hidden;
+    text-align: center;
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 18px 0;
+    margin-bottom: 10%;
+}
+
+.categories-list .category-card:hover {
+    transform: scale(1.05);
+    cursor: pointer;
+}
+
+.categories-list .category-card .category-image {
+    width: 150px;
+    height: 210px;
+    object-fit: cover;
+    margin-bottom: 15px;
+}
+
+.categories-list .category-card .category-image:hover {
+    border-radius: 8px;
+}
+
+.categories-list .category-card p {
+    margin: 0;
+    font-size: 1.rem;
+    opacity: 1;
+    font-weight: 600;
+}
+
+@media (max-width: 600px) {
+    .categories-list {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+        padding: 10px;
+    }
+
+    .categories-list .category-card .category-image {
+        width: 120px;
+        height: 170px;
+    }
+
+    .categories-list .category-card {
+        padding: 15px 5px;
+        margin-bottom: 5%;
+    }
+
+    .categories-list .category-card p {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 1024px) {
+    .categories-list {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+        padding: 15px;
+    }
+
+    .categories-list .category-card .category-image {
+        width: 130px;
+        height: 190px;
+    }
+
+    .categories-list .category-card {
+        padding: 18px 8px;
+        margin-bottom: 7%;
+    }
+
+    .categories-list .category-card p {
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
+}
+
+@media (min-width: 1025px) {
+    .categories-list {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 25px;
+        padding: 20px;
+    }
+
+    .categories-list .category-card .category-image {
+        width: 150px;
+        height: 210px;
+    }
+
+    .categories-list .category-card {
+        padding: 20px 10px;
+    }
+
+    .categories-list .category-card p {
+        font-size: 1rem;
+    }
 }

@@ -41,17 +41,15 @@ const handleCategoryClick = (categoryName) => {
         <div className="container">
           <h2 className='text-center mt-5 mb-5 category-title'>Kategoriler</h2>
           <div className="categories-list">
-            <div className="row">
-              {categories && categories.map((category) => (
-                <div className="category-card col-lg-3 col-md-4 col-sm-6 col-xs-12" key={category.id} onClick={() => handleCategoryClick(category.name)}>
-                    <div className="d-flex flex-column align-items-center mb-5">
-                      <img src={category.imageUrl} alt="category-image" width="200px" height="281px"/>
-                      <p className='mt-1 fs-5'>{category.name}</p>
-                    </div>
+            {categories && categories.map((category) => (
+              <div className="category-card" key={category.id} onClick={() => handleCategoryClick(category.name)}>
+                <div className="d-flex flex-column align-items-center mb-5">
+                  <img src={category.imageUrl} alt="category-image" width="150px"/>
+                  <p>{category.name}</p>
+                </div>
               </div>
-              ))}
-            </div>
-        </div>
+            ))}
+          </div>
         </div>
         <Footer/>
     </div>

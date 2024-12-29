@@ -25,6 +25,7 @@ import MyStories from './pages/mystories/MyStories';
 import Feed from './pages/feed/Feed';
 import Profile from './pages/profile/Profile';
 import UserProfile from './pages/userprofile/UserProfile';
+import BookDetails from './pages/bookdetails/BookDetails';
 import CustomNavbar from './layouts/navbar/Navbar';
 import { UserProvider } from './User.Context';
 
@@ -53,7 +54,8 @@ const routes = createBrowserRouter([
   { path: '/my-stories', element: <MyStories/>},
   { path: '/feed', element: <Feed/>},
   { path: '/profile/:username', element: <Profile/>},
-  { path: '/user/:username', element: <UserProfile/>}
+  { path: '/user/:username', element: <UserProfile/>},
+  { path: '/book-details/:bookName', element: <BookDetails/>}
 ]);
 
 
