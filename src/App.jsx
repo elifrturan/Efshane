@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Start from './pages/start/Start';
 import SignUp from './pages/signup/SignUp';
@@ -23,6 +23,10 @@ import AddVoice from './pages/addvoicesection/AddVoice';
 import Edit from './pages/addsection/edit/Edit';
 import MyStories from './pages/mystories/MyStories';
 import Feed from './pages/feed/Feed';
+import Profile from './pages/profile/Profile';
+import UserProfile from './pages/userprofile/UserProfile';
+import CustomNavbar from './layouts/navbar/Navbar';
+import { UserProvider } from './User.Context';
 
 const routes = createBrowserRouter([
   { path: '/', element: <Start/>, errorElement: <h1>Page not found</h1>},
@@ -47,14 +51,19 @@ const routes = createBrowserRouter([
   { path: '/about-us', element: <AboutUs/>},
   { path: '/add-voice-section/:bookTitle', element: <AddVoice/>},
   { path: '/my-stories', element: <MyStories/>},
-  { path: '/feed', element: <Feed/>}
-])
+  { path: '/feed', element: <Feed/>},
+  { path: '/profile/:username', element: <Profile/>},
+  { path: '/user/:username', element: <UserProfile/>}
+]);
+
 
 function App() {
-  
   return (
-    <RouterProvider router={routes}/>
-  )
+    <UserProvider>
+      <CustomNavbar/>
+      <RouterProvider router={routes}/>
+    </UserProvider>
+  );
 }
 
-export default App
+export default App;

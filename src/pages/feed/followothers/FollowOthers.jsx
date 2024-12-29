@@ -2,11 +2,16 @@ import React, { useState, useEffect } from 'react'
 import './FollowOthers.css'
 import { Button } from 'react-bootstrap'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom';
 
 function FollowOthers() {
-
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
+    
+    const handleProfileClick = (user) => {
+        navigate(`/user/${user.username}`);
+    }
 
     useEffect(() => {
         const fetchRandomUsers = async () => {
@@ -47,25 +52,25 @@ function FollowOthers() {
     };
 
     if (loading) return <p>Yükleniyor...</p>;
-return (
-    <>
-        <div className="follow-others">
-            <h5>Diğerlerini takip edin</h5>
-            {users.map((user) => (
-                <div className="user" key={user.id}>
-                    <div className="user-left d-flex gap-2">
-                        <img src={user.profile_image} alt="" width="40" height="40" className='rounded-circle object-fit-cover'/>
-                        <div className="user-info d-flex flex-column">
-                            <span className='fw-bold'>{user.username}</span>
-                            <span>@{user.username}</span>
+    return (
+        <>
+            <div className="follow-others">
+                <h5>Diğerlerini takip edin</h5>
+                {users.map((user) => (
+                    <div className="user" key={user.id}>
+                        <div className="user-left d-flex gap-2">
+                            <img src={user.profile_image} alt="" width="40" height="40" className='rounded-circle object-fit-cover' onClick={() => handleProfileClick(user)}/>
+                            <div className="user-info d-flex flex-column">
+                                <span className='fw-bold'>{user.username}</span>
+                                <span>@{user.username}</span>
+                            </div>
                         </div>
+                        <Button onClick={() => handleFollow(user.id)} >Takip et</Button>
                     </div>
-                    <Button onClick={() => handleFollow(user.id)} >Takip et</Button>
-                </div>
-            ))} 
-        </div>
-    </>
-)
+                ))} 
+            </div>
+        </>
+    )
 }
 
 export default FollowOthers

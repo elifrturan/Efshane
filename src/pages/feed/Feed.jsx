@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react'
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import './Feed.css'
-import Navbar from "../../layouts/navbar/Navbar"
+import Footer from "../../layouts/footer/Footer"
 import { Button, Dropdown } from 'react-bootstrap';
 import AddPost from './addpost/AddPost';
 import FollowOthers from './followothers/FollowOthers';
-import axios from 'axios';
 
 function Feed() {
     const [modalImage, setModalImage] = useState(null);
@@ -14,6 +15,7 @@ function Feed() {
     const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState(false);
     const [postComment, setPostComment] = useState([]);
+    const navigate = useNavigate(); 
 
     useEffect(() => {
         const fetchPosts = async () => {
@@ -35,6 +37,14 @@ function Feed() {
     
         fetchPosts();
     }, []);
+
+    const handleProfileClick = (post) => {
+        if (!post.user || !post.user.username) {
+            console.error("User or username is undefined for post:", post);
+            return;
+        }
+        navigate(`/user/${post.user.username}`);
+    };    
     
     const handleAddNewPost = (newPost) => {
         setPosts((prevPosts) => [newPost, ...prevPosts]);
@@ -412,7 +422,6 @@ function Feed() {
 
 return (
     <div className='feed-page'>
-        <Navbar/>
         <div className="container">
             <div className="feed-page-main mt-5">
                     <div className="posts">
@@ -425,7 +434,8 @@ return (
                                         alt="" 
                                         width="40" 
                                         height="40" 
-                                        className='rounded-circle object-fit-cover'/>
+                                        className='rounded-circle object-fit-cover'
+                                        onClick={() => handleProfileClick(post)}/>
                                 </div>
                                 <div className="feed-post-right">
                                     <div className="user-info d-flex justify-content-between">
@@ -588,6 +598,7 @@ return (
                     </div>
             </div>
         </div>
+        <Footer/>
     </div>
 )
 }

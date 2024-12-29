@@ -1,11 +1,18 @@
 import React, { useRef, useEffect, useState } from 'react';
 import './Suggestion.css';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 
 function Suggestion() {
     const scrollRef = useRef(null);
     const [books, setBooks] = useState([]);
+    const navigate = useNavigate();
+    const username = "prensesingunlugu";
+
+    const handleProfileClick = () => {
+        navigate(`/user/${username}`);
+    }
 
     useEffect(() => {
         const fetchBookSuggestion = async () => {
@@ -46,7 +53,7 @@ function Suggestion() {
                 <h3 className='ms-3 mb-3'>Beğenebileceklerin</h3>
                 <div className="suggestion-books d-flex align-items-center">
                     <i className="suggestion-left-arrow bi bi-arrow-left-circle-fill" onClick={scrollLeft}></i>
-                    <div className="books-list d-flex" ref={scrollRef}>
+                    <div className="books-list d-flex" ref={scrollRef} style={{ overflowX: 'auto', whiteSpace: 'nowrap' }}>
                         {books && books.map((book) => (
                             <div key={book.id} className="suggestionBook d-flex flex-column align-items-center justify-content-center ms-2 me-5">
                                 <div className="suggestion-book-cover">
@@ -57,7 +64,7 @@ function Suggestion() {
                                         <h6>{book.title}</h6>
                                     </div>
                                     <div className="suggestion-book-writer d-flex">
-                                        <img src={book.profile_image} alt="" className='img-fliud rounded-circle' width="24px" height="24px"/>
+                                        <img src={book.profile_image} alt="" className='img-fliud rounded-circle' width="24px" height="24px" onClick={handleProfileClick}/>
                                         <p className='ms-1'>{book.username}</p>
                                     </div>
                                 </div>

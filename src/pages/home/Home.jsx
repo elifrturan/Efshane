@@ -45,7 +45,6 @@ function Home() {
 
   return (
     <div className="home-page">
-      <Navbar/>
       <div className="search-section">
         <div className="search-overlay">
           <div className="container text-start text-white">

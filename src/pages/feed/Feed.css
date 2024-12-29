@@ -10,6 +10,10 @@
     }
 }
 
+.feed-page {
+    color: #333;
+}
+
 .feed-page .feed-page-main {
     padding: 0 8%;
 }
