@@ -37,7 +37,6 @@ const handleCategoryClick = (categoryName) => {
 
   return (
     <div className="categories-page">
-        <Navbar/>
         <div className="container">
           <h2 className='text-center mt-5 mb-5 category-title'>Kategoriler</h2>
           <div className="categories-list">

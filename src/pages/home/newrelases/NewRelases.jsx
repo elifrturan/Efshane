@@ -7,10 +7,8 @@ function NewRelases() {
     const scrollRef = useRef(null);
     const [books, setBook] = useState(null);
     const navigate = useNavigate();
-    const username = "prensesingunlugu";
-    const bookName = "Aşk ve Gurur";
 
-    const handleProfileClick = () => {
+    const handleProfileClick = (username) => {
         navigate(`/user/${username}`);
     }
 
@@ -65,7 +63,7 @@ function NewRelases() {
         .replace(/\s+/g, "-");
     }
 
-    const handleBookClick = () => {
+    const handleBookClick = (bookName) => {
       const formattedBookName = formatBookNameForURL(bookName);
       navigate(`/book-details/${formattedBookName}`)
     }
@@ -79,7 +77,7 @@ function NewRelases() {
           <div className="book-list-newrelases" ref={scrollRef} style={{ overflowX: 'auto', whiteSpace: 'nowrap' }}>
             {books && books.map((book) => (
               <div key={book.id} className="book1 d-flex flex-column align-items-center justify-content-center ms-2 me-5">
-                <div className="new-book-cover" onClick={handleBookClick} style={{cursor: 'pointer'}}>
+                <div className="new-book-cover" onClick={() => handleBookClick(book.title)} style={{cursor: 'pointer'}}>
                   <img src={book.bookCover} alt="" width="125px"/>
                 </div>
                 <div className="new-book-content d-flex flex-column align-items-center">
@@ -87,7 +85,7 @@ function NewRelases() {
                     <h6>{book.title}</h6>
                   </div>
                   <div className="new-book-writer d-flex mb-3">
-                    <img src={book.user.profile_image} alt="" className='rounded-circle object-fit-cover' width="20px" height="20px" onClick={handleProfileClick}/>
+                    <img src={book.user.profile_image} alt="" className='rounded-circle object-fit-cover' width="20px" height="20px" onClick={() => handleProfileClick(book.user.username)}/>
                     <p>{book.user.username}</p>
                   </div>
                 </div>

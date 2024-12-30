@@ -38,7 +38,6 @@ function ContactUs() {
 
     return (
         <>
-            <Navbar/>
             <main>
                 <div className="contact-us mt-5">
                     <div className="container">

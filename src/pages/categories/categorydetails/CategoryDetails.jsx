@@ -65,7 +65,6 @@ function CategoryDetails() {
 
     return (
         <div className='category-details-page'>
-            <Navbar />
             <div className="container">
                 <h2 className='mt-5 mb-5 text-center'>{categoryName}</h2>
                 <div className="details-book-list">

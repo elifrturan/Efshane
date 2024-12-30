@@ -21,7 +21,6 @@ function Profile() {
     const [stories , setStories] = useState([]);
     const [books, setBooks] = useState([]);
     const [anons, setAnons] = useState([]);
-    const bookName = "Aşk ve Gurur";
 
     const handleClose = () => setShowEdit(false);
     const handleShow = () => setShowEdit(true);
@@ -263,19 +262,19 @@ function Profile() {
 
     function formatBookNameForURL(bookName) {
         return bookName
-          .toLowerCase()
-          .replace(/ğ/g, "g")
-          .replace(/ü/g, "u")
-          .replace(/ş/g, "s")
-          .replace(/ı/g, "i")
-          .replace(/ö/g, "o")
-          .replace(/ç/g, "c")
-          .replace(/[^a-z0-9\s-]/g, "")
-          .trim()
-          .replace(/\s+/g, "-");
+            .toLowerCase()
+            .replace(/ğ/g, "g")
+            .replace(/ü/g, "u")
+            .replace(/ş/g, "s")
+            .replace(/ı/g, "i")
+            .replace(/ö/g, "o")
+            .replace(/ç/g, "c")
+            .replace(/[^a-z0-9\s-]/g, "")
+            .trim()
+            .replace(/\s+/g, "-");
     }
     
-    const handleBookClick = () => {
+    const handleBookClick = (bookName) => {
         const formattedBookName = formatBookNameForURL(bookName);
         navigate(`/book-details/${formattedBookName}`)
     }  
@@ -418,7 +417,7 @@ function Profile() {
                         <div className="story-list" ref={storyScrollRef}>
                             {stories.map((story) => (
                                 <div className="story mt-1" key={story.id}>
-                                    <img src={story.bookCover} alt="" width="100px" height="140px" className='object-fit-cover' onClick={handleBookClick}/>
+                                    <img src={story.bookCover} alt="" width="100px" height="140px" className='object-fit-cover' onClick={() => handleBookClick(story.title)}/>
                                     <span className='mt-1'>{story.title}</span>
                                     <div className="statistics d-flex justify-content-between mt-1">
                                         <p className='d-flex'><i className="bi bi-eye me-1"></i>{formatNumber(story.analysis?.[0]?.read_count ?? 0)}</p>

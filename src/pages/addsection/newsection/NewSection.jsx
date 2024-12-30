@@ -189,7 +189,6 @@ function NewSection() {
                     Authorization: `Bearer ${localStorage.getItem('token')}`,
                 },
             });
-            alert('Bölüm kaydedildi!');
             console.log(response.data);
         } catch (error) {
             console.error(error);

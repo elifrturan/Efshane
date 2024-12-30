@@ -15,7 +15,6 @@ function MyStories() {
 
 return (
     <div className="my-stories-page">
-        <Navbar/>
         <div className="container">
             <h2 className='text-center mt-5 mb-5'>Hikayelerim</h2>
             {/* Tabs */}

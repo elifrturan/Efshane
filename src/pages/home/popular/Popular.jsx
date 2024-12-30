@@ -7,10 +7,8 @@ function Popular() {
     const scrollRef = useRef(null);
     const [books, setBook] = useState(null);
     const navigate = useNavigate();
-    const username = "prensesingunlugu";
-    const bookName = "Aşk ve Gurur";
 
-    const handleProfileClick = () => {
+    const handleProfileClick = (username) => {
         navigate(`/user/${username}`);
     }
 
@@ -54,19 +52,19 @@ function Popular() {
 
     function formatBookNameForURL(bookName) {
         return bookName
-          .toLowerCase()
-          .replace(/ğ/g, "g")
-          .replace(/ü/g, "u")
-          .replace(/ş/g, "s")
-          .replace(/ı/g, "i")
-          .replace(/ö/g, "o")
-          .replace(/ç/g, "c")
-          .replace(/[^a-z0-9\s-]/g, "")
-          .trim()
-          .replace(/\s+/g, "-");
+            .toLowerCase()
+            .replace(/ğ/g, "g")
+            .replace(/ü/g, "u")
+            .replace(/ş/g, "s")
+            .replace(/ı/g, "i")
+            .replace(/ö/g, "o")
+            .replace(/ç/g, "c")
+            .replace(/[^a-z0-9\s-]/g, "")
+            .trim()
+            .replace(/\s+/g, "-");
     }
-  
-    const handleBookClick = () => {
+
+    const handleBookClick = (bookName) => {
         const formattedBookName = formatBookNameForURL(bookName);
         navigate(`/book-details/${formattedBookName}`)
     }
@@ -80,7 +78,7 @@ function Popular() {
                     <div className="book-list-popular" ref={scrollRef} style={{ overflowX: 'auto', whiteSpace: 'nowrap' }}>
                         {books && books.map((book) => (
                             <div key={book.id} className="populerBook d-flex flex-column align-items-center justify-content-center ms-2 me-5">
-                                <div className="popular-book-cover" onClick={handleBookClick} style={{cursor: 'pointer'}}>
+                                <div className="popular-book-cover" onClick={() => handleBookClick(book.title)} style={{cursor: 'pointer'}}>
                                     <img src={book.bookCover} alt="" width="125px"/>
                                 </div>
                                 <div className="popular-book-content d-flex flex-column align-items-center">
@@ -88,7 +86,7 @@ function Popular() {
                                         <h6>{book.title}</h6>
                                     </div>
                                     <div className="popular-book-writer d-flex mb-3">
-                                        <img src={book.user.profile_image} alt="" className='rounded-circle object-fit-cover' width="20px" height="20px" onClick={handleProfileClick}/>
+                                        <img src={book.user.profile_image} alt="" className='rounded-circle object-fit-cover' width="20px" height="20px" onClick={() => handleProfileClick(book.user.username)}/>
                                         <p>{book.user.username}</p>
                                     </div>
                                 </div>

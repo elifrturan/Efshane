@@ -100,7 +100,6 @@ function AboutUs() {
 
   return (
     <div className='about-us-page'>
-      <Navbar/>
       <section className="about-header text-center my-5">
           <h2>Hakkımızda</h2>
           <p className="lead about-us-content mt-3">

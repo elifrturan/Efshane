@@ -37,7 +37,6 @@ function NewMessage() {
 
     return (
         <div className='new-message-page'>
-            <Navbar />
             <div className="container">
                 <div className="new-message-container mt-5 mb-5">
                     <h2 className='text-center mt-3 mb-2'>Yeni Mesaj Oluştur</h2>

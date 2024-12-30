@@ -112,7 +112,6 @@ function Messages() {
 
 return (
     <div className='messages-page'>
-        <Navbar/>
         <div className="messages-container container d-flex flex-column justify-content-between">
             <div className="messages-up">
                 <h2 className="text-center mt-5 mb-5">Mesajlar</h2>

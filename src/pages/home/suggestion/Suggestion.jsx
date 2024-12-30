@@ -8,10 +8,8 @@ function Suggestion() {
     const scrollRef = useRef(null);
     const [books, setBooks] = useState([]);
     const navigate = useNavigate();
-    const username = "prensesingunlugu";
-    const bookName = "Aşk ve Gurur";
 
-    const handleProfileClick = () => {
+    const handleProfileClick = (username) => {
         navigate(`/user/${username}`);
     }
 
@@ -50,19 +48,19 @@ function Suggestion() {
 
     function formatBookNameForURL(bookName) {
         return bookName
-          .toLowerCase()
-          .replace(/ğ/g, "g")
-          .replace(/ü/g, "u")
-          .replace(/ş/g, "s")
-          .replace(/ı/g, "i")
-          .replace(/ö/g, "o")
-          .replace(/ç/g, "c")
-          .replace(/[^a-z0-9\s-]/g, "")
-          .trim()
-          .replace(/\s+/g, "-");
+            .toLowerCase()
+            .replace(/ğ/g, "g")
+            .replace(/ü/g, "u")
+            .replace(/ş/g, "s")
+            .replace(/ı/g, "i")
+            .replace(/ö/g, "o")
+            .replace(/ç/g, "c")
+            .replace(/[^a-z0-9\s-]/g, "")
+            .trim()
+            .replace(/\s+/g, "-");
     }
-  
-    const handleBookClick = () => {
+
+    const handleBookClick = (bookName) => {
         const formattedBookName = formatBookNameForURL(bookName);
         navigate(`/book-details/${formattedBookName}`)
     }
@@ -76,7 +74,7 @@ function Suggestion() {
                     <div className="books-list d-flex" ref={scrollRef} style={{ overflowX: 'auto', whiteSpace: 'nowrap' }}>
                         {books && books.map((book) => (
                             <div key={book.id} className="suggestionBook d-flex flex-column align-items-center justify-content-center ms-2 me-5">
-                                <div className="suggestion-book-cover" onClick={handleBookClick} style={{cursor: 'pointer'}}>
+                                <div className="suggestion-book-cover" onClick={() => handleBookClick(book.title)} style={{cursor: 'pointer'}}>
                                     <img src={book.bookCover} alt="" width="125px"/>
                                 </div>
                                 <div className="suggestion-book-content d-flex flex-column align-items-center">
@@ -84,7 +82,7 @@ function Suggestion() {
                                         <h6>{book.title}</h6>
                                     </div>
                                     <div className="suggestion-book-writer d-flex mb-3">
-                                        <img src={book.profile_image} alt="" className='rounded-circle object-fit-cover' width="20px" height="20px" onClick={handleProfileClick}/>
+                                        <img src={book.profile_image} alt="" className='rounded-circle object-fit-cover' width="20px" height="20px" onClick={() => handleProfileClick(book.username)}/>
                                         <p>{book.username}</p>
                                     </div>
                                 </div>

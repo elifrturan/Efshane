@@ -17,7 +17,6 @@ function UserProfile() {
     const [stories, setStories] = useState([]);
     const [books, setBooks] = useState([]);
     const [anons, setAnons] = useState([]);
-    const bookName = "Aşk ve Gurur";
 
     useEffect(() => {
         const fetchUserProfile = async () => {
@@ -160,16 +159,16 @@ function UserProfile() {
     const handleFollowToggle = async () => {
         try {
             if (isFollowing) {
-                await unfollowUser(username);
+                await unfollowUser(username); 
+                setIsFollowing(false); 
             } else {
-                await followUser(username);
+                await followUser(username); 
+                setIsFollowing(true); 
             }
-            setIsFollowing((prev) => !prev);
         } catch (error) {
             console.error('Error toggling follow status:', error);
         }
-    };
-    
+    };    
 
     const scrollLeft = (ref) => {
         if(ref.current) {
@@ -233,25 +232,6 @@ function UserProfile() {
         return num.toString();
     }
 
-    function formatBookNameForURL(bookName) {
-        return bookName
-          .toLowerCase()
-          .replace(/ğ/g, "g")
-          .replace(/ü/g, "u")
-          .replace(/ş/g, "s")
-          .replace(/ı/g, "i")
-          .replace(/ö/g, "o")
-          .replace(/ç/g, "c")
-          .replace(/[^a-z0-9\s-]/g, "")
-          .trim()
-          .replace(/\s+/g, "-");
-    }
-    
-    const handleBookClick = () => {
-        const formattedBookName = formatBookNameForURL(bookName);
-        navigate(`/book-details/${formattedBookName}`)
-    }
-
     return (
         <>
             <div className="profile2-page">
@@ -263,7 +243,6 @@ function UserProfile() {
                             onClick={() => openModal(user.image_background)}
                         />
                     </div>
-
                     <div className="profile2-details">
                         <div className="profile-photo">
                             <img 
@@ -279,14 +258,13 @@ function UserProfile() {
                             onMouseEnter={() => setIsHovering(true)}
                             onMouseLeave={() => setIsHovering(false)}
                         >
-                            {isHovering ? 'Takibi Bırak' : 'Takip Ediliyor'}
+                            {isHovering  ? 'Takibi Bırak' : 'Takip Ediliyor'}
                         </Button>
                             
                         ): (
                             <Button className='follow-btn' onClick={handleFollowToggle}>Takip Et</Button>
                         )}
                     </div>
-
                     {showModal && (
                         <div className="profile2-modal">
                             <div className="modal-overlay" onClick={closeModal}>
@@ -297,24 +275,21 @@ function UserProfile() {
                             </div>
                         </div>
                     )}
-
                     <div className="profile2-user-details">
                         <div className="username-name">
                             <p>{user.name}</p>
                             <span>@{user.username}</span>
                         </div>
-
                         <div className="about-section">
                             <span>{user.about}</span>
                         </div>
-
                         <div className="attend-date">
                             <p><span><i className="bi bi-calendar-week me-2"></i></span>{formatDate(user.date)} tarihinde katıldı</p>
                         </div>
 
                         <div className="follower-statistics">
-                            <p><b>{user.followersCount}</b> <span>Takipçi</span></p>
-                            <p><b>{user.followingCount}</b> <span>Takip Edilen</span></p>
+                            <p><b>{user.followingCount}</b> <span>Takipçi</span></p>
+                            <p><b>{user.followersCount}</b> <span>Takip Edilen</span></p>
                         </div>
                     </div>
                 </div>
@@ -338,7 +313,7 @@ function UserProfile() {
                             <div className="story-list" ref={storyScrollRef}>
                                 {stories.map((story) => (
                                     <div className="story mt-1" key={story.id}>
-                                        <img src={story.bookCover} alt="" width="100px" height="140px" className='object-fit-cover' onClick={handleBookClick}/>
+                                        <img src={story.bookCover} alt="" width="100px" height="140px" className='object-fit-cover'/>
                                         <span className='mt-1'>{story.title}</span>
                                         <div className="statistics d-flex justify-content-between mt-1">
                                             <p className='d-flex'><i className="bi bi-eye me-1"></i>{formatNumber(story.analysis?.[0]?.read_count ?? 0)}</p>
@@ -364,7 +339,7 @@ function UserProfile() {
                             <div className="read-story-list" ref={readListScrollRef}>
                                 {books.map((book) => (
                                     <div className="story mt-1" key={book.id}>
-                                        <img src={book.bookCover} alt="" width="100px" height="140px" className='object-fit-cover' onClick={handleBookClick}/>
+                                        <img src={book.bookCover} alt="" width="100px" height="140px" className='object-fit-cover'/>
                                         <span className='mt-1'>{book.title}</span>
                                         <div className="statistics d-flex justify-content-between mt-1">
                                             <p className='d-flex'><i className="bi bi-eye me-1"></i>{formatNumber(book.analysis?.[0]?.read_count ?? 0)}</p>

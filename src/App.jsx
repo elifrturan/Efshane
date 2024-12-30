@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, Outlet, RouterProvider, useLocation } from 'react-router-dom';
 import Start from './pages/start/Start';
 import SignUp from './pages/signup/SignUp';
 import SignIn from './pages/signin/SignIn';
@@ -29,41 +29,60 @@ import BookDetails from './pages/bookdetails/BookDetails';
 import CustomNavbar from './layouts/navbar/Navbar';
 import { UserProvider } from './User.Context';
 
-const routes = createBrowserRouter([
-  { path: '/', element: <Start/>, errorElement: <h1>Page not found</h1>},
-  { path: '/signup', element: <SignUp/>},
-  { path: '/signin', element: <SignIn/>},
-  { path: '/emailconfirm', element: <EmailConfirm/>},
-  { path: '/emailconfirm/codeverification', element: <CodeVerification/>},
-  { path: '/emailconfirm/codeverification/passwordrenewal', element: <PasswordRenewal/>},
-  { path: '/categoryselection', element: <CategorySelection/>},
-  { path: '/home', element: <Home/>},
-  { path: '/categories', element: <CategoriesList/>},
-  { path: '/categories/categoryDetails/:categoryName', element: <CategoryDetails/>},
-  { path: '/notifications', element: <Notifications/>},
-  { path: '/messages', element: <Messages/>},
-  { path: '/messages/:username', element: <MessageDetails/>},
-  { path: '/newmessage', element: <NewMessage/>},
-  { path: '/createstory', element: <CreateStory/>},
-  { path: '/addsection/:bookTitle', element: <AddSection/>},
-  { path: '/addsection/:bookTitle/newsection', element: <NewSection/>},
-  { path: '/addsection/edit/:bookTitle/:chapterTitle', element: <Edit /> },
-  { path: '/contact-us', element: <ContactUs/>},
-  { path: '/about-us', element: <AboutUs/>},
-  { path: '/add-voice-section/:bookTitle', element: <AddVoice/>},
-  { path: '/my-stories', element: <MyStories/>},
-  { path: '/feed', element: <Feed/>},
-  { path: '/profile/:username', element: <Profile/>},
-  { path: '/user/:username', element: <UserProfile/>},
-  { path: '/book-details/:bookName', element: <BookDetails/>}
-]);
+function Layout() {
+  const location = useLocation();
 
+  const noNavbarRoutes = ['/', '/signup', '/signin', '/emailconfirm', '/emailconfirm/codeverification', '/emailconfirm/codeverification/passwordrenewal, /categoryselection'];
+
+  const shouldShowNavbar = !noNavbarRoutes.includes(location.pathname);
+
+  return (
+    <>
+      {shouldShowNavbar && <CustomNavbar />}
+      <Outlet /> 
+    </>
+  );
+}
+
+const routes = createBrowserRouter([
+  {
+    path: '/',
+    element: <Layout />,
+    children: [
+      { path: '/', element: <Start /> },
+      { path: '/signup', element: <SignUp /> },
+      { path: '/signin', element: <SignIn /> },
+      { path: '/emailconfirm', element: <EmailConfirm /> },
+      { path: '/emailconfirm/codeverification', element: <CodeVerification /> },
+      { path: '/emailconfirm/codeverification/passwordrenewal', element: <PasswordRenewal /> },
+      { path: '/categoryselection', element: <CategorySelection /> },
+      { path: '/home', element: <Home /> },
+      { path: '/categories', element: <CategoriesList /> },
+      { path: '/categories/categoryDetails/:categoryName', element: <CategoryDetails /> },
+      { path: '/notifications', element: <Notifications /> },
+      { path: '/messages', element: <Messages /> },
+      { path: '/messages/:username', element: <MessageDetails /> },
+      { path: '/newmessage', element: <NewMessage /> },
+      { path: '/createstory', element: <CreateStory /> },
+      { path: '/addsection/:bookTitle', element: <AddSection /> },
+      { path: '/addsection/:bookTitle/newsection', element: <NewSection /> },
+      { path: '/addsection/edit/:bookTitle/:chapterTitle', element: <Edit /> },
+      { path: '/contact-us', element: <ContactUs /> },
+      { path: '/about-us', element: <AboutUs /> },
+      { path: '/add-voice-section/:bookTitle', element: <AddVoice /> },
+      { path: '/my-stories', element: <MyStories /> },
+      { path: '/feed', element: <Feed /> },
+      { path: '/profile/:username', element: <Profile /> },
+      { path: '/user/:username', element: <UserProfile /> },
+      { path: '/book-details/:bookName', element: <BookDetails /> },
+    ],
+  },
+]);
 
 function App() {
   return (
     <UserProvider>
-      <CustomNavbar/>
-      <RouterProvider router={routes}/>
+      <RouterProvider router={routes} />
     </UserProvider>
   );
 }

@@ -120,7 +120,6 @@ function MessageDetails() {
 
     return (
         <div className='message-details-page'>
-            <Navbar />
             <div className='chat-page text-center mt-5 mb-5'>
                 <h2>{username} ile Sohbet</h2>
 
