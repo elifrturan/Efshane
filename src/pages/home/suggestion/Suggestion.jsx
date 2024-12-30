@@ -76,6 +76,12 @@ function Suggestion() {
                             <div key={book.id} className="suggestionBook d-flex flex-column align-items-center justify-content-center ms-2 me-5">
                                 <div className="suggestion-book-cover" onClick={() => handleBookClick(book.title)} style={{cursor: 'pointer'}}>
                                     <img src={book.bookCover} alt="" width="125px"/>
+                                    {book.isAudio && (
+                                        <img
+                                        src='/images/headphone-icon.svg'
+                                        className='headphone-icon'
+                                        />
+                                    )}
                                 </div>
                                 <div className="suggestion-book-content d-flex flex-column align-items-center">
                                     <div className="suggestion-book-title mt-1">

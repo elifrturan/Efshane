@@ -80,6 +80,12 @@ function Popular() {
                             <div key={book.id} className="populerBook d-flex flex-column align-items-center justify-content-center ms-2 me-5">
                                 <div className="popular-book-cover" onClick={() => handleBookClick(book.title)} style={{cursor: 'pointer'}}>
                                     <img src={book.bookCover} alt="" width="125px"/>
+                                    {book.isAudio && (
+                                        <img
+                                        src='/images/headphone-icon.svg'
+                                        className='headphone-icon'
+                                        />
+                                    )}
                                 </div>
                                 <div className="popular-book-content d-flex flex-column align-items-center">
                                     <div className="popular-book-title mt-1">
