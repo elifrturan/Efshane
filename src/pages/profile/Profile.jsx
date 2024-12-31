@@ -485,7 +485,7 @@ function Profile() {
                                                 {charCount}/200
                                             </div>
                                             <div className="d-flex justify-content-between align-items-center mt-2 announcement-buttons">
-                                                <div className="form-check">
+                                                <div className="form-check d-flex gap-2 align-items-center">
                                                     <input
                                                         type="checkbox"
                                                         className="form-check-input"

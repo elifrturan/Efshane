@@ -53,8 +53,7 @@ function Details() {
         };
     
         fetchAudioBookDetails();
-    }, [encodedAudioBookTitle]); // URL değiştiğinde verileri yeniden getir
-    
+    }, [encodedAudioBookTitle]); 
 
     const handleAddTag = () => {
         if(currentTag && !bookTags.includes(currentTag)){
@@ -150,20 +149,13 @@ function Details() {
     const handleSubmit = async (e) => {
         e.preventDefault();
     
-        if (!title.trim() || !summary.trim() || !bookCategory || !ageRange || bookContentChoice === '') {
-            setShowErrorAlert(true);
-            setShowSuccessAlert(false);
-            window.scrollTo(0, 0);
-            return;
-        }
-    
         const payload = {
-            title: title.trim(),
-            summary: summary.trim(),
+            title: title?.trim(),
+            summary: summary?.trim(),
             bookCover: typeof bookImage === 'string' ? bookImage : null,
-            categories: String(bookCategory),
-            ageRange: String(ageRange),
-            bookCopyright: String(bookContentChoice),
+            categories: String(bookCategory || ''),
+            ageRange: String(ageRange || ''),
+            bookCopyright: String(bookContentChoice || ''),
             hashtags: Array.isArray(bookTags) ? bookTags.map(tag => String(tag)) : [],
         };
     
@@ -328,7 +320,7 @@ return (
                                 <div className="alert alert-danger d-flex align-items-start" role="alert">
                                     <i className="bi bi-exclamation-triangle-fill me-2"></i>
                                         <div>
-                                            "Kitabın içeriği tamamen bana aittir. 
+                                            "Kitaın içeriği tamamen bana aittir. 
                                             Hiçbir dış kaynaktan alıntı yapılmamıştır." 
                                             seçeneğini seçmiş olmanız durumunda, kitabınızın içeriği 
                                             ile ilgili tüm sorumluluk size aittir. Herhangi bir telif hakkı 

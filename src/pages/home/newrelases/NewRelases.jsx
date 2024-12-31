@@ -28,6 +28,7 @@ function NewRelases() {
               Authorization: `Bearer ${parsedToken}`,
             },
           });
+          console.log(response.data);
           setBook(response.data);
         } catch (error) {
           console.error("Kitap alınırken hata oluştu:", error.response?.data || error.message);
@@ -79,7 +80,8 @@ function NewRelases() {
               <div key={book.id} className="book1 d-flex flex-column align-items-center justify-content-center ms-2 me-5">
                 <div className="new-book-cover" onClick={() => handleBookClick(book.title)} style={{cursor: 'pointer'}}>
                   <img src={book.bookCover} alt="" width="125px"/>
-                  {book.isAudio && (
+                  <p>{book[0]?.user.username}</p>
+                  {book.isAudioBook && (
                     <img
                       src='/images/headphone-icon.svg'
                       className='headphone-icon'
@@ -91,8 +93,8 @@ function NewRelases() {
                     <h6>{book.title}</h6>
                   </div>
                   <div className="new-book-writer d-flex mb-3">
-                    <img src={book.user.profile_image} alt="" className='rounded-circle object-fit-cover' width="20px" height="20px" onClick={() => handleProfileClick(book.user.username)}/>
-                    <p>{book.user.username}</p>
+                    <img src={book[0]?.user.profile_image} alt="" className='rounded-circle object-fit-cover' width="20px" height="20px" onClick={() => handleProfileClick(book[0]?.user.username)}/>
+                    <p>{book[0]?.user.name}</p>
                   </div>
                 </div>
               </div>

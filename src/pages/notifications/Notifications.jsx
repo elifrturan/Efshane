@@ -6,7 +6,6 @@ import { useNavigate } from 'react-router-dom';
 
 function Notifications() {
     const navigate = useNavigate();
-    const username = "prensesingunlugu";
     const [currentPage, setCurrentPage] = useState(1);
     const notificationsPerPage = 12;
     const [notifications, setNotifications] = useState([]);
@@ -90,8 +89,8 @@ function Notifications() {
         }
     }
 
-    const handleProfileClick = () => {
-        navigate(`/${username}`);
+    const handleProfileClick = (username) => {
+        navigate(`/user/${username}`);
     }
 
     return (
@@ -104,8 +103,9 @@ function Notifications() {
                 {currentNotifications.map(notification => (
                     <div className="notification d-flex justify-content-between mb-3" key={notification.id}>
                         <div className='d-flex'>
-                            <img src={notification.user.profile_image} alt="" className="rounded-circle object-fit-cover notification-image" width="60px" height="60px" onClick={handleProfileClick}/>
+                            <img src={notification.user.profile_image} alt="" className="rounded-circle object-fit-cover notification-image" width="60px" height="60px" onClick={() => handleProfileClick(notification.user.username)}/>
                             <div className="notification-content d-flex flex-column justify-content-between ms-3">
+                                <b>@{notification.user.username}:</b>
                                 <p>{notification.message}</p>
                             </div>
                         </div>

@@ -65,6 +65,11 @@ function Suggestion() {
         navigate(`/book-details/${formattedBookName}`)
     }
 
+    const handleAudioBookClick = (bookName) => {
+        const formattedBookName = formatBookNameForURL(bookName);
+        navigate(`/audio-book-details/${formattedBookName}`)
+    }
+
     return (
         <div className="suggestion-books-container mt-5 mb-3">
             <div className="container">
@@ -72,28 +77,42 @@ function Suggestion() {
                 <div className="suggestion-books d-flex align-items-center">
                     <i className="suggestion-left-arrow bi bi-arrow-left-circle-fill" onClick={scrollLeft}></i>
                     <div className="books-list d-flex" ref={scrollRef} style={{ overflowX: 'auto', whiteSpace: 'nowrap' }}>
-                        {books && books.map((book) => (
-                            <div key={book.id} className="suggestionBook d-flex flex-column align-items-center justify-content-center ms-2 me-5">
-                                <div className="suggestion-book-cover" onClick={() => handleBookClick(book.title)} style={{cursor: 'pointer'}}>
-                                    <img src={book.bookCover} alt="" width="125px"/>
-                                    {book.isAudio && (
-                                        <img
-                                        src='/images/headphone-icon.svg'
-                                        className='headphone-icon'
-                                        />
-                                    )}
-                                </div>
-                                <div className="suggestion-book-content d-flex flex-column align-items-center">
-                                    <div className="suggestion-book-title mt-1">
-                                        <h6>{book.title}</h6>
-                                    </div>
-                                    <div className="suggestion-book-writer d-flex mb-3">
-                                        <img src={book.profile_image} alt="" className='rounded-circle object-fit-cover' width="20px" height="20px" onClick={() => handleProfileClick(book.username)}/>
-                                        <p>{book.username}</p>
-                                    </div>
-                                </div>
+                    {books && books.map((book) => (
+                    <div key={book.id} className="suggestionBook d-flex flex-column align-items-center justify-content-center ms-2 me-5">
+                        <div
+                            className="suggestion-book-cover"
+                            onClick={() =>
+                                book.isAudioBook ? handleAudioBookClick(book.title) : handleBookClick(book.title)
+                            }
+                            style={{ cursor: 'pointer' }}
+                        >
+                            <img src={book.bookCover} alt="" width="125px" />
+                            {book.isAudioBook && (
+                                <img
+                                    src="/images/headphone-icon.svg"
+                                    className="headphone-icon"
+                                />
+                            )}
+                        </div>
+                        <div className="suggestion-book-content d-flex flex-column align-items-center">
+                            <div className="suggestion-book-title mt-1">
+                                <h6>{book.title}</h6>
                             </div>
-                        ))}
+                            <div className="suggestion-book-writer d-flex mb-3">
+                                <img
+                                    src={book.profile_image}
+                                    alt=""
+                                    className="rounded-circle object-fit-cover"
+                                    width="20px"
+                                    height="20px"
+                                    onClick={() => handleProfileClick(book.username)}
+                                />
+                                <p>{book.username}</p>
+                            </div>
+                        </div>
+                    </div>
+                ))}
+
                     </div>
                     <i className="suggestion-right-arrow bi bi-arrow-right-circle-fill" onClick={scrollRight}></i>
                 </div>

@@ -13,8 +13,8 @@ function BookDetails() {
     const [bookDetails, setBookDetails] = useState([]);
     const [chapters, setChapters] = useState([]);
     const [comments, setComments] = useState([]);
-    const [isAddedToLibrary, setIsAddedToLibrary] = useState(null); //okuduğu kitaplar
-    const [isAddedToReadingList, setIsAddedToReadingList] = useState(null); //readinglist düz
+    const [isAddedToLibrary, setIsAddedToLibrary] = useState(bookDetails.isLibrary);
+    const [isAddedToReadingList, setIsAddedToReadingList] = useState(bookDetails.isReadingList);
 
     useEffect(() => {
         const fetchBookDetails = async () => {
@@ -49,54 +49,14 @@ function BookDetails() {
         fetchChapterDetails();
     }, [formattedBookName]);
 
-    useEffect(() => {
-        const fetchIsInReadingList = async () => {
-            try {
-                const response = await axios.get(`http://localhost:3000/reading-list/${formattedBookName}`, {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('token')}`,
-                    },
-                });
-                console.log("ıs in:", response.data);
-                setIsAddedToReadingList(response.data);
-            } catch (error) {
-                console.error("Error fetching book details:", error);
-            }
-        };
-
-        fetchIsInReadingList();
-    }, [formattedBookName]);
     //backend fonksiyonu ayarla
     const handleAddToLibrary = () => {
         setIsAddedToLibrary(!isAddedToLibrary);
     }
 
-    const handleAddToReadingList = async (bookId) => {
-
-        try {
-            const response = await axios.post(`http://localhost:3000/reading-list/${bookId}`, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`,
-                },
-            });
-            setIsAddedToReadingList(response.data); 
-        } catch (error) {
-            console.error("Error when book added to reading list:", error);
-        }
-    };
-
-    const handleDeleteToReadingList = async (bookId) => {
-        try {
-            const response = await axios.delete(`http://localhost:3000/reading-list/delete/${bookId}`, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`,
-                },
-            });
-            setIsAddedToReadingList(response.data); 
-        } catch (error) {
-            console.error("Error when book removed from reading list:", error);
-        }
-    };
+    const handleAddToReadingList = () => {
+        setIsAddedToReadingList(!isAddedToReadingList);
+    }
 
     const handleProfileClick = (username) => {
         navigate(`/user/${username}`);
@@ -205,11 +165,11 @@ function BookDetails() {
                                 )}
                                 {isAddedToReadingList ? (
                                     console.log("reading list", isAddedToReadingList),
-                                    <Button className="btn-book" onClick={() => handleDeleteToReadingList(bookDetails[0]?.id)}>
+                                    <Button className="btn-book" onClick={handleAddToReadingList}>
                                         <i className="bi bi-bookmark-check-fill me-1"></i> Okuma Listesinden Kaldır
                                     </Button>
                                 ) : (
-                                    <Button className="btn-book" onClick={() => handleAddToReadingList(bookDetails[0]?.id, bookDetails[0]?.userId)}>
+                                    <Button className="btn-book" onClick={handleAddToReadingList}>
                                         <i className="bi bi-bookmark me-1"></i> Okuma Listesine Ekle
                                     </Button>
                                 )}
@@ -250,7 +210,7 @@ function BookDetails() {
                         <div className="tags-container">
                         {bookDetails[0]?.hashtags.map((hashtag) => (
                             <span key={hashtag.id} className="badge bg-secondary mx-1">
-                                #{hashtag.name}
+                                {hashtag.name}
                             </span>
                         ))}
                         </div>
