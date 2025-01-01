@@ -27,6 +27,7 @@ import Profile from './pages/profile/Profile';
 import UserProfile from './pages/userprofile/UserProfile';
 import BookDetails from './pages/bookdetails/BookDetails';
 import AudioBookDetails from './pages/audiobookdetails/AudioBookDetails';
+import ReadBook from './pages/readbook/ReadBook';
 import CustomNavbar from './layouts/navbar/Navbar';
 import { UserProvider } from './User.Context';
 
@@ -77,6 +78,7 @@ const routes = createBrowserRouter([
       { path: '/user/:username', element: <UserProfile /> },
       { path: '/book-details/:bookName', element: <BookDetails /> },
       { path: '/audio-book-details/:bookName', element: <AudioBookDetails/>},
+      { path: '/read-book/:bookName', element: <ReadBook/>},
     ],
   },
 ]);
