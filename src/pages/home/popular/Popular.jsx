@@ -8,10 +8,6 @@ function Popular() {
     const [books, setBook] = useState(null);
     const navigate = useNavigate();
 
-    const handleProfileClick = (username) => {
-        navigate(`/user/${username}`);
-    }
-
     useEffect(() => {
         const fetchBook = async () => {
             const token = localStorage.getItem('token');
@@ -64,9 +60,18 @@ function Popular() {
             .replace(/\s+/g, "-");
     }
 
+    const handleProfileClick = (username) => {
+        navigate(`/user/${username}`);
+    }
+
     const handleBookClick = (bookName) => {
         const formattedBookName = formatBookNameForURL(bookName);
         navigate(`/book-details/${formattedBookName}`)
+    }
+
+    const handleAudioBookClick = (bookName) => {
+        const formattedBookName = formatBookNameForURL(bookName);
+        navigate(`/audio-book-details/${formattedBookName}`)
     }
 
     return (
@@ -76,28 +81,41 @@ function Popular() {
                 <div className="popular-books-wrapper d-flex align-items-center">
                     <i className="popular-left-arrow bi bi-arrow-left-circle-fill" onClick={scrollLeft}></i>
                     <div className="book-list-popular" ref={scrollRef} style={{ overflowX: 'auto', whiteSpace: 'nowrap' }}>
-                        {books && books.map((book) => (
-                            <div key={book.id} className="populerBook d-flex flex-column align-items-center justify-content-center ms-2 me-5">
-                                <div className="popular-book-cover" onClick={() => handleBookClick(book.title)} style={{cursor: 'pointer'}}>
-                                    <img src={book.bookCover} alt="" width="125px"/>
-                                    {book.isAudioBook && (
-                                        <img
-                                        src='/images/headphone-icon.svg'
-                                        className='headphone-icon'
-                                        />
-                                    )}
+                    {books && books.map((book) => (
+                        <div key={book.id} className="suggestionBook d-flex flex-column align-items-center justify-content-center ms-2 me-5">
+                            <div
+                                className="suggestion-book-cover"
+                                onClick={() =>
+                                    book.isAudioBook ? handleAudioBookClick(book.title) : handleBookClick(book.title)
+                                }
+                                style={{ cursor: 'pointer' }}
+                            >
+                                <img src={book.bookCover} alt="" width="125px" />
+                                {book.isAudioBook && (
+                                    <img
+                                        src="/images/headphone-icon.svg"
+                                        className="headphone-icon"
+                                    />
+                                )}
+                            </div>
+                            <div className="suggestion-book-content d-flex flex-column align-items-center">
+                                <div className="suggestion-book-title mt-1">
+                                    <h6>{book.title}</h6>
                                 </div>
-                                <div className="popular-book-content d-flex flex-column align-items-center">
-                                    <div className="popular-book-title mt-1">
-                                        <h6>{book.title}</h6>
-                                    </div>
-                                    <div className="popular-book-writer d-flex mb-3">
-                                        <img src={book.user.profile_image} alt="" className='rounded-circle object-fit-cover' width="20px" height="20px" onClick={() => handleProfileClick(book.user.username)}/>
-                                        <p>{book.user.username}</p>
-                                    </div>
+                                <div className="suggestion-book-writer d-flex mb-3">
+                                    <img
+                                        src={book.profile_image}
+                                        alt=""
+                                        className="rounded-circle object-fit-cover"
+                                        width="20px"
+                                        height="20px"
+                                        onClick={() => handleProfileClick(book.username)}
+                                    />
+                                    <p>{book.username}</p>
                                 </div>
                             </div>
-                        ))}
+                        </div>
+                    ))}
                     </div>
                     <i className="popular-right-arrow bi bi-arrow-right-circle-fill" onClick={scrollRight}></i>
                 </div>
