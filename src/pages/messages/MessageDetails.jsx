@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import './MessageDetails.css';
-import Navbar from "../../layouts/navbar/Navbar";
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 

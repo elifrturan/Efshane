@@ -607,9 +607,9 @@ function Sections() {
         }
     };    
 
-    const handleUpdateSaveSection = async (publish = false) => {
+    const handleUpdateSaveSection = async (publish = false, title) => {
         console.log("update save");
-        console.log("Title:", sectionToDelete.title)
+        console.log("Title:", title)
         const formData = new FormData();
 
         formData.append("title", title);
@@ -628,9 +628,13 @@ function Sections() {
             formData.append("audioFile", audioFile);
         }
 
+        const formattedEpisodeTitle = formatTitleForUrl(title);
+        const formattedAudioBookTitle = formatTitleForUrl(encodedAudioBookTitle);
+        console.log("Formatted Episode Title:", formattedEpisodeTitle);
+        console.log("Formatted Audio Book Title:", formattedAudioBookTitle);
         try {
             const response = await axios.put(
-            `http://localhost:3000/episode/save/${formatTitleForUrl(encodedAudioBookTitle)}/${title}`,
+            `http://localhost:3000/episode/save/${formattedAudioBookTitle}/${formattedEpisodeTitle}`,
             formData,
             {
                 headers: {
@@ -1086,7 +1090,7 @@ return (
                                                 İptal
                                             </Button>
                                             <div className='d-flex gap-2'>
-                                            <Button variant="secondary" className='btn-modal-save' onClick={() => handleUpdateSaveSection(false)}>
+                                            <Button variant="secondary" className='btn-modal-save' onClick={() => handleUpdateSaveSection(false, section.title)}>
                                                 Kaydet
                                             </Button>
                                             <Button variant="primary" className='btn-modal-publish' onClick={() => handlePublishSection(true)}>

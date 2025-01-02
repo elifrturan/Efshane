@@ -13,8 +13,8 @@ function AudioBookDetails() {
     const [bookDetails, setBookDetails] = useState({});
     const [chapters, setChapters] = useState([]);
     const [comments, setComments] = useState([]);
-    const [isAddedToLibrary, setIsAddedToLibrary] = useState(bookDetails.isLibrary);
-    const [isAddedToReadingList, setIsAddedToReadingList] = useState(bookDetails.isReadingList);
+    const [isAddedToLibrary, setIsAddedToLibrary] = useState(bookDetails.isAudioBookCase);
+    const [isAddedToListeningList, setIsAddedListeningList] = useState(bookDetails.isListeningList);
 
     useEffect(() => {
         const fetchAudioBookDetails = async () => {
@@ -24,8 +24,12 @@ function AudioBookDetails() {
                         Authorization: `Bearer ${localStorage.getItem('token')}`,
                     },
                 });
-                console.log("Response:", response.data);
                 setBookDetails(response.data);
+                const isBookInListeningList = response.data[0]?.isListeningList;
+                setIsAddedListeningList(isBookInListeningList); 
+                const isBookInBookCase = response.data[0]?.isAudioBookCase;
+                console.log("isBookInBookCase", isBookInBookCase);
+                setIsAddedToLibrary(isBookInBookCase);
             } catch (error) {
                 console.error("Error fetching book details:", error);
             }
@@ -57,27 +61,63 @@ function AudioBookDetails() {
         fetchChapterDetails();
     }, [formattedBookName]);
 
-    useEffect(() => {
-        if (bookDetails[0]) {
-            setIsAddedToLibrary(bookDetails[0].isLibrary);
-            setIsAddedToReadingList(bookDetails[0].isReadingList);
-        }
-    }, [bookDetails]);
-
-    useEffect(() => {
-        if (bookDetails[0]?.comments) {
-            setComments(bookDetails[0].comments);
-        }
-    }, [bookDetails]);
-
     
-    const handleAddToLibrary = () => {
-        setIsAddedToLibrary(!isAddedToLibrary);
-    }
+    const handleAddToLibrary = async () => {
+        const previousState = isAddedToLibrary; 
+        setIsAddedToLibrary(!previousState); 
+    
+        try {
+            const response = await axios.post(
+                `http://localhost:3000/book-case/audioBook/${bookDetails[0]?.id}`,
+                {},
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    },
+                }
+            );
+    
+            if (response.data.message === "Kütüphaneye eklendi.") {
+                setIsAddedToLibrary(true);
+            } else if (response.data.message === "Kütüphaneden çıkarıldı.") {
+                setIsAddedToLibrary(false);
+            }
+        } catch (error) {
+            console.error("Error adding/removing from book case:", error);
+            setIsAddedToLibrary(previousState); 
+        }
+    };
 
-    const handleAddToReadingList = () => {
-        setIsAddedToReadingList(!isAddedToReadingList);
-    }
+    const handleAddToListeningList = async () => {
+        const previousState = isAddedToListeningList; 
+        setIsAddedListeningList(!previousState); 
+
+        try {
+            const response = await axios.post(
+                `http://localhost:3000/reading-list/audioBook/${bookDetails[0]?.id}`,
+                {},
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    },
+                }
+            );
+    
+            if (response.data.message === "Kitap okuma listesine eklendi.") {
+                setIsAddedListeningList(true);
+            } else if (response.data.message === "Kitap okuma listesinden çıkarıldı.") {
+                setIsAddedListeningList(false);
+            }
+    
+            setBookDetails((prevDetails) => {
+                const updatedDetails = [...prevDetails];
+                updatedDetails[0].isListeningList = !setIsAddedListeningList;
+                return updatedDetails;
+            });
+        } catch (error) {
+            console.error("Error adding/removing from listening list:", error);
+        }
+    };
 
     const calculateTotalTime = (totalMinutes) => {
         const hours = Math.floor(totalMinutes / 60);
@@ -119,7 +159,7 @@ function AudioBookDetails() {
                     },
                 }
             );
-            const newComment = response.data;
+            const newComment = response.data.comment;
             setComments((prevComments) => [newComment, ...prevComments]);
     
             setBookDetails((prevDetails) => {
@@ -135,7 +175,6 @@ function AudioBookDetails() {
             console.error("Error adding comment:", error.response?.data || error.message);
         }
     };
-    
 
     const handleTabClick = (tab) => {
         setActiveTab(tab);
@@ -187,20 +226,20 @@ function AudioBookDetails() {
                             <div className="buttons d-flex flex-column">
                                 <div>
                                     {isAddedToLibrary ? (
-                                        <Button className="btn-book" onClick={handleAddToLibrary}>
+                                        <Button className="btn-book" onClick={() => handleAddToLibrary(bookDetails[0]?.id)}>
                                             <i className="bi bi-book-fill me-1"></i> Kitaplıktan Kaldır
                                         </Button>
                                     ) : (
-                                        <Button className="btn-book" onClick={handleAddToLibrary}>
+                                        <Button className="btn-book" onClick={() => handleAddToLibrary(bookDetails[0]?.id)}>
                                             <i className="bi bi-book me-1"></i> Kitaplığa Ekle
                                         </Button>
                                     )}
-                                    {isAddedToReadingList ? (
-                                        <Button className="btn-book" onClick={handleAddToReadingList}>
+                                    {isAddedToListeningList ? (
+                                        <Button className="btn-book" onClick={() => handleAddToListeningList(bookDetails[0]?.id)}>
                                             <i className="bi bi-bookmark-check-fill me-1"></i> Okuma Listesinden Kaldır
                                         </Button>
                                     ) : (
-                                        <Button className="btn-book" onClick={handleAddToReadingList}>
+                                        <Button className="btn-book" onClick={() => handleAddToListeningList(bookDetails[0]?.id)}>
                                             <i className="bi bi-bookmark me-1"></i> Okuma Listesine Ekle
                                         </Button>
                                     )}
@@ -280,7 +319,7 @@ function AudioBookDetails() {
                             {activeTab === 'chapters' && (
                                 <div id="chapters" className={`tab-pane ${activeTab === 'chapters' ? 'active' : ''}`}>
                                     {chapters.map((chapter, index) => (
-                                        <div className='chapter-item' key={index}>
+                                        <div className='section-item' key={index}>
                                             {chapter.title}
                                         </div>
                                     ))}

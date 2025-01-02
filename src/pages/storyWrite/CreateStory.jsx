@@ -23,8 +23,6 @@ function CreateStory() {
     const [ageRanges, setAgeRange] = useState([]); 
     const [selectedAgeRange, setSelectedAgeRange] = useState('');
     const [isAudioBook, setIsAudioBook] = useState(null);
-
-    const defaultImage = "/images/default-book-cover.webp";
     
     const formatTitleForUrl = (title) => {
         const charMap = {
@@ -80,6 +78,7 @@ function CreateStory() {
             img.src = URL.createObjectURL(file);
         }
     };
+
     const convertToBase64 = (file) => {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
@@ -180,7 +179,7 @@ function CreateStory() {
             return;
         }
     
-        const bookCover = image || defaultImage;
+        const bookCover = image;
         const normalizedTitle = bookTitle.toLowerCase().trim()
 
         setShowErrorAlert(false);
@@ -211,7 +210,7 @@ function CreateStory() {
                     title: bookTitle,
                     normalizedTitle,
                     summary: bookSummary,
-                    bookCover,
+                    bookCover: bookCover || null,
                     isAudioBook,
                     hashtags: tags,
                     categories: selectedCategory,
@@ -232,6 +231,12 @@ function CreateStory() {
             );
     
             if (response.status === 201) {
+                const { bookCover: backendBookCover } = response.data;
+
+                if (!bookCover && backendBookCover) {
+                    console.log(`Backend tarafından oluşturulan kapak resmi: ${backendBookCover}`);
+                }
+                
                 setTimeout(() => {
                     setShowSuccessAlert(false);
                     if (isAudioBook) {

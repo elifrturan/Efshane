@@ -13,7 +13,7 @@ function BookDetails() {
     const [bookDetails, setBookDetails] = useState([]);
     const [chapters, setChapters] = useState([]);
     const [comments, setComments] = useState([]);
-    const [isAddedToLibrary, setIsAddedToLibrary] = useState(bookDetails.isLibrary);
+    const [isAddedToLibrary, setIsAddedToLibrary] = useState(bookDetails.isBookCase);
     const [isAddedToReadingList, setIsAddedToReadingList] = useState(bookDetails.isReadingList);
 
     useEffect(() => {
@@ -25,6 +25,11 @@ function BookDetails() {
                     },
                 });
                 setBookDetails(response.data);
+                const isBookInReadingList = response.data[0]?.isReadingList;
+                setIsAddedToReadingList(isBookInReadingList); 
+                const isBookInBookCase = response.data[0]?.isBookCase;
+                console.log("isBookInBookCase", isBookInBookCase);
+                setIsAddedToLibrary(isBookInBookCase);
             } catch (error) {
                 console.error("Error fetching book details:", error);
             }
@@ -49,17 +54,81 @@ function BookDetails() {
         fetchChapterDetails();
     }, [formattedBookName]);
 
-    //backend fonksiyonu ayarla
-    const handleAddToLibrary = () => {
-        setIsAddedToLibrary(!isAddedToLibrary);
-    }
+    const handleAddToLibrary = async () => {
+        const previousState = isAddedToLibrary; 
+        setIsAddedToLibrary(!previousState); 
+    
+        try {
+            const response = await axios.post(
+                `http://localhost:3000/book-case/${bookDetails[0]?.id}`,
+                {},
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    },
+                }
+            );
+    
+            if (response.data.message === "Kütüphaneye eklendi.") {
+                setIsAddedToLibrary(true);
+            } else if (response.data.message === "Kütüphaneden çıkarıldı.") {
+                setIsAddedToLibrary(false);
+            }
+        } catch (error) {
+            console.error("Error adding/removing from book case:", error);
+            setIsAddedToLibrary(previousState); 
+        }
+    };
 
-    const handleAddToReadingList = () => {
-        setIsAddedToReadingList(!isAddedToReadingList);
-    }
-
+    const handleAddToReadingList = async () => {
+        try {
+            const response = await axios.post(
+                `http://localhost:3000/reading-list/${bookDetails[0]?.id}`,
+                {},
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    },
+                }
+            );
+    
+            if (response.data.message === "Kitap okuma listesine eklendi.") {
+                setIsAddedToReadingList(true);
+            } else if (response.data.message === "Kitap okuma listesinden çıkarıldı.") {
+                setIsAddedToReadingList(false);
+            }
+    
+            setBookDetails((prevDetails) => {
+                const updatedDetails = [...prevDetails];
+                updatedDetails[0].isReadingList = !isAddedToReadingList;
+                return updatedDetails;
+            });
+        } catch (error) {
+            console.error("Error adding/removing from reading list:", error);
+        }
+    };
+    
     const handleProfileClick = (username) => {
         navigate(`/user/${username}`);
+    }
+
+    function formatBookNameForURL(bookName) {
+        return bookName
+            .toLowerCase()
+            .replace(/ğ/g, "g")
+            .replace(/ü/g, "u")
+            .replace(/ş/g, "s")
+            .replace(/ı/g, "i")
+            .replace(/ö/g, "o")
+            .replace(/ç/g, "c")
+            .replace(/[^a-z0-9\s-]/g, "")
+            .trim()
+            .replace(/\s+/g, "-");
+        }
+
+    const handleReadBookClick = (bookName) => {
+        const formattedBookName = formatBookNameForURL(bookName);
+        navigate(`/read-book/${formattedBookName}`);
     }
 
     const handleTabClick = (tab) => {
@@ -116,7 +185,7 @@ function BookDetails() {
                     },
                 }
             );
-            const newComment = response.data;
+            const newComment = response.data.comment;
 
             setComments((prevComments) => [newComment, ...prevComments]);
 
@@ -155,21 +224,20 @@ function BookDetails() {
                             </div>
                             <div className="buttons">
                                 {isAddedToLibrary ? (
-                                    <Button className="btn-book" onClick={handleAddToLibrary}>
+                                    <Button className="btn-book" onClick={() => handleAddToLibrary(bookDetails[0]?.id)}>
                                         <i className="bi bi-book-fill me-1"></i> Kitaplıktan Kaldır
                                     </Button>
                                 ) : (
-                                    <Button className="btn-book" onClick={handleAddToLibrary}>
+                                    <Button className="btn-book" onClick={() => handleAddToLibrary(bookDetails[0]?.id)}>
                                         <i className="bi bi-book me-1"></i> Kitaplığa Ekle
                                     </Button>
                                 )}
                                 {isAddedToReadingList ? (
-                                    console.log("reading list", isAddedToReadingList),
-                                    <Button className="btn-book" onClick={handleAddToReadingList}>
+                                    <Button className="btn-book" onClick={() => handleAddToReadingList(bookDetails[0]?.id)}>
                                         <i className="bi bi-bookmark-check-fill me-1"></i> Okuma Listesinden Kaldır
                                     </Button>
                                 ) : (
-                                    <Button className="btn-book" onClick={handleAddToReadingList}>
+                                    <Button className="btn-book" onClick={() => handleAddToReadingList(bookDetails[0]?.id)}>
                                         <i className="bi bi-bookmark me-1"></i> Okuma Listesine Ekle
                                     </Button>
                                 )}
@@ -187,7 +255,7 @@ function BookDetails() {
                                 <p className='d-flex'><i className="bi bi-heart-fill me-2"></i>{formatNumber(bookDetails[0]?.analysis[0]?.like_count || 0)}</p>
                                 <p className='d-flex'><i className="bi bi-chat-fill me-2"></i>{formatNumber(bookDetails[0]?.analysis[0]?.comment_count || 0)}</p>
                             </div>
-                            <div className="read-button">
+                            <div className="read-button " onClick={() => handleReadBookClick(bookDetails[0]?.title)}>
                                 {bookDetails.isLibrary ? (
                                     <Button>Okumaya Devam Et</Button>
                                 ) : (
@@ -248,12 +316,16 @@ function BookDetails() {
                         <div className="tab-content">
                         {activeTab === 'chapters' && (
                         <div id="chapters" className={`tab-pane ${activeTab === 'chapters' ? 'active' : ''}`}>
-                            {chapters.map((chapter, index) => (
-                                <div className="section-item" key={index}>
-                                    {chapter.title}
-                                </div>
-                            ))}
-                        </div>
+                            {Array.isArray(chapters) && chapters.length > 0 ? (
+                                chapters.map((chapter, index) => (
+                                    <div className="section-item" key={index}>
+                                        {chapter.title}
+                                    </div>
+                                ))
+                            ) : (
+                                <div>No chapters found</div>
+                            )}
+                    </div>
                     )}
                             {activeTab === 'comments' && (
                                 <div id="comments" className={`tab-pane ${activeTab === 'comments' ? 'active' : ''}`}>
