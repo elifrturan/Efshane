@@ -1,0 +1,400 @@
+* {
+    box-sizing: border-box;
+}
+
+.listen-book-page {
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    background-color: #f5f5f5;
+}
+
+.listen-book-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1% 5%;
+    background-color: #f0f0f0;
+    border-bottom: 1px solid #eee;
+}
+
+.listen-book-nav .sections-dropdown button {
+    background: none;
+    color: var(--second-color);
+    border: none;
+    text-shadow: 1px 1px 2px #ddd;
+    font-size: 1rem;
+}
+
+.listen-book-nav .sections-dropdown button:focus {
+    background: none;
+    color: var(--second-color);
+    border: none;
+}
+
+.listen-book-nav .sections-dropdown div.dropdown-menu.show {
+    border-radius: 0%;
+    border: 1px solid #f0f0f0;
+    box-shadow: none;
+    margin-top: 13%;
+    width: 240px;
+    margin-left: -80px;
+    background-color: #f0f0f0;
+    transition: all 0.3s ease-in-out;
+    padding-bottom: 0%;
+}
+
+.listen-book-nav .sections-dropdown .dropdown-item {
+    padding: 10px 20px;
+    cursor: pointer;
+    text-align: center;
+    border-bottom: 1px solid #fff;
+}
+
+.listen-book-nav .sections-dropdown .dropdown-item:hover {
+    background-color: #eee;
+    font-weight: 600;
+}
+
+.listen-book-nav .sections-dropdown .dropdown-item:last-child {
+    border-bottom: none;
+}
+
+.listen-book-nav .book-title {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+}
+
+.listen-book-nav .book-title span {
+    text-shadow: 1px 1px 2px #ddd;
+    font-weight: 600;
+    font-size: 1.25rem;
+    cursor: default;
+}
+
+.listen-book-nav .actions {
+    display: flex;
+    gap: 18px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+.listen-book-nav .actions span:hover {
+    transform: scale(1.02);
+    text-shadow: 1px 1px 2px #ddd;
+}
+
+.listen-book-nav .actions i.bi-heart-fill::before {
+    color: red;
+}
+
+.listen-book-content {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: left;
+}
+
+.listen-book-content .audio-player {
+    text-align: center;
+    margin: 20px 0;
+    cursor: pointer;
+}
+
+.listen-book-content .audio-player #waveform {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.listen-book-content .audio-player .time-display {
+    font-size: 0.95rem;
+    margin-top: 3%;
+    margin-bottom: 2%;
+}
+
+.listen-book-content .audio-player .play-button {
+    padding: 10px 20px;
+    background-color: #000000;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+}
+
+.listen-book-content .audio-player .play-button:hover {
+    background-color: #000000;
+    opacity: 0.9;
+    transform: scale(1.02);
+}
+
+.listen-book-content .section-header {
+    text-align: center;
+}
+
+.listen-book-content .section-header .section-image {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 0 0 4px 4px;
+}
+
+.listen-book-content .section-header h2 {
+    font-size: 1.5rem;
+    color: var(--main-color);
+    margin-top: 4%;
+}
+
+.listen-book-content .section-header .statistics {
+    margin: 2% auto;
+    font-size: 0.85rem;
+    color: var(--second-color);
+    font-weight: 500;
+    justify-content: center;
+    align-items: center;
+}
+
+.listen-book-content .next-section-btn {
+    margin:  8% auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 300px;
+    border-radius: 25px;
+    background-color: var(--theme-color);
+    border: 1px solid var(--theme-color);
+    transition: all 0.5s ease-in-out;
+    padding: 6px;
+    font-size: 0.95rem;
+}
+
+.listen-book-content .next-section-btn:hover {
+    transform: scale(1.08);
+} 
+
+.listen-book-content .next-section-btn:focus {
+    background-color: var(--theme-color);
+    border: 1px solid var(--theme-color);
+}
+
+.listen-book-content .alert {
+    font-size: 0.95rem;
+    line-height: 28px;
+    text-align: center;
+}
+
+.listen-book-content .comments-section {
+    margin-top: 20px;
+}
+
+.listen-book-content .comments-section h4 {
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+.listen-book-content .comment {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1%;
+    border-bottom: 1px solid #eee;
+    padding: 25px 0px;
+}
+
+.listen-book-content .comment .user-profile-img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.listen-book-content .comment-details .user-name {
+    font-size: 1rem;
+}
+
+.listen-book-content .comment-content {
+    font-size: 0.9rem;
+    color: var(--second-color);
+}
+
+.listen-book-content .comment-input {
+    position: relative;
+}
+
+.listen-book-content .comment-input textarea {
+    border: none;
+    color: var(--second-color);
+    resize: none;
+    margin-bottom: 1%;
+    font-size: 0.95rem;
+}
+
+.listen-book-content .comment-input textarea::placeholder {
+    color: var(--second-color) !important;
+    font-size: 0.95rem;
+}
+
+.listen-book-content .comment-input button {
+    position: absolute;
+    right: 0;
+    padding: 6px 12px;
+    transition: all 0.3s ease-in-out;
+    background-color: var(--second-color);
+    opacity: 1;
+}
+
+.listen-book-content .comment-input button:hover {
+    opacity: 0.8;
+    background-color: var(--second-color);
+}
+
+.listen-book-content .comment-input button:focus {
+    opacity: 0.8;
+    background-color: var(--second-color);
+}
+
+@media (max-width: 1200px) {
+    .listen-book-nav .book-title {
+        text-align: center;
+        display: flex;
+        justify-content: center;
+    }
+
+    .listen-book-content .audio-player #waveform {
+        max-width: 500px;
+    }
+
+    .listen-book-nav .book-title span {
+        font-size: 1.1rem;
+        text-align: center;
+        margin: 0 !important;
+    }
+
+    .listen-book-nav .actions {
+        font-size: 0.85rem;
+    }
+
+    .listen-book-content .content {
+        padding: 0 3% 0 3%;
+    }
+
+    .listen-book-content .next-section-btn {
+        width: 250px;
+    }
+
+    .listen-book-content .alert {
+        margin: 0 3% 0 3%;
+    }
+
+    .listen-book-content .comments-section {
+        padding: 0 3% 0 3%;
+    }
+
+    .listen-book-content .comment-input  {
+        margin: 0 3% 0 3%;
+    }
+}
+
+@media (max-width: 768px) {
+    .listen-book-nav {
+        flex-direction: column;
+        align-items: center;
+        padding: 2% 5%;
+    }
+
+    .listen-book-nav .sections-dropdown {
+        margin-bottom: 5%;
+    }
+
+    .listen-book-nav .book-title {
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        margin-top: -5%;
+    }
+
+    .listen-book-nav .book-title span {
+        font-size: 1.1rem;
+        text-align: center;
+        margin: 0 !important;
+    }
+
+    .listen-book-nav .actions {
+        margin-top: 1rem;
+        gap: 10px;
+    }
+
+    listen-book-content .audio-player #waveform {
+        max-width: 350px;
+    }
+
+    .listen-book-content .audio-player .play-button {
+        padding: 8px 16px;
+    }
+
+    .listen-book-content .next-section-btn {
+        width: 80%;
+    }
+
+    .listen-book-content .section-image {
+        height: 250px;
+    }
+
+    .listen-book-content .section-header h2 {
+        font-size: 1.15rem;
+    }
+
+    .listen-book-content .alert {
+        margin: 0 3% 0 3%;
+    }
+
+    .listen-book-content .comments-section h4 {
+        font-size: 1.1rem;
+    }
+
+    .listen-book-content .comment-input textarea {
+        font-size: 0.9rem;
+    }
+
+    .listen-book-content .comments-section {
+        padding: 0 3% 0 3%;
+    }
+
+    .listen-book-content .comment-input  {
+        margin: 0 3% 0 3%;
+    }
+}
+
+@media (max-width: 480px) {
+    .listen-book-nav .book-title span {
+        font-size: 1rem;
+    }
+
+    .listen-book-nav .actions {
+        font-size: 0.8rem;
+    }
+
+    .listen-book-content .next-section-btn {
+        width: 90%;
+    }
+
+    .listen-book-content .section-image {
+        height: 200px;
+    }
+
+    .listen-book-content .section-header h2 {
+        font-size: 1rem;
+    }
+
+    .listen-book-content .comment-input textarea {
+        font-size: 0.85rem;
+    }
+
+    .listen-book-content .comment-input button {
+        padding: 4px 8px;
+    }
+}
