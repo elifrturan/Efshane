@@ -444,7 +444,7 @@ function NewSection() {
             </div>
             <div className="robot">
                 <button className='help d-flex justify-content-center align-items-center' onClick={toggleChat}>
-                    <i className="bi bi-robot"></i>
+                    <img src="/images/efso_logo.svg" alt="" width="180px"/>
                 </button>
             </div>
         </div>

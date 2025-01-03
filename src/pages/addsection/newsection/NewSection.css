@@ -273,12 +273,17 @@
     text-shadow: 2px 2px 5px rgba(255, 193, 7, 0.5);
 }
 
+.robot img {
+    margin-right: 25%;
+    margin-top: 30%;
+}
+
 button.help{
     width: 60px;
     height: 60px;
     font-size: 2rem;
     border-radius: 50%;
-    background: linear-gradient(145deg, #ffeeba, #ffae00);
+    background: linear-gradient(145deg, #ffeeba, #e7e7e7);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2), inset 0 -3px 5px rgba(255, 255, 255, 0.5);
     border: none;
     color: #fff;

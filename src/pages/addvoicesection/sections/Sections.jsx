@@ -655,9 +655,10 @@ function Sections() {
 return (
     <>
         {isLoading && (
-            <div className="loading-overlay">
+            <div className="loading-overlay d-flex gap-3">
                 <Spinner animation="border" variant="primary" />
-                <p>Lütfen bekleyin... Bölümünüz analiz ediliyor...</p>
+                <img src="/images/efso_logo.svg" alt="" width="60px"/>
+                <p>Merhaba, ben Efso! Bu bölümü sizin için analiz ediyorum. Lütfen biraz bekleyin...</p>
             </div>
         )}
         {activeTab === 'sections' && (

@@ -29,6 +29,7 @@ import BookDetails from './pages/bookdetails/BookDetails';
 import AudioBookDetails from './pages/audiobookdetails/AudioBookDetails';
 import ReadBook from './pages/readbook/ReadBook';
 import ListenAudioBook from './pages/listenaudiobook/ListenAudioBook';
+import Library from './pages/library/Library';
 import CustomNavbar from './layouts/navbar/Navbar';
 import { UserProvider } from './User.Context';
 
@@ -81,6 +82,7 @@ const routes = createBrowserRouter([
       { path: '/audio-book-details/:bookName', element: <AudioBookDetails/>},
       { path: '/read-book/:bookName', element: <ReadBook/>},
       { path: '/listen-audio-book/:bookName', element: <ListenAudioBook/>},
+      { path: '/library', element: <Library/>},
     ],
   },
 ]);
