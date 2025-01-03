@@ -13,7 +13,7 @@ function AudioBookDetails() {
     const [bookDetails, setBookDetails] = useState({});
     const [chapters, setChapters] = useState([]);
     const [comments, setComments] = useState([]);
-    const [isAddedToLibrary, setIsAddedToLibrary] = useState(bookDetails.isAudioBookCase);
+    const [isAddedToLibrary, setIsAddedToLibrary] = useState(formattedBookName.isAudioBookCase);
     const [isAddedToListeningList, setIsAddedListeningList] = useState(bookDetails.isListeningList);
 
     useEffect(() => {
@@ -68,7 +68,7 @@ function AudioBookDetails() {
     
         try {
             const response = await axios.post(
-                `http://localhost:3000/book-case/audioBook/${bookDetails[0]?.id}`,
+                `http://localhost:3000/book-case/audioBook/${formattedBookName}`,
                 {},
                 {
                     headers: {
@@ -117,6 +117,10 @@ function AudioBookDetails() {
         } catch (error) {
             console.error("Error adding/removing from listening list:", error);
         }
+    };
+
+    const handleListenAudioBookClick = (formattedBookName) => {
+        navigate(`/listen-audio-book/${formattedBookName}`);
     };
 
     const calculateTotalTime = (totalMinutes) => {
@@ -207,6 +211,7 @@ function AudioBookDetails() {
     useEffect(() => {
         window.scrollTo(0,0);
     }, [])
+
     return (
         <>
             <div className="audio-book-details-page">
@@ -257,7 +262,7 @@ function AudioBookDetails() {
                                 <p className='d-flex'><i className="bi bi-heart-fill me-2"></i>{formatNumber(bookDetails[0]?.analysis[0]?.like_count || 0)}</p>
                                 <p className='d-flex'><i className="bi bi-chat-fill me-2"></i>{formatNumber(bookDetails[0]?.analysis[0]?.comment_count || 0)}</p>
                             </div>
-                            <div className="read-button">
+                            <div className="read-button" onClick={() => handleListenAudioBookClick(formattedBookName)}>
                                 {bookDetails.isLibrary ? (
                                     <Button>Dinlemeye Devam Et</Button>
                                 ) : (

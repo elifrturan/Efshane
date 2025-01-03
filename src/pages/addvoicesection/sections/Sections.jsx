@@ -187,9 +187,7 @@ function Sections() {
     
             setSections(sections.filter((section) => section.id !== sectionToDelete.id));
             setShowModal(false);
-            setSectionToDelete(null);
-    
-            alert("Bölüm başarıyla silindi!");
+            setSectionToDelete(null);    
         } catch (error) {
             console.error("Hata detayları:", error.response || error.message);
             alert("Bölüm silinirken bir hata oluştu.");

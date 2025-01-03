@@ -6,6 +6,7 @@ import axios from 'axios';
 
 function NewSection() {
     const { bookTitle: encodedBookTitle } = useParams();
+
     useEffect(() => {
     }, [encodedBookTitle]);
 
@@ -26,6 +27,9 @@ function NewSection() {
     const [inputValue, setInputValue] = useState('');
     const [loading, setLoading] = useState(false);
     const [dangerShow, setDangerShow] = useState(false);
+
+    const [updatedContent, setUpdatedContent] = useState('');  // Store updatedContent
+    const [showButtons, setShowButtons] = useState(false); 
 
     const handleDangerClose = () => setDangerShow(false);
 
@@ -130,6 +134,7 @@ function NewSection() {
             );
             if (response.status === 201) {
                 const updatedContent = response.data.updatedContent;
+                setUpdatedContent(updatedContent);
     
                 setInputValue('');
 
@@ -138,6 +143,7 @@ function NewSection() {
                 await typeMessage(newContent);
 
                 setContent((prevContent) => `${prevContent} ${newContent}`);
+                setShowButtons(true);
             } else {
                 console.error('Error:', response.data.error);
             }
@@ -230,6 +236,63 @@ function NewSection() {
         } finally {
             setLoading(false);
         }
+    };
+
+    const handleTryAgain = async () => {
+        console.log('Try again');
+    
+        // Check if inputValue and updatedContent are correctly set
+        if (!inputValue || !updatedContent) {
+            console.error("Either inputValue or updatedContent is undefined or empty.");
+            console.log("inputValue:", inputValue);
+            console.log("updatedContent:", updatedContent);
+            return;
+        }
+    
+        // Combine inputValue and updatedContent to form the new content
+        const newContent = `${inputValue} ${updatedContent}`;
+        console.log("Combined newContent:", newContent);
+    
+        try {
+            // Send request to the API with the new combined content
+            const response = await axios.post('http://localhost:3000/openai', {
+                input: inputValue,
+                content: newContent,
+            }, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+    
+            if (response.status === 201) {
+                const newUpdatedContent = response.data.updatedContent;
+    
+                // Check if the response contains the new updated content
+                if (newUpdatedContent) {
+                    setUpdatedContent(newUpdatedContent);
+    
+                    // Clear the input value
+                    setInputValue('');
+    
+                    // Append the new content to the editor
+                    const currentContent = contentRef.current.innerHTML;
+                    await typeMessage(newUpdatedContent);
+    
+                    // Update the content in the editor
+                    setContent((prevContent) => `${prevContent} ${newUpdatedContent}`);
+                } else {
+                    console.error('No updated content received in response.');
+                }
+            } else {
+                console.error('Error:', response.data.error);
+            }
+        } catch (error) {
+            console.error('Request error:', error.message);
+        }
+    };
+
+    const handleAccept = () => {
+        setShowButtons(false);  // Hide buttons
     };
 
     return (
@@ -339,6 +402,12 @@ function NewSection() {
                     >
                     </div>
                 </form>
+                {showButtons && updatedContent && (
+                    <div className="response-buttons">
+                        <button onClick={handleTryAgain}>Try Again</button>
+                        <button onClick={handleAccept}>Accept</button>
+                    </div>
+                )}
             </div>
             {/* Chatbot modal */}
             <div className={`chat-modal ${isChatOpen ? 'active' : ''}`}>

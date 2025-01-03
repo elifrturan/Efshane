@@ -13,8 +13,8 @@ function BookDetails() {
     const [bookDetails, setBookDetails] = useState([]);
     const [chapters, setChapters] = useState([]);
     const [comments, setComments] = useState([]);
-    const [isAddedToLibrary, setIsAddedToLibrary] = useState(bookDetails.isBookCase);
-    const [isAddedToReadingList, setIsAddedToReadingList] = useState(bookDetails.isReadingList);
+    const [isAddedToLibrary, setIsAddedToLibrary] = useState(formattedBookName.isBookCase);
+    const [isAddedToReadingList, setIsAddedToReadingList] = useState(formattedBookName.isReadingList);
 
     useEffect(() => {
         const fetchBookDetails = async () => {
@@ -55,12 +55,14 @@ function BookDetails() {
     }, [formattedBookName]);
 
     const handleAddToLibrary = async () => {
+        console.log("tıklandı");
         const previousState = isAddedToLibrary; 
         setIsAddedToLibrary(!previousState); 
     
         try {
+            console.log("formattedBookName", formattedBookName);
             const response = await axios.post(
-                `http://localhost:3000/book-case/${bookDetails[0]?.id}`,
+                `http://localhost:3000/book-case/book/${formattedBookName}`,
                 {},
                 {
                     headers: {
@@ -107,7 +109,7 @@ function BookDetails() {
             console.error("Error adding/removing from reading list:", error);
         }
     };
-    
+
     const handleProfileClick = (username) => {
         navigate(`/user/${username}`);
     }
@@ -255,7 +257,7 @@ function BookDetails() {
                                 <p className='d-flex'><i className="bi bi-heart-fill me-2"></i>{formatNumber(bookDetails[0]?.analysis[0]?.like_count || 0)}</p>
                                 <p className='d-flex'><i className="bi bi-chat-fill me-2"></i>{formatNumber(bookDetails[0]?.analysis[0]?.comment_count || 0)}</p>
                             </div>
-                            <div className="read-button " onClick={() => handleReadBookClick(bookDetails[0]?.title)}>
+                            <div className="read-button " onClick={() => handleReadBookClick(formattedBookName)}>
                                 {bookDetails.isLibrary ? (
                                     <Button>Okumaya Devam Et</Button>
                                 ) : (

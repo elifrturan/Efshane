@@ -147,6 +147,44 @@
     width: 100%;
 }
 
+.accept-button, .try-again-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.accept-button {
+    background-color: #28a745;
+    color: white;
+}
+
+.accept-button:hover {
+    background-color: #218838;
+}
+
+.accept-button:active {
+    background-color: #1e7e34;
+    transform: scale(0.98);
+}
+
+.try-again-button {
+    background-color: #dc3545;
+    color: white;
+}
+
+.try-again-button:hover {
+    background-color: #c82333;
+}
+
+.try-again-button:active {
+    background-color: #bd2130;
+    transform: scale(0.98);
+}
+
 .content-toolbar {
     display: flex;
     justify-content: center;
@@ -265,8 +303,8 @@ button.help:active {
     position: fixed;
     bottom: 14%;
     right: 20px;
-    width: 200px;
-    height: 400px;
+    width: 300px;
+    height: 450px;
     background-color: white;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     border-radius: 10px;
@@ -355,7 +393,6 @@ button.help:active {
     font-size: 0.8rem;
     opacity: 75%;
 }
-
 
 .chat-modal-footer button{
     padding: 6px 10px;

@@ -24,6 +24,7 @@ function CreateStory() {
     const [selectedAgeRange, setSelectedAgeRange] = useState('');
     const [isAudioBook, setIsAudioBook] = useState(null);
     
+    const defaultImage = "/images/default-book-cover.webp";
     const formatTitleForUrl = (title) => {
         const charMap = {
             'ç': 'c',
@@ -210,7 +211,7 @@ function CreateStory() {
                     title: bookTitle,
                     normalizedTitle,
                     summary: bookSummary,
-                    bookCover: bookCover || null,
+                    bookCover: bookCover || defaultImage,
                     isAudioBook,
                     hashtags: tags,
                     categories: selectedCategory,

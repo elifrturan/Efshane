@@ -24,7 +24,6 @@ function NewRelases() {
               Authorization: `Bearer ${parsedToken}`,
             },
           });
-          console.log(response.data);
           setBook(response.data);
         } catch (error) {
           console.error("Kitap alınırken hata oluştu:", error.response?.data || error.message);
@@ -72,8 +71,7 @@ function NewRelases() {
     const handleAudioBookClick = (bookName) => {
       const formattedBookName = formatBookNameForURL(bookName);
       navigate(`/audio-book-details/${formattedBookName}`)
-  }
-
+    }
 
   return (
     <div className="new-relases mt-5 mb-3">

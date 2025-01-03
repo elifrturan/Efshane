@@ -19,7 +19,7 @@
     border-bottom: 1px solid #eee;
 }
 
-.listen-book-nav .sections-dropdown button {
+.listen-book-nav .episode-dropdown button {
     background: none;
     color: var(--second-color);
     border: none;
@@ -27,13 +27,13 @@
     font-size: 1rem;
 }
 
-.listen-book-nav .sections-dropdown button:focus {
+.listen-book-nav .episode-dropdown button:focus {
     background: none;
     color: var(--second-color);
     border: none;
 }
 
-.listen-book-nav .sections-dropdown div.dropdown-menu.show {
+.listen-book-nav .episode-dropdown div.dropdown-menu.show {
     border-radius: 0%;
     border: 1px solid #f0f0f0;
     box-shadow: none;
@@ -45,19 +45,19 @@
     padding-bottom: 0%;
 }
 
-.listen-book-nav .sections-dropdown .dropdown-item {
+.listen-book-nav .episode-dropdown .dropdown-item {
     padding: 10px 20px;
     cursor: pointer;
     text-align: center;
     border-bottom: 1px solid #fff;
 }
 
-.listen-book-nav .sections-dropdown .dropdown-item:hover {
+.listen-book-nav .episode-dropdown .dropdown-item:hover {
     background-color: #eee;
     font-weight: 600;
 }
 
-.listen-book-nav .sections-dropdown .dropdown-item:last-child {
+.listen-book-nav .episode-dropdown .dropdown-item:last-child {
     border-bottom: none;
 }
 
@@ -133,24 +133,24 @@
     transform: scale(1.02);
 }
 
-.listen-book-content .section-header {
+.listen-book-content .episode-header {
     text-align: center;
 }
 
-.listen-book-content .section-header .section-image {
+.listen-book-content .episode-header .episode-image {
     width: 100%;
     height: 300px;
     object-fit: cover;
     border-radius: 0 0 4px 4px;
 }
 
-.listen-book-content .section-header h2 {
+.listen-book-content .episode-header h2 {
     font-size: 1.5rem;
     color: var(--main-color);
     margin-top: 4%;
 }
 
-.listen-book-content .section-header .statistics {
+.listen-book-content .episode-header .statistics {
     margin: 2% auto;
     font-size: 0.85rem;
     color: var(--second-color);
@@ -159,7 +159,7 @@
     align-items: center;
 }
 
-.listen-book-content .next-section-btn {
+.listen-book-content .next-episode-btn {
     margin:  8% auto;
     display: flex;
     justify-content: center;
@@ -173,11 +173,11 @@
     font-size: 0.95rem;
 }
 
-.listen-book-content .next-section-btn:hover {
+.listen-book-content .next-episode-btn:hover {
     transform: scale(1.08);
 } 
 
-.listen-book-content .next-section-btn:focus {
+.listen-book-content .next-episode-btn:focus {
     background-color: var(--theme-color);
     border: 1px solid var(--theme-color);
 }
@@ -188,11 +188,11 @@
     text-align: center;
 }
 
-.listen-book-content .comments-section {
+.listen-book-content .comments-episode {
     margin-top: 20px;
 }
 
-.listen-book-content .comments-section h4 {
+.listen-book-content .comments-episode h4 {
     font-size: 1.25rem;
     font-weight: bold;
 }
@@ -282,7 +282,7 @@
         padding: 0 3% 0 3%;
     }
 
-    .listen-book-content .next-section-btn {
+    .listen-book-content .next-episode-btn {
         width: 250px;
     }
 
@@ -290,7 +290,7 @@
         margin: 0 3% 0 3%;
     }
 
-    .listen-book-content .comments-section {
+    .listen-book-content .comments-episode {
         padding: 0 3% 0 3%;
     }
 
@@ -306,7 +306,7 @@
         padding: 2% 5%;
     }
 
-    .listen-book-nav .sections-dropdown {
+    .listen-book-nav .episode-dropdown {
         margin-bottom: 5%;
     }
 
@@ -328,7 +328,7 @@
         gap: 10px;
     }
 
-    listen-book-content .audio-player #waveform {
+    .listen-book-content .audio-player #waveform {
         max-width: 350px;
     }
 
@@ -336,15 +336,15 @@
         padding: 8px 16px;
     }
 
-    .listen-book-content .next-section-btn {
+    .listen-book-content .next-episode-btn {
         width: 80%;
     }
 
-    .listen-book-content .section-image {
+    .listen-book-content .episode-image {
         height: 250px;
     }
 
-    .listen-book-content .section-header h2 {
+    .listen-book-content .episode-header h2 {
         font-size: 1.15rem;
     }
 
@@ -352,7 +352,7 @@
         margin: 0 3% 0 3%;
     }
 
-    .listen-book-content .comments-section h4 {
+    .listen-book-content .comments-episode h4 {
         font-size: 1.1rem;
     }
 
@@ -360,7 +360,7 @@
         font-size: 0.9rem;
     }
 
-    .listen-book-content .comments-section {
+    .listen-book-content .comments-episode {
         padding: 0 3% 0 3%;
     }
 
@@ -378,15 +378,15 @@
         font-size: 0.8rem;
     }
 
-    .listen-book-content .next-section-btn {
+    .listen-book-content .next-episode-btn {
         width: 90%;
     }
 
-    .listen-book-content .section-image {
+    .listen-book-content .episode-image {
         height: 200px;
     }
 
-    .listen-book-content .section-header h2 {
+    .listen-book-content .episode-header h2 {
         font-size: 1rem;
     }
 

@@ -8,8 +8,8 @@ import axios from 'axios'
 function ReadBook() {
     const { bookName: formattedBookName } = useParams();
     const [chapters, setChapters] = useState([]);
-    const [liked, setLiked] = useState(chapters.book?.isLiked);
-    const [addedToLibrary, setAddedToLibrary] = useState(false);
+    const [liked, setLiked] = useState(false);
+    const [isAddedToLibrary, setIsAddedToLibrary] = useState(formattedBookName.isAudioBookCase);
     const [selectedSection, setSelectedSection] = useState(1);
     const [newComment, setNewComment] = useState('');
     const [comments, setComments] = useState([]);
@@ -28,15 +28,15 @@ function ReadBook() {
     useEffect(() => {
         const fetchChaptersDetails = async () => {
             try {
-                const response = await axios.get(`http://localhost:3000/chapter/${formattedBookName}`, {
+                const response = await axios.get(`http://localhost:3000/chapter/read/book/${formattedBookName}`, {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`,
                     },
                 });
     
                 const { book, chapters } = response.data;
-    
                 setChapters(chapters);
+                console.log("Episodes:", book.isAudioBookCase);
                 setLiked(book.isLiked); 
             } catch (error) {
                 console.error("Error fetching book details:", error);
@@ -71,11 +71,33 @@ function ReadBook() {
             alert("Beğenme işlemi sırasında bir hata oluştu.");
         }
     };
-    
 
-    const handleAddToLibrary = () => {
-        setAddedToLibrary(!addedToLibrary);
-    }
+    const handleAddToLibrary = async () => {
+        const previousState = isAddedToLibrary; 
+        setIsAddedToLibrary(!previousState); 
+    
+        const encodeBookTitle = encodeURIComponent(formattedBookName);
+        try {
+            const response = await axios.post(
+                `http://localhost:3000/book-case/book/${encodeBookTitle}`,
+                {},
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    },
+                }
+            );
+    
+            if (response.data.message === "Kütüphaneye eklendi.") {
+                setIsAddedToLibrary(true);
+            } else if (response.data.message === "Kütüphaneden çıkarıldı.") {
+                setIsAddedToLibrary(false);
+            }
+        } catch (error) {
+            console.error("Error adding/removing from book case:", error);
+            setIsAddedToLibrary(previousState); 
+        }
+    };
 
     const goToNextSection = () => {
         if (selectedSection < chapters.length) {
@@ -216,9 +238,9 @@ function ReadBook() {
                                     {liked ? "Beğenildi" : "Beğen"}
                                 </span>
                             )}
-                            <span onClick={() => handleAddToLibrary()} className={addedToLibrary ? "added" : ""}>
-                                <i className={`bi me-2 ${addedToLibrary ? "bi-book-fill" : "bi-book"}`}></i>
-                                {addedToLibrary ? "Kitaplıktan Kaldır" : "Kitaplığa Ekle"}
+                            <span onClick={() => handleAddToLibrary(chapters.book?.id)} className={isAddedToLibrary ? "added" : ""}>
+                                <i className={`bi me-2 ${isAddedToLibrary ? "bi-book-fill" : "bi-book"}`}></i>
+                                {isAddedToLibrary ? "Kitaplıktan Kaldır" : "Kitaplığa Ekle"}
                             </span>
                     </div>
                 </div>
