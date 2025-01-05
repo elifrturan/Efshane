@@ -42,8 +42,8 @@ const handleCategoryClick = (categoryName) => {
           <div className="categories-list">
             {categories && categories.map((category) => (
               <div className="category-card" key={category.id} onClick={() => handleCategoryClick(category.name)}>
-                <div className="d-flex flex-column align-items-center mb-5">
-                  <img src={category.imageUrl} alt="category-image" width="150px"/>
+                <div className="d-flex flex-column align-items-center justify-content-center">
+                  <img src={category.imageUrl} alt="category-image" width="150px" className='category-image'/>
                   <p>{category.name}</p>
                 </div>
               </div>
