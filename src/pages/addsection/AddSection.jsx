@@ -102,22 +102,17 @@ function AddSection() {
         if (file) {
             const img = new Image();
             img.onload = async () => {
-                if (img.width > 200 || img.height > 281) {
-                    setError("Görsel boyutu 200x281 pikselden büyük olamaz.");
-                    setTimeout(() => setError(""), 5000);
-                } else {
-                    setError("");
-                    const reader = new FileReader();
-                    reader.onloadend = () => {
-                        setImage(reader.result);
-                    };
-                    reader.readAsDataURL(file);
-                    try {
-                        const base64Image = await convertToBase64(file); 
-                        setImage(base64Image);
-                    } catch (error) {
-                        console.error("Görsel dönüştürme hatası:", error);
-                    }
+                setError("");
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    setImage(reader.result);
+                };
+                reader.readAsDataURL(file);
+                try {
+                    const base64Image = await convertToBase64(file); 
+                    setImage(base64Image);
+                } catch (error) {
+                    console.error("Görsel dönüştürme hatası:", error);
                 }
             };
             img.src = URL.createObjectURL(file);

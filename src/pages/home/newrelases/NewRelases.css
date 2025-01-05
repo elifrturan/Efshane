@@ -45,6 +45,12 @@
     border-radius: 4px;
 }
 
+.book-list-newrelases .book1 .new-book-cover img:first-child {
+    width: 125px;
+    height: 200px;
+    object-fit: cover;
+}
+
 .new-book-cover {
     position: relative; 
 }
@@ -69,14 +75,20 @@
     display: none;
 }
 
-.book-list-newrelases .new-book-writer {
+.book-list-newrelases .book1 .new-book-cover img:first-child {
+    width: 135px;
+    height: 200px;
+    object-fit: cover;
+}
+
+.book-list-newrelases .book1 .newrelases-book-writer {
     display: flex;
     gap: 5px;
     justify-content: center;
     align-items: center;
 }
 
-.book-list-newrelases .new-book-writer p{
+.book-list-newrelases .newrelases-book-writer p{
     font-size: 0.8rem;
     opacity: 0.9;
     margin: 0;

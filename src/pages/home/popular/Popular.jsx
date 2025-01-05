@@ -82,9 +82,9 @@ function Popular() {
                     <i className="popular-left-arrow bi bi-arrow-left-circle-fill" onClick={scrollLeft}></i>
                     <div className="book-list-popular" ref={scrollRef} style={{ overflowX: 'auto', whiteSpace: 'nowrap' }}>
                     {books && books.map((book) => (
-                        <div key={book.id} className="suggestionBook d-flex flex-column align-items-center justify-content-center ms-2 me-5">
+                        <div key={book.id} className="popularBook d-flex flex-column align-items-center justify-content-center ms-2 me-5">
                             <div
-                                className="suggestion-book-cover"
+                                className="popular-book-cover"
                                 onClick={() =>
                                     book.isAudioBook ? handleAudioBookClick(book.title) : handleBookClick(book.title)
                                 }
@@ -98,11 +98,11 @@ function Popular() {
                                     />
                                 )}
                             </div>
-                            <div className="suggestion-book-content d-flex flex-column align-items-center">
-                                <div className="suggestion-book-title mt-1">
+                            <div className="popular-book-content d-flex flex-column align-items-center">
+                                <div className="popular-book-title mt-1">
                                     <h6>{book.title}</h6>
                                 </div>
-                                <div className="suggestion-book-writer d-flex mb-3">
+                                <div className="popular-book-writer d-flex mb-3">
                                     <img
                                         src={book.profile_image}
                                         alt=""

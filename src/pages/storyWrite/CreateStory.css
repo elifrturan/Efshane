@@ -133,7 +133,7 @@ html, body {
 }
 
 .create-story-btn:hover {
-    background-color: indianred;
+    background-color: rgb(13, 22, 87);
 }
 
 .form-select-create{

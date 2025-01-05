@@ -30,29 +30,6 @@ function ContinueRead() {
         };
         fetchLastActivity();
     }, []);
-    
-    useEffect(() => {
-        const fetchLastReadBook = async () => {
-        const token = localStorage.getItem('token');
-        const parsedToken = token && token.startsWith('{') ? JSON.parse(token) : token;
-        if (!parsedToken) {
-            console.error("Token bulunamadı!");
-            return;
-        }
-            try {
-                const response = await axios.get(`http://localhost:3000/book-case/last`, {
-                    headers: {
-                        Authorization: `Bearer ${parsedToken}`, 
-                    },
-                });
-                console.log("REspomse", response.data);
-                setLastActivity(response.data); 
-            } catch (error) {
-                console.error("Kitap alınırken hata oluştu:", error.response?.data || error.message);
-            }
-        };
-        fetchLastReadBook();
-    }, []);
 
     const handleProfileClick = (username) => {
         navigate(`/user/${username}`);
@@ -171,7 +148,7 @@ function ContinueRead() {
                                         <div className="interaction d-flex">
                                             <div className="read-count me-3">
                                                 <p>
-                                                    <i className="bi bi-eye-fill text-muted"></i> 
+                                                    <i className="bi bi-eye-fill text-muted me-1"></i> 
                                                     {lastActivity.type === 'book' 
                                                         ? formatNumber(lastActivity.book?.analysis[0]?.read_count || 0) 
                                                         : formatNumber(lastActivity.audioBooks?.analysis[0]?.read_count || 0)}
@@ -179,7 +156,7 @@ function ContinueRead() {
                                             </div>
                                             <div className="like-count me-3">
                                                 <p>
-                                                    <i className="bi bi-heart-fill text-muted"></i>
+                                                    <i className="bi bi-heart-fill text-muted me-1"></i>
                                                     {lastActivity.type === 'book' 
                                                         ? formatNumber(lastActivity.book?.analysis[0]?.like_count || 0) 
                                                         : formatNumber(lastActivity.audioBooks?.analysis[0]?.like_count || 0)}
@@ -187,7 +164,7 @@ function ContinueRead() {
                                             </div>
                                             <div className="comment-count me-3">
                                                 <p>
-                                                    <i className="bi bi-chat-fill text-muted"></i> 
+                                                    <i className="bi bi-chat-fill text-muted me-1"></i> 
                                                     {lastActivity.type === 'book' 
                                                         ? formatNumber(lastActivity.book?.analysis[0]?.comment_count || 0) 
                                                         : formatNumber(lastActivity.audioBooks?.analysis[0]?.comment_count || 0)}

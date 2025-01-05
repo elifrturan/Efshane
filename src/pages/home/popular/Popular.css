@@ -48,6 +48,12 @@
     position: relative; 
 }
 
+.book-list-popular .populerBook .popular-book-cover img:first-child {
+    width: 125px;
+    height: 200px;
+    object-fit: cover;
+}
+
 .popular-book-cover .headphone-icon {
     position: absolute;
     top: 5px;
@@ -67,6 +73,12 @@
 
 .book-list-popular::-webkit-scrollbar {
     display: none;
+}
+
+.book-list-popular .popular-book-cover img:first-child {
+    width: 135px;
+    height: 200px;
+    object-fit: cover;
 }
 
 .book-list-popular .popular-book-writer {

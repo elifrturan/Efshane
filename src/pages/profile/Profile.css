@@ -125,7 +125,7 @@ html, body {
 }
 
 .profile-user-details .follower-statistics p:hover {
-    border-bottom: 1px solid #aaa;
+    border-bottom: 3px solid #aaa;
     cursor: pointer;
 }
 

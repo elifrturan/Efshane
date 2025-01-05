@@ -23,9 +23,18 @@ function Profile() {
     const [anons, setAnons] = useState([]);
 
     const handleClose = () => setShowEdit(false);
-    const handleShow = () => setShowEdit(true);
 
-    const { user } = useUser();
+    const handleShow = () => {
+        setTempProfile({
+            name: user.name,
+            profile_image: user.profile_image,
+            image_background: user.image_background,
+            about: user.about,
+        });
+        setShowEdit(true);
+    };
+
+    const { user, setUser } = useUser();
 
     useEffect(() => {
         const fetchMyBooks = async () => {
@@ -105,27 +114,37 @@ function Profile() {
     async function handleSave() {
         try {
             const { name, profile_image, image_background, about } = tempProfile;
-            const response = await axios.put('http://localhost:3000/users/updateUser',  
-            {
-                name,
-                profile_image,
-                image_background,
-                about
-            },
-            {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+            const response = await axios.put(
+                'http://localhost:3000/users/updateUser',
+                {
+                    name,
+                    profile_image,
+                    image_background,
+                    about,
                 },
-            }
-        );
-
-        console.log("Güncellenen kullanıcı:", response.data);
-        handleClose();
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    },
+                }
+            );
+    
+            console.log("Güncellenen kullanıcı:", response.data);
+    
+            setUser((prevUser) => ({
+                ...prevUser,
+                name: response.data.name,
+                about: response.data.about,
+                profile_image: response.data.profile_image,
+                image_background: response.data.image_background,
+            }));
+    
+            handleClose();
         } catch (error) {
             console.error("Güncelleme hatası:", error);
         }
     }
-
+    
     const scrollLeft = (ref) => {
         if (ref.current) {
             ref.current.scrollBy({ left: -150, behavior: 'smooth' });
@@ -229,7 +248,6 @@ function Profile() {
             });
     
             if (response.status === 200) {
-                alert("Duyuru başarıyla silindi!");
                 setAnons((prevAnons) => prevAnons.filter((anons) => anons.id !== anonsId));
             }
         } catch (error) {

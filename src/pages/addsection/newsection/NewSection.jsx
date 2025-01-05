@@ -1,11 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react'
 import './NewSection.css'
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Button, Modal } from 'react-bootstrap';
 import axios from 'axios';
 
 function NewSection() {
     const { bookTitle: encodedBookTitle } = useParams();
+    const [successShow, setSuccessShow] = useState(false);
+    const handleSuccessClose = () => setSuccessShow(false);
+    const handleSuccessShow = () => setSuccessShow(true);
+    const navigate = useNavigate(); 
 
     useEffect(() => {
     }, [encodedBookTitle]);
@@ -28,7 +32,7 @@ function NewSection() {
     const [loading, setLoading] = useState(false);
     const [dangerShow, setDangerShow] = useState(false);
 
-    const [updatedContent, setUpdatedContent] = useState('');  // Store updatedContent
+    const [updatedContent, setUpdatedContent] = useState('');  
     const [showButtons, setShowButtons] = useState(false); 
 
     const handleDangerClose = () => setDangerShow(false);
@@ -196,6 +200,8 @@ function NewSection() {
                 },
             });
             console.log(response.data);
+            handleSuccessShow(); 
+            navigate(`/addsection`);
         } catch (error) {
             console.error(error);
             alert('Bölüm kaydedilirken bir hata oluştu. Lütfen tekrar deneyin.');
@@ -228,8 +234,8 @@ function NewSection() {
                     Authorization: `Bearer ${localStorage.getItem('token')}`,
                 },
             });
-            alert('Bölüm yayınlandı!');
-            console.log(response.data);
+            handleSuccessShow(); 
+            navigate(`/addsection`);
         } catch (error) {
             console.error(error);
             alert('Bölüm yayınlanırken bir hata oluştu. Lütfen tekrar deneyin.');
@@ -238,65 +244,21 @@ function NewSection() {
         }
     };
 
-    const handleTryAgain = async () => {
-        console.log('Try again');
-    
-        // Check if inputValue and updatedContent are correctly set
-        if (!inputValue || !updatedContent) {
-            console.error("Either inputValue or updatedContent is undefined or empty.");
-            console.log("inputValue:", inputValue);
-            console.log("updatedContent:", updatedContent);
-            return;
-        }
-    
-        // Combine inputValue and updatedContent to form the new content
-        const newContent = `${inputValue} ${updatedContent}`;
-        console.log("Combined newContent:", newContent);
-    
-        try {
-            // Send request to the API with the new combined content
-            const response = await axios.post('http://localhost:3000/openai', {
-                input: inputValue,
-                content: newContent,
-            }, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-    
-            if (response.status === 201) {
-                const newUpdatedContent = response.data.updatedContent;
-    
-                // Check if the response contains the new updated content
-                if (newUpdatedContent) {
-                    setUpdatedContent(newUpdatedContent);
-    
-                    // Clear the input value
-                    setInputValue('');
-    
-                    // Append the new content to the editor
-                    const currentContent = contentRef.current.innerHTML;
-                    await typeMessage(newUpdatedContent);
-    
-                    // Update the content in the editor
-                    setContent((prevContent) => `${prevContent} ${newUpdatedContent}`);
-                } else {
-                    console.error('No updated content received in response.');
-                }
-            } else {
-                console.error('Error:', response.data.error);
-            }
-        } catch (error) {
-            console.error('Request error:', error.message);
-        }
-    };
-
-    const handleAccept = () => {
-        setShowButtons(false);  // Hide buttons
-    };
-
     return (
         <div className='new-section-page'>
+            <Modal show={successShow} onHide={handleSuccessClose} centered>
+                <Modal.Header closeButton>
+                    <Modal.Title>Bölüm Yayınlandı!</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <p>Bölümünüz başarıyla yayınlandı. Tebrikler!</p>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="primary" onClick={handleSuccessClose}>
+                        Tamam
+                    </Button>
+                </Modal.Footer>
+            </Modal>
             <Modal show={dangerShow} onHide={handleDangerClose} className='danger-modal' centered backdrop='static'>
                 <Modal.Header closeButton>
                     <Modal.Title>İlham Yolculuğunda Yalnız Değilsin</Modal.Title>
@@ -402,12 +364,6 @@ function NewSection() {
                     >
                     </div>
                 </form>
-                {showButtons && updatedContent && (
-                    <div className="response-buttons">
-                        <button onClick={handleTryAgain}>Try Again</button>
-                        <button onClick={handleAccept}>Accept</button>
-                    </div>
-                )}
             </div>
             {/* Chatbot modal */}
             <div className={`chat-modal ${isChatOpen ? 'active' : ''}`}>

@@ -86,7 +86,7 @@ function Suggestion() {
                             }
                             style={{ cursor: 'pointer' }}
                         >
-                            <img src={book.bookCover} alt="" width="125px" />
+                            <img src={book.bookCover}  alt=""/>
                             {book.isAudioBook && (
                                 <img
                                     src="/images/headphone-icon.svg"

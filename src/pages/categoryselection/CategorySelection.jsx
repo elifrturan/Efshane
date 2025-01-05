@@ -64,13 +64,6 @@ function CategorySelection() {
     return (
         <div className="selection-page">
             <div className="container">
-                <div className="left">
-                    <div className="d-flex align-items-center justify-content-start">
-                        <img src="/logo/logo.svg" alt="Logo" className="img-fluid logo" />
-                        <h5 className="ms-3 mb-0 logo-text"><span className='ef'>EF</span>shane</h5>
-                    </div>
-                </div>
-                
                 <div className="container-fluid mt-3">
                     <h1 className='text-center title'>
                         <span className='ef'>EF</span>shane’nin Sonsuz Kitap Dünyasına Hoş Geldin

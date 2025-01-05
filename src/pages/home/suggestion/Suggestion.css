@@ -68,6 +68,12 @@
     display: none;
 }
 
+.books-list .suggestion-book-cover img:first-child {
+    width: 135px;
+    height: 200px;
+    object-fit: cover;
+}
+
 .books-list .suggestion-book-writer {
     display: flex;
     gap: 5px;

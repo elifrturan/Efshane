@@ -60,7 +60,7 @@ function AudioBookDetails() {
         }; 
         fetchChapterDetails();
     }, [formattedBookName]);
-
+    
     
     const handleAddToLibrary = async () => {
         const previousState = isAddedToLibrary; 
@@ -323,7 +323,7 @@ function AudioBookDetails() {
                         <div className="tab-content">
                             {activeTab === 'chapters' && (
                                 <div id="chapters" className={`tab-pane ${activeTab === 'chapters' ? 'active' : ''}`}>
-                                    {chapters.map((chapter, index) => (
+                                    {Array.isArray(chapters) && chapters.map((chapter, index) => (
                                         <div className='section-item' key={index}>
                                             {chapter.title}
                                         </div>

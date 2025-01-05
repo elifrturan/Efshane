@@ -81,15 +81,15 @@ function NewRelases() {
           <i className="left-arrow bi bi-arrow-left-circle-fill" onClick={scrollLeft} ></i>
           <div className="book-list-newrelases" ref={scrollRef} style={{ overflowX: 'auto', whiteSpace: 'nowrap' }}>
           {books && books.map((book) => (
-                    <div key={book.id} className="suggestionBook d-flex flex-column align-items-center justify-content-center ms-2 me-5">
+                    <div key={book.id} className="book1 d-flex flex-column align-items-center justify-content-center ms-2 me-5">
                         <div
-                            className="suggestion-book-cover"
+                            className="new-book-cover"
                             onClick={() =>
                                 book.isAudioBook ? handleAudioBookClick(book.title) : handleBookClick(book.title)
                             }
                             style={{ cursor: 'pointer' }}
                         >
-                            <img src={book.bookCover} alt="" width="125px" />
+                            <img src={book.bookCover} alt="" />
                             {book.isAudioBook && (
                                 <img
                                     src="/images/headphone-icon.svg"
@@ -97,11 +97,11 @@ function NewRelases() {
                                 />
                             )}
                         </div>
-                        <div className="suggestion-book-content d-flex flex-column align-items-center">
-                            <div className="suggestion-book-title mt-1">
+                        <div className="newrelases-book-content d-flex flex-column align-items-center">
+                            <div className="newrelases-book-title mt-1">
                                 <h6>{book.title}</h6>
                             </div>
-                            <div className="suggestion-book-writer d-flex mb-3">
+                            <div className="newrelases-book-writer d-flex mb-3">
                                 <img
                                     src={book.profile_image}
                                     alt=""

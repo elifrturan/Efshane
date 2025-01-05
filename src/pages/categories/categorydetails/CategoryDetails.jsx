@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom'; 
 import './CategoryDetails.css';
-import Navbar from "../../../layouts/navbar/Navbar";
 import Footer from "../../../layouts/footer/Footer";
 import axios from 'axios';
 
 function CategoryDetails() {
     const { categoryName } = useParams(); 
     const navigate = useNavigate();
-    const username = "prensesingunlugu";
-    const bookName = "Aşk ve Gurur";
     const [categoryDetails, setCategoryDetails] = useState([]);
 
     useEffect(() => {
@@ -40,10 +37,6 @@ function CategoryDetails() {
         fetchCategoryDetails();
     }, [categoryName]);
 
-    const handleProfileClick = () => {
-        navigate(`/${username}`);
-    }
-
     function formatBookNameForURL(bookName) {
         return bookName
         .toLowerCase()
@@ -58,9 +51,18 @@ function CategoryDetails() {
         .replace(/\s+/g, "-");
     }
 
-    const handleBookClick = () => {
+    const handleProfileClick = (username) => {
+        navigate(`/user/${username}`);
+    }
+
+    const handleBookClick = (bookName) => {
         const formattedBookName = formatBookNameForURL(bookName);
         navigate(`/book-details/${formattedBookName}`)
+    }
+
+    const handleAudioBookClick = (bookName) => {
+        const formattedBookName = formatBookNameForURL(bookName);
+        navigate(`/audio-book-details/${formattedBookName}`)
     }
 
     return (
@@ -70,11 +72,40 @@ function CategoryDetails() {
                 <div className="details-book-list">
                     {categoryDetails && categoryDetails.map((book) => (
                         <div className="details-book-card d-flex flex-column align-items-center mb-5" key={book.id}>
-                            <img src={book.bookCover} alt="" className='book-cover' width="150px" onClick={handleBookClick}/>
+                            <div className="book-cover-wrapper" style={{ position: "relative" }}>
+                                <img 
+                                    src={book.bookCover} 
+                                    alt="" 
+                                    className='book-cover' 
+                                    width="150px" 
+                                    onClick={() => 
+                                        book.isAudiobook ? handleAudioBookClick(book.title) : handleBookClick(book.title)
+                                    } 
+                                />
+                                {book.isAudiobook && (
+                                    <div className="audio-icon" style={{
+                                        position: "absolute",
+                                        top: "5px",
+                                        right: "5px",
+                                        backgroundColor: "rgba(0, 0, 0, 0.7)",
+                                        borderRadius: "50%",
+                                        padding: "5px"
+                                    }}>
+                                        <i className="bi bi-headphones" style={{ color: "white", fontSize: "18px" }}></i>
+                                    </div>
+                                )}
+                            </div>
                             <div className="details-book-content d-flex flex-column align-items-center">
                                 <p className='mt-1'>{book.title}</p>
-                                <div className="details-book-writer d-flex" onClick={handleProfileClick}>
-                                    <img src={book.profile_image} alt="" className='rounded-circle object-fit-cover' width="24px" height="24px" />
+                                <div className="details-book-writer d-flex">
+                                    <img 
+                                        src={book.profile_image} 
+                                        alt="" 
+                                        className='rounded-circle object-fit-cover' 
+                                        width="24px" 
+                                        height="24px" 
+                                        onClick={() => handleProfileClick(book.username)} 
+                                    />
                                     <p>{book.username}</p>
                                 </div>
                             </div>

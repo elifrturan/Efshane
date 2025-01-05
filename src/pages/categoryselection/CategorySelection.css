@@ -33,10 +33,12 @@
 
 .card-img-top{
     border-radius: 2px;
+    width: 250px;
+    height: 300px;
 }
 
 .border-red {
-    border: 3px solid rgba(255, 0, 0, 0.4) !important;
+    border: 3px solid rgba(180, 114, 114, 0.4) !important;
 }
 
 .shadow {
@@ -49,5 +51,5 @@
 }
 
 .btn-category-register:hover{
-    background-color: palevioletred !important;
+    background-color: #1c427a !important;
 }

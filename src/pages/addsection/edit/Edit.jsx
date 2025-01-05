@@ -1,10 +1,17 @@
 import React, { useRef, useState, useEffect } from 'react'
 import './Edit.css'
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
+import { Button, Modal } from 'react-bootstrap';
+
 import axios from 'axios';
 
 function Edit() {
     const { bookTitle, chapterTitle } = useParams();
+    const [successPublishShow, setSuccessPublishShow] = useState(false);
+    const [successSaveShow, setSuccessSaveShow] = useState(false);
+    const handleSuccessClose = () => setSuccessShow(false);
+    const handleSuccessShow = () => setSuccessShow(true);
+    const navigate = useNavigate(); 
 
     useEffect(() => {
     }, [bookTitle, chapterTitle]);
@@ -228,7 +235,8 @@ function Edit() {
                     Authorization: `Bearer ${localStorage.getItem('token')}`,
                 },
             });
-            alert('Bölüm kaydedildi!');
+            handleSuccessSaveShow(); 
+            navigate(`/addsection`);
             console.log(response.data);
         } catch (error) {
             console.error(error);
@@ -261,8 +269,8 @@ function Edit() {
                     Authorization: `Bearer ${localStorage.getItem('token')}`,
                 },
             });
-            alert('Bölüm yayınlandı!');
-            console.log(response.data);
+            handleSuccessPublishShow(); 
+            navigate(`/storyWrite`);
         } catch (error) {
             console.error(error);
             alert('Bölüm yayınlanırken bir hata oluştu. Lütfen tekrar deneyin.');
@@ -273,6 +281,32 @@ function Edit() {
 
 return (
     <div className='edit-section-page'>
+        <Modal show={successPublishShow} onHide={handleSuccessClose} centered>
+            <Modal.Header closeButton>
+                <Modal.Title>Bölüm Yayınlandı!</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <p>Bölümünüz başarıyla yayınlandı. Tebrikler!</p>
+            </Modal.Body>
+            <Modal.Footer>
+                <Button variant="primary" onClick={handleSuccessClose}>
+                    Tamam
+                </Button>
+            </Modal.Footer>
+        </Modal>
+        <Modal show={successSaveShow} onHide={handleSuccessClose} centered>
+            <Modal.Header closeButton>
+                <Modal.Title>Bölüm Yayınlandı!</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <p>Bölümünüz başarıyla yayınlandı. Tebrikler!</p>
+            </Modal.Body>
+            <Modal.Footer>
+                <Button variant="primary" onClick={handleSuccessClose}>
+                    Tamam
+                </Button>
+            </Modal.Footer>
+        </Modal>
         <div className="edit-fixed-header">
             <div className="edit-header-buttons">
                 <button className="save" onClick={saveChapter} disabled={loading}>
