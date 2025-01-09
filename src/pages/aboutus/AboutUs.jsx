@@ -22,63 +22,56 @@ function AboutUs() {
     },
     {
       id: 3,
-      title: "Yapay Zeka Sistemi ile Yaratıcılığı Destekleyen Öneriler",
+      title: "Yapay Zeka Aracımız Efso ile Yaratıcılığı Destekleyen Öneriler",
       description:
         "Hikayeleriniz için ilham eksikliği yaşadığınızda yapay zeka aracımız size bölümünüzü yazarken eksik kaldığınız noktalarda önerilerde bulunur ve yaratıcılığınızı destekler.",
       image: "/images/advice-system.png",
     },
     {
       id: 4,
-      title: "Yapay Zeka ile Kitap Kapak Tasarımı",
-      description:
-        "Yapay zeka desteğiyle hikayelerinizin kitap kapağını; kitap adına ve özetine uygun şekilde zahmetsizce oluşturabilirsiniz.",
-      image: "/images/book-cover-ai.png",
-    },
-    {
-      id: 5,
       title: "Kitap Okuma/Oluşturma",
       description:
         "Dilediğiniz türde kitaplar oluşturabilir bu kitapları düzenleyebilir veya zevkinize uygun şekilde kolayca okuyabilirsiniz.",
       image: "/images/read-book.jpg",
     },
     {
-      id: 6,
+      id: 5,
       title: "Sesli Kitap Dinleme",
       description:
         "Sesli kitapları dinleyerek hem farklı bir okuma deneyimi yaşayabilir hem de hikayelerin keyfini çıkarabilirsiniz.",
       image: "/images/listen-book.jpg",
     },
     {
-      id: 7,
+      id: 6,
       title: "Kitap Listesi Oluşturma",
       description:
         "Kendinize özel ve sınırsız kişisel kitap listeleri oluşturup favori eserlerinizi düzenli bir şekilde saklayabilirsiniz.",
       image: "/images/book-list.jpg",
     },
     {
-      id: 8,
+      id: 7,
       title: "Takip Etme",
       description:
         "Beğendiğiniz yazarları veya diğer okuyucuları takip ederek ilham alabilir ve yeni içeriklere hızlıca ulaşabilirsiniz.",
       image: "/images/add-friend.jpg",
     },
     {
-      id: 9,
+      id: 8,
       title: "Akış",
       description:
         "Akışta dilediğiniz kitaplardan alıntılar paylaşabilir, takip ettiğiniz kişilerin paylaşımlarına akış üzerinden kolayca erişebilirsiniz.",
       image: "/images/feed.jpg",
     },
     {
-      id: 10,
+      id: 9,
       title: "Mesajlaşma",
       description:
         "Diğer okuyucularla anlık mesajlaşarak etkili ve eğlenceli bir iletişim kurabilir, kitaplar hakkında sohbet edebilirsiniz.",
       image: "/images/chat.jpg",
     },
     {
-      id: 11,
-      title: "Güvenli ve Kullanıcı Dostu Tasarım",
+      id: 10,
+      title: "Bütün Cihazlardan Kolaylıkla Erişim",
       description:
         "Tüm cihazlardan kolayca erişilebilir olan kullanıcı dostu arayüzümüz, güvenli ve konforlu bir deneyim sunar.",
       image: "/images/efshane-device.png",
