@@ -4,7 +4,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 
-function Suggestion() {
+function Suggestion(initialLastActivity) {
     const scrollRef = useRef(null);
     const [books, setBooks] = useState([]);
     const navigate = useNavigate();
@@ -32,7 +32,7 @@ function Suggestion() {
             }
         };
         fetchBookSuggestion();
-    }, []);
+    }, [initialLastActivity]);
 
     const scrollLeft = () => {
         if (scrollRef.current) {

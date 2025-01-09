@@ -6,8 +6,22 @@ import axios from 'axios';
 
 function NewSection() {
     const { bookTitle: encodedBookTitle } = useParams();
-    const [successShow, setSuccessShow] = useState(false);
-    const handleSuccessClose = () => setSuccessShow(false);
+    const [successPublishShow, setSuccessPublishShow] = useState(false);
+    const [successSaveShow, setSuccessSaveShow] = useState(false);
+    const handleSuccessSaveShow = () => setSuccessSaveShow(true);
+    const handleSuccessPublishShow = () => setSuccessPublishShow(true);
+
+    const handleSuccessSaveClose = () => {
+        setSuccessSaveShow(false);
+        navigate(`/addsection/${encodedBookTitle}`);
+    };
+
+    const handleSuccessPublishClose = () => {
+        setSuccessPublishShow(false);
+        navigate(`/addsection/${encodedBookTitle}`);
+    };
+    
+    
     const handleSuccessShow = () => setSuccessShow(true);
     const navigate = useNavigate(); 
 
@@ -199,9 +213,12 @@ function NewSection() {
                     Authorization: `Bearer ${localStorage.getItem('token')}`,
                 },
             });
-            console.log(response.data);
-            handleSuccessShow(); 
-            navigate(`/addsection`);
+            handleSuccessSaveShow(); 
+            navigate(`/addsection/${encodedTitle}`);
+            setTimeout(() => {
+                navigate(`/addsection/${encodedBookTitle}`);
+            }, 1000);
+
         } catch (error) {
             console.error(error);
             alert('Bölüm kaydedilirken bir hata oluştu. Lütfen tekrar deneyin.');
@@ -234,8 +251,8 @@ function NewSection() {
                     Authorization: `Bearer ${localStorage.getItem('token')}`,
                 },
             });
-            handleSuccessShow(); 
-            navigate(`/addsection`);
+            handleSuccessPublishShow(); 
+            navigate(`/addsection/${encodedTitle}`);
         } catch (error) {
             console.error(error);
             alert('Bölüm yayınlanırken bir hata oluştu. Lütfen tekrar deneyin.');
@@ -246,7 +263,7 @@ function NewSection() {
 
     return (
         <div className='new-section-page'>
-            <Modal show={successShow} onHide={handleSuccessClose} centered>
+            <Modal show={successPublishShow} onHide={handleSuccessPublishClose} centered>
                 <Modal.Header closeButton>
                     <Modal.Title>Bölüm Yayınlandı!</Modal.Title>
                 </Modal.Header>
@@ -254,7 +271,20 @@ function NewSection() {
                     <p>Bölümünüz başarıyla yayınlandı. Tebrikler!</p>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="primary" onClick={handleSuccessClose}>
+                    <Button variant="primary" onClick={handleSuccessPublishClose}>
+                        Tamam
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+            <Modal show={successSaveShow} onHide={handleSuccessSaveClose} centered>
+                <Modal.Header closeButton>
+                    <Modal.Title>Bölüm Kaydedildi!</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <p>Bölümünüz başarıyla kaydedildi. Tebrikler!</p>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="primary" onClick={handleSuccessSaveClose}>
                         Tamam
                     </Button>
                 </Modal.Footer>

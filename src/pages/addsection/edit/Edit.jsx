@@ -9,8 +9,10 @@ function Edit() {
     const { bookTitle, chapterTitle } = useParams();
     const [successPublishShow, setSuccessPublishShow] = useState(false);
     const [successSaveShow, setSuccessSaveShow] = useState(false);
-    const handleSuccessClose = () => setSuccessShow(false);
-    const handleSuccessShow = () => setSuccessShow(true);
+    const handleSuccessSaveClose = () => setSuccessSaveShow(false);
+    const handleSuccessPublishClose = () => setSuccessPublishShow(false);
+    const handleSuccessSaveShow = () => setSuccessSaveShow(true);
+    const handleSuccessPublishShow = () => setSuccessPublishShow(true);
     const navigate = useNavigate(); 
 
     useEffect(() => {
@@ -236,7 +238,7 @@ function Edit() {
                 },
             });
             handleSuccessSaveShow(); 
-            navigate(`/addsection`);
+            navigate(`/addsection/${encodedTitle}`);
             console.log(response.data);
         } catch (error) {
             console.error(error);
@@ -270,7 +272,7 @@ function Edit() {
                 },
             });
             handleSuccessPublishShow(); 
-            navigate(`/storyWrite`);
+            navigate(`/addsection/${encodedTitle}`);
         } catch (error) {
             console.error(error);
             alert('Bölüm yayınlanırken bir hata oluştu. Lütfen tekrar deneyin.');
@@ -281,7 +283,7 @@ function Edit() {
 
 return (
     <div className='edit-section-page'>
-        <Modal show={successPublishShow} onHide={handleSuccessClose} centered>
+        <Modal show={successPublishShow} onHide={handleSuccessPublishClose} centered>
             <Modal.Header closeButton>
                 <Modal.Title>Bölüm Yayınlandı!</Modal.Title>
             </Modal.Header>
@@ -289,20 +291,20 @@ return (
                 <p>Bölümünüz başarıyla yayınlandı. Tebrikler!</p>
             </Modal.Body>
             <Modal.Footer>
-                <Button variant="primary" onClick={handleSuccessClose}>
+                <Button variant="primary" onClick={handleSuccessPublishClose}>
                     Tamam
                 </Button>
             </Modal.Footer>
         </Modal>
-        <Modal show={successSaveShow} onHide={handleSuccessClose} centered>
+        <Modal show={successSaveShow} onHide={handleSuccessSaveClose} centered>
             <Modal.Header closeButton>
-                <Modal.Title>Bölüm Yayınlandı!</Modal.Title>
+                <Modal.Title>Bölüm Kaydedildi!</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <p>Bölümünüz başarıyla yayınlandı. Tebrikler!</p>
+                <p>Bölümünüz başarıyla kaydedildi. Tebrikler!</p>
             </Modal.Body>
             <Modal.Footer>
-                <Button variant="primary" onClick={handleSuccessClose}>
+                <Button variant="primary" onClick={handleSuccessSaveClose}>
                     Tamam
                 </Button>
             </Modal.Footer>
@@ -433,7 +435,7 @@ return (
         </div>
         <div className="edit-robot">
             <button className='edit-help d-flex justify-content-center align-items-center' onClick={toggleChat}>
-                <i className="bi bi-robot"></i>
+                <img src="/images/efso_logo.svg" alt="" width="180px"/>
             </button>
         </div>
     </div>

@@ -257,6 +257,19 @@ function Feed() {
         if(diffSeconds > 0) return `${diffSeconds}sn`;
     }
 
+    function formatNumber(num) {
+        if (num >= 1_000_000_000) {
+            return (num / 1_000_000_000).toFixed(1).replace(/\.0$/, '') + 'B';
+        }
+        if (num >= 1_000_000) {
+            return (num / 1_000_000).toFixed(1).replace(/\.0$/, '') + 'M';
+        }
+        if (num >= 1_000) {
+            return (num / 1_000).toFixed(1).replace(/\.0$/, '') + 'K';
+        }
+        return num.toString();
+    }
+
     const handleLike = async (postId, isLiked) => {
         try {
             const response = await axios.post(
@@ -302,8 +315,6 @@ function Feed() {
             );
     
             const { originalPost } = response.data;
-    
-            // Repost edilen gönderiyi güncelle
             setPosts((prevPosts) =>
                 prevPosts.map((post) =>
                     post.id === originalPost.id
@@ -462,7 +473,7 @@ return (
                                     <div className="post-image">
                                         {post.image ? (
                                             <img 
-                                                src={`http://localhost:3000/${post.image}`}
+                                                src={post.image}
                                                 onClick={() => openModal(post.image)}
                                                 style={{cursor: "pointer"}}
                                             />
@@ -485,19 +496,19 @@ return (
                                                 className={`bi ${post.isLiked ? "bi-heart-fill me-2" : "bi-heart me-2"}`}
                                                 onClick={() => handleLike(post.id, post.isLiked)}
                                             ></i>
-                                            {post.analysis?.like_count}
+                                            {formatNumber(post.analysis?.like_count)}
                                         </p>
                                             <p>
                                                 <i
                                                     className={`bi ${post.isRepostedByUser  ? "bi-repeat active me-2 text-success" : "bi-repeat me-2"}`}
                                                     onClick={() => handleRepost(post.id)}
                                                 ></i>
-                                                {post.analysis?.repost_count}
+                                                {formatNumber(post.analysis?.repost_count)}
                                             </p>
                                             <div>
                                                 <p onClick={() => toggleComments(post.id)}>
                                                     <i className="bi bi-chat me-2"></i>
-                                                    {post.analysis?.comment_count}
+                                                    {formatNumber(post.analysis?.comment_count)}
                                                 </p>
                                             </div>
                                         </div>

@@ -52,8 +52,8 @@
 }
 
 .profile-pic {
-    width: 40px;
-    height: 40px;
+    width: 28px;
+    height: 30px;
     border-radius: 50%;
     margin: 0 10px;
     background-color: transparent;
@@ -71,7 +71,7 @@
 }
 
 .message-details.sent .message-content-details {
-    background-color: #ffc107   ;
+    background-color: #afd3f9   ;
     color: var(--second-color);
 }
 

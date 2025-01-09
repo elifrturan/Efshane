@@ -58,35 +58,12 @@ function CreateStory() {
         if (file) {
             const img = new Image();
             img.onload = async () => {
-                if (img.width > 200 || img.height > 281) {
-                    setError("Görsel boyutu 200x281 pikselden büyük olamaz.");
-                    setTimeout(() => setError(""), 5000);
-                } else {
-                    setError("");
-                    const reader = new FileReader();
-                    reader.onloadend = () => {
-                        setImage(reader.result);
-                    };
-                    reader.readAsDataURL(file);
-                    try {
-                        const base64Image = await convertToBase64(file); 
-                        setImage(base64Image);
-                    } catch (error) {
-                        console.error("Görsel dönüştürme hatası:", error);
-                    }
-                }
+                console.log(file);
+                setImage(file);
             };
             img.src = URL.createObjectURL(file);
+            console.log(img.src);
         }
-    };
-
-    const convertToBase64 = (file) => {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = () => resolve(reader.result);
-            reader.onerror = (error) => reject(error);
-        });
     };
     
     const handleAddTag = () => {
@@ -180,77 +157,60 @@ function CreateStory() {
             return;
         }
     
-        const bookCover = image;
-        const normalizedTitle = bookTitle.toLowerCase().trim()
-
         setShowErrorAlert(false);
         setShowSuccessAlert(true);
         window.scrollTo(0, 0);
-    
-        const formattedTitle = formatTitleForUrl(bookTitle);
-        const defaultDuration = "0";
-    
-        try {
-            let url, payload;
-            if(isAudioBook) {
-                url = 'http://localhost:3000/audio-book';
-                payload = {
-                    title: bookTitle,
-                    normalizedTitle,
-                    summary: bookSummary,
-                    bookCover,
-                    duration: defaultDuration,
-                    hashtags: tags,
-                    categories: selectedCategory,
-                    ageRange: selectedAgeRange,
-                    bookCopyright: contentChoice,
-                };
-            } else {
-                url = 'http://localhost:3000/book';
-                payload = {
-                    title: bookTitle,
-                    normalizedTitle,
-                    summary: bookSummary,
-                    bookCover: bookCover || defaultImage,
-                    isAudioBook,
-                    hashtags: tags,
-                    categories: selectedCategory,
-                    ageRange: selectedAgeRange,
-                    bookCopyright: contentChoice,
-                    duration: "0",
-                };
-            }
 
+        const normalizedTitle = bookTitle.toLowerCase().trim();
+
+        const formData = new FormData();
+        formData.append('bookCover', image);
+        formData.append('title', bookTitle);
+        formData.append('summary', bookSummary);
+        formData.append('normalizedTitle', bookTitle.toLowerCase().trim());
+        formData.append('hashtags', JSON.stringify(tags)); 
+        formData.append('categories', selectedCategory);
+        formData.append('ageRange', selectedAgeRange);
+        formData.append('bookCopyright', contentChoice);
+        formData.append('duration', "0");
+
+        const url = isAudioBook ? 'http://localhost:3000/audio-book' : 'http://localhost:3000/book';
+        console.log(url);
+
+        if (url !== 'http://localhost:3000/audio-book') {
+            formData.append('isAudioBook', isAudioBook ? 'true' : 'false');
+        }
+
+        try {
             const response = await axios.post(
-                url,
-                payload,
+                url, 
+                formData, 
                 {
                     headers: {
+                        'Content-Type': 'multipart/form-data',
                         Authorization: `Bearer ${localStorage.getItem("token")}`,
                     },
                 }
             );
+            console.log(response);
     
             if (response.status === 201) {
-                const { bookCover: backendBookCover } = response.data;
-
-                if (!bookCover && backendBookCover) {
-                    console.log(`Backend tarafından oluşturulan kapak resmi: ${backendBookCover}`);
-                }
-                
+                console.log("basarılı");
+                const { normalizedTitle } = response.data;
                 setTimeout(() => {
-                    setShowSuccessAlert(false);
                     if (isAudioBook) {
-                        navigate(`/add-voice-section/${formattedTitle}`);
+                        navigate(`/add-voice-section/${normalizedTitle}`);
                     } else {
-                        navigate(`/addsection/${formattedTitle}`);
+                        navigate(`/addsection/${normalizedTitle}`);
                     }
                 }, 3000);
             }
+
         } catch (error) {
             setShowErrorAlert(true);
             setShowSuccessAlert(false);
             window.scrollTo(0, 0);
+            console.error(error);
         }
     };
     
@@ -264,184 +224,184 @@ function CreateStory() {
         }
     };
 
-return (
-    <>
-    {showSuccessAlert && (
-        <div className="alert alert-success d-flex" role="alert">
-            <i className="bi bi-check-circle-fill me-3"></i>
-            <div>
-                Kitap oluşturma işlemi başarılı. Yönlendiriliyorsunuz...
-            </div>
-        </div>
-    )}
-    {showErrorAlert && (
-        <div className="alert alert-danger d-flex" role="alert">
-            <i className="bi bi-exclamation-triangle-fill me-3"></i>
-            <div>Lütfen tüm alanları doldurun.</div>
-        </div>
-    )}
-    <div className='create-story-page'>
-        <div className="container mt-5 mb-5">
-            <div className="create-story-title">
-                <h2 className='text-center'>Hikaye Oluştur</h2>
-                <span >
-                    <i className='text-center'>
-                    Kitabınızın başlık, açıklama, kategori gibi bilgilerini girin ve bir kapak resmi yükleyin. Etiketler ekleyerek kitabınızı daha görünür hale getirebilirsiniz. Tüm alanları doldurduğunuzda kitabınızı kaydedebilirsiniz.
-                    </i>
-                </span>
-            </div>
-            <div className="create-story-main mt-5">
-                <div className="create-left">
-                    {image ? (
-                        <img src={image} alt="uploaded" width="200px" height="281px" />
-                    ) : (
-                        <img src="/images/upload-image.svg" alt="upload-image" width="200px" height="281px" />
-                    )}
-                    <input
-                        type="file"
-                        accept="image/*"
-                        id="image-upload"
-                        style={{ display: 'none' }}
-                        onChange={handleImageUpload}
-                    />
-                    <button onClick={() => document.getElementById('image-upload').click()}>Görsel Yükle <i className="bi bi-cloud-arrow-up-fill ms-1"></i></button>
-                    {error && <p className='error-message-cover'>{error}</p>}
-                    <i className='left-description'>Kitabınız için bir kapak resmi yükleyin. 
-                        Bu, kitabınızın daha çekici görünmesini sağlayacaktır.
-                    </i>
+    return (
+        <>
+        {showSuccessAlert && (
+            <div className="alert alert-success d-flex" role="alert">
+                <i className="bi bi-check-circle-fill me-3"></i>
+                <div>
+                    Kitap oluşturma işlemi başarılı. Yönlendiriliyorsunuz...
                 </div>
-                <div className="create-right">
-                    <Form onSubmit={handleSubmit}>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Kitap Adı</Form.Label>
-                            <Form.Control type="text" className='bg-transparent' value={bookTitle} onChange={(e) => setBookTitle(e.target.value)}/>
-                        </Form.Group>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Kitap Özeti</Form.Label>
-                            <Form.Control className='bg-transparent' as="textarea" rows={4} value={bookSummary} onChange={(e) => setBookSummary(e.target.value)}/>
-                        </Form.Group>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Kategori</Form.Label>
-                            <Form.Select 
-                                size='sm' 
-                                className='form-select-create bg-transparent'
-                                value={selectedCategory}  
-                                onChange={handleCategoryChange} 
-                            >
-                                <option value="">Kategori Seçiniz...</option>
-                                {Array.isArray(category) && category.length > 0 ? (
-                                    category.map((categories) => (
-                                        <option key={categories.id} value={categories.id}>
-                                            {categories.name}
-                                        </option>
-                                    ))
-                                ) : (
-                                    <option disabled>Yükleniyor...</option>
-                                )}
-                            </Form.Select>
-                        </Form.Group>
-                        <Form.Label>Sesli kitap mı?</Form.Label>
-                        <Form.Group className="d-flex align-items-center mb-3">
-                            <Form.Check
-                                type='radio'
-                                label='Evet'
-                                className='d-flex align-items-center gap-2 m-0 me-3 bg-transparent'
-                                checked={isAudioBook === true} 
-                                onChange={() => setIsAudioBook(true)}    
-                            />
-                            <Form.Check
-                                type='radio'
-                                label='Hayır'
-                                className='d-flex align-items-center gap-2 m-0 bg-transparent'
-                                checked={isAudioBook === false} 
-                                onChange={() => setIsAudioBook(false)}
-                            />
-                        </Form.Group>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Etiketler</Form.Label>
-                            <div className="tags-container">
-                                {tags.map((tag, index) => (
-                                    <div className="tag-item" key={index}>
-                                        <span className="tag-text">{tag}</span>
-                                        <span className="remove-tag" onClick={() => handleRemoveTag(tag)}>x</span>
-                                    </div>
-                                ))}
-                            </div>
-                            <InputGroup>
-                                <Form.Control
-                                    className='bg-transparent'
-                                    value={currentTag}
-                                    onChange={(e) => setCurrentTag(e.target.value)}
-                                    onKeyDown={handleKeyDown}
-                                />
-                                <span className='input-group-text span-plus' onClick={handleAddTag}>+</span>
-                            </InputGroup>
-                        </Form.Group>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Yaş Aralığı</Form.Label>
-                            <Form.Select
-                                size='sm' 
-                                className='form-select-create bg-transparent'
-                                value={selectedAgeRange} 
-                                onChange={handleRangeChange} 
-                            >
-                                <option value="">Yaş Aralığı Seçiniz...</option>
-                                {Array.isArray(ageRanges) && ageRanges.length > 0 ? (
-                                    ageRanges.map((range) => (
-                                        <option key={range.id} value={range.id}>
-                                            {range.range}
-                                        </option>
-                                    ))
-                                ) : (
-                                    <option disabled>Yükleniyor...</option>
-                                )}
-                            </Form.Select>
-                        </Form.Group>
-                        {showCopyrightAlert && (
-                                <div className="alert alert-warning d-flex" role="alert">
-                                    <i className="bi bi-exclamation-triangle-fill me-3"></i>
-                                    <div>
-                                        Lütfen yasal uyarıyı kontrol ettiğinizden emin olun.
-                                    </div>
-                                </div>
-                            )}
-                            <Form.Group className="mb-4">
-                                <Form.Label>Telif Hakkı</Form.Label>
-                                <Form.Select size='sm' className='form-select-create bg-transparent' value={contentChoice} onChange={handleContentChoiceChange}>
-                                    <option value="" selected>Seçiniz...</option>
-                                    {copyrightStatuses.map((status) => (
-                                        <option key={status.id} value={status.id}>
-                                            {status.copyright}
-                                        </option>
-                                    ))}
-                                </Form.Select>
-                            </Form.Group>
-                            
-                            {showCopyrightAlert && contentChoice === "1" && (
-                            <div className="alert alert-danger d-flex align-items-start" role="alert">
-                                <i className="bi bi-exclamation-triangle-fill me-2"></i>
-                                <div>
-                                    "Kitabın içeriği tamamen bana aittir. 
-                                    Hiçbir dış kaynaktan alıntı yapılmamıştır." 
-                                    seçeneğini seçmiş olmanız durumunda, kitabınızın içeriği 
-                                    ile ilgili tüm sorumluluk size aittir. Herhangi bir telif hakkı 
-                                    ihlali veya yasal yükümlülük durumunda sorumluluk tamamen 
-                                    size ait olacaktır.
-                                </div>
-                            </div>
-                        )} 
-                        <Button className='create-story-btn' type='submit'>Kaydet</Button>
-                    </Form>
-                </div>
-            </div>
-        </div>
-        {tagError && (
-            <div className="error-message-cover error-message-bottom-left">
-                {tagError}
             </div>
         )}
-    </div>
-    </>
+        {showErrorAlert && (
+            <div className="alert alert-danger d-flex" role="alert">
+                <i className="bi bi-exclamation-triangle-fill me-3"></i>
+                <div>Lütfen tüm alanları doldurun.</div>
+            </div>
+        )}
+        <div className='create-story-page'>
+            <div className="container mt-5 mb-5">
+                <div className="create-story-title">
+                    <h2 className='text-center'>Hikaye Oluştur</h2>
+                    <span >
+                        <i className='text-center'>
+                        Kitabınızın başlık, açıklama, kategori gibi bilgilerini girin ve bir kapak resmi yükleyin. Etiketler ekleyerek kitabınızı daha görünür hale getirebilirsiniz. Tüm alanları doldurduğunuzda kitabınızı kaydedebilirsiniz.
+                        </i>
+                    </span>
+                </div>
+                <div className="create-story-main mt-5">
+                    <div className="create-left">
+                        {image ? (
+                            <img src={image} alt="uploaded" width="200px" height="281px" />
+                        ) : (
+                            <img src="/images/upload-image.svg" alt="upload-image" width="200px" height="281px" />
+                        )}
+                        <input
+                            type="file"
+                            accept="image/*"
+                            id="image-upload"
+                            style={{ display: 'none' }}
+                            onChange={handleImageUpload}
+                        />
+                        <button onClick={() => document.getElementById('image-upload').click()}>Görsel Yükle <i className="bi bi-cloud-arrow-up-fill ms-1"></i></button>
+                        {error && <p className='error-message-cover'>{error}</p>}
+                        <i className='left-description'>Kitabınız için bir kapak resmi yükleyin. 
+                            Bu, kitabınızın daha çekici görünmesini sağlayacaktır.
+                        </i>
+                    </div>
+                    <div className="create-right">
+                        <Form onSubmit={handleSubmit}>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Kitap Adı</Form.Label>
+                                <Form.Control type="text" className='bg-transparent' value={bookTitle} onChange={(e) => setBookTitle(e.target.value)}/>
+                            </Form.Group>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Kitap Özeti</Form.Label>
+                                <Form.Control className='bg-transparent' as="textarea" rows={4} value={bookSummary} onChange={(e) => setBookSummary(e.target.value)}/>
+                            </Form.Group>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Kategori</Form.Label>
+                                <Form.Select 
+                                    size='sm' 
+                                    className='form-select-create bg-transparent'
+                                    value={selectedCategory}  
+                                    onChange={handleCategoryChange} 
+                                >
+                                    <option value="">Kategori Seçiniz...</option>
+                                    {Array.isArray(category) && category.length > 0 ? (
+                                        category.map((categories) => (
+                                            <option key={categories.id} value={categories.id}>
+                                                {categories.name}
+                                            </option>
+                                        ))
+                                    ) : (
+                                        <option disabled>Yükleniyor...</option>
+                                    )}
+                                </Form.Select>
+                            </Form.Group>
+                            <Form.Label>Sesli kitap mı?</Form.Label>
+                            <Form.Group className="d-flex align-items-center mb-3">
+                                <Form.Check
+                                    type='radio'
+                                    label='Evet'
+                                    className='d-flex align-items-center gap-2 m-0 me-3 bg-transparent'
+                                    checked={isAudioBook === true} 
+                                    onChange={() => setIsAudioBook(true)}    
+                                />
+                                <Form.Check
+                                    type='radio'
+                                    label='Hayır'
+                                    className='d-flex align-items-center gap-2 m-0 bg-transparent'
+                                    checked={isAudioBook === false} 
+                                    onChange={() => setIsAudioBook(false)}
+                                />
+                            </Form.Group>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Etiketler</Form.Label>
+                                <div className="tags-container">
+                                    {tags.map((tag, index) => (
+                                        <div className="tag-item" key={index}>
+                                            <span className="tag-text">{tag}</span>
+                                            <span className="remove-tag" onClick={() => handleRemoveTag(tag)}>x</span>
+                                        </div>
+                                    ))}
+                                </div>
+                                <InputGroup>
+                                    <Form.Control
+                                        className='bg-transparent'
+                                        value={currentTag}
+                                        onChange={(e) => setCurrentTag(e.target.value)}
+                                        onKeyDown={handleKeyDown}
+                                    />
+                                    <span className='input-group-text span-plus' onClick={handleAddTag}>+</span>
+                                </InputGroup>
+                            </Form.Group>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Yaş Aralığı</Form.Label>
+                                <Form.Select
+                                    size='sm' 
+                                    className='form-select-create bg-transparent'
+                                    value={selectedAgeRange} 
+                                    onChange={handleRangeChange} 
+                                >
+                                    <option value="">Yaş Aralığı Seçiniz...</option>
+                                    {Array.isArray(ageRanges) && ageRanges.length > 0 ? (
+                                        ageRanges.map((range) => (
+                                            <option key={range.id} value={range.id}>
+                                                {range.range}
+                                            </option>
+                                        ))
+                                    ) : (
+                                        <option disabled>Yükleniyor...</option>
+                                    )}
+                                </Form.Select>
+                            </Form.Group>
+                            {showCopyrightAlert && (
+                                    <div className="alert alert-warning d-flex" role="alert">
+                                        <i className="bi bi-exclamation-triangle-fill me-3"></i>
+                                        <div>
+                                            Lütfen yasal uyarıyı kontrol ettiğinizden emin olun.
+                                        </div>
+                                    </div>
+                                )}
+                                <Form.Group className="mb-4">
+                                    <Form.Label>Telif Hakkı</Form.Label>
+                                    <Form.Select size='sm' className='form-select-create bg-transparent' value={contentChoice} onChange={handleContentChoiceChange}>
+                                        <option value="" selected>Seçiniz...</option>
+                                        {copyrightStatuses.map((status) => (
+                                            <option key={status.id} value={status.id}>
+                                                {status.copyright}
+                                            </option>
+                                        ))}
+                                    </Form.Select>
+                                </Form.Group>
+                                
+                                {showCopyrightAlert && contentChoice === "1" && (
+                                <div className="alert alert-danger d-flex align-items-start" role="alert">
+                                    <i className="bi bi-exclamation-triangle-fill me-2"></i>
+                                    <div>
+                                        "Kitabın içeriği tamamen bana aittir. 
+                                        Hiçbir dış kaynaktan alıntı yapılmamıştır." 
+                                        seçeneğini seçmiş olmanız durumunda, kitabınızın içeriği 
+                                        ile ilgili tüm sorumluluk size aittir. Herhangi bir telif hakkı 
+                                        ihlali veya yasal yükümlülük durumunda sorumluluk tamamen 
+                                        size ait olacaktır.
+                                    </div>
+                                </div>
+                            )} 
+                            <Button className='create-story-btn' type='submit'>Kaydet</Button>
+                        </Form>
+                    </div>
+                </div>
+            </div>
+            {tagError && (
+                <div className="error-message-cover error-message-bottom-left">
+                    {tagError}
+                </div>
+            )}
+        </div>
+        </>
     )
 }
 export default CreateStory

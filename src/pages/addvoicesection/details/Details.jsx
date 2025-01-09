@@ -146,6 +146,18 @@ function Details() {
             });
     }, []); 
 
+    const handleImageUpload = async (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const img = new Image();
+            img.onload = async () => {
+                setError(""); 
+                setImage(file); 
+            };
+            img.src = URL.createObjectURL(file);
+        }
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
     
@@ -200,148 +212,174 @@ function Details() {
         }
     };
 
-return (
-    <>
-        {showSuccessAlert && (
-            <div className="alert alert-success d-flex" role="alert">
-                <i className="bi bi-check-circle-fill me-3"></i>
-                <div>
-                    Kitap güncelleme işlemi başarılı.
+    const backendBaseUrl = 'http://localhost:3000';
+
+    return (
+        <>
+            {showSuccessAlert && (
+                <div className="alert alert-success d-flex" role="alert">
+                    <i className="bi bi-check-circle-fill me-3"></i>
+                    <div>
+                        Kitap güncelleme işlemi başarılı.
+                    </div>
                 </div>
-            </div>
-        )}
-        {showErrorAlert && (
-            <div className="alert alert-danger d-flex" role="alert">
-                <i className="bi bi-exclamation-triangle-fill me-3"></i>
-                <div>Kitap güncelleme işlemi başarısız.</div>
-            </div>
-        )}
-        {activeTab === 'details' && (
-            <div id="details" className={`tab-pane ${activeTab === 'details' ? 'active' : ''}`}>
-                <form className = 'm-0' onSubmit={handleSubmit}>
-                    <div className="form-group mb-3">
-                        <label className='form-label'>Kitap Adı</label>
-                            <input 
-                                type="text" 
-                                className='form-control'
-                                value={title}
-                                onChange={(e) => setBookTitle(e.target.value)}
-                            />
-                    </div>
-                    <div className="form-group mb-3">
-                        <label className='form-label'>Kitap Özeti</label>
-                            <textarea 
-                                rows="4" 
-                                className='form-control'
-                                value={summary}
-                                onChange={(e) => setBookSummary(e.target.value)}
-                            />
-                    </div>
-                    <div className="form-group mb-3">
-                        <label className='form-label'>Kategori</label>
-                            <select
-                                className="form-select form-select-sm form-select-create"
-                                value={bookCategory}  
-                                onChange={handleCategoryChange} 
-                            >
-                            <option value="">Kategori Seçiniz...</option>
-                            {Array.isArray(category) && (
-                                category.map((categories) => (
-                                    <option key={categories.id} value={categories.id}>
-                                        {categories.name}
-                                    </option>
-                                ))
-                            )}
-                            </select>
-                    </div>
-                        <div className="form-group mb-3">
-                            <label className='form-label'>Etiketler</label>
-                                <div className="tags-container">
-                                {Array.isArray(bookTags) && bookTags.map((bookTag, index) => (
-                                    <div className="tag-item" key={index}>
-                                        <span className="tag-text">{bookTag}</span>
-                                        <span className="remove-tag" onClick={() => handleRemoveTag(bookTag)}>x</span>
-                                    </div>
-                                ))}
-                        </div>
-                        <div className="input-group">
-                            <input  
-                                className='form-control'
-                                value={currentTag}
-                                onChange={(e) => setCurrentTag(e.target.value)}
-                                onKeyDown={handleKeyDown}
-                                placeholder='Etiket ekleyiniz...'
-                            />
-                            <span className='input-group-text span-plus' onClick={handleAddTag}>+</span>
-                        </div>
-                    </div>
-                    <div className="mb-3">
-                        <label className='form-label'>Yaş Aralığı</label>
-                            <select
-                                className="form-select form-select-sm form-select-create"
-                                value={ageRange} 
-                                onChange={handleRangeChange} 
-                            >
-                            <option value="">Yaş Aralığı Seçiniz...</option>
-                            {Array.isArray(ageRanges) && (
-                                ageRanges.map((range) => (
-                                    <option key={range.id} value={range.id}>
-                                        {range.range}
-                                    </option>
-                                ))
-                            )}
-                            </select>
-                    </div>
-                    {showCopyrightAlert && (
-                        <div className="alert alert-warning d-flex" role="alert">
-                            <i className="bi bi-exclamation-triangle-fill me-3"></i>
-                                <div>
-                                    Lütfen yasal uyarıyı kontrol ettiğinizden emin olun.
-                                </div>
-                        </div>
-                    )}
-                    <div className="form-group mb-3">
-                        <label className='form-label'>Telif Hakkı</label>
-                            <select 
-                                className="form-select form-select-sm form-select-create" 
-                                value={bookContentChoice} 
-                                onChange={handleContentChoiceChange}
-                                >
-                                <option value="" selected>Seçiniz...</option>
-                                {Array.isArray(copyrightStatuses) && 
-                                    copyrightStatuses.map(status => (
-                                        <option key={status.id} value={status.id}>
-                                            {status.copyright}
-                                        </option>
-                                ))}
-                            </select>
+            )}
+            {showErrorAlert && (
+                <div className="alert alert-danger d-flex" role="alert">
+                    <i className="bi bi-exclamation-triangle-fill me-3"></i>
+                    <div>Kitap güncelleme işlemi başarısız.</div>
+                </div>
+            )}
+            {activeTab === 'details' && (
+                <div id="details" className={`tab-pane ${activeTab === 'details' ? 'active' : ''}`}>
+                    <form className = 'm-0' onSubmit={handleSubmit}>
+                        <div className='add-voice-section-left'>
+                            <div className="form-group mb-3">
+                                {bookImage ? (
+                                    <img
+                                        src={bookImage.startsWith('uploads') ? `${backendBaseUrl}/${bookImage}` : bookImage}
+                                        alt="uploaded"
+                                        width="200px"
+                                        height="281px"
+                                    />
+                                ) : (
+                                    <img src="/images/upload-image.svg" alt="upload-image" width="200px" height="281px" />
+                                )}
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    id="image-upload"
+                                    style={{ display: 'none' }}
+                                    onChange={handleImageUpload}
+                                />
+                                <button onClick={() => document.getElementById('image-upload').click()}>
+                                    Görsel Yükle <i className="bi bi-cloud-arrow-up-fill ms-1"></i>
+                                </button>
                             </div>
-                            {showCopyrightAlert && bookContentChoice === "1" && (
-                                <div className="alert alert-danger d-flex align-items-start" role="alert">
-                                    <i className="bi bi-exclamation-triangle-fill me-2"></i>
-                                        <div>
-                                            "Kitaın içeriği tamamen bana aittir. 
-                                            Hiçbir dış kaynaktan alıntı yapılmamıştır." 
-                                            seçeneğini seçmiş olmanız durumunda, kitabınızın içeriği 
-                                            ile ilgili tüm sorumluluk size aittir. Herhangi bir telif hakkı 
-                                            ihlali veya yasal yükümlülük durumunda sorumluluk tamamen 
-                                            size ait olacaktır.
+                        </div>
+                        <div className="form-group mb-3">
+                            <label className='form-label'>Kitap Adı</label>
+                                <input 
+                                    type="text" 
+                                    className='form-control'
+                                    value={title}
+                                    onChange={(e) => setBookTitle(e.target.value)}
+                                />
+                        </div>
+                        <div className="form-group mb-3">
+                            <label className='form-label'>Kitap Özeti</label>
+                                <textarea 
+                                    rows="4" 
+                                    className='form-control'
+                                    value={summary}
+                                    onChange={(e) => setBookSummary(e.target.value)}
+                                />
+                        </div>
+                        <div className="form-group mb-3">
+                            <label className='form-label'>Kategori</label>
+                                <select
+                                    className="form-select form-select-sm form-select-create"
+                                    value={bookCategory}  
+                                    onChange={handleCategoryChange} 
+                                >
+                                <option value="">Kategori Seçiniz...</option>
+                                {Array.isArray(category) && (
+                                    category.map((categories) => (
+                                        <option key={categories.id} value={categories.id}>
+                                            {categories.name}
+                                        </option>
+                                    ))
+                                )}
+                                </select>
+                        </div>
+                            <div className="form-group mb-3">
+                                <label className='form-label'>Etiketler</label>
+                                    <div className="tags-container">
+                                    {Array.isArray(bookTags) && bookTags.map((bookTag, index) => (
+                                        <div className="tag-item" key={index}>
+                                            <span className="tag-text">{bookTag}</span>
+                                            <span className="remove-tag" onClick={() => handleRemoveTag(bookTag)}>x</span>
                                         </div>
+                                    ))}
+                            </div>
+                            <div className="input-group">
+                                <input  
+                                    className='form-control'
+                                    value={currentTag}
+                                    onChange={(e) => setCurrentTag(e.target.value)}
+                                    onKeyDown={handleKeyDown}
+                                    placeholder='Etiket ekleyiniz...'
+                                />
+                                <span className='input-group-text span-plus' onClick={handleAddTag}>+</span>
+                            </div>
+                        </div>
+                        <div className="mb-3">
+                            <label className='form-label'>Yaş Aralığı</label>
+                                <select
+                                    className="form-select form-select-sm form-select-create"
+                                    value={ageRange} 
+                                    onChange={handleRangeChange} 
+                                >
+                                <option value="">Yaş Aralığı Seçiniz...</option>
+                                {Array.isArray(ageRanges) && (
+                                    ageRanges.map((range) => (
+                                        <option key={range.id} value={range.id}>
+                                            {range.range}
+                                        </option>
+                                    ))
+                                )}
+                                </select>
+                        </div>
+                        {showCopyrightAlert && (
+                            <div className="alert alert-warning d-flex" role="alert">
+                                <i className="bi bi-exclamation-triangle-fill me-3"></i>
+                                    <div>
+                                        Lütfen yasal uyarıyı kontrol ettiğinizden emin olun.
+                                    </div>
+                            </div>
+                        )}
+                        <div className="form-group mb-3">
+                            <label className='form-label'>Telif Hakkı</label>
+                                <select 
+                                    className="form-select form-select-sm form-select-create" 
+                                    value={bookContentChoice} 
+                                    onChange={handleContentChoiceChange}
+                                    >
+                                    <option value="" selected>Seçiniz...</option>
+                                    {Array.isArray(copyrightStatuses) && 
+                                        copyrightStatuses.map(status => (
+                                            <option key={status.id} value={status.id}>
+                                                {status.copyright}
+                                            </option>
+                                    ))}
+                                </select>
                                 </div>
-                            )} 
-                    <button className='add-section-btn mb-3' type='submit'>Kaydet</button> 
-                </form>
-            </div>
-        )}
-        {/* Errors */}
-        {tagError && (
-            <div className="error-message-cover error-message-bottom-left">
-                {tagError}
-            </div>
-        )}
-    </>
-    
-)
+                                {showCopyrightAlert && bookContentChoice === "1" && (
+                                    <div className="alert alert-danger d-flex align-items-start" role="alert">
+                                        <i className="bi bi-exclamation-triangle-fill me-2"></i>
+                                            <div>
+                                                "Kitaın içeriği tamamen bana aittir. 
+                                                Hiçbir dış kaynaktan alıntı yapılmamıştır." 
+                                                seçeneğini seçmiş olmanız durumunda, kitabınızın içeriği 
+                                                ile ilgili tüm sorumluluk size aittir. Herhangi bir telif hakkı 
+                                                ihlali veya yasal yükümlülük durumunda sorumluluk tamamen 
+                                                size ait olacaktır.
+                                            </div>
+                                    </div>
+                                )} 
+                        <button className='add-section-btn mb-3' type='submit'>Kaydet</button> 
+                    </form>
+                </div>
+            )}
+            {/* Errors */}
+            {tagError && (
+                <div className="error-message-cover error-message-bottom-left">
+                    {tagError}
+                </div>
+            )}
+        </>
+        
+    )
 }
 
 export default Details

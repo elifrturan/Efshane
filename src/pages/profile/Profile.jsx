@@ -61,7 +61,8 @@ function Profile() {
                         Authorization: `Bearer ${localStorage.getItem('token')}`,
                     },
                 });
-                setBooks(response.data.books);
+                console.log(response.data);
+                setBooks(response.data || []);
             } catch (error) {
                 console.error("Error fetching comments:", error);
             }

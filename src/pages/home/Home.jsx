@@ -1,4 +1,4 @@
-import { React, useState } from 'react'
+import { React, useState, useEffect } from 'react'
 import './Home.css'
 import NewRelases from './newrelases/NewRelases';
 import Popular from './popular/Popular';
@@ -17,9 +17,16 @@ const debounce = (func, delay) => {
   };
 };
 
+const defaultProfileImage = '/images/user.jpeg';
+
 function Home() {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState({ books: [], users: [] });
+  const [lastActivity, setLastActivity] = useState(null);
+
+  useEffect(() => {
+    setLastActivity(null);
+}, [localStorage.getItem('token')]);
 
   const handleSearch = async() => {
     try {
@@ -91,7 +98,7 @@ function Home() {
                   {filteredUsers.map((user) => (
                     <div className="search-author-item d-flex mb-2" key={user.id}>
                       <img
-                        src={user.profile_image}
+                        src={user.profile_image || defaultProfileImage}
                         alt={user.username}
                         className="search-author-profile me-3"
                         style={{ width: "50px", height: "50px", borderRadius: "50%" }}
@@ -107,10 +114,10 @@ function Home() {
           </div>
         </div>
       </div>
-      <ContinueRead/>
-      <NewRelases/>
-      <Popular/>
-      <Suggestion/>
+      <ContinueRead lastActivity={lastActivity} />
+      <NewRelases lastActivity={lastActivity}/>
+      <Popular lastActivity={lastActivity}/>
+      <Suggestion lastActivity={lastActivity}/>
       <Footer/>
     </div>
   )

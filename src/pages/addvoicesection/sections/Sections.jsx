@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react'
 import './Sections.css'
 import { Button, Dropdown, Form, Modal, Spinner } from 'react-bootstrap';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
 
 function Sections() {
@@ -38,30 +38,31 @@ function Sections() {
     const [showSuccessModal, setShowSuccessModal] = useState(false);
     const handleSuccessModalClose = () => setShowSuccessModal(false);
 
-
     useEffect(() => {
         const fetchSections = async () => {
-            if (activeTab === "sections") { 
+            if (activeTab === "sections") {
                 try {
                     const response = await axios.get(
-                        `http://localhost:3000/episode/${encodedAudioBookTitle}`, 
+                        `http://localhost:3000/episode/${encodedAudioBookTitle}`,
                         {
                             headers: {
                                 Authorization: `Bearer ${localStorage.getItem("token")}`,
                             },
                         }
                     );
-                    if (response.data) {
-                        setSections(response.data); 
+                    console.log("API Yanıtı:", response.data); 
+                    if (Array.isArray(response.data.episodes)) {
+                        setSections(response.data.episodes);
                     } else {
-                        console.error("Bölüm verisi beklenmeyen formatta:", response.data);
+                        console.error("Beklenmeyen veri formatı:", response.data);
+                        setSections([]); 
                     }
                 } catch (error) {
-                    console.error("Bölümleri çekerken hata oluştu:", error);
+                    console.error("API çağrısı sırasında hata oluştu:", error);
+                    setSections([]); 
                 }
             }
-        };
-    
+        };            
         fetchSections();
     }, [activeTab]);
 
@@ -212,17 +213,17 @@ function Sections() {
     }
 
     const calculateTotalDuration = () => {
-        const totalSeconds = sections.reduce((sum, section) => sum + section.duration, 0);
+        if (!Array.isArray(sections) || sections.length === 0) {
+            return "0 dakika 0 saniye"; 
+        }
+        const totalSeconds = sections.reduce((sum, section) => sum + (section.duration || 0), 0);
         const hours = Math.floor(totalSeconds / 3600);
         const minutes = Math.floor((totalSeconds % 3600) / 60);
         const seconds = totalSeconds % 60;
-        if (hours > 1){
-            return `${hours} saat ${minutes} dakika ${seconds} saniye`
-        } else {
-            return `${minutes} dakika ${seconds} saniye`
-        }
-        
-    }
+        return hours > 0 
+            ? `${hours} saat ${minutes} dakika ${seconds} saniye`
+            : `${minutes} dakika ${seconds} saniye`;
+    };    
 
     const handleCancel = () => {
         setFileType(null);
@@ -656,8 +657,12 @@ return (
     <>
         {isLoading && (
             <div className="loading-overlay d-flex gap-3">
-                <Spinner animation="border" variant="primary" />
-                <img src="/images/efso_logo.svg" alt="" width="60px"/>
+                <img src="/images/efso_logo.svg" alt="" width="320px"/>
+                <Spinner 
+                    animation="border"
+                    variant="primary"
+                    style={{ width: '100px', height: '100px' }}
+                />
                 <p>Merhaba, ben Efso! Bu bölümü sizin için analiz ediyorum. Lütfen biraz bekleyin...</p>
             </div>
         )}

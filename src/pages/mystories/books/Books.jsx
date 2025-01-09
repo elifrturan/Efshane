@@ -10,6 +10,7 @@ function Books() {
     const [bookToDelete, setBookToDelete] = useState(null);
     const [books, setBooks] = useState([]);
     const navigate = useNavigate();
+    const backendBaseUrl = 'http://localhost:3000';
 
     useEffect(() => {
         const fetchBooks = async () => {
@@ -167,7 +168,16 @@ return (
                         {books.map((book) => (
                             <div className="book-card mb-3" key={book.id}>
                                 <div className="my-stories-book-left d-flex gap-3">
-                                    <img src={book.bookCover} alt="" width="80" height="120" />
+                                    <img
+                                        src={
+                                            book.bookCover?.startsWith('uploads')
+                                                ? `${backendBaseUrl}/${book.bookCover}`
+                                                : book.bookCover
+                                        }
+                                        alt={book.title}
+                                        width="80"
+                                        height="120"
+                                    />
                                     <div className="stories-left-right">
                                         <p className='stories-name'>{book.title}</p>
                                         <p className='stories-date'>

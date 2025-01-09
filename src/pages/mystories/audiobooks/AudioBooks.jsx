@@ -62,7 +62,7 @@ function AudioBooks() {
 
     const handleEdit = (e, bookName) => {
         e.preventDefault();
-
+        console.log("edit");
         const formattedTitle = formatTitleForUrl(bookName);
         navigate(`/add-voice-section/${formattedTitle}`)        
     }
@@ -136,108 +136,108 @@ function AudioBooks() {
             alert('Bir hata oluştu. Lütfen tekrar deneyin.');
         }
     };    
-console.log("asdgas");
-return (
-    <>
-        {activeTab === 'audioBooks' && (
-            <div id="audio-books" className={`stories-tab-pane ${activeTab === 'audioBooks' ? 'active' : ''}`}>
-                {audioBooks.map((audioBook) => (
-                    <div className="audio-book-card mb-3" key={audioBook.id}>
-                        <div className="audio-book-left d-flex gap-3">
-                            <img src={audioBook.bookCover} alt="" width="80" height="120"/>
-                            <div className="audio-book-left-right">
-                                <p className='audio-book-name'>{audioBook.title}</p>
-                                <p className='stories-date'>
-                                Yayınlanma Tarihi: {new Date(audioBook.publish_date).toLocaleDateString('tr-TR', {
-                                    year: 'numeric',
-                                    month: 'long',
-                                    day: 'numeric',
-                                    hour: '2-digit',
-                                    minute: '2-digit',
-                                })}
-                                </p>                                
-                                <div className="audio-book-istatistic">
-                                    <p className='me-2'><i className="bi bi-eye-fill me-1"></i>{audioBook.read_count}</p>
-                                    <p className='me-2'><i className="bi bi-heart-fill me-1"></i>{audioBook.like_count}</p>
-                                    <p><i className="bi bi-chat-fill me-1"></i>{audioBook.comment_count}</p>
+
+    return (
+        <>
+            {activeTab === 'audioBooks' && (
+                <div id="audio-books" className={`stories-tab-pane ${activeTab === 'audioBooks' ? 'active' : ''}`}>
+                    {audioBooks.map((audioBook) => (
+                        <div className="audio-book-card mb-3" key={audioBook.id}>
+                            <div className="audio-book-left d-flex gap-3">
+                                <img src={audioBook.bookCover} alt="" width="80" height="120"/>
+                                <div className="audio-book-left-right">
+                                    <p className='audio-book-name'>{audioBook.title}</p>
+                                    <p className='stories-date'>
+                                    Yayınlanma Tarihi: {new Date(audioBook.publish_date).toLocaleDateString('tr-TR', {
+                                        year: 'numeric',
+                                        month: 'long',
+                                        day: 'numeric',
+                                        hour: '2-digit',
+                                        minute: '2-digit',
+                                    })}
+                                    </p>                                
+                                    <div className="audio-book-istatistic">
+                                        <p className='me-2'><i className="bi bi-eye-fill me-1"></i>{audioBook.read_count}</p>
+                                        <p className='me-2'><i className="bi bi-heart-fill me-1"></i>{audioBook.like_count}</p>
+                                        <p><i className="bi bi-chat-fill me-1"></i>{audioBook.comment_count}</p>
+                                    </div>
+                                    <p className='audio-book-total-time'>Toplam Süre: {audioBook.duration}</p>
                                 </div>
-                                <p className='audio-book-total-time'>Toplam Süre: {audioBook.duration}</p>
+                            </div>
+                            <div className="audio-book-right d-flex gap-2">
+                                <Dropdown>
+                                    <Dropdown.Toggle className='no-toggle'>
+                                        <i className="bi bi-three-dots-vertical"></i>
+                                    </Dropdown.Toggle>
+
+                                    <Dropdown.Menu>
+                                        <Dropdown.Item className='icon-link icon-link-hover' onClick={(e) => handleEdit(e, audioBook.title)}><i className="bi bi-pen me-1"></i>Düzenle</Dropdown.Item>
+                                        <Dropdown.Item className='icon-link icon-link-hover' onClick={() => handleDeleteClick(audioBook)}><i className="bi bi-trash me-1"></i>Sil</Dropdown.Item>
+                                        <Dropdown.Item className="icon-link icon-link-hover">
+                                            <i className="bi bi-book me-1"></i>
+                                            {audioBook.publish ? (
+                                                <button
+                                                    className="p-0 m-0"
+                                                    style={{
+                                                        background: 'none',
+                                                        border: 'none',
+                                                        padding: '0',
+                                                        color: 'inherit',
+                                                        cursor: 'pointer',
+                                                        fontSize: 'inherit',
+                                                    }}
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        togglePublish(audioBook.id, audioBook.title);
+                                                    }}
+                                                >
+                                                    Yayından Kaldır
+                                                </button>
+                                            ) : (
+                                                <button
+                                                    className="p-0 m-0"
+                                                    style={{
+                                                        background: 'none',
+                                                        border: 'none',
+                                                        padding: '0',
+                                                        color: 'inherit',
+                                                        cursor: 'pointer',
+                                                        fontSize: 'inherit',
+                                                    }}
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        togglePublish(audioBook.id, audioBook.title);
+                                                    }}
+                                                >
+                                                    Yayınla
+                                                </button>
+                                            )}
+                                        </Dropdown.Item>
+                                    </Dropdown.Menu>
+                                </Dropdown>
                             </div>
                         </div>
-                        <div className="audio-book-right d-flex gap-2">
-                            <Dropdown>
-                                <Dropdown.Toggle className='no-toggle'>
-                                    <i className="bi bi-three-dots-vertical"></i>
-                                </Dropdown.Toggle>
-
-                                <Dropdown.Menu>
-                                    <Dropdown.Item className='icon-link icon-link-hover' onClick={(e) => handleEdit(e, audioBook.title)}><i className="bi bi-pen me-1"></i>Düzenle</Dropdown.Item>
-                                    <Dropdown.Item className='icon-link icon-link-hover' onClick={() => handleDeleteClick(audioBook)}><i className="bi bi-trash me-1"></i>Sil</Dropdown.Item>
-                                    <Dropdown.Item className="icon-link icon-link-hover">
-                                        <i className="bi bi-book me-1"></i>
-                                        {audioBook.publish ? (
-                                            <button
-                                                className="p-0 m-0"
-                                                style={{
-                                                    background: 'none',
-                                                    border: 'none',
-                                                    padding: '0',
-                                                    color: 'inherit',
-                                                    cursor: 'pointer',
-                                                    fontSize: 'inherit',
-                                                }}
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    togglePublish(audioBook.id, audioBook.title);
-                                                }}
-                                            >
-                                                Yayından Kaldır
-                                            </button>
-                                        ) : (
-                                            <button
-                                                className="p-0 m-0"
-                                                style={{
-                                                    background: 'none',
-                                                    border: 'none',
-                                                    padding: '0',
-                                                    color: 'inherit',
-                                                    cursor: 'pointer',
-                                                    fontSize: 'inherit',
-                                                }}
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    togglePublish(audioBook.id, audioBook.title);
-                                                }}
-                                            >
-                                                Yayınla
-                                            </button>
-                                        )}
-                                    </Dropdown.Item>
-                                </Dropdown.Menu>
-                            </Dropdown>
-                        </div>
-                    </div>
-                ))}
-            </div>
-        )}
-        <Modal show={showModal} onHide={() => setShowModal(false)} centered className='audio-book-delete-modal'>
-            <Modal.Header closeButton>
-                <Modal.Title>Sesli kitabını silmek mi istiyorsun?</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                <p>Kitabını silmek istediğin için üzgünüz. Bu işlem geri alınamaz. Emin misin?</p>
-            </Modal.Body>
-            <Modal.Footer>
-                <Button onClick={() => setShowModal(false)}>
-                    İptal
-                </Button>
-                <Button onClick={confirmDelete}>
-                    Sil
-                </Button>
-            </Modal.Footer>
-        </Modal>
-    </>
-)
+                    ))}
+                </div>
+            )}
+            <Modal show={showModal} onHide={() => setShowModal(false)} centered className='audio-book-delete-modal'>
+                <Modal.Header closeButton>
+                    <Modal.Title>Sesli kitabını silmek mi istiyorsun?</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <p>Kitabını silmek istediğin için üzgünüz. Bu işlem geri alınamaz. Emin misin?</p>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button onClick={() => setShowModal(false)}>
+                        İptal
+                    </Button>
+                    <Button onClick={confirmDelete}>
+                        Sil
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+        </>
+    )
 }
 
 export default AudioBooks

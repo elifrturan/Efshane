@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React from 'react';
 import './Navbar.css'
 import { Navbar, Nav, Dropdown, Container} from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -6,6 +6,7 @@ import {useUser } from '../../User.Context';
 
 function CustomNavbar() {
   const { user } = useUser();
+  const defaultProfileImage = '/images/user.jpeg';
 
   return (
     <>
@@ -15,12 +16,9 @@ function CustomNavbar() {
             <img
               src="/logo/logo.svg"
               alt="Logo"
-              className="me-2"
-              style={{ height: '40px' }}
+              className="object-fit-cover"
+              style={{ width: '100px', height: '40px' }}
             />
-            <span className="fw-bold fs-5 ms-2">
-              <span className="navbar-ef">EF</span>shane
-            </span>
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="navbar-nav" />
           <Navbar.Collapse id="navbar-nav">
@@ -37,7 +35,7 @@ function CustomNavbar() {
               <Dropdown align="end">
                 <Dropdown.Toggle as="a" className="nav-link p-0 mx-2">
                   <img
-                    src={user.profile_image}
+                    src={user.profile_image || defaultProfileImage}
                     alt="Profil"
                     className="rounded-circle"
                     style={{ height: '40px', width: '40px', objectFit: 'cover' }}

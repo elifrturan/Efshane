@@ -3,7 +3,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-function NewRelases() {
+function NewRelases(initialLastActivity) {
     const scrollRef = useRef(null);
     const [books, setBook] = useState(null);
     const navigate = useNavigate();
@@ -31,7 +31,7 @@ function NewRelases() {
       };
     
       fetchBook();
-    }, []);
+    }, [initialLastActivity]);
 
     const scrollLeft = () => {
       if (scrollRef.current) {

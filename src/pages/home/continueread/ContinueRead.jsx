@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from 'react-bootstrap'
 import './ContinueRead.css';
 
-function ContinueRead() {
+function ContinueRead({initialLastActivity}) {
     const navigate = useNavigate();
     const [lastActivity, setLastActivity] = useState(null);
 
@@ -28,8 +28,10 @@ function ContinueRead() {
                 console.error("Kitap alınırken hata oluştu:", error.response?.data || error.message);
             }
         };
-        fetchLastActivity();
-    }, []);
+        if (!initialLastActivity) {
+            fetchLastActivity();
+        }
+    }, [initialLastActivity]);
 
     const handleProfileClick = (username) => {
         navigate(`/user/${username}`);
