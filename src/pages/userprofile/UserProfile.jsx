@@ -12,11 +12,15 @@ function UserProfile() {
     const [isFollowing, setIsFollowing] = useState(false);
     const storyScrollRef = useRef(null);
     const readListScrollRef = useRef(null);
+    const [showListModal, setShowListModal] = useState(false);
     const { username } = useParams();
     const [user, setUserProfile] = useState([])
     const [stories, setStories] = useState([]);
     const [books, setBooks] = useState([]);
     const [anons, setAnons] = useState([]);
+    const [selectedStory, setSelectedStory] = useState(null);
+    const [editMode, setEditMode] = useState(false);
+    const [newListName, setNewListName] = useState("");
 
     useEffect(() => {
         const fetchUserProfile = async () => {
@@ -232,6 +236,53 @@ function UserProfile() {
         return num.toString();
     }
 
+    const readingLists = [
+        {
+            id: 1,
+            name: "Favorilerim",
+            books: [
+                {id: 101, storyName: "Aşk ve Gurur", image: "/images/ask-ve-gurur.jpg"},
+                {id: 102, storyName: "Şeker Portakalı", image: "/images/seker-portakali.jpg"},
+                {id: 103, storyName: "Simyacı", image: "/images/simyaci.jpg"},
+            ],
+        },
+        {
+            id: 2,
+            name: "Bilim Kurgu",
+            books: [
+                {id: 201, storyName: "Şeker Portakalı", image: "/images/seker-portakali.jpg"},
+                {id: 202, storyName: "Simyacı", image: "/images/simyaci.jpg"},
+            ],
+        }
+    ].map(list => ({
+        ...list,
+        cover: list.books.length > 0 ? list.books[0].image : "/images/default-cover.jpg",
+    }));
+
+    const handleListModalClose = () => setShowListModal(false)
+
+    const handleListModalOpen = (story) => {
+        setSelectedStory(story);
+        setShowListModal(true);
+    }
+
+    const handleEditClick = () => {
+        setEditMode(true);
+        setNewListName(selectedStory.name);
+    }
+    
+    const handleSaveClick = () => {
+        setEditMode(false);
+        setSelectedStory({ ...selectedStory, name: newListName });
+        const updatedReadingLists = readingLists.map((list) =>
+            list.id === selectedStory.id ? { ...list, name: newListName } : list
+        );
+    }
+
+    const handleListNameChange = (e) => {
+        setNewListName(e.target.value);
+    }
+
     return (
         <>
             <div className="profile2-page">
@@ -326,29 +377,48 @@ function UserProfile() {
                         </div>
                         <div className="my-read-list mt-4">
                             <div className="read-list-title d-flex align-items-center justify-content-start">
-                                <p className="text-start fw-bold m-0 p-0">Okuma Listesi</p>
+                                <p className="text-start fw-bold m-0 p-0">Okuma Listeleri</p>
                                 <div className="read-list-controls">
-                                    <button className="scroll-btn" onClick={() => scrollLeft(readListScrollRef)}>
+                                    <button onClick={() => scrollLeft(readListScrollRef)} className="scroll-btn">
                                         <i className="bi bi-chevron-left"></i>
                                     </button>
-                                    <button className="scroll-btn" onClick={() => scrollRight(readListScrollRef)}>
+                                    <button onClick={() => scrollRight(readListScrollRef)} className="scroll-btn">
                                         <i className="bi bi-chevron-right"></i>
                                     </button>
                                 </div>
                             </div>
                             <div className="read-story-list" ref={readListScrollRef}>
-                                {books.map((book) => (
-                                    <div className="story mt-1" key={book.id}>
-                                        <img src={book.bookCover} alt="" width="100px" height="140px" className='object-fit-cover'/>
-                                        <span className='mt-1'>{book.title}</span>
-                                        <div className="statistics d-flex justify-content-between mt-1">
-                                            <p className='d-flex'><i className="bi bi-eye me-1"></i>{formatNumber(book.analysis?.[0]?.read_count ?? 0)}</p>
-                                            <p className='d-flex'><i className="bi bi-heart me-1"></i>{formatNumber(book.analysis?.[0]?.like_count ?? 0)}</p>
-                                            <p className='d-flex'><i className="bi bi-chat me-1"></i>{formatNumber(book.analysis?.[0]?.comment_count ?? 0)}</p>
-                                        </div>
+                                {readingLists.map((story) => (
+                                    <div className="story mt-1" key={story.id}>
+                                        <img src={story.cover} alt="" width="100px" height="140px" className='object-fit-cover' onClick={() => handleListModalOpen(story)}/>
+                                        <span className='mt-1'>{story.name}</span>
                                     </div>
                                 ))}
                             </div>
+
+                            <Modal show={showListModal} onHide={handleListModalClose} centered className='read-list-modal'>
+                                <Modal.Header closeButton>
+                                    <Modal.Title>
+                                        {selectedStory ? selectedStory.name : 'Kitap Listesi'}
+                                    </Modal.Title>
+                                </Modal.Header>
+                                <Modal.Body>
+                                    <div className="book-list">
+                                        {selectedStory?.books?.length > 0 ? (
+                                            <div className="d-flex flex-wrap justify-content-around">
+                                                {selectedStory.books.map((book) => (
+                                                    <div className="book-item m-3 text-center d-flex flex-column gap-2" key={book.id} onClick={handleBookClick}>
+                                                        <img src={book.image} alt={book.storyName} width="100px" height="150px" className="object-fit-cover" />
+                                                        <span className="mt-1">{book.storyName}</span>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        ) : (
+                                            <p>Bu listede kitap bulunmamaktadır.</p>
+                                        )}
+                                    </div>
+                                </Modal.Body>
+                            </Modal>
                         </div>
                     </div>
                     <div className="right">

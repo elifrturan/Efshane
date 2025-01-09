@@ -349,12 +349,36 @@ html, body {
     border-radius: 4px;
 }
 
-.profile-page-down .left .stories .story .statistics p,
-.profile-page-down .left .my-read-list .story .statistics p {
+.profile-page-down .left .stories .story .statistics p {
     font-size: 0.6rem !important;
     color: #333;
     opacity: 0.6;
     font-weight: 500;
+}
+
+.read-list-modal .modal-body .book-list .book-item {
+    transition: all 0.3s ease-in-out;
+}
+
+.read-list-modal .modal-header .modal-title {
+    font-size: 1.25rem;
+    color: var(--second-color);
+} 
+
+.read-list-modal .modal-header .btn-close {
+    font-size: 0.8rem;
+}
+.read-list-modal .modal-body .book-list .book-item img {
+    border-radius: 4px;
+}
+
+.read-list-modal .modal-body .book-list .book-item span {
+    font-size: 0.9rem;
+}
+
+.read-list-modal .modal-body .book-list .book-item:hover {
+    transform: scale(1.1);
+    cursor: pointer;
 }
 
 .add-announcement {
