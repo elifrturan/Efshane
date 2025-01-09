@@ -3,6 +3,8 @@ import './Popular.css'
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
+const backendBaseUrl = 'http://localhost:3000';
+
 function Popular() {
     const scrollRef = useRef(null);
     const [books, setBook] = useState(null);
@@ -90,7 +92,16 @@ function Popular() {
                                 }
                                 style={{ cursor: 'pointer' }}
                             >
-                                <img src={book.bookCover} alt="" width="125px" />
+                                <img
+                                    src={
+                                            book.bookCover?.startsWith('uploads')
+                                            ? `${backendBaseUrl}/${book.bookCover}`
+                                            : book.bookCover
+                                        }
+                                    alt={book.title}
+                                    width="80"
+                                    height="120"
+                                />
                                 {book.isAudioBook && (
                                     <img
                                         src="/images/headphone-icon.svg"

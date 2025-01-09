@@ -4,6 +4,8 @@ import { Button, Dropdown, Form, Modal, Spinner } from 'react-bootstrap';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
+const backendBaseUrl = 'http://localhost:3000';
+
 function AddVoice() {
     const [activeTab, setActiveTab] = useState('details');
     const { bookTitle: encodedAudioBookTitle } = useParams();
@@ -911,6 +913,8 @@ function AddVoice() {
         }
     }; 
 
+    
+
     return (
         <div className="add-voice-section-page">
             <div className="container">
@@ -919,7 +923,12 @@ function AddVoice() {
                     <div className="add-voice-section-left">
                         {/* Upload Cover */}
                         {bookImage ? (
-                            <img src={bookImage} alt="uploaded" width="200px" height="281px" />
+                            <img 
+                                src={bookImage.startsWith('uploads') ? `${backendBaseUrl}/${bookImage}` : bookImage} 
+                                alt="uploaded" 
+                                width="200px" 
+                                height="281px" 
+                            />
                             ) : (
                             <img src="/images/upload-image.svg" alt="upload-image" width="200px" height="281px" />
                         )}

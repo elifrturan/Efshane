@@ -3,6 +3,8 @@ import React, { useRef, useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
+const backendBaseUrl = 'http://localhost:3000';
+
 function NewRelases(initialLastActivity) {
     const scrollRef = useRef(null);
     const [books, setBook] = useState(null);
@@ -89,7 +91,16 @@ function NewRelases(initialLastActivity) {
                             }
                             style={{ cursor: 'pointer' }}
                         >
-                            <img src={book.bookCover} alt="" />
+                            <img
+                              src={
+                                    book.bookCover?.startsWith('uploads')
+                                      ? `${backendBaseUrl}/${book.bookCover}`
+                                      : book.bookCover
+                                  }
+                              alt={book.title}
+                              width="80"
+                              height="120"
+                            />
                             {book.isAudioBook && (
                                 <img
                                     src="/images/headphone-icon.svg"

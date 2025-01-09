@@ -5,6 +5,8 @@ import { Button, Dropdown } from 'react-bootstrap'
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
 
+const backendBaseUrl = 'http://localhost:3000';
+
 function ReadBook() {
     const { bookName: formattedBookName } = useParams();
     const [chapters, setChapters] = useState([]);
@@ -244,14 +246,17 @@ function ReadBook() {
                             </span>
                     </div>
                 </div>
-    
                 {/* Seçili Bölüm İçeriği */}
                 <div className="read-book-content">
                     {chapters[selectedSection - 1] && (
                         <div className="chapter-details">
                             {chapters[selectedSection - 1].image && (
                                 <img 
-                                    src={chapters[selectedSection - 1].image} 
+                                    src={
+                                        chapters[selectedSection - 1].image.startsWith('uploads')
+                                            ? `${backendBaseUrl}/${chapters[selectedSection - 1].image}`
+                                            : chapters[selectedSection - 1].image
+                                    } 
                                     alt={chapters[selectedSection - 1].title} 
                                     className="chapter-image"
                                 />

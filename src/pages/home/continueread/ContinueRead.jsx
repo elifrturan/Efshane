@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from 'react-bootstrap'
 import './ContinueRead.css';
 
+const backendBaseUrl = 'http://localhost:3000';
+
 function ContinueRead({initialLastActivity}) {
     const navigate = useNavigate();
     const [lastActivity, setLastActivity] = useState(null);
@@ -94,17 +96,30 @@ function ContinueRead({initialLastActivity}) {
                                 <h2 className='text-start ms-5 mb-3'>
                                     {lastActivity.type === 'book' ? "Okumaya Devam Et" : "Dinlemeye Devam Et"}
                                 </h2>
-                                <img 
-                                    src={lastActivity.type === 'book' ? lastActivity.book?.bookCover : lastActivity.audioBooks?.bookCover} 
-                                    alt="cover" 
-                                    width="220px" 
+                                <img
+                                    src={
+                                        (lastActivity.type === 'book' 
+                                            ? lastActivity.book?.bookCover 
+                                            : lastActivity.audioBooks?.bookCover
+                                        )?.startsWith('uploads')
+                                            ? `${backendBaseUrl}/${
+                                                lastActivity.type === 'book'
+                                                    ? lastActivity.book?.bookCover
+                                                    : lastActivity.audioBooks?.bookCover
+                                            }`
+                                            : lastActivity.type === 'book'
+                                            ? lastActivity.book?.bookCover
+                                            : lastActivity.audioBooks?.bookCover
+                                    }
+                                    alt="cover"
+                                    width="220px"
                                     onClick={() =>
-                                        lastActivity.type === 'book' 
-                                            ? handleBookClick(lastActivity.book?.title) 
+                                        lastActivity.type === 'book'
+                                            ? handleBookClick(lastActivity.book?.title)
                                             : handleAudioBookClick(lastActivity.audioBooks?.title)
-                                    } 
-                                    style={{cursor: 'pointer'}}
-                                /> 
+                                    }
+                                    style={{ cursor: 'pointer' }}
+                                />
                             </div>
                             <div className="col-lg-8">
                                 <div className="book-content text-start"> 

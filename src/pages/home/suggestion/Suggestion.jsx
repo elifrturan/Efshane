@@ -3,6 +3,7 @@ import './Suggestion.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
+const backendBaseUrl = 'http://localhost:3000';
 
 function Suggestion(initialLastActivity) {
     const scrollRef = useRef(null);
@@ -86,7 +87,16 @@ function Suggestion(initialLastActivity) {
                             }
                             style={{ cursor: 'pointer' }}
                         >
-                            <img src={book.bookCover}  alt=""/>
+                            <img
+                                src={
+                                        book.bookCover?.startsWith('uploads')
+                                        ? `${backendBaseUrl}/${book.bookCover}`
+                                        : book.bookCover
+                                    }
+                                alt={book.title}
+                                width="80"
+                                height="120"
+                            />
                             {book.isAudioBook && (
                                 <img
                                     src="/images/headphone-icon.svg"

@@ -4,6 +4,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Button, Modal } from 'react-bootstrap';
 import axios from 'axios';
 
+const backendBaseUrl = 'http://localhost:3000';
+
 function NewSection() {
     const { bookTitle: encodedBookTitle } = useParams();
     const [successPublishShow, setSuccessPublishShow] = useState(false);
@@ -20,9 +22,7 @@ function NewSection() {
         setSuccessPublishShow(false);
         navigate(`/addsection/${encodedBookTitle}`);
     };
-    
-    
-    const handleSuccessShow = () => setSuccessShow(true);
+
     const navigate = useNavigate(); 
 
     useEffect(() => {
@@ -54,13 +54,10 @@ function NewSection() {
     const handleImageUpload = async (e) => {
         const file = e.target.files[0];
         if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setImage(reader.result);
-            };
-            reader.readAsDataURL(file);
+            const imgURL = URL.createObjectURL(file); 
+            setImage(imgURL); 
         }
-    };
+    };    
 
     const triggerFileInput = () => {
         document.getElementById('file-input').click();
@@ -199,20 +196,24 @@ function NewSection() {
         const encodedTitle = encodeURIComponent(encodedBookTitle);
         console.log(encodedTitle);
     
+        const formData = new FormData();
+        formData.append('image', e.target.files[0]); 
+        formData.append('title', title);
+        formData.append('content', content);
+
         const url = `http://localhost:3000/chapter/${encodedTitle}`;
-        const payload = {
-            title,
-            content,
-            image: image || null,
-        };
-    
         setLoading(true);
         try {
-            const response = await axios.post(url, payload, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`,
-                },
-            });
+            const response = await axios.post(
+                url, 
+                formData, 
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
+                });
+            console.log(response);
             handleSuccessSaveShow(); 
             navigate(`/addsection/${encodedTitle}`);
             setTimeout(() => {
@@ -237,20 +238,27 @@ function NewSection() {
             return;
         }
     
+        const encodedTitle = encodeURIComponent(encodedBookTitle);
+
+        const formData = new FormData();
+        formData.append('image', image);
+        formData.append('title', title);
+        formData.append('content', content);
+
         const url = `http://localhost:3000/chapter/publish/${encodedBookTitle}`;
-        const payload = {
-            title,
-            content,
-            image,
-        };
-    
         setLoading(true);
         try {
-            const response = await axios.post(url, payload, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`,
-                },
-            });
+            const response = await axios.post(
+                url,
+                formData,
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
+                }
+            );
+            console.log(response);
             handleSuccessPublishShow(); 
             navigate(`/addsection/${encodedTitle}`);
         } catch (error) {
@@ -324,7 +332,16 @@ function NewSection() {
                         <label className='form-label image-upload-label'>
                             {image ? (
                                 <>
-                                    <img src={image} alt="Bölüm Görseli" className='uploaded-image'/>
+                                    <img 
+                                        src=
+                                        {
+                                            image.startsWith('uploads')
+                                                ? `${backendBaseUrl}/${image}`
+                                                : image
+                                        }
+                                        alt="Bölüm Görseli" 
+                                        className='uploaded-image'
+                                    />
                                     <div className="overlay">
                                         <span>Görsel Yükle</span>
                                     </div>    

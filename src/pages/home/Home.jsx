@@ -18,6 +18,7 @@ const debounce = (func, delay) => {
 };
 
 const defaultProfileImage = '/images/user.jpeg';
+const backendBaseUrl = 'http://localhost:3000';
 
 function Home() {
   const [query, setQuery] = useState("");
@@ -83,7 +84,11 @@ function Home() {
                   {filteredBooks.map((book) => (
                     <div className="search-book-item d-flex mb-2" key={book.id}>
                       <img
-                        src={book.bookCover}
+                        src={
+                          book.bookCover?.startsWith('uploads')
+                            ? `${backendBaseUrl}/${book.bookCover}`
+                            : book.bookCover
+                          }
                         alt={book.title}
                         className="search-book-cover me-3"
                         style={{ width: "60px", height: "90px" }}

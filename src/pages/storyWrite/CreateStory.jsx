@@ -24,6 +24,7 @@ function CreateStory() {
     const [selectedAgeRange, setSelectedAgeRange] = useState('');
     const [isAudioBook, setIsAudioBook] = useState(null);
     
+    const backendBaseUrl = 'http://localhost:3000';
     const defaultImage = "/images/default-book-cover.webp";
     const formatTitleForUrl = (title) => {
         const charMap = {
@@ -175,7 +176,6 @@ function CreateStory() {
         formData.append('duration', "0");
 
         const url = isAudioBook ? 'http://localhost:3000/audio-book' : 'http://localhost:3000/book';
-        console.log(url);
 
         if (url !== 'http://localhost:3000/audio-book') {
             formData.append('isAudioBook', isAudioBook ? 'true' : 'false');
@@ -192,7 +192,6 @@ function CreateStory() {
                     },
                 }
             );
-            console.log(response);
     
             if (response.status === 201) {
                 console.log("basarılı");
@@ -253,7 +252,16 @@ function CreateStory() {
                 <div className="create-story-main mt-5">
                     <div className="create-left">
                         {image ? (
-                            <img src={image} alt="uploaded" width="200px" height="281px" />
+                            <img 
+                                src={
+                                    book.bookCover?.startsWith('uploads')
+                                        ? `${backendBaseUrl}/${book.bookCover}`
+                                        : book.bookCover
+                                }
+                                alt="uploaded" 
+                                width="200px" 
+                                height="281px" 
+                            />
                         ) : (
                             <img src="/images/upload-image.svg" alt="upload-image" width="200px" height="281px" />
                         )}

@@ -4,6 +4,8 @@ import './CategoryDetails.css';
 import Footer from "../../../layouts/footer/Footer";
 import axios from 'axios';
 
+const backendBaseUrl = 'http://localhost:3000';
+
 function CategoryDetails() {
     const { categoryName } = useParams(); 
     const navigate = useNavigate();
@@ -73,15 +75,19 @@ function CategoryDetails() {
                     {categoryDetails && categoryDetails.map((book) => (
                         <div className="details-book-card d-flex flex-column align-items-center mb-5" key={book.id}>
                             <div className="book-cover-wrapper" style={{ position: "relative" }}>
-                                <img 
-                                    src={book.bookCover} 
-                                    alt="" 
-                                    className='book-cover' 
-                                    width="150px" 
-                                    onClick={() => 
-                                        book.isAudiobook ? handleAudioBookClick(book.title) : handleBookClick(book.title)
-                                    } 
-                                />
+                            <img
+                                src={
+                                    book.bookCover?.startsWith('uploads')
+                                        ? `${backendBaseUrl}/${book.bookCover}`
+                                        : book.bookCover
+                                }
+                                alt={book.title}
+                                className="book-cover"
+                                width="150px"
+                                onClick={() =>
+                                    book.isAudiobook ? handleAudioBookClick(book.title) : handleBookClick(book.title)
+                                }
+                            />
                                 {book.isAudiobook && (
                                     <div className="audio-icon" style={{
                                         position: "absolute",

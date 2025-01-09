@@ -4,6 +4,8 @@ import { Button, Dropdown, Modal } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios'
 
+const backendBaseUrl = 'http://localhost:3000';
+
 function AudioBooks() {
     const [activeTab, setActiveTab] = useState('audioBooks');
     const [showModal, setShowModal] = useState(false);
@@ -144,7 +146,16 @@ function AudioBooks() {
                     {audioBooks.map((audioBook) => (
                         <div className="audio-book-card mb-3" key={audioBook.id}>
                             <div className="audio-book-left d-flex gap-3">
-                                <img src={audioBook.bookCover} alt="" width="80" height="120"/>
+                                <img
+                                    src={
+                                        audioBook.bookCover?.startsWith('uploads')
+                                            ? `${backendBaseUrl}/${audioBook.bookCover}`
+                                            : audioBook.bookCover
+                                        }
+                                    alt={audioBook.title}
+                                    width="80"
+                                    height="120"
+                                />
                                 <div className="audio-book-left-right">
                                     <p className='audio-book-name'>{audioBook.title}</p>
                                     <p className='stories-date'>

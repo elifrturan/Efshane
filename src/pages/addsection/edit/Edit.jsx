@@ -2,8 +2,9 @@ import React, { useRef, useState, useEffect } from 'react'
 import './Edit.css'
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button, Modal } from 'react-bootstrap';
-
 import axios from 'axios';
+
+const backendBaseUrl = 'http://localhost:3000';
 
 function Edit() {
     const { bookTitle, chapterTitle } = useParams();
@@ -52,6 +53,7 @@ function Edit() {
                 );
 
                 const data = response.data;
+                console.log(data);
                 setTitle(data.title);
                 setImage(data.image);
                 setContent(data.content);
@@ -62,32 +64,14 @@ function Edit() {
 
         fetchChapterDetails();
     }, [bookTitle, chapterTitle]);
-    
-    const convertToBase64 = (file) => {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = () => resolve(reader.result);
-            reader.onerror = (error) => reject(error);
-        });
-    };
 
-    const handleImageUpload = (e) => {
+    const handleImageUpload = async (e) => {
         const file = e.target.files[0];
         if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setImage(reader.result);
-            };
-            reader.readAsDataURL(file);
-            try {
-                const base64Image = convertToBase64(file); 
-                setImage(base64Image);
-            } catch (error) {
-                console.error("Görsel dönüştürme hatası:", error);
-            }
+            const imgURL = URL.createObjectURL(file); 
+            setImage(imgURL); 
         }
-    };
+    }; 
 
     const triggerFileInput = () => {
         document.getElementById('file-input').click();
@@ -223,20 +207,26 @@ function Edit() {
         const encodedTitle = encodeURIComponent(bookTitle);
         const encodedChapterTitle = encodeURIComponent(chapterTitle);
     
+        const formData = new FormData();
+        formData.append('image', image); 
+        formData.append('title', title);
+        formData.append('content', content);
+
         const url = `http://localhost:3000/chapter/save/${encodedTitle}/${encodedChapterTitle}`;
-        const payload = {
-            title,
-            content,
-            image: image || null,
-        };
-    
         setLoading(true);
         try {
-            const response = await axios.put(url, payload, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`,
-                },
-            });
+            const response = await axios.put
+            (
+                url, 
+                formData, 
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
+                }
+            );
+            console.log(response);
             handleSuccessSaveShow(); 
             navigate(`/addsection/${encodedTitle}`);
             console.log(response.data);
@@ -257,20 +247,25 @@ function Edit() {
         const encodedTitle = encodeURIComponent(bookTitle);
         const encodedChapterTitle = encodeURIComponent(chapterTitle);
     
+        const formData = new FormData();
+        formData.append('image', image); 
+        formData.append('title', title);
+        formData.append('content', content);
+
         const url = `http://localhost:3000/chapter/update/publish/${encodedTitle}/${encodedChapterTitle}`;
-        const payload = {
-            title,
-            content,
-            image: image || null,
-        };
-    
         setLoading(true);
         try {
-            const response = await axios.put(url, payload, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`,
-                },
-            });
+            const response = await axios.put(
+                url, 
+                formData, 
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
+                }
+            );
+            console.log(response);
             handleSuccessPublishShow(); 
             navigate(`/addsection/${encodedTitle}`);
         } catch (error) {
@@ -281,165 +276,169 @@ function Edit() {
         }
     };
 
-return (
-    <div className='edit-section-page'>
-        <Modal show={successPublishShow} onHide={handleSuccessPublishClose} centered>
-            <Modal.Header closeButton>
-                <Modal.Title>Bölüm Yayınlandı!</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                <p>Bölümünüz başarıyla yayınlandı. Tebrikler!</p>
-            </Modal.Body>
-            <Modal.Footer>
-                <Button variant="primary" onClick={handleSuccessPublishClose}>
-                    Tamam
-                </Button>
-            </Modal.Footer>
-        </Modal>
-        <Modal show={successSaveShow} onHide={handleSuccessSaveClose} centered>
-            <Modal.Header closeButton>
-                <Modal.Title>Bölüm Kaydedildi!</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                <p>Bölümünüz başarıyla kaydedildi. Tebrikler!</p>
-            </Modal.Body>
-            <Modal.Footer>
-                <Button variant="primary" onClick={handleSuccessSaveClose}>
-                    Tamam
-                </Button>
-            </Modal.Footer>
-        </Modal>
-        <div className="edit-fixed-header">
-            <div className="edit-header-buttons">
-                <button className="save" onClick={saveChapter} disabled={loading}>
-                    {loading ? 'Kaydediliyor...' : 'Kaydet'}
-                </button>
-                <button className="publish" onClick={publishChapter} disabled={loading}>
-                    {loading ? 'Yayınlanıyor...' : 'Yayınla'}
-                </button>
+    return (
+        <div className='edit-section-page'>
+            <Modal show={successPublishShow} onHide={handleSuccessPublishClose} centered>
+                <Modal.Header closeButton>
+                    <Modal.Title>Bölüm Yayınlandı!</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <p>Bölümünüz başarıyla yayınlandı. Tebrikler!</p>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="primary" onClick={handleSuccessPublishClose}>
+                        Tamam
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+            <Modal show={successSaveShow} onHide={handleSuccessSaveClose} centered>
+                <Modal.Header closeButton>
+                    <Modal.Title>Bölüm Kaydedildi!</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <p>Bölümünüz başarıyla kaydedildi. Tebrikler!</p>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="primary" onClick={handleSuccessSaveClose}>
+                        Tamam
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+            <div className="edit-fixed-header">
+                <div className="edit-header-buttons">
+                    <button className="save" onClick={saveChapter} disabled={loading}>
+                        {loading ? 'Kaydediliyor...' : 'Kaydet'}
+                    </button>
+                    <button className="publish" onClick={publishChapter} disabled={loading}>
+                        {loading ? 'Yayınlanıyor...' : 'Yayınla'}
+                    </button>
+                </div>
             </div>
-        </div>
-        <div className="container">
-            {/* Add Image */}
-                <div className='m-0'>
+            <div className="container">
+                {/* Add Image */}
+                    <div className='m-0'>
                     <div className="edit-image-upload-area" onClick={triggerFileInput}>
                         <form>
-                            <label className='form-label edit-image-upload-label'>
-                                {image ? (
-                                    <>
-                                        <img src={image} alt="Bölüm Görseli" className='edit-uploaded-image'/>
-                                        <div className="edit-overlay">
-                                            <span>Görsel Yükle</span>
-                                        </div>    
-                                    </>
-                                ) : (
-                                    <img src={image} className='edit-uploaded-image'/>
-                                )}
+                            <label className="form-label edit-image-upload-label">
+                            <img
+                                src={
+                                    image
+                                        ? image?.startsWith('uploads')
+                                            ? `${backendBaseUrl}/${image}` 
+                                            : image 
+                                        : '/default-image.png'
+                                }
+                                alt="Bölüm Görseli"
+                                className="edit-uploaded-image"
+                            />
+                                <div className="edit-overlay">
+                                    <span>Görsel Yükle</span>
+                                </div>
                             </label>
                             <input
-                                id='file-input' 
+                                id="file-input"
                                 type="file"
-                                className='edit-image-upload-input form-control'
+                                className="edit-image-upload-input form-control"
                                 onChange={handleImageUpload}
-                                onInput={handleInputResize}
-                                accept='image/*' />
+                                accept="image/*"
+                            />
                         </form>
                     </div>
-                    <form>
-                        {/* Add Title */ }
-                        <input 
-                            type="text"
-                            className='form-control edit-section-title'
-                            placeholder='Bir başlık ekleyin...'  
-                            value={title}  
-                        />
-                        <hr />
-                        {/* Add Content */ }
-                        <div className="edit-content-toolbar">
-                            <button
-                                type='button'
-                                onClick={() => handleFormat('bold')}
-                                className={activeStyle.bold ? 'active' : ''}
-                            ><b>B</b></button>
-                            <button
-                                type='button'
-                                onClick={() => handleFormat('italic')}
-                                className={activeStyle.italic ? 'active' : ''}
-                            ><i>I</i></button>
-                            <button
-                                type='button'
-                                onClick={() => handleFormat('underline')}
-                                className={activeStyle.underline ? 'active' : ''}
-                            ><u>U</u></button>
-                            <button
-                                type='button'
-                                onClick={() => handleFormat('left')}
-                                className={activeStyle.left ? 'active' : ''}
-                            ><i className="bi bi-text-left"></i></button>
-                            <button
-                                type='button'
-                                onClick={() => handleFormat('center')}
-                                className={activeStyle.center ? 'active' : ''}
-                            ><i className="bi bi-text-center"></i></button>
-                            <button
-                                type='button'
-                                onClick={() => handleFormat('right')}
-                                className={activeStyle.right ? 'active' : ''}
-                            ><i className="bi bi-text-right"></i></button>
-                        </div>
-                        <div
-                            ref={contentRef} 
-                            className='form-control edit-section-content'
-                            contentEditable="true"
-                            value={content}
-                            onInput={handleContentChange}
-                            placeholder='Bölümünüzü buraya yazın...'
-                        >
-                            {/* {content} */}
-                        </div>
-                    </form>
-                </div>
-        </div>
-        {/* Chatbot modal */}
-        <div className={`chat-modal ${isChatOpen ? 'active' : ''}`}>
-            <div className="edit-chat-modal-header">
-                <i className="bi bi-chat-left-text"></i> Yardım Al
-                <button className="edit-close-btn" onClick={toggleChat}>&times;</button>
-            </div>
-            <div className="edit-chat-modal-body" ref={chatBodyRef}>
-                <p>
-                    Merhaba! Sana hikayeni yazarken destek olmak için buradayım. 
-                    Eğer yazdığın bölümde bir yerde takılı kaldıysan ya da hikayene 
-                    nasıl devam edeceğini bilemiyorsan, lütfen aşağıya neye ihtiyacın olduğunu yaz. 
-                    İster yeni fikirler ister olay örgüsü önerileri olsun, sana yardımcı olmaktan mutluluk duyarım!
-                </p>
-                {messages.map((message, index) => (
-                    <div
-                        key={index}
-                        className={`chat-message ${message.sender === 'user' ? 'user' : 'bot'}`}
-                    >
-                        {message.text}
+                        <form>
+                            {/* Add Title */ }
+                            <input 
+                                type="text"
+                                className='form-control edit-section-title'
+                                placeholder='Bir başlık ekleyin...'  
+                                value={title}  
+                            />
+                            <hr />
+                            {/* Add Content */ }
+                            <div className="edit-content-toolbar">
+                                <button
+                                    type='button'
+                                    onClick={() => handleFormat('bold')}
+                                    className={activeStyle.bold ? 'active' : ''}
+                                ><b>B</b></button>
+                                <button
+                                    type='button'
+                                    onClick={() => handleFormat('italic')}
+                                    className={activeStyle.italic ? 'active' : ''}
+                                ><i>I</i></button>
+                                <button
+                                    type='button'
+                                    onClick={() => handleFormat('underline')}
+                                    className={activeStyle.underline ? 'active' : ''}
+                                ><u>U</u></button>
+                                <button
+                                    type='button'
+                                    onClick={() => handleFormat('left')}
+                                    className={activeStyle.left ? 'active' : ''}
+                                ><i className="bi bi-text-left"></i></button>
+                                <button
+                                    type='button'
+                                    onClick={() => handleFormat('center')}
+                                    className={activeStyle.center ? 'active' : ''}
+                                ><i className="bi bi-text-center"></i></button>
+                                <button
+                                    type='button'
+                                    onClick={() => handleFormat('right')}
+                                    className={activeStyle.right ? 'active' : ''}
+                                ><i className="bi bi-text-right"></i></button>
+                            </div>
+                            <div
+                                ref={contentRef} 
+                                className='form-control edit-section-content'
+                                contentEditable="true"
+                                value={content}
+                                onInput={handleContentChange}
+                                placeholder='Bölümünüzü buraya yazın...'
+                            >
+                                {content}
+                            </div>
+                        </form>
                     </div>
-                ))}
             </div>
-            <div className="edit-chat-modal-footer">
-                <input
-                    type="text"
-                    placeholder="Mesajınızı yazın..."
-                    value={inputValue}
-                    onChange={handleInputChange}
-                    onKeyDown={handleKeyDown}
-                />
-                <button onClick={handleSendMessage}>Gönder</button>
+            {/* Chatbot modal */}
+            <div className={`chat-modal ${isChatOpen ? 'active' : ''}`}>
+                <div className="edit-chat-modal-header">
+                    <i className="bi bi-chat-left-text"></i> Yardım Al
+                    <button className="edit-close-btn" onClick={toggleChat}>&times;</button>
+                </div>
+                <div className="edit-chat-modal-body" ref={chatBodyRef}>
+                    <p>
+                        Merhaba! Sana hikayeni yazarken destek olmak için buradayım. 
+                        Eğer yazdığın bölümde bir yerde takılı kaldıysan ya da hikayene 
+                        nasıl devam edeceğini bilemiyorsan, lütfen aşağıya neye ihtiyacın olduğunu yaz. 
+                        İster yeni fikirler ister olay örgüsü önerileri olsun, sana yardımcı olmaktan mutluluk duyarım!
+                    </p>
+                    {messages.map((message, index) => (
+                        <div
+                            key={index}
+                            className={`chat-message ${message.sender === 'user' ? 'user' : 'bot'}`}
+                        >
+                            {message.text}
+                        </div>
+                    ))}
+                </div>
+                <div className="edit-chat-modal-footer">
+                    <input
+                        type="text"
+                        placeholder="Mesajınızı yazın..."
+                        value={inputValue}
+                        onChange={handleInputChange}
+                        onKeyDown={handleKeyDown}
+                    />
+                    <button onClick={handleSendMessage}>Gönder</button>
+                </div>
+            </div>
+            <div className="edit-robot">
+                <button className='edit-help d-flex justify-content-center align-items-center' onClick={toggleChat}>
+                    <img src="/images/efso_logo.svg" alt="" width="180px"/>
+                </button>
             </div>
         </div>
-        <div className="edit-robot">
-            <button className='edit-help d-flex justify-content-center align-items-center' onClick={toggleChat}>
-                <img src="/images/efso_logo.svg" alt="" width="180px"/>
-            </button>
-        </div>
-    </div>
-)
+    )
 }
 
 export default Edit

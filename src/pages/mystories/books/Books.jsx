@@ -4,13 +4,14 @@ import { useNavigate } from 'react-router-dom';
 import { Button, Dropdown, Modal } from 'react-bootstrap';
 import axios from 'axios'
 
+const backendBaseUrl = 'http://localhost:3000';
+
 function Books() {
     const [activeTab, setActiveTab] = useState('books');
     const [showModal, setShowModal] = useState(false);
     const [bookToDelete, setBookToDelete] = useState(null);
     const [books, setBooks] = useState([]);
     const navigate = useNavigate();
-    const backendBaseUrl = 'http://localhost:3000';
 
     useEffect(() => {
         const fetchBooks = async () => {
