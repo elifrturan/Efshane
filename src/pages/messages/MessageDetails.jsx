@@ -3,6 +3,8 @@ import './MessageDetails.css';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 
+const backendBaseUrl = 'http://localhost:3000';
+
 function MessageDetails() {
     const { username } = useParams();
     const [messages, setMessages] = useState([]);
@@ -129,7 +131,13 @@ function MessageDetails() {
                             className={`message-details ${message.sentByCurrentUser ? 'sent' : 'received'} mb-3`}
                         >
                             <img
-                                src={message.profileImage}
+                                src={
+                                    message?.profileImage
+                                        ? message.profileImage.startsWith('uploads')
+                                            ? `${backendBaseUrl}/${message.profileImage}`
+                                            : message.profileImage
+                                        : 'default-book-cover.jpg'
+                                }
                                 alt={`${message.sentByCurrentUser ? 'Your' : message.otherUsername} profile`}
                                 className="profile-pic"
                             />

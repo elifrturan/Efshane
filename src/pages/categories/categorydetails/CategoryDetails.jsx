@@ -105,7 +105,13 @@ function CategoryDetails() {
                                 <p className='mt-1'>{book.title}</p>
                                 <div className="details-book-writer d-flex">
                                     <img 
-                                        src={book.profile_image} 
+                                        src={
+                                            book?.profile_image
+                                                ? book.profile_image.startsWith('uploads')
+                                                    ? `${backendBaseUrl}/${book.profile_image}`
+                                                    : book.profile_image
+                                                : 'default-book-cover.jpg'
+                                        }
                                         alt="" 
                                         className='rounded-circle object-fit-cover' 
                                         width="24px" 

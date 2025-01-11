@@ -118,6 +118,42 @@ html, body {
     gap: 25px;
 }
 
+/* Okuma Listem ve Hikayelerim Kısmı İçin Ortak Ayarlar */
+.profile-page-down .left .stories .story .statistics p,
+.profile-page-down .left .my-read-list .story .statistics p {
+    font-size: 0.6rem !important;
+    color: #333;
+    opacity: 0.6;
+    font-weight: 500;
+}
+
+.profile-page-down .left .stories .story .statistics,
+.profile-page-down .left .my-read-list .story .statistics {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 5px;
+}
+
+/* Hover Durumu */
+.profile-page-down .left .stories .story:hover,
+.profile-page-down .left .my-read-list .story:hover {
+    transform: scale(1.04);
+    border-radius: 4px;
+}
+
+/* Okuma Listesi Görsellerine Uygulanacak Ayar */
+.profile-page-down .left .my-read-list .read-story-list .story img {
+    border-radius: 4px;
+}
+
+/* Okuma Listesi Metin Görünümü */
+.profile-page-down .left .my-read-list .story span {
+    font-size: 0.75rem;
+    font-weight: 500;
+    width: 100%;
+    text-align: center;
+}
+
 .profile-user-details .follower-statistics span {
     opacity: 0.7;
     margin-left: 1px;
@@ -261,7 +297,7 @@ html, body {
     font-size: 1rem;
 }
 
-.profile-page-down .left .stories p, .profile-page-down .left .my-read-list p {
+.profile-page-down .left .stories p, .profile-page-down .left .my-list p {
     margin: 0;
 }
 

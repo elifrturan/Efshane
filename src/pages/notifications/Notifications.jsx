@@ -4,6 +4,8 @@ import Footer from "../../layouts/footer/Footer"
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
+const backendBaseUrl = 'http://localhost:3000';
+
 function Notifications() {
     const navigate = useNavigate();
     const [currentPage, setCurrentPage] = useState(1);
@@ -103,7 +105,20 @@ function Notifications() {
                 {currentNotifications.map(notification => (
                     <div className="notification d-flex justify-content-between mb-3" key={notification.id}>
                         <div className='d-flex'>
-                            <img src={notification.user.profile_image} alt="" className="rounded-circle object-fit-cover notification-image" width="60px" height="60px" onClick={() => handleProfileClick(notification.user.username)}/>
+                            <img 
+                                src={
+                                    notification?.user.profile_image
+                                        ? notification.user.profile_image.startsWith('uploads')
+                                            ? `${backendBaseUrl}/${notification.user.profile_image}`
+                                            : notification.user.profile_image
+                                        : 'default-book-cover.jpg'
+                                }
+                                alt="" 
+                                className="rounded-circle object-fit-cover notification-image" 
+                                width="60px" 
+                                height="60px" 
+                                onClick={() => handleProfileClick(notification.user.username)}
+                            />
                             <div className="notification-content d-flex flex-column justify-content-between ms-3">
                                 <b>@{notification.user.username}:</b>
                                 <p>{notification.message}</p>

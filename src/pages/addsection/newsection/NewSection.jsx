@@ -12,6 +12,8 @@ function NewSection() {
     const [successSaveShow, setSuccessSaveShow] = useState(false);
     const handleSuccessSaveShow = () => setSuccessSaveShow(true);
     const handleSuccessPublishShow = () => setSuccessPublishShow(true);
+    const [showAlert, setShowAlert] = useState(false);
+    const handleCloseAlert = () => setShowAlert(false);
 
     const handleSuccessSaveClose = () => {
         setSuccessSaveShow(false);
@@ -197,7 +199,7 @@ function NewSection() {
         console.log(encodedTitle);
     
         const formData = new FormData();
-        formData.append('image', e.target.files[0]); 
+        formData.append('image', image); 
         formData.append('title', title);
         formData.append('content', content);
 
@@ -215,11 +217,6 @@ function NewSection() {
                 });
             console.log(response);
             handleSuccessSaveShow(); 
-            navigate(`/addsection/${encodedTitle}`);
-            setTimeout(() => {
-                navigate(`/addsection/${encodedBookTitle}`);
-            }, 1000);
-
         } catch (error) {
             console.error(error);
             alert('Bölüm kaydedilirken bir hata oluştu. Lütfen tekrar deneyin.');
@@ -231,6 +228,16 @@ function NewSection() {
     const toggleChat = () => {
         setIsChatOpen(!isChatOpen);
     };
+
+    const analyzeContent = async (content) => {
+        try {
+            const response = await axios.post('https://f6bb-34-30-41-4.ngrok-free.app/analyze', { text: content });
+            return response.data.is_offensive === 0;
+        } catch (error) {
+            console.error('Content analysis failed:', error.message);
+            return false;
+        }
+    };
     
     const publishChapter = async () => {
         if (!title.trim() || !content.trim()) {
@@ -238,8 +245,6 @@ function NewSection() {
             return;
         }
     
-        const encodedTitle = encodeURIComponent(encodedBookTitle);
-
         const formData = new FormData();
         formData.append('image', image);
         formData.append('title', title);
@@ -258,12 +263,25 @@ function NewSection() {
                     },
                 }
             );
-            console.log(response);
-            handleSuccessPublishShow(); 
-            navigate(`/addsection/${encodedTitle}`);
+            if (response.status === 201) {
+                handleSuccessPublishShow(); 
+            } else {
+                console.error('Yayınlama hatası:', response.data.error);
+                alert('Bölüm yayınlanırken bir hata oluştu. Lütfen tekrar deneyin.');
+            }
         } catch (error) {
-            console.error(error);
-            alert('Bölüm yayınlanırken bir hata oluştu. Lütfen tekrar deneyin.');
+            if (error.response) {
+                const errorMessage = error.response.data?.message || 'Bilinmeyen bir hata oluştu.';
+                if (error.response.status === 400 && errorMessage.includes('Content contains offensive language')) {
+                    setShowAlert(true); 
+                } else {
+                    alert(`Hata: ${errorMessage}`);
+                }
+            } else if (error.request) {
+                alert('Sunucudan yanıt alınamadı. Lütfen bağlantınızı kontrol edin.');
+            } else {
+                alert(`Bir hata oluştu: ${error.message}`);
+            }
         } finally {
             setLoading(false);
         }
@@ -271,6 +289,38 @@ function NewSection() {
 
     return (
         <div className='new-section-page'>
+            <Modal
+                show={showAlert}
+                onHide={handleCloseAlert}
+                centered
+                backdrop="static"
+                className="danger-alert-modal"
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title style={{ color: 'red' }}>Uygunsuz İçerik Uyarısı</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <p>İçerik uygunsuz kelimeler içeriyor. Lütfen içeriği düzeltin ve tekrar deneyin.</p>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="danger" onClick={handleCloseAlert}>
+                        Kapat
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+            <Modal show={successSaveShow} onHide={handleSuccessSaveClose} centered>
+                <Modal.Header closeButton>
+                    <Modal.Title>Bölüm Kaydedildi!</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <p>Bölümünüz başarıyla kaydedildi. Tebrikler!</p>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="primary" onClick={handleSuccessSaveClose}>
+                        Tamam
+                    </Button>
+                </Modal.Footer>
+            </Modal>
             <Modal show={successPublishShow} onHide={handleSuccessPublishClose} centered>
                 <Modal.Header closeButton>
                     <Modal.Title>Bölüm Yayınlandı!</Modal.Title>
@@ -415,7 +465,7 @@ function NewSection() {
             {/* Chatbot modal */}
             <div className={`chat-modal ${isChatOpen ? 'active' : ''}`}>
                 <div className="chat-modal-header">
-                    <i class="bi bi-chat-left-text"></i> Yardım Al
+                    <i className="bi bi-chat-left-text"></i> Yardım Al
                     <button className="close-btn" onClick={toggleChat}>&times;</button>
                 </div>
                 <div className="chat-modal-body" ref={chatBodyRef}>

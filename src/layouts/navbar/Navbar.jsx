@@ -3,10 +3,20 @@ import './Navbar.css'
 import { Navbar, Nav, Dropdown, Container} from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {useUser } from '../../User.Context';
+import { useNavigate } from 'react-router-dom';
+
+const backendBaseUrl = 'http://localhost:3000';
 
 function CustomNavbar() {
-  const { user } = useUser();
-  const defaultProfileImage = '/images/user.jpeg';
+  const { user, setUser } = useUser();
+  const navigate = useNavigate(); 
+
+  const handleLogout = () => {
+    localStorage.removeItem('token'); 
+    setUser(null); 
+    console.log("asdng");
+    navigate('/signin'); 
+  };
 
   return (
     <>
@@ -32,10 +42,17 @@ function CustomNavbar() {
               <Nav.Link href="/notifications" className="mx-2">
                 <i className="bi bi-bell fs-5"></i>
               </Nav.Link>
+              {user ? (
               <Dropdown align="end">
                 <Dropdown.Toggle as="a" className="nav-link p-0 mx-2">
                   <img
-                    src={user.profile_image || defaultProfileImage}
+                    src={
+                      user?.profile_image
+                        ? user.profile_image.startsWith('uploads')
+                          ? `${backendBaseUrl}/${user.profile_image}`
+                          : user.profile_image
+                        : '/images/user.jpeg' 
+                    }
                     alt="Profil"
                     className="rounded-circle"
                     style={{ height: '40px', width: '40px', objectFit: 'cover' }}
@@ -47,11 +64,18 @@ function CustomNavbar() {
                   <Dropdown.Item href="/library" className="text-muted"><i className="bi bi-book me-2"></i>Kitaplık</Dropdown.Item>
                   <Dropdown.Item href="/settings" className="text-muted"><i className="bi bi-gear me-2"></i>Ayarlar</Dropdown.Item>
                   <Dropdown.Item href="/contact-us" className="text-muted"><i className="bi bi-question-circle me-2"></i>Bize Ulaşın</Dropdown.Item>
-                  <Dropdown.Item href="/logout" className="text-danger logout">
+                  <Dropdown.Item  onClick={handleLogout}
+                    className="text-danger logout"
+                  >
                     <i className="bi bi-box-arrow-left me-2"></i>Çıkış Yap
                   </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
+              ) : ( 
+              <Nav.Link href="/signin" className="mx-2">
+                
+              </Nav.Link>
+            )}
             </Nav>
           </Navbar.Collapse>
         </Container>

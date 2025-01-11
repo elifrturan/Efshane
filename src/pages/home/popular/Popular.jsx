@@ -115,7 +115,13 @@ function Popular() {
                                 </div>
                                 <div className="popular-book-writer d-flex mb-3">
                                     <img
-                                        src={book.profile_image}
+                                        src={
+                                            book?.profile_image
+                                                ? book.profile_image.startsWith('uploads')
+                                                    ? `${backendBaseUrl}/${book.profile_image}`
+                                                    : book.profile_image
+                                                : 'default-background.jpg' 
+                                        }
                                         alt=""
                                         className="rounded-circle object-fit-cover"
                                         width="20px"

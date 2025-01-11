@@ -24,7 +24,6 @@ function ContinueRead({initialLastActivity}) {
                         Authorization: `Bearer ${parsedToken}`,
                     },
                 });
-                console.log(response.data);
                 setLastActivity(response.data); 
             } catch (error) {
                 console.error("Kitap alınırken hata oluştu:", error.response?.data || error.message);
@@ -143,14 +142,23 @@ function ContinueRead({initialLastActivity}) {
                                             : lastActivity.audioBooks?.user?.username
                                         )}>
                                             <img 
-                                            src={
-                                                lastActivity.type === 'book' 
-                                                ? lastActivity.book?.user?.profile_image 
-                                                : lastActivity.audioBooks?.user?.profile_image
-                                            }                                             alt="30x30" 
-                                            width="25px" 
-                                            height="25px" 
-                                            className='img-fuild rounded-circle object-fit-cover'
+                                                src={
+                                                    lastActivity.type === 'book' 
+                                                        ? lastActivity.book?.user?.profile_image
+                                                            ? lastActivity.book.user.profile_image.startsWith('uploads')
+                                                                ? `${backendBaseUrl}/${lastActivity.book.user.profile_image}`
+                                                                : lastActivity.book.user.profile_image
+                                                            : 'default-background.jpg'
+                                                        : lastActivity.audioBooks?.user?.profile_image
+                                                            ? lastActivity.audioBooks.user.profile_image.startsWith('uploads')
+                                                                ? `${backendBaseUrl}/${lastActivity.audioBooks.user.profile_image}`
+                                                                : lastActivity.audioBooks.user.profile_image
+                                                            : 'default-background.jpg'
+                                                }                                          
+                                                alt="30x30" 
+                                                width="25px" 
+                                                height="25px" 
+                                                className='img-fuild rounded-circle object-fit-cover'
                                             />
                                             <p className='ms-2 d-flex mt-2'>
                                             {lastActivity.type === 'book' 

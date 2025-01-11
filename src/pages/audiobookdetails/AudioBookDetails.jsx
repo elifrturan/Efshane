@@ -5,6 +5,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Button } from 'react-bootstrap'
 import axios from 'axios';
 
+const backendBaseUrl = 'http://localhost:3000';
+
 function AudioBookDetails() {
     const navigate = useNavigate();
     const { bookName: formattedBookName } = useParams();
@@ -95,7 +97,7 @@ function AudioBookDetails() {
         try {
             const response = await axios.post(
                 `http://localhost:3000/reading-list/audioBook/${bookDetails[0]?.id}`,
-                {},
+                { name: bookDetails[0]?.title },
                 {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -217,7 +219,16 @@ function AudioBookDetails() {
             <div className="audio-book-details-page">
                 <div className="audio-book-details-up">
                     <div className="book-cover">
-                        <img src={bookDetails[0]?.bookCover} alt="" />
+                        <img 
+                            src={
+                                bookDetails[0]?.bookCover
+                                    ? bookDetails[0]?.bookCover.startsWith('uploads')
+                                        ? `${backendBaseUrl}/${bookDetails[0]?.bookCover}`
+                                        : bookDetails[0]?.bookCover
+                                    : 'default-background.jpg' 
+                            }
+                            alt="" 
+                        />
                         <img src="/images/headphone-icon.svg" alt="" className='headphones-icon'/>
                     </div>
                     <div className="book-header">
@@ -241,11 +252,11 @@ function AudioBookDetails() {
                                     )}
                                     {isAddedToListeningList ? (
                                         <Button className="btn-book" onClick={() => handleAddToListeningList(bookDetails[0]?.id)}>
-                                            <i className="bi bi-bookmark-check-fill me-1"></i> Okuma Listesinden Kaldır
+                                            <i className="bi bi-bookmark-check-fill me-1"></i> Dinleme Listesinden Kaldır
                                         </Button>
                                     ) : (
                                         <Button className="btn-book" onClick={() => handleAddToListeningList(bookDetails[0]?.id)}>
-                                            <i className="bi bi-bookmark me-1"></i> Okuma Listesine Ekle
+                                            <i className="bi bi-bookmark me-1"></i> Dinleme Listesine Ekle
                                         </Button>
                                     )}
                                 </div>
@@ -254,7 +265,16 @@ function AudioBookDetails() {
                         </div>
                         <div className="book-info d-flex flex-column mt-3">
                             <div className="author-info d-flex align-items-center gap-2" onClick={handleProfileClick}>
-                                <img src={bookDetails[0]?.user.profile_image} alt=""/>
+                                <img 
+                                    src={
+                                        bookDetails[0]?.user.profile_image
+                                            ? bookDetails[0]?.user.profile_image.startsWith('uploads')
+                                                ? `${backendBaseUrl}/${bookDetails[0]?.user.profile_image}`
+                                                : bookDetails[0]?.user.profile_image
+                                            : 'default-background.jpg' 
+                                    } 
+                                    alt=""
+                                />
                                 <p>{bookDetails[0]?.user.username}</p>
                             </div>
                             <div className="statistics d-flex gap-3">

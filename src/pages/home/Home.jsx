@@ -103,7 +103,13 @@ function Home() {
                   {filteredUsers.map((user) => (
                     <div className="search-author-item d-flex mb-2" key={user.id}>
                       <img
-                        src={user.profile_image || defaultProfileImage}
+                        src={
+                          user?.profile_image
+                              ? user.profile_image.startsWith('uploads')
+                                  ? `${backendBaseUrl}/${user.profile_image}`
+                                  : user.profile_image
+                              : 'default-background.jpg' 
+                        }
                         alt={user.username}
                         className="search-author-profile me-3"
                         style={{ width: "50px", height: "50px", borderRadius: "50%" }}

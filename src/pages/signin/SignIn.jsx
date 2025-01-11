@@ -28,8 +28,6 @@ function SignIn() {
       const token = response.data.accessToken;
       localStorage.setItem('token', typeof token === "object" ? JSON.stringify(token) : token);
 
-      console.log('Giriş başarılı:', response.data);
-
       navigate(`/home`);
     } catch (error) {
       console.error('Giriş başarısız:', error.response?.data || error.message);
@@ -87,16 +85,6 @@ function SignIn() {
           {/* button */}
           <Link className='btn btn-login mb-2' onClick={handleSubmit}>Giriş Yap</Link>
         </form>
-
-        {/* login options */}
-        <div className="mt-2 d-flex justify-content-between options">
-          <div className="google d-flex justify-content-center align-items-center">
-            <span className='text-white'><i className="bi bi-google me-1"></i>Google</span>
-          </div>
-          <div className="apple d-flex justify-content-center align-items center">
-            <span className="text-white"><i className="bi bi-apple me-1"></i>Apple</span>
-          </div>
-        </div>
       </div>
     </div>
   )

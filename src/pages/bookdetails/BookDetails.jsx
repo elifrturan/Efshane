@@ -5,6 +5,8 @@ import { Button } from 'react-bootstrap'
 import { useNavigate, useParams } from 'react-router-dom'
 import axios from 'axios'
 
+const backendBaseUrl = 'http://localhost:3000';
+
 function BookDetails() {
     const navigate = useNavigate();
     const { bookName: formattedBookName } = useParams();
@@ -86,7 +88,7 @@ function BookDetails() {
         try {
             const response = await axios.post(
                 `http://localhost:3000/reading-list/${bookDetails[0]?.id}`,
-                {},
+                { name: bookDetails[0]?.title },
                 {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -214,7 +216,16 @@ function BookDetails() {
             <div className="book-details-page">
                 <div className="book-details-up">
                     <div className="book-cover">
-                        <img src={bookDetails[0]?.bookCover} alt="" />
+                        <img 
+                            src={
+                                bookDetails[0]?.bookCover
+                                    ? bookDetails[0]?.bookCover.startsWith('uploads')
+                                        ? `${backendBaseUrl}/${bookDetails[0]?.bookCover}`
+                                        : bookDetails[0]?.bookCover
+                                    : 'default-background.jpg' 
+                            }
+                            alt="" 
+                        />
                     </div>
                     <div className="book-header">
                         <div className="book-name">
@@ -248,7 +259,16 @@ function BookDetails() {
                         <div className="book-info d-flex flex-column mt-3">
                         {bookDetails[0]?.user && (
                             <div className="author-info d-flex align-items-center gap-2" onClick={() => handleProfileClick(bookDetails[0]?.user.username)}>
-                                <img src={bookDetails[0]?.user.profile_image} alt="" />
+                                <img 
+                                    src={
+                                        bookDetails[0]?.user.profile_image
+                                            ? bookDetails[0]?.user.profile_image.startsWith('uploads')
+                                                ? `${backendBaseUrl}/${bookDetails[0]?.user.profile_image}`
+                                                : bookDetails[0]?.user.profile_image
+                                            : 'default-background.jpg' 
+                                    }
+                                    alt="" 
+                                />
                                 <p>{bookDetails[0]?.user.username}</p>
                             </div>
                         )}

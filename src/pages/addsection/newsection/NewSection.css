@@ -17,6 +17,25 @@
     min-height: 100vh;
 }
 
+.danger-alert-modal .modal-header {
+    background-color: #f8d7da;
+    border-bottom: 1px solid #f5c6cb;
+}
+
+.danger-alert-modal .modal-title {
+    color: #721c24;
+}
+
+.danger-alert-modal .modal-body {
+    color: #721c24;
+    font-weight: 500;
+}
+
+.danger-alert-modal .btn-danger {
+    background-color: #d9534f;
+    border-color: #d43f3a;
+}
+
 .danger-modal .modal-content{
     border: #dfdfdf;
     width: 500px;

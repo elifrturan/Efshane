@@ -6,6 +6,8 @@ import { Button, Dropdown, Form, Modal } from 'react-bootstrap';
 import { useUser } from '../../User.Context';
 import axios from 'axios';
 
+const backendBaseUrl = 'http://localhost:3000';
+
 function Profile() {
     const [showModal, setShowModal] = useState(false);
     const [currentImage, setCurrentImage] = useState("");
@@ -24,7 +26,10 @@ function Profile() {
     const [showListModal, setShowListModal] = useState(false);
     const [selectedStory, setSelectedStory] = useState(null);
     const [editMode, setEditMode] = useState(false);
-    const [newListName, setNewListName] = useState("");
+    const [userLists, setUserLists] = useState([]);
+    const [selectedList, setSelectedList] = useState(null);
+    const [listBooks, setListBooks] = useState([]);
+    const { user, setUser } = useUser();
 
     const handleClose = () => setShowEdit(false);
 
@@ -37,8 +42,6 @@ function Profile() {
         });
         setShowEdit(true);
     };
-
-    const { user, setUser } = useUser();
 
     useEffect(() => {
         const fetchMyBooks = async () => {
@@ -106,49 +109,59 @@ function Profile() {
         const file = event.target.files[0];
         if (file) {
             const reader = new FileReader();
+    
             reader.onload = (e) => {
                 setTempProfile((prevState) => ({
-                ...prevState,
-                [photoType]: e.target.result
+                    ...prevState,
+                    [photoType]: e.target.result, 
                 }));
             };
+    
+            setTempProfile((prevState) => ({
+                ...prevState,
+                [`${photoType}File`]: file, 
+            }));
+    
             reader.readAsDataURL(file);
+            console.log(file);
         }
-    }
+    };    
 
-    async function handleSave() {
+    const handleSave = async () => {
         try {
-            const { name, profile_image, image_background, about } = tempProfile;
+            const formData = new FormData();
+            formData.append('name', tempProfile.name);
+            formData.append('about', tempProfile.about);
+    
+            if (tempProfile.profile_imageFile) {
+                formData.append('profile_image', tempProfile.profile_imageFile); 
+            }
+    
+            if (tempProfile.image_backgroundFile) {
+                formData.append('image_background', tempProfile.image_backgroundFile); 
+            }
+    
+            console.log(formData);
             const response = await axios.put(
                 'http://localhost:3000/users/updateUser',
-                {
-                    name,
-                    profile_image,
-                    image_background,
-                    about,
-                },
+                formData,
                 {
                     headers: {
+                        'Content-Type': 'multipart/form-data',
                         Authorization: `Bearer ${localStorage.getItem('token')}`,
                     },
                 }
             );
-    
-            console.log("Güncellenen kullanıcı:", response.data);
-    
             setUser((prevUser) => ({
                 ...prevUser,
-                name: response.data.name,
-                about: response.data.about,
-                profile_image: response.data.profile_image,
-                image_background: response.data.image_background,
+                ...response.data,
             }));
     
-            handleClose();
+            setShowEdit(false);
         } catch (error) {
-            console.error("Güncelleme hatası:", error);
+            console.error('Güncelleme hatası:', error.response || error);
         }
-    }
+    };    
     
     const scrollLeft = (ref) => {
         if (ref.current) {
@@ -166,28 +179,37 @@ function Profile() {
         navigate('/my-stories');
     }
 
-    const readingLists = [
-        {
-            id: 1,
-            name: "Favorilerim",
-            books: [
-                {id: 101, storyName: "Aşk ve Gurur", image: "/images/ask-ve-gurur.jpg"},
-                {id: 102, storyName: "Şeker Portakalı", image: "/images/seker-portakali.jpg"},
-                {id: 103, storyName: "Simyacı", image: "/images/simyaci.jpg"},
-            ],
-        },
-        {
-            id: 2,
-            name: "Bilim Kurgu",
-            books: [
-                {id: 201, storyName: "Şeker Portakalı", image: "/images/seker-portakali.jpg"},
-                {id: 202, storyName: "Simyacı", image: "/images/simyaci.jpg"},
-            ],
+    useEffect(() => {
+        const fetchUserLists = async () => {
+            try {
+                const response = await axios.get(`http://localhost:3000/reading-list/list`, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
+                });
+                console.log(response.data);
+                setUserLists(response.data);
+            } catch (error) {
+                console.error("Kitap listeleri alınırken bir hata oluştu:", error);
+            }
+        };
+    
+        fetchUserLists();
+    }, []);
+
+    const fetchBooksInList = async (listName) => {
+        try {
+            const response = await axios.get(`http://localhost:3000/reading-list/list/${listName}`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+            });
+            setListBooks(response.data);
+            setSelectedList(listName);
+        } catch (error) {
+            console.error("Liste kitapları alınırken bir hata oluştu:", error);
         }
-    ].map(list => ({
-        ...list,
-        cover: list.books.length > 0 ? list.books[0].image : "/images/default-cover.jpg",
-    }));
+    };
 
     const handleListModalClose = () => setShowListModal(false)
 
@@ -354,14 +376,30 @@ function Profile() {
             <div className="profile-page">
                 <div className="profile-page-up">
                     <img
-                        src={user.image_background}
+                        src={
+                            user?.image_background
+                                ? user.image_background.startsWith('uploads')
+                                    ? `${backendBaseUrl}/${user.image_background}`
+                                    : user.image_background
+                                : 'default-background.jpg' 
+                        }
                         alt="Background"
                         onClick={() => openModal(user.image_background)}
                         className="clickable-photo"
                     />
                     <div className="profile-details">
                         <div className="profile-photo">
-                            <img src={user.profile_image} alt="" onClick={() => openModal(user.profile_image)} className='clickable-photo'/>
+                            <img
+                                src={
+                                    user?.profile_image
+                                        ? user.profile_image.startsWith('uploads')
+                                            ? `${backendBaseUrl}/${user.profile_image}`
+                                            : user.profile_image
+                                        : 'default-background.jpg' 
+                                }
+                                alt="" 
+                                onClick={() => openModal(user.profile_image)} 
+                                className='clickable-photo'/>
                         </div>
                         <Button className='edit-profile-btn' onClick={handleShow}>Profili düzenle</Button>
                     </div>
@@ -370,7 +408,14 @@ function Profile() {
                         <div className="user-profile-model">
                             <div className="modal-overlay" onClick={closeModal}>
                                 <div className="modal-content">
-                                    <img src={currentImage} alt="Büyütülmüş Görsel" />
+                                    <img 
+                                        src={
+                                            currentImage.startsWith('uploads')
+                                                ? `${backendBaseUrl}/${currentImage}`
+                                                : currentImage
+                                        }
+                                        alt="Büyütülmüş Görsel" 
+                                    />
                                     <button className="close-modal" onClick={closeModal}>
                                         ×
                                     </button>
@@ -411,7 +456,16 @@ function Profile() {
                         <Modal.Body>
                             <div className="cover-photo">
                                 <label htmlFor="coverPhotoInput" className="w-100">
-                                    <img src={tempProfile.image_background} alt="" />
+                                    <img 
+                                        src={
+                                            tempProfile?.image_background
+                                                ? tempProfile.image_background.startsWith('uploads')
+                                                    ? `${backendBaseUrl}/${tempProfile.image_background}`
+                                                    : tempProfile.image_background
+                                                : 'default-background.jpg' 
+                                        }
+                                        alt="" 
+                                    />
                                 </label>
                                 <input
                                     id="coverPhotoInput"
@@ -425,7 +479,16 @@ function Profile() {
                             <div className="profile-details">
                                 <div className="profile-photo">
                                     <label htmlFor="profilePhotoInput" className="clickable-photo w-100">
-                                        <img src={tempProfile.profile_image} alt="" />
+                                        <img 
+                                            src={
+                                                tempProfile?.profile_image
+                                                    ? tempProfile.profile_image.startsWith('uploads')
+                                                        ? `${backendBaseUrl}/${tempProfile.profile_image}`
+                                                        : tempProfile.profile_image
+                                                    : 'default-background.jpg' 
+                                            }
+                                            alt="" 
+                                        />
                                     </label>
                                     <input
                                         id="profilePhotoInput"
@@ -487,7 +550,20 @@ function Profile() {
                         <div className="story-list" ref={storyScrollRef}>
                             {stories.map((story) => (
                                 <div className="story mt-1" key={story.id}>
-                                    <img src={story.bookCover} alt="" width="100px" height="140px" className='object-fit-cover' onClick={() => handleBookClick(story.title)}/>
+                                    <img
+                                        src={
+                                            story?.bookCover
+                                                ? story.bookCover.startsWith('uploads')
+                                                    ? `${backendBaseUrl}/${story.bookCover}`
+                                                    : story.bookCover
+                                                : 'default-book-cover.jpg'
+                                        }
+                                        alt="" 
+                                        width="100px" 
+                                        height="140px" 
+                                        className='object-fit-cover' 
+                                        onClick={() => handleBookClick(story.title)}
+                                    />
                                     <span className='mt-1'>{story.title}</span>
                                     <div className="statistics d-flex justify-content-between mt-1">
                                         <p className='d-flex'><i className="bi bi-eye me-1"></i>{formatNumber(story.analysis?.[0]?.read_count ?? 0)}</p>
@@ -497,11 +573,10 @@ function Profile() {
                                 </div>
                             ))}
                         </div>
-                        
                     </div>
                     <div className="my-read-list mt-4">
                         <div className="read-list-title d-flex align-items-center justify-content-start">
-                            <p className="text-start fw-bold m-0 p-0">Okuma Listelerim</p>
+                            <p className="text-start fw-bold m-0 p-0">Okuma Listem</p>
                             <div className="read-list-controls">
                                 <button onClick={() => scrollLeft(readListScrollRef)} className="scroll-btn">
                                     <i className="bi bi-chevron-left"></i>
@@ -512,10 +587,28 @@ function Profile() {
                             </div>
                         </div>
                         <div className="read-story-list" ref={readListScrollRef}>
-                            {readingLists.map((story) => (
-                                <div className="story mt-1" key={story.id}>
-                                    <img src={story.cover} alt="" width="100px" height="140px" className='object-fit-cover' onClick={() => handleListModalOpen(story)}/>
-                                    <span className='mt-1'>{story.name}</span>
+                            {userLists.map((list) => (
+                                <div className="story mt-1" key={list.name}>
+                                    <img 
+                                        src={
+                                            list.cover
+                                                ? list.cover.startsWith("uploads")
+                                                    ? `${backendBaseUrl}/${list.cover}`
+                                                    : list.cover
+                                                : "default-book-cover.jpg"
+                                        } 
+                                        alt="" 
+                                        width="100px" 
+                                        height="140px" 
+                                        className='object-fit-cover'
+                                        onClick={() => fetchBooksInList(list.name)}
+                                    />
+                                    <span className='mt-1'>{list.name}</span>
+                                    <div className="statistics d-flex justify-content-between mt-1">
+                                        <p className='d-flex'><i className="bi bi-eye me-1"></i>{formatNumber(list.analysis?.[0]?.read_count ?? 0)}</p>
+                                        <p className='d-flex'><i className="bi bi-heart me-1"></i>{formatNumber(list.analysis?.[0]?.like_count ?? 0)}</p>
+                                        <p className='d-flex'><i className="bi bi-chat me-1"></i>{formatNumber(list.analysis?.[0]?.comment_count ?? 0)}</p>
+                                    </div>
                                 </div>
                             ))}
                         </div>
@@ -551,17 +644,27 @@ function Profile() {
                             </Modal.Header>
                             <Modal.Body>
                                 <div className="book-list">
-                                    {selectedStory?.books?.length > 0 ? (
+                                    {selectedList && (
                                         <div className="d-flex flex-wrap justify-content-around">
-                                            {selectedStory.books.map((book) => (
-                                                <div className="book-item m-3 text-center d-flex flex-column gap-2" key={book.id} onClick={handleBookClick}>
-                                                    <img src={book.image} alt={book.storyName} width="100px" height="150px" className="object-fit-cover" />
-                                                    <span className="mt-1">{book.storyName}</span>
+                                            {listBooks.map((book) => (
+                                                <div className="book-item m-3 text-center d-flex flex-column gap-2" key={book.book.id} onClick={handleBookClick}>
+                                                    <img 
+                                                        src={
+                                                            book.book.bookCover
+                                                                ? book.book.bookCover.startsWith("uploads")
+                                                                    ? `${backendBaseUrl}/${book.book.bookCover}`
+                                                                    : book.book.bookCover
+                                                                : "default-book-cover.jpg"
+                                                        }
+                                                        alt={book.book.title} 
+                                                        width="100px" 
+                                                        height="150px" 
+                                                        className="object-fit-cover" 
+                                                    />
+                                                    <span className="mt-1">{book.book.title}</span>
                                                 </div>
                                             ))}
                                         </div>
-                                    ) : (
-                                        <p>Bu listede kitap bulunmamaktadır.</p>
                                     )}
                                 </div>
                             </Modal.Body>
@@ -574,7 +677,13 @@ function Profile() {
                             <div className="add-announcement">
                                 <div className="add-announcement-left">
                                     <img
-                                        src={user.profile_image}
+                                        src={
+                                            user?.profile_image
+                                                ? user.profile_image.startsWith('uploads')
+                                                    ? `${backendBaseUrl}/${user.profile_image}`
+                                                    : user.profile_image
+                                                : 'default-background.jpg' 
+                                        }
                                         alt=""
                                         width="40"
                                         height="40"
@@ -627,7 +736,13 @@ function Profile() {
                                     <div className="profile-announcement" key={announcement.id}>
                                         <div className="profile-announcement-left">
                                             <img 
-                                                src={user.profile_image}
+                                                src={
+                                                    user?.profile_image
+                                                        ? user.profile_image.startsWith('uploads')
+                                                            ? `${backendBaseUrl}/${user.profile_image}`
+                                                            : user.profile_image
+                                                        : 'default-background.jpg' 
+                                                }
                                                 alt="" 
                                                 width="40" 
                                                 height="40" 

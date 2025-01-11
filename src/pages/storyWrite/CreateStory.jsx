@@ -59,11 +59,9 @@ function CreateStory() {
         if (file) {
             const img = new Image();
             img.onload = async () => {
-                console.log(file);
                 setImage(file);
             };
             img.src = URL.createObjectURL(file);
-            console.log(img.src);
         }
     };
     
@@ -86,13 +84,11 @@ function CreateStory() {
     const handleKeyDown = (e) => {
         if(e.key === 'Enter'){
             e.preventDefault();
-            console.log("down");
             handleAddTag();
         }
     }
 
     const handleRemoveTag = (tagToRemove) => {
-        console.log("remove");
         setTags(tags.filter(tag => tag !== tagToRemove));
     } 
 
@@ -194,7 +190,6 @@ function CreateStory() {
             );
     
             if (response.status === 201) {
-                console.log("basarılı");
                 const { normalizedTitle } = response.data;
                 setTimeout(() => {
                     if (isAudioBook) {
@@ -253,11 +248,7 @@ function CreateStory() {
                     <div className="create-left">
                         {image ? (
                             <img 
-                                src={
-                                    book.bookCover?.startsWith('uploads')
-                                        ? `${backendBaseUrl}/${book.bookCover}`
-                                        : book.bookCover
-                                }
+                                src={typeof image === "string" ? image : URL.createObjectURL(image)}
                                 alt="uploaded" 
                                 width="200px" 
                                 height="281px" 

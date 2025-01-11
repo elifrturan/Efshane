@@ -53,7 +53,11 @@ function AddVoice() {
     const [isLoading, setIsLoading] = useState(false);
     const [showSuccessModal, setShowSuccessModal] = useState(false);
     const handleSuccessModalClose = () => setShowSuccessModal(false);
+    const handleInfoClose = () => setShowInfoModal(false);
+    const handleInfoShow = () => setShowInfoModal(true);
 
+    const handleEditClose = () => setShowEditModal(false);
+    const handleEditShow = () => setShowEditModal(true);
 
     const handleTabClick = (tab) => {
         setActiveTab(tab);
@@ -68,7 +72,6 @@ function AddVoice() {
         return num.toString(); 
     };
 
-    //düzenle kısmı için ama pop-up
     const handleAction = (action, sectionId) => {
         if (action === "delete") {
             setSectionToDelete(sectionId);
@@ -97,37 +100,12 @@ function AddVoice() {
         if (file) {
             const img = new Image();
             img.onload = async () => {
-                if (img.width > 200 || img.height > 281) {
-                    setError("Görsel boyutu 200x281 pikselden büyük olamaz.");
-                    setTimeout(() => setError(""), 5000);
-                } else {
-                    setError("");
-                    const reader = new FileReader();
-                    reader.onloadend = () => {
-                        setImage(reader.result);
-                    };
-                    reader.readAsDataURL(file);
-                    try {
-                        const base64Image = await convertToBase64(file); 
-                        setImage(base64Image);
-                    } catch (error) {
-                        console.error("Görsel dönüştürme hatası:", error);
-                    }
-                }
+                setImage(file);
             };
             img.src = URL.createObjectURL(file);
         }
     };
     
-    const convertToBase64 = (file) => {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = () => resolve(reader.result);
-            reader.onerror = (error) => reject(error);
-        });
-    };
-
     useEffect(() => {
         const fetchAudioBookDetails = async () => {
             try {
@@ -255,8 +233,8 @@ function AddVoice() {
         e.preventDefault();
     
         const payload = {
-            title: title?.trim(),
-            summary: summary?.trim(),
+            title: title.trim(),
+            summary: summary.trim(),
             bookCover: typeof bookImage === 'string' ? bookImage : null,
             categories: String(bookCategory || ''),
             ageRange: String(ageRange || ''),
@@ -304,8 +282,6 @@ function AddVoice() {
             setShowSuccessAlert(false);
         }
     };
-
-    const backendBaseUrl = 'http://localhost:3000';
 
     useEffect(() => {
         const fetchSections = async () => {
@@ -369,12 +345,6 @@ function AddVoice() {
         setBookTitle("");
         setShowNewSectionModal(true);
     };
-
-    const handleInfoClose = () => setShowInfoModal(false);
-    const handleInfoShow = () => setShowInfoModal(true);
-
-    const handleEditClose = () => setShowEditModal(false);
-    const handleEditShow = () => setShowEditModal(true);
 
     const handleFileSelect = (type) => {
         setSelectedButton(type);
@@ -778,6 +748,7 @@ function AddVoice() {
         }
     
         formData.append("title", sectionTitle);
+        console.log(title);
         formData.append("duration", audioDuration.toString());
         formData.append("publish", publish.toString());
         formData.append("normalizedTitle", formatTitleForUrl(encodedAudioBookTitle));
@@ -798,6 +769,7 @@ function AddVoice() {
     
             if (response.status === 201) {
                 const newSection = response.data; 
+                console.log(response.data);
                 setSections((prevSections) => [...prevSections, newSection]);
                 setShowSuccessModal(true); 
                 handleClose(); 
@@ -912,8 +884,6 @@ function AddVoice() {
             console.error("Error while saving section:", error);
         }
     }; 
-
-    
 
     return (
         <div className="add-voice-section-page">
@@ -1195,7 +1165,18 @@ function AddVoice() {
                                                 {fileType === 'image' && (
                                                     <div className='add-voice-image'>
                                                         <Form.Group className='mt-4 mb-4 d-flex flex-column'>
-                                                            {imageFile && <img src={imageFile} className='img-fluid mb-4'  alt="Bölüm Görseli" width="300" height="200"/>}
+                                                            {imageFile && 
+                                                                <img 
+                                                                    src={
+                                                                        typeof imageFile === "string"
+                                                                            ? imageFile
+                                                                            : URL.createObjectURL(imageFile)
+                                                                    }
+                                                                    className='img-fluid mb-4'  
+                                                                    alt="Bölüm Görseli" 
+                                                                    width="300" 
+                                                                    height="200"
+                                                                />}
                                                             <Form.Label>Bölüm görselinizi yükleyin</Form.Label>
                                                             <Form.Control
                                                                 type="file"
@@ -1388,7 +1369,13 @@ function AddVoice() {
                                                                             <Form.Group className='mt-4 mb-4 d-flex flex-column'>
                                                                                 {section.image && (
                                                                                     <img 
-                                                                                        src={imageFilePath} 
+                                                                                        src={
+                                                                                            section?.image
+                                                                                                ? section.image.startsWith('uploads')
+                                                                                                    ? `${backendBaseUrl}/${section.image}`
+                                                                                                    : section.image
+                                                                                                : 'default-book-cover.jpg'
+                                                                                        }
                                                                                         className='img-fluid mb-4'  
                                                                                         alt="Bölüm Görseli" 
                                                                                         width="300" 
