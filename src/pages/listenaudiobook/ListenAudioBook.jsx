@@ -6,6 +6,8 @@ import WaveSurfer from 'wavesurfer.js'
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
 
+const backendBaseUrl = 'http://localhost:3000';
+
 function ListenAudioBook() {
     const { bookName: formattedBookName } = useParams();
     const [episode, setEpisodes] = useState([]);
@@ -207,7 +209,8 @@ function ListenAudioBook() {
     
         if (episode.length > 0 && selectedSection) {
             const currentEpisode = episode[selectedSection - 1];
-            const audioFileUrl = currentEpisode?.audioFile;
+            console.log(currentEpisode);
+            const audioFileUrl = `http://localhost:3000${currentEpisode?.audioFile}`;
             console.log("Audio File URL:", audioFileUrl);
     
             if (waveSurferRef.current && audioFileUrl) {

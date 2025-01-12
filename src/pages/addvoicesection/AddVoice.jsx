@@ -747,11 +747,11 @@ function AddVoice() {
             formData.append("audioFile", audioFile);
         }
     
-        formData.append("title", sectionTitle);
+        formData.append("title", title);
         console.log(title);
         formData.append("duration", audioDuration.toString());
         formData.append("publish", publish.toString());
-        formData.append("normalizedTitle", formatTitleForUrl(encodedAudioBookTitle));
+        //formData.append("normalizedTitle", formatTitleForUrl(encodedAudioBookTitle));
     
         setIsLoading(true);
 
@@ -766,7 +766,7 @@ function AddVoice() {
                     },
                 }
             );
-    
+            console.log("dngkalsg");
             if (response.status === 201) {
                 const newSection = response.data; 
                 console.log(response.data);
