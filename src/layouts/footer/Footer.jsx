@@ -20,7 +20,7 @@ function Footer() {
                     <li className="nav-item"><a href="#" className="nav-link px-2 text-body-secondary" onClick={handleShow}>Şartlar & Koşullar</a></li>
                 </ul>
 
-                <div className="d-flex flex-wrap justify-content-between align-items-center">
+                <div className="d-flex flex-wrap justify-content-between align-items-center down">
                   <div className="col-md-4 d-flex align-items center">
                     <a href="/" className="mb-3 me-2 mb-md-0 text-body-secondary text-decoration-none lh-1">
                       <img src="/logo/logo.svg" alt="" width="30px" height="24px"/>
