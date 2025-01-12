@@ -1,0 +1,197 @@
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    background-color: whitesmoke;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    color: var(--second-color);
+}
+
+.settings-page {
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.settings-page h4{
+    margin-bottom: 3%;
+    font-size: 1.4rem;
+    color: var(--second-color);
+    font-weight: 600;
+}
+
+.settings-page .personal-info .form-label {
+    font-size: 0.9rem;
+    color: var(--second-color);
+    opacity: 0.9;
+}
+
+.settings-page .personal-info .form-control,
+.settings-page .personal-info span {
+    font-size: 0.9rem;
+    color: var(--second-color);
+    opacity: 0.9;
+}
+
+.settings-page .personal-info .password-label span{
+    color: var(--theme-color);
+    transition: all 0.3s ease-in-out;
+}
+
+.settings-page .personal-info .password-label span:hover {
+    text-decoration: underline;
+    transform: scale(1.05);
+}
+ 
+.settings-page .personal-info button {
+    font-size: 0.9rem;
+    background-color: var(--theme-color);
+    border: 1px solid var(--theme-color);
+    transition: all 0.3s ease-in-out;
+}
+
+.settings-page .personal-info button:hover {
+    opacity: 0.9;
+    transform: scale(1.03);
+}
+
+.settings-page .personal-info button:focus {
+    opacity: 0.9;
+    background-color: var(--theme-color);
+    border: 1px solid var(--theme-color);
+}
+
+.settings-modal .modal-header .btn-close {
+    font-size: 0.8rem;
+}
+
+.settings-modal .modal-body .form-label {
+    font-size: 0.9rem;
+}
+
+.settings-modal .modal-body .form-control::placeholder {
+    color: var(--second-color) !important;
+    font-size: 0.8rem;
+}
+
+.settings-modal .modal-footer button {
+    font-size: 0.9rem;
+    background-color: var(--theme-color);
+    border: 1px solid var(--theme-color);
+    transition: all 0.3s ease-in-out;
+}
+
+.settings-modal .modal-footer button:hover {
+    opacity: 0.9;
+    transform: scale(1.03);
+}
+
+.settings-modal .modal-footer button:focus {
+    opacity: 0.9;
+    background-color: var(--theme-color);
+    border: 1px solid var(--theme-color);
+}
+
+.settings-page .account-settings,
+.settings-page .help-settings {
+    display: flex;
+    gap: 8px;
+}
+
+.settings-page .account-settings .buttons button,
+.settings-page .help-settings .buttons button {
+    width: 100%;
+    background: none;
+    color: var(--theme-color);
+    opacity: 0.9;
+    border-radius: 25px;
+    border: 1px solid var(--theme-color);
+    transition: all 0.3s ease-in-out;
+}
+
+.settings-page .account-settings .buttons button:last-child {
+    background-color: red;
+    color: var(--bg-color);
+    border: 1px solid red;
+}
+
+.settings-page .account-settings .buttons button:hover,
+.settings-page .help-settings .buttons button:hover {
+    opacity: 1;
+    transform: scale(1.01);
+}
+
+.settings-page .help-settings .buttons button:last-child {
+    background-color: gray;
+    color: var(--bg-color);
+    border: 1px solid gray;
+}
+
+@media (max-width: 1200px) {
+    .settings-page {
+        padding: 0 15px;
+    }
+    .settings-page h4 {
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .settings-page h4 {
+        font-size: 1rem;
+    }
+
+    .settings-page .personal-info .form-label,
+    .settings-page .personal-info .form-control {
+        font-size: 0.8rem;
+    }
+
+    .settings-page .account-settings,
+    .settings-page .help-settings {
+        flex-direction: column;
+    }
+
+    .settings-page .account-settings .buttons button,
+    .settings-page .help-settings .buttons button {
+        margin-bottom: 10px;
+    }
+
+    .settings-page .personal-info button {
+        width: 100%;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .settings-page {
+        padding: 0 10px;
+    }
+
+    .settings-page h4 {
+        font-size: 0.9rem;
+    }
+
+    .settings-page .personal-info .form-control,
+    .settings-page .personal-info .form-label {
+        font-size: 0.75rem;
+    }
+
+    .settings-page .personal-info button {
+        font-size: 1rem;
+    }
+
+    .settings-modal .modal-body .form-control::placeholder {
+        font-size: 0.7rem;
+    }
+
+    .settings-page .account-settings .buttons button,
+    .settings-page .help-settings .buttons button {
+        font-size: 0.85rem;
+        padding: 12px;
+    }
+}
