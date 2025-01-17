@@ -41,6 +41,7 @@ function ListenAudioBook() {
                     },
                 });
         
+                console.log("API Response:", response.data);
                 const { audioBooks, episode } = response.data;                
                 setEpisodes(episode); 
                 console.log("Episodes:", audioBooks.isLiked);
@@ -75,7 +76,6 @@ function ListenAudioBook() {
             console.log(response.data.isLiked || true);
         } catch (error) {
             console.error("Beğenme işlemi sırasında hata oluştu:", error);
-            alert("Beğenme işlemi sırasında bir hata oluştu.");
         }
     };
 
@@ -105,6 +105,17 @@ function ListenAudioBook() {
             setIsAddedToLibrary(previousState); 
         }
     };
+
+    const formatTime = (time) => {
+        const hours = Math.floor(time / 3600);
+        const minutes = Math.floor((time % 3600) / 60);
+        const seconds = Math.floor(time % 60);
+        
+        if (hours > 0) {
+            return `${hours}:${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+        }
+        return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    }
 
     const goToNextSection = () => {
         if (selectedSection < episode.length) {
@@ -196,25 +207,54 @@ function ListenAudioBook() {
                 cursorColor: '#333',
                 responsive: true,
                 backend: 'mediaelement',
+                xhr: {
+                    cache: 'default',
+                    mode: 'cors',
+                    method: 'GET',
+                    credentials: 'same-origin',
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    }
+                }    
             });
     
+            const formatDurationForBackend = (seconds) => {
+                const hours = Math.floor(seconds / 3600);
+                const minutes = Math.floor((seconds % 3600) / 60);
+                const remainingSeconds = Math.floor(seconds % 60);
+                
+                return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+            };
+            
             waveSurferRef.current.on('ready', () => {
-                setAudioDuration(waveSurferRef.current.getDuration());
+                const duration = waveSurferRef.current.getDuration();
+                setAudioDuration(duration);
+                const formattedDuration = formatDurationForBackend(duration);
             });
     
             waveSurferRef.current.on('audioprocess', () => {
                 setCurrentTime(waveSurferRef.current.getCurrentTime());
             });
+
+            waveSurferRef.current.on('error', (err) => {
+                console.error('WaveSurfer error:', err);
+            });    
         }
     
         if (episode.length > 0 && selectedSection) {
-            const currentEpisode = episode[selectedSection - 1];
-            console.log(currentEpisode);
-            const audioFileUrl = `http://localhost:3000${currentEpisode?.audioFile}`;
-            console.log("Audio File URL:", audioFileUrl);
-    
-            if (waveSurferRef.current && audioFileUrl) {
-                waveSurferRef.current.load(audioFileUrl);
+            const currentEpisode = episode[selectedSection - 1];     
+
+            if (currentEpisode?.audioFile) {
+                const fullAudioUrl = `${backendBaseUrl}${currentEpisode.audioFile}`;
+                console.log("Loading audio from:", fullAudioUrl);
+                
+                try {
+                    waveSurferRef.current.load(fullAudioUrl);
+                } catch (error) {
+                    console.error("Error loading audio:", error);
+                }
+            } else {
+                console.error("No audio file path available for current episode");
             }
         }
     
@@ -247,12 +287,6 @@ function ListenAudioBook() {
         return num.toString();
     } 
 
-    const formatTime = (time) => {
-        const minutes = Math.floor(time / 60);
-        const seconds = Math.floor(time % 60);
-        return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-    }
-
     return (
         <>
             <div className="listen-book-page">
@@ -262,7 +296,6 @@ function ListenAudioBook() {
                             <Dropdown.Toggle>
                                 Bölümler
                             </Dropdown.Toggle>
-
                             <Dropdown.Menu>
                             {episode && episode.length > 0 ? (
                                 episode.map(episodes => (
@@ -294,7 +327,13 @@ function ListenAudioBook() {
                     <div className="episode-header">
                         {episode[selectedSection - 1]?.image ? (
                             <img 
-                                src={episode[selectedSection - 1]?.image} 
+                                src={
+                                    episode[selectedSection - 1]?.image
+                                        ? episode[selectedSection - 1].image.startsWith('uploads')
+                                            ? `${backendBaseUrl}/${episode[selectedSection - 1].image}`
+                                            : episode[selectedSection - 1].image
+                                        : 'default-background.jpg' 
+                                }
                                 alt={episode[selectedSection - 1]?.title} 
                                 className="episode-image"
                             />
@@ -338,9 +377,11 @@ function ListenAudioBook() {
                         </div>
                     )}
 
-                    <Button className='next-episode-btn' onClick={goToNextSection}>
-                        Sonraki Bölüme Geç <i className="bi bi-chevron-right ms-2"></i>
-                    </Button>
+                    {selectedSection < episode.length && (
+                        <Button className='next-episode-btn' onClick={goToNextSection}>
+                            Sonraki Bölüme Geç <i className="bi bi-chevron-right ms-2"></i>
+                        </Button>
+                    )}
 
                     <div className="comments-chapter mt-4">
                         <h4 className="mb-2">Yorumlar</h4>
@@ -351,7 +392,13 @@ function ListenAudioBook() {
                                 episode[selectedSection - 1].comments.map((comment, index) => (
                                     <div className="comment d-flex" key={comment.id}>
                                         <img 
-                                            src={comment.user?.profile_image || '/default-profile.png'} 
+                                            src={
+                                                comment?.user?.profile_image
+                                                    ? comment.user?.profile_image.startsWith('uploads')
+                                                        ? `${backendBaseUrl}/${comment.user?.profile_image}`
+                                                        : comment.user?.profile_image
+                                                    : 'default-background.jpg' 
+                                            }
                                             alt={comment.user?.username || 'Anonim'} 
                                             className="user-profile-img" 
                                         />

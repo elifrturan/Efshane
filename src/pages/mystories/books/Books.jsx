@@ -191,9 +191,9 @@ return (
                                         })}
                                         </p>
                                         <div className="stories-istatistic">
-                                            <p className='me-2'><i className="bi bi-eye-fill me-1"></i>{book.read_count}</p>
-                                            <p className='me-2'><i className="bi bi-heart-fill me-1"></i>{book.like_count}</p>
-                                            <p><i className="bi bi-chat-fill me-1"></i>{book.comment_count}</p>
+                                            <p className='me-2'><i className="bi bi-eye-fill me-1"></i>{book.read_count || 0}</p>
+                                            <p className='me-2'><i className="bi bi-heart-fill me-1"></i>{book.like_count || 0}</p>
+                                            <p><i className="bi bi-chat-fill me-1"></i>{book.comment_count || 0}</p>
                                         </div>
                                         {!book.isAudioBook && (
                                             <Button onClick={(e) => convertAudioBook(e, book.title)}>

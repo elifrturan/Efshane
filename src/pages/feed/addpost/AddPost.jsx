@@ -3,6 +3,8 @@ import './AddPost.css'
 import { Button } from 'react-bootstrap';
 import axios from 'axios';
 
+const backendBaseUrl = 'http://localhost:3000';
+
 function AddPost({ onNewPost }) {
     const [content, setContent] = useState('');
     const [image, setImage] = useState(null);
@@ -84,7 +86,19 @@ function AddPost({ onNewPost }) {
 return (
     <div className="add-post">
         <div className="add-post-left">
-            <img src={userProfile?.profile_image} alt="" width="40" height="40" className='rounded-circle object-fit-cover'/>
+            <img 
+                src={
+                    userProfile?.profile_image
+                        ? userProfile.profile_image.startsWith('uploads')
+                            ? `${backendBaseUrl}/${userProfile.profile_image}`
+                            : userProfile.profile_image
+                        : 'default-background.jpg' 
+                }
+                alt="" 
+                width="40" 
+                height="40" 
+                className='rounded-circle object-fit-cover'
+            />
         </div>
         <div className="add-post-right">
             <textarea
@@ -97,7 +111,10 @@ return (
             </textarea><hr />
             {image && (
                 <div className="upload-image-div position-relative">
-                    <img src={image} className='upload-image rounded'/>
+                    <img 
+                    src={image} 
+                    className='upload-image rounded'
+                    />
                     <button
                         className='remove-image-button'
                         onClick={removeImage}

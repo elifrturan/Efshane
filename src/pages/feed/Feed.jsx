@@ -7,6 +7,8 @@ import { Button, Dropdown } from 'react-bootstrap';
 import AddPost from './addpost/AddPost';
 import FollowOthers from './followothers/FollowOthers';
 
+const backendBaseUrl = 'http://localhost:3000';
+
 function Feed() {
     const [modalImage, setModalImage] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -441,7 +443,13 @@ return (
                             <div className="feed-post" key={post.id}>
                                 <div className="feed-post-left">
                                     <img 
-                                        src={post.user?.profile_image} 
+                                        src={
+                                            post?.user?.profile_image
+                                                ? post.user.profile_image.startsWith('uploads')
+                                                    ? `${backendBaseUrl}/${post.user.profile_image}`
+                                                    : post.user.profile_image
+                                                : 'default-background.jpg' 
+                                        }
                                         alt="" 
                                         width="40" 
                                         height="40" 

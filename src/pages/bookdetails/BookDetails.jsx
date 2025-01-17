@@ -18,6 +18,7 @@ function BookDetails() {
     const [isAddedToLibrary, setIsAddedToLibrary] = useState(formattedBookName.isBookCase);
     const [isAddedToReadingList, setIsAddedToReadingList] = useState(formattedBookName.isReadingList);
 
+    
     useEffect(() => {
         const fetchBookDetails = async () => {
             try {
@@ -356,7 +357,13 @@ function BookDetails() {
                                             <div className="d-flex align-items-center justify-content-between gap-2 mb-1">
                                                 <div className="left d-flex align-items-center gap-2">
                                                     <img
-                                                        src={comment.user?.profile_image}
+                                                        src={
+                                                            comment?.user?.profile_image
+                                                                ? comment.user.profile_image.startsWith('uploads')
+                                                                    ? `${backendBaseUrl}/${comment.user.profile_image}`
+                                                                    : comment.user.profile_image
+                                                                : 'default-background.jpg' 
+                                                        }
                                                         alt={comment.user?.username}
                                                         className="user-profile-image"
                                                         onClick={handleProfileClick}

@@ -751,7 +751,6 @@ function AddVoice() {
         console.log(title);
         formData.append("duration", audioDuration.toString());
         formData.append("publish", publish.toString());
-        //formData.append("normalizedTitle", formatTitleForUrl(encodedAudioBookTitle));
     
         setIsLoading(true);
 

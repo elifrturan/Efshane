@@ -22,7 +22,7 @@ const backendBaseUrl = 'http://localhost:3000';
 
 function Home() {
   const [query, setQuery] = useState("");
-  const [results, setResults] = useState({ books: [], users: [] });
+  const [results, setResults] = useState({ books: [], users: [], audioBooks: [] });
   const [lastActivity, setLastActivity] = useState(null);
 
   useEffect(() => {
@@ -41,6 +41,10 @@ function Home() {
   }
 
   const debouncedSearch = debounce(handleSearch, 500);
+
+  const filteredAudioBooks = results.audioBooks.filter((audioBook) =>
+    audioBook.title.toLowerCase().includes(query.toLowerCase())
+  );
 
   const filteredBooks = results.books.filter((book) =>
     book.title.toLowerCase().includes(query.toLowerCase())
@@ -96,6 +100,25 @@ function Home() {
                       <div className="search-book-info d-flex flex-column align-items-start">
                         <h6 className="search-book-title mb-1 text-muted">{book.title}</h6>
                         <p className="search-book-author text-muted mb-0">{book.user?.username}</p>
+                      </div>
+                    </div>
+                  ))}
+                  {/* Audio Book results */}
+                  {filteredAudioBooks.map((audioBook) => (
+                    <div className="search-book-item d-flex mb-2" key={audioBook.id}>
+                      <img
+                        src={
+                          audioBook.bookCover?.startsWith('uploads')
+                            ? `${backendBaseUrl}/${audioBook.bookCover}`
+                            : audioBook.bookCover
+                          }
+                        alt={audioBook.title}
+                        className="search-book-cover me-3"
+                        style={{ width: "60px", height: "90px" }}
+                      />
+                      <div className="search-book-info d-flex flex-column align-items-start">
+                        <h6 className="search-book-title mb-1 text-muted">{audioBook.title}</h6>
+                        <p className="search-book-author text-muted mb-0">{audioBook.user?.username}</p>
                       </div>
                     </div>
                   ))}

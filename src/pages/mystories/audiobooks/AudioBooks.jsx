@@ -168,9 +168,9 @@ function AudioBooks() {
                                     })}
                                     </p>                                
                                     <div className="audio-book-istatistic">
-                                        <p className='me-2'><i className="bi bi-eye-fill me-1"></i>{audioBook.read_count}</p>
-                                        <p className='me-2'><i className="bi bi-heart-fill me-1"></i>{audioBook.like_count}</p>
-                                        <p><i className="bi bi-chat-fill me-1"></i>{audioBook.comment_count}</p>
+                                        <p className='me-2'><i className="bi bi-eye-fill me-1"></i>{audioBook.read_count || 0}</p>
+                                        <p className='me-2'><i className="bi bi-heart-fill me-1"></i>{audioBook.like_count || 0}</p>
+                                        <p><i className="bi bi-chat-fill me-1"></i>{audioBook.comment_count || 0}</p>
                                     </div>
                                     <p className='audio-book-total-time'>Toplam Süre: {audioBook.duration}</p>
                                 </div>

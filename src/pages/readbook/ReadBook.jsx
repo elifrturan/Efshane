@@ -70,7 +70,6 @@ function ReadBook() {
             console.log(response.data.isLiked || true);
         } catch (error) {
             console.error("Beğenme işlemi sırasında hata oluştu:", error);
-            alert("Beğenme işlemi sırasında bir hata oluştu.");
         }
     };
 

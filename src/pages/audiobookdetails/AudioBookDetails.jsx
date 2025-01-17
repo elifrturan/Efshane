@@ -30,7 +30,6 @@ function AudioBookDetails() {
                 const isBookInListeningList = response.data[0]?.isListeningList;
                 setIsAddedListeningList(isBookInListeningList); 
                 const isBookInBookCase = response.data[0]?.isAudioBookCase;
-                console.log("isBookInBookCase", isBookInBookCase);
                 setIsAddedToLibrary(isBookInBookCase);
             } catch (error) {
                 console.error("Error fetching book details:", error);
@@ -260,7 +259,7 @@ function AudioBookDetails() {
                                         </Button>
                                     )}
                                 </div>
-                                <div className='total-time'><p>Toplam Süre: {calculateTotalTime(bookDetails[0]?.duration)}</p></div>
+                                <div className='total-time'><p>Toplam Süre: 15 dakika 35 saniye</p></div>
                             </div>
                         </div>
                         <div className="book-info d-flex flex-column mt-3">
@@ -331,7 +330,7 @@ function AudioBookDetails() {
                                 className={`tab-button ${activeTab === 'chapters' ? 'active' : ''}`}
                                 onClick={() => handleTabClick('chapters')}
                             >
-                                <i class="bi bi-list-ul"></i> Bölümler ({chapters.length})
+                                <i className="bi bi-list-ul"></i> Bölümler ({chapters.length})
                             </button>
                             <button
                                 className={`tab-button ${activeTab === 'comments' ? 'active' : ''}`}
