@@ -14,7 +14,6 @@ function CustomNavbar() {
   const handleLogout = () => {
     localStorage.removeItem('token'); 
     setUser(null); 
-    console.log("asdng");
     navigate('/signin'); 
   };
 
@@ -61,7 +60,7 @@ function CustomNavbar() {
                 <Dropdown.Menu className='navbar-dropdown'>
                   <Dropdown.Item href={`/profile/${user.username}`} className="text-muted"><i className="bi bi-person me-2"></i>Profilim</Dropdown.Item>
                   <Dropdown.Item href="/messages" className="text-muted"><i className="bi bi-chat me-2"></i>Mesajlar</Dropdown.Item>
-                  <Dropdown.Item href="/library" className="text-muted"><i className="bi bi-book me-2"></i>Kitaplık</Dropdown.Item>
+                  <Dropdown.Item href="/book-case" className="text-muted"><i className="bi bi-book me-2"></i>Kitaplık</Dropdown.Item>
                   <Dropdown.Item href="/settings" className="text-muted"><i className="bi bi-gear me-2"></i>Ayarlar</Dropdown.Item>
                   <Dropdown.Item href="/contact-us" className="text-muted"><i className="bi bi-question-circle me-2"></i>Bize Ulaşın</Dropdown.Item>
                   <Dropdown.Item  onClick={handleLogout}

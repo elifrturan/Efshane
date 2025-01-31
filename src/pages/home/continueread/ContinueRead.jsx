@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Button } from 'react-bootstrap'
@@ -9,6 +10,7 @@ const backendBaseUrl = 'http://localhost:3000';
 function ContinueRead({initialLastActivity}) {
     const navigate = useNavigate();
     const [lastActivity, setLastActivity] = useState(null);
+    const [progress, setProgress] = useState(null);
 
     useEffect(() => {
         const fetchLastActivity = async () => {
@@ -25,6 +27,22 @@ function ContinueRead({initialLastActivity}) {
                     },
                 });
                 setLastActivity(response.data); 
+
+                if (response.data) {
+                    const bookTitle = response.data.type === 'book' ? response.data.book?.title : null;                    
+                    if (bookTitle) {
+                        try {
+                            const progressResponse = await axios.get(`${backendBaseUrl}/progress/book/${bookTitle}`, {
+                                headers: {
+                                    Authorization: `Bearer ${parsedToken}`,
+                                },
+                            });
+                            setProgress(progressResponse.data);
+                        } catch (progressError) {
+                            console.error("Progress fetch error:", progressError);
+                        }
+                    }
+                }
             } catch (error) {
                 console.error("Kitap alınırken hata oluştu:", error.response?.data || error.message);
             }
@@ -48,14 +66,58 @@ function ContinueRead({initialLastActivity}) {
         navigate(`/audio-book-details/${formattedBookName}`)
     }
 
-    const handleReadBookClick = (bookName) => {
+    const handleReadBookClick = async (bookName) => {
         const formattedBookName = formatBookNameForURL(bookName);
-        navigate(`/read-book/${formattedBookName}`);
+        if (lastActivity && lastActivity.book?.title) {
+            try {
+                const token = localStorage.getItem('token');
+                const parsedToken = token && token.startsWith('{') ? JSON.parse(token) : token;
+                
+                const progressResponse = await axios.get(`${backendBaseUrl}/progress/book/${lastActivity.book.title}`, {
+                    headers: {
+                        Authorization: `Bearer ${parsedToken}`,
+                    },
+                });
+                                
+                if (progressResponse.data && progressResponse.data.chapters) {
+                    navigate(`/read-book/${formattedBookName}/${progressResponse.data.chapters.id}`);
+                } else {
+                    navigate(`/read-book/${formattedBookName}`);
+                }
+            } catch (error) {
+                console.error("Progress check error:", error);
+                navigate(`/read-book/${formattedBookName}`);
+            }
+        } else {
+            navigate(`/read-book/${formattedBookName}`);
+        }
     }
 
-    const handleListenAudioBookClick = (bookName) => {
+    const handleListenAudioBookClick = async (bookName) => {
         const formattedBookName = formatBookNameForURL(bookName);
-        navigate(`/listen-audio-book/${formattedBookName}`);
+        if (lastActivity && lastActivity.audioBooks?.title) {
+            try {
+                const token = localStorage.getItem('token');
+                const parsedToken = token && token.startsWith('{') ? JSON.parse(token) : token;
+                
+                const progressResponse = await axios.get(`${backendBaseUrl}/progress/book/${formatBookNameForURL(lastActivity.audioBooks.title)}`, {
+                    headers: {
+                        Authorization: `Bearer ${parsedToken}`,
+                    },
+                });
+                                
+                if (progressResponse.data && progressResponse.data.episodes) {
+                    navigate(`/listen-audio-book/${formattedBookName}/${progressResponse.data.episodes.id}`);
+                } else {
+                    navigate(`/listen-audio-book/${formattedBookName}`);
+                }
+            } catch (error) {
+                console.error("Progress check error:", error);
+                navigate(`/listen-audio-book/${formattedBookName}`);
+            }
+        } else {
+            navigate(`/listen-audio-book1/${formattedBookName}`);
+        }
     }
 
     function formatBookNameForURL(bookName) {

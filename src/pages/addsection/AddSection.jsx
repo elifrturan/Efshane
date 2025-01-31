@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import './AddSection.css'
 import { useNavigate, useParams } from 'react-router-dom';
+import { motion, AnimatePresence } from "framer-motion";
+import { CheckCircle } from 'react-feather';
 import axios from 'axios';
 
 function AddSection() {
     const { bookTitle: encodedBookTitle } = useParams();
-
     const [bookImage, setImage] = useState(""); //kitaba ait resim
     const [bookTags, setTags] = useState([]); 
     const [bookContentChoice, setContentChoice] = useState(""); //kitabın ait olduğu haklar
@@ -29,6 +30,8 @@ function AddSection() {
     const [copyrightStatuses, setCopyrightStatuses] = useState([]);
     const [showErrorAlert, setShowErrorAlert] = useState(false);
     const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+    const [showToast, setShowToast] = useState(false); 
+    const [isSuccess, setIsSuccess] = useState(false);
 
     const formatTitleForUrl = (title) => {
         const charMap = {
@@ -289,7 +292,16 @@ function AddSection() {
                     section.id === chapterId ? { ...section, publish: updatedChapter.publish } : section
                 )
             );
+
+            if(!updatedChapter.publish) {
+                setIsSuccess(false);
+            } else {
+                setIsSuccess(true);
+                setTimeout(() => setShowToast(false), 4000);
+            }
     
+            setShowToast(true);
+            setTimeout(() => setShowToast(false), 4000);    
         } catch (error) {
             console.error('Bölümün yayın durumu değiştirilirken hata oluştu:', error);
             alert('Bir hata oluştu. Lütfen tekrar deneyin.');
@@ -695,7 +707,32 @@ function AddSection() {
                     </div>
                 </div>
             </div>
-
+            
+            {/* Yayinlanma Animasyonu */}
+            <AnimatePresence>
+                {showToast && (
+                    <motion.div 
+                        className="toast-overlay"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.3 }}
+                    >
+                        <motion.div 
+                            className={`toast-box ${isSuccess ? "success" : "error"}`} 
+                            initial={{ scale: 0 }}
+                            animate={{ scale: 1, rotate: 360 }}
+                            exit={{ scale: 0 }}
+                            transition={{ duration: 0.5 }}
+                    >
+                            <CheckCircle size={100} />
+                            <p className='mt-4'>
+                                {isSuccess ? "Bölüm başarıyla yayınlandı!" : "Bölüm başarıyla yayından kaldırıldı!"}
+                            </p>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </div>
     )
 }

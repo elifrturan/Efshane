@@ -1,9 +1,11 @@
 import React, { useRef, useState, useEffect } from 'react'
 import './UserProfile.css'
 import Footer from '../../layouts/footer/Footer'
-import { Button } from 'react-bootstrap';
+import { Modal, Button } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+
+const backendBaseUrl = 'http://localhost:3000';
 
 function UserProfile() {
     const [showModal, setShowModal] = useState(false);
@@ -289,7 +291,13 @@ function UserProfile() {
                 <div className="profile2-page-up">
                     <div className="cover-photo">
                         <img 
-                            src={user.image_background} 
+                            src={
+                                user?.image_background
+                                    ? user.image_background.startsWith('uploads')
+                                        ? `${backendBaseUrl}/${user.image_background}`
+                                        : user.image_background
+                                    : 'default-background.jpg' 
+                            }
                             alt="" 
                             onClick={() => openModal(user.image_background)}
                         />
@@ -297,9 +305,15 @@ function UserProfile() {
                     <div className="profile2-details">
                         <div className="profile-photo">
                             <img 
-                                src={user.profile_image}
-                                alt="" 
-                                onClick={() => openModal(user.profile_image)}
+                                src={
+                                    user?.profile_image
+                                        ? user.profile_image.startsWith('uploads')
+                                            ? `${backendBaseUrl}/${user.profile_image}`
+                                            : user.profile_image
+                                        : 'default-background.jpg' 
+                                    }
+                                    alt="" 
+                                    onClick={() => openModal(user.profile_image)}
                             />
                         </div>
                         {isFollowing ? (

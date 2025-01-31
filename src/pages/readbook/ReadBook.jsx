@@ -38,8 +38,24 @@ function ReadBook() {
     
                 const { book, chapters } = response.data;
                 setChapters(chapters);
-                console.log("Episodes:", book.isAudioBookCase);
                 setLiked(book.isLiked); 
+
+                const lastReadResponse = await axios.get(
+                    `http://localhost:3000/progress/book/${formattedBookName}`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem('token')}`,
+                        },
+                    }
+                );
+
+                const lastReadChapter = lastReadResponse.data?.chapters;
+                if (lastReadChapter) {
+                    const lastReadIndex = chapters.findIndex(chapter => chapter.id === lastReadChapter.id);
+                    setSelectedSection(lastReadIndex !== -1 ? lastReadIndex + 1 : 1);
+                } else {
+                    setSelectedSection(1);
+                }
             } catch (error) {
                 console.error("Error fetching book details:", error);
             }
@@ -67,7 +83,6 @@ function ReadBook() {
                 }
             );
             setLiked(response.data.isLiked);
-            console.log(response.data.isLiked || true);
         } catch (error) {
             console.error("Beğenme işlemi sırasında hata oluştu:", error);
         }
@@ -100,12 +115,44 @@ function ReadBook() {
         }
     };
 
-    const goToNextSection = () => {
-        if (selectedSection < chapters.length) {
-            setSelectedSection(selectedSection + 1);
-            window.scrollTo(0,0);
+    const updateProgress = async (formattedBookName, chapterId) => {
+        try {
+            const response = await axios.post(
+                `${backendBaseUrl}/progress/book/${formattedBookName}/chapter/${chapterId}`,
+                {},
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    },
+                }
+            );
+        } catch (error) {
+            console.error("Progress update failed:", error.response?.data || error.message);
         }
-    }
+    };    
+
+    const goToNextSection = async () => {
+        if (selectedSection < chapters.length) {
+            const nextSection = selectedSection + 1;
+            setSelectedSection(nextSection);
+            window.scrollTo(0, 0);
+    
+            const chapterId = chapters[nextSection - 1]?.id; 
+            if (chapterId) {
+                await updateProgress(formattedBookName, chapterId);
+            }
+        }
+    };    
+
+    const handleSectionChange = async (index) => {
+        setSelectedSection(index + 1);
+        window.scrollTo(0, 0);
+    
+        const chapterId = chapters[index]?.id; 
+        if (chapterId) {
+            await updateProgress(formattedBookName, chapterId);
+        }
+    };    
 
     const formatTitleForUrl = (title) => {
         const charMap = {
@@ -209,10 +256,7 @@ function ReadBook() {
                                 {chapters.map((chapter, index) => (
                                     <Dropdown.Item 
                                         key={chapter.id} 
-                                        onClick={() => {
-                                            setSelectedSection(index + 1); 
-                                            window.scrollTo(0, 0); 
-                                        }}
+                                        onClick={() => handleSectionChange(index)}
                                     >
                                         {chapter.title}
                                     </Dropdown.Item>

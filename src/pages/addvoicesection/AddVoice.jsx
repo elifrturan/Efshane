@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from 'react'
 import './AddVoice.css'
 import { Button, Dropdown, Form, Modal, Spinner } from 'react-bootstrap';
 import { useParams, useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from "framer-motion";
+import { CheckCircle } from 'react-feather';
 import axios from 'axios';
 
 const backendBaseUrl = 'http://localhost:3000';
@@ -58,6 +60,8 @@ function AddVoice() {
 
     const handleEditClose = () => setShowEditModal(false);
     const handleEditShow = () => setShowEditModal(true);
+    const [showToast, setShowToast] = useState(false); 
+    const [isSuccess, setIsSuccess] = useState(false);
 
     const handleTabClick = (tab) => {
         setActiveTab(tab);
@@ -367,10 +371,9 @@ function AddVoice() {
 
     const togglePublish = async (sectionId, episodeTitle) => {
         try {
-            const encodedTitle = encodeURIComponent(encodedAudioBookTitle);
             const encodedEpisodeTitle = encodeURIComponent(episodeTitle);
     
-            const url = `http://localhost:3000/episode/toggle/${encodedTitle}/${encodedEpisodeTitle}`;
+            const url = `http://localhost:3000/episode/toggle/${encodedAudioBookTitle}/${encodedEpisodeTitle}`;
             const response = await axios.put(
                 url,
                 {}, 
@@ -390,6 +393,16 @@ function AddVoice() {
                         : section
                 )
             );
+
+            if(!updatedEpisode.publish) {
+                setIsSuccess(false);
+            } else {
+                setIsSuccess(true);
+                setTimeout(() => setShowToast(false), 4000);
+            }
+    
+            setShowToast(true);
+            setTimeout(() => setShowToast(false), 4000); 
         } catch (error) {
             console.error('Yayın durumu değiştirilirken hata oluştu:', error);
             alert('Bir hata oluştu. Lütfen tekrar deneyin.');
@@ -1634,7 +1647,33 @@ function AddVoice() {
                     {tagError}
                 </div>
             )}
-        </div>
+
+            {/* Yayinlanma Animasyonu */}
+            <AnimatePresence>
+                {showToast && (
+                    <motion.div 
+                        className="toast-overlay"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.3 }}
+                    >
+                        <motion.div 
+                            className={`toast-box ${isSuccess ? "success" : "error"}`} 
+                            initial={{ scale: 0 }}
+                            animate={{ scale: 1, rotate: 360 }}
+                            exit={{ scale: 0 }}
+                            transition={{ duration: 0.5 }}
+                    >
+                            <CheckCircle size={100} />
+                            <p className='mt-4'>
+                                {isSuccess ? "Bölüm başarıyla yayınlandı!" : "Bölüm başarıyla yayından kaldırıldı!"}
+                            </p>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </div> 
     )
 }
 

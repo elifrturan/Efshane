@@ -1,4 +1,5 @@
 import { React, useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom';
 import './Home.css'
 import NewRelases from './newrelases/NewRelases';
 import Popular from './popular/Popular';
@@ -17,13 +18,13 @@ const debounce = (func, delay) => {
   };
 };
 
-const defaultProfileImage = '/images/user.jpeg';
 const backendBaseUrl = 'http://localhost:3000';
 
 function Home() {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState({ books: [], users: [], audioBooks: [] });
   const [lastActivity, setLastActivity] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setLastActivity(null);
@@ -53,6 +54,34 @@ function Home() {
   const filteredUsers = results.users.filter((user) =>
     user.username.toLowerCase().includes(query.toLowerCase())
   );
+
+  function formatBookNameForURL(bookName) {
+    return bookName
+      .toLowerCase()
+      .replace(/ğ/g, "g")
+      .replace(/ü/g, "u")
+      .replace(/ş/g, "s")
+      .replace(/ı/g, "i")
+      .replace(/ö/g, "o")
+      .replace(/ç/g, "c")
+      .replace(/[^a-z0-9\s-]/g, "")
+      .trim()
+      .replace(/\s+/g, "-");
+  }
+
+  const handleProfileClick = (username) => {
+    navigate(`/user/${username}`);
+  }
+
+  const handleBookClick = (bookName) => {
+    const formattedBookName = formatBookNameForURL(bookName);
+    navigate(`/book-details/${formattedBookName}`)
+  }
+
+  const handleAudioBookClick = (bookName) => {
+    const formattedBookName = formatBookNameForURL(bookName);
+    navigate(`/audio-book-details/${formattedBookName}`)
+  }
 
   return (
     <div className="home-page">
@@ -86,7 +115,7 @@ function Home() {
                 <div className="search-results">
                   {/* Book results */}
                   {filteredBooks.map((book) => (
-                    <div className="search-book-item d-flex mb-2" key={book.id}>
+                    <div className="search-book-item d-flex mb-2" key={book.id} onClick={() => handleBookClick(book.title)}>
                       <img
                         src={
                           book.bookCover?.startsWith('uploads')
@@ -105,7 +134,7 @@ function Home() {
                   ))}
                   {/* Audio Book results */}
                   {filteredAudioBooks.map((audioBook) => (
-                    <div className="search-book-item d-flex mb-2" key={audioBook.id}>
+                    <div className="search-book-item d-flex mb-2" key={audioBook.id} onClick={() => handleAudioBookClick(audioBook.title)}>
                       <img
                         src={
                           audioBook.bookCover?.startsWith('uploads')
@@ -124,7 +153,7 @@ function Home() {
                   ))}
                   {/* Author results */}
                   {filteredUsers.map((user) => (
-                    <div className="search-author-item d-flex mb-2" key={user.id}>
+                    <div className="search-author-item d-flex mb-2" key={user.id} onClick={() => handleProfileClick(user.username)}>
                       <img
                         src={
                           user?.profile_image

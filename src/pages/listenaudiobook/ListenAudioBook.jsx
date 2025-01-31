@@ -40,12 +40,27 @@ function ListenAudioBook() {
                         Authorization: `Bearer ${localStorage.getItem('token')}`,
                     },
                 });
-        
-                console.log("API Response:", response.data);
                 const { audioBooks, episode } = response.data;                
                 setEpisodes(episode); 
-                console.log("Episodes:", audioBooks.isLiked);
                 setLiked(audioBooks.isLiked); 
+
+                const lastReadResponse = await axios.get(
+                    `http://localhost:3000/progress/book/${formattedBookName}`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem('token')}`,
+                        },
+                    }
+                );
+
+                const lastListenEpisode = lastReadResponse.data?.episodes;
+                if (lastListenEpisode) {
+                    const lastListenIndex = episode.findIndex(episodes => episodes.id === lastListenEpisode.id);
+                    setSelectedSection(lastListenIndex !== -1 ? lastListenIndex + 1 : 1);
+                } else {
+                    setSelectedSection(1);
+                }
+
             } catch (error) {
                 console.error("Error fetching audio book details:", error);
             }
@@ -73,7 +88,6 @@ function ListenAudioBook() {
                 }
             );
             setLiked(response.data.isLiked);
-            console.log(response.data.isLiked || true);
         } catch (error) {
             console.error("Beğenme işlemi sırasında hata oluştu:", error);
         }
@@ -117,12 +131,44 @@ function ListenAudioBook() {
         return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
     }
 
-    const goToNextSection = () => {
-        if (selectedSection < episode.length) {
-            setSelectedSection(selectedSection + 1);
-            window.scrollTo(0,0);
+    const updateProgress = async (formattedBookName, chapterId) => {
+        try {
+            const response = await axios.post(
+                `${backendBaseUrl}/progress/book/${formattedBookName}/chapter/${chapterId}`,
+                {},
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    },
+                }
+            );
+        } catch (error) {
+            console.error("Progress update failed:", error.response?.data || error.message);
         }
-    }
+    };    
+
+    const goToNextSection = async () => {
+        if (selectedSection < chapters.length) {
+            const nextSection = selectedSection + 1;
+            setSelectedSection(nextSection);
+            window.scrollTo(0, 0);
+    
+            const chapterId = chapters[nextSection - 1]?.id; 
+            if (chapterId) {
+                await updateProgress(formattedBookName, chapterId);
+            }
+        }
+    };    
+    
+    const handleSectionChange = async (index) => {
+        setSelectedSection(index + 1);
+        window.scrollTo(0, 0);
+    
+        const chapterId = episode[index]?.id; 
+        if (chapterId) {
+            await updateProgress(formattedBookName, chapterId);
+        }
+    };  
 
     const formatTitleForUrl = (title) => {
         const charMap = {
@@ -181,9 +227,7 @@ function ListenAudioBook() {
                         }
                         : episodes
                 )
-            );
-            console.log(response.data);
-        
+            );        
             setNewComment(""); 
         } catch (error) {
             console.error("Yorum eklenirken hata oluştu:", error.response?.data || error.message);
@@ -245,9 +289,7 @@ function ListenAudioBook() {
             const currentEpisode = episode[selectedSection - 1];     
 
             if (currentEpisode?.audioFile) {
-                const fullAudioUrl = `${backendBaseUrl}${currentEpisode.audioFile}`;
-                console.log("Loading audio from:", fullAudioUrl);
-                
+                const fullAudioUrl = `${backendBaseUrl}${currentEpisode.audioFile}`;                
                 try {
                     waveSurferRef.current.load(fullAudioUrl);
                 } catch (error) {
@@ -297,15 +339,14 @@ function ListenAudioBook() {
                                 Bölümler
                             </Dropdown.Toggle>
                             <Dropdown.Menu>
-                            {episode && episode.length > 0 ? (
-                                episode.map(episodes => (
-                                    <Dropdown.Item key={episodes.id} onClick={() => setSelectedSection(episodes.id)}>
-                                        {episodes.title}
-                                    </Dropdown.Item>
-                                ))
-                            ) : (
-                                <Dropdown.Item disabled>Hiç bölüm bulunamadı</Dropdown.Item>
-                            )}
+                            {episode.map((episode, index) => (
+                                <Dropdown.Item 
+                                    key={episode.id} 
+                                    onClick={() => handleSectionChange(index)}
+                                >
+                                    {episode.title}
+                                </Dropdown.Item>
+                            ))}
                             </Dropdown.Menu>
                         </Dropdown>
                     </div>
@@ -329,8 +370,8 @@ function ListenAudioBook() {
                             <img 
                                 src={
                                     episode[selectedSection - 1]?.image
-                                        ? episode[selectedSection - 1].image.startsWith('uploads')
-                                            ? `${backendBaseUrl}/${episode[selectedSection - 1].image}`
+                                        ? episode[selectedSection - 1].image.startsWith('/')
+                                            ? `${backendBaseUrl}${episode[selectedSection - 1].image}`
                                             : episode[selectedSection - 1].image
                                         : 'default-background.jpg' 
                                 }

@@ -23,7 +23,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 12px;
+    gap: 12px; 
     transition: all 0.3s ease-in-out;
     margin-top: 5%;
 }
@@ -38,6 +38,18 @@
     object-fit: cover;
     border-radius: 4px;
     box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+}
+
+.library-page .book-list .book .book-img .headphone-icon{
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 24px;
+    height: 24px;
+    pointer-events: none;
+    background-color: rgba(255, 255, 255, 1);
+    padding: 5px; 
+    border-radius: 50%;
 }
 
 .library-page .book-overlay {

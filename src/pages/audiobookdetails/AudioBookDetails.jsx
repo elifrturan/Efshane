@@ -62,7 +62,20 @@ function AudioBookDetails() {
         fetchChapterDetails();
     }, [formattedBookName]);
     
-    
+    function formatBookNameForURL(bookName) {
+        return bookName
+            .toLowerCase()
+            .replace(/ğ/g, "g")
+            .replace(/ü/g, "u")
+            .replace(/ş/g, "s")
+            .replace(/ı/g, "i")
+            .replace(/ö/g, "o")
+            .replace(/ç/g, "c")
+            .replace(/[^a-z0-9\s-]/g, "")
+            .trim()
+            .replace(/\s+/g, "-");
+        }
+
     const handleAddToLibrary = async () => {
         const previousState = isAddedToLibrary; 
         setIsAddedToLibrary(!previousState); 
@@ -120,8 +133,30 @@ function AudioBookDetails() {
         }
     };
 
-    const handleListenAudioBookClick = (formattedBookName) => {
-        navigate(`/listen-audio-book/${formattedBookName}`);
+    const handleListenAudioBookClick = async (bookName) => {
+        const formattedBookName = formatBookNameForURL(bookName);
+        
+        try {
+            const response = await axios.post(
+                `${backendBaseUrl}/book-case/audioBook/${formattedBookName}`,
+                {},
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    },
+                }
+            );
+    
+            if (response.status === 200) {
+                console.log('Kitap başarıyla başlatıldı:', response.data);
+            } else {
+                console.warn('Beklenmeyen durum:', response);
+            }
+    
+            navigate(`/listen-audio-book/${formattedBookName}`);
+        } catch (error) {
+            console.error('Kitabı başlatırken bir hata oluştu:', error.response?.data || error.message);
+        }
     };
 
     const calculateTotalTime = (totalMinutes) => {

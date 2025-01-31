@@ -63,7 +63,7 @@ function NewRelases(initialLastActivity) {
 
     const handleProfileClick = (username) => {
       navigate(`/user/${username}`);
-  }
+    }
 
     const handleBookClick = (bookName) => {
       const formattedBookName = formatBookNameForURL(bookName);

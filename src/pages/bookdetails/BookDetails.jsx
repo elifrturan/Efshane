@@ -129,12 +129,33 @@ function BookDetails() {
             .replace(/[^a-z0-9\s-]/g, "")
             .trim()
             .replace(/\s+/g, "-");
-        }
-
-    const handleReadBookClick = (bookName) => {
-        const formattedBookName = formatBookNameForURL(bookName);
-        navigate(`/read-book/${formattedBookName}`);
     }
+
+    const handleReadBookClick = async (bookName) => {
+        const formattedBookName = formatBookNameForURL(bookName);
+        
+        try {
+            const response = await axios.post(
+                `${backendBaseUrl}/book-case/book/${formattedBookName}`,
+                {},
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    },
+                }
+            );
+        
+            if (response.status === 200) {
+                console.log('Kitap başarıyla başlatıldı:', response.data);
+            } else {
+                console.warn('Beklenmeyen durum:', response);
+            }
+        
+            navigate(`/read-book/${formattedBookName}`);
+        } catch (error) {
+            console.error('Kitabı başlatırken bir hata oluştu:', error.response?.data || error.message);
+        }
+    };
 
     const handleTabClick = (tab) => {
         setActiveTab(tab);

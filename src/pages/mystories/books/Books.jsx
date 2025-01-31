@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react'
 import './Books.css'
 import { useNavigate } from 'react-router-dom';
 import { Button, Dropdown, Modal } from 'react-bootstrap';
-import axios from 'axios'
+import { motion, AnimatePresence } from "framer-motion";
+import { CheckCircle } from 'react-feather';
+import axios from 'axios';
 
 const backendBaseUrl = 'http://localhost:3000';
 
@@ -12,6 +14,8 @@ function Books() {
     const [bookToDelete, setBookToDelete] = useState(null);
     const [books, setBooks] = useState([]);
     const navigate = useNavigate();
+    const [showToast, setShowToast] = useState(false); 
+    const [isSuccess, setIsSuccess] = useState(false);
 
     useEffect(() => {
         const fetchBooks = async () => {
@@ -153,129 +157,176 @@ function Books() {
                 )
             );
     
-            const statusMessage = updatedBook.publish
-                ? 'Kitap başarıyla yayınlandı!'
-                : 'Kitap yayından kaldırıldı.';
+            if(!updatedBook.publish) {
+                setIsSuccess(false);
+            } else {
+                setIsSuccess(true);
+                setTimeout(() => setShowToast(false), 4000);
+            }
+    
+            setShowToast(true);
+            setTimeout(() => setShowToast(false), 4000);
         } catch (error) {
             console.error('Yayın durumu değiştirilirken hata oluştu:', error);
             alert('Bir hata oluştu. Lütfen tekrar deneyin.');
         }
     };
     
-return (
-    <>
-        {activeTab === 'books' && (
-                    <div id="books" className={`stories-tab-pane ${activeTab === 'books' ? 'active' : ''}`}>
-                        {books.map((book) => (
-                            <div className="book-card mb-3" key={book.id}>
-                                <div className="my-stories-book-left d-flex gap-3">
-                                    <img
-                                        src={
-                                            book.bookCover?.startsWith('uploads')
-                                                ? `${backendBaseUrl}/${book.bookCover}`
-                                                : book.bookCover
-                                        }
-                                        alt={book.title}
-                                        width="80"
-                                        height="120"
-                                    />
-                                    <div className="stories-left-right">
-                                        <p className='stories-name'>{book.title}</p>
-                                        <p className='stories-date'>
-                                        Yayınlanma Tarihi: {new Date(book.publish_date).toLocaleDateString('tr-TR', {
-                                            year: 'numeric',
-                                            month: 'long',
-                                            day: 'numeric',
-                                            hour: '2-digit',
-                                            minute: '2-digit',
-                                        })}
-                                        </p>
-                                        <div className="stories-istatistic">
-                                            <p className='me-2'><i className="bi bi-eye-fill me-1"></i>{book.read_count || 0}</p>
-                                            <p className='me-2'><i className="bi bi-heart-fill me-1"></i>{book.like_count || 0}</p>
-                                            <p><i className="bi bi-chat-fill me-1"></i>{book.comment_count || 0}</p>
+    function formatNumber(num) {
+        if (num >= 1_000_000_000) {
+            return (num / 1_000_000_000).toFixed(1).replace(/\.0$/, '') + 'B';
+        }
+        if (num >= 1_000_000) {
+            return (num / 1_000_000).toFixed(1).replace(/\.0$/, '') + 'M';
+        }
+        if (num >= 1_000) {
+            return (num / 1_000).toFixed(1).replace(/\.0$/, '') + 'K';
+        }
+        return num.toString();
+    }
+
+    return (
+        <>
+            {activeTab === 'books' && (
+                        <div id="books" className={`stories-tab-pane ${activeTab === 'books' ? 'active' : ''}`}>
+                            {books.map((book) => (
+                                <div className="book-card mb-3" key={book.id}>
+                                    <div className="my-stories-book-left d-flex gap-3">
+                                        <img
+                                            src={
+                                                book.bookCover?.startsWith('uploads')
+                                                    ? `${backendBaseUrl}/${book.bookCover}`
+                                                    : book.bookCover
+                                            }
+                                            alt={book.title}
+                                            width="80"
+                                            height="120"
+                                        />
+                                        <div className="stories-left-right">
+                                            <p className='stories-name'>{book.title}</p>
+                                            <p className='stories-date'>
+                                            Yayınlanma Tarihi: {new Date(book.publish_date).toLocaleDateString('tr-TR', {
+                                                year: 'numeric',
+                                                month: 'long',
+                                                day: 'numeric',
+                                                hour: '2-digit',
+                                                minute: '2-digit',
+                                            })}
+                                            </p>
+                                            <div className="stories-istatistic">
+                                                <p className='me-2'><i className="bi bi-eye-fill me-1"></i>{formatNumber(book.read_count || 0)}</p>
+                                                <p className='me-2'><i className="bi bi-heart-fill me-1"></i>{formatNumber(book.like_count || 0)}</p>
+                                                <p><i className="bi bi-chat-fill me-1"></i>{formatNumber(book.comment_count || 0)}</p>
+                                            </div>
+                                            {!book.isAudioBook && (
+                                                <Button onClick={(e) => convertAudioBook(e, book.title)}>
+                                                    <i className="bi bi-record-circle me-2"></i>Sesli Kitaba Dönüştür
+                                                </Button>
+                                            )}
                                         </div>
-                                        {!book.isAudioBook && (
-                                            <Button onClick={(e) => convertAudioBook(e, book.title)}>
-                                                <i className="bi bi-record-circle me-2"></i>Sesli Kitaba Dönüştür
-                                            </Button>
-                                        )}
+                                    </div>
+                                    <div className="my-stories-book-right d-flex gap-2">
+                                        <Dropdown>
+                                            <Dropdown.Toggle className='no-toggle'>
+                                                <i className="bi bi-three-dots-vertical"></i>
+                                            </Dropdown.Toggle>
+
+                                            <Dropdown.Menu>
+                                                <Dropdown.Item className='icon-link icon-link-hover' onClick={(e) => handleEdit(e, book.title)}><i className="bi bi-pen me-1"></i>Düzenle</Dropdown.Item>
+                                                <Dropdown.Item className='icon-link icon-link-hover' onClick={() => handleDeleteClick(book)}><i className="bi bi-trash me-1"></i>Sil</Dropdown.Item>
+                                                <Dropdown.Item className="icon-link icon-link-hover">
+                                                    <i className="bi bi-book me-1"></i>
+                                                    {book.publish ? (
+                                                        <button
+                                                            className="p-0 m-0"
+                                                            style={{
+                                                                background: 'none',
+                                                                border: 'none',
+                                                                padding: '0',
+                                                                color: 'inherit',
+                                                                cursor: 'pointer',
+                                                                fontSize: 'inherit',
+                                                            }}
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                togglePublish(book.id, book.title);
+                                                            }}
+                                                        >
+                                                            Yayından Kaldır
+                                                        </button>
+                                                    ) : (
+                                                        <button
+                                                            className="p-0 m-0"
+                                                            style={{
+                                                                background: 'none',
+                                                                border: 'none',
+                                                                padding: '0',
+                                                                color: 'inherit',
+                                                                cursor: 'pointer',
+                                                                fontSize: 'inherit',
+                                                            }}
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                togglePublish(book.id, book.title);
+                                                            }}
+                                                        >
+                                                            Yayınla
+                                                        </button>
+                                                    )}
+                                                </Dropdown.Item>
+                                            </Dropdown.Menu>
+                                        </Dropdown>
                                     </div>
                                 </div>
-                                <div className="my-stories-book-right d-flex gap-2">
-                                    <Dropdown>
-                                        <Dropdown.Toggle className='no-toggle'>
-                                            <i className="bi bi-three-dots-vertical"></i>
-                                        </Dropdown.Toggle>
+                            ))}
+                        </div>
+                    )}
 
-                                        <Dropdown.Menu>
-                                            <Dropdown.Item className='icon-link icon-link-hover' onClick={(e) => handleEdit(e, book.title)}><i className="bi bi-pen me-1"></i>Düzenle</Dropdown.Item>
-                                            <Dropdown.Item className='icon-link icon-link-hover' onClick={() => handleDeleteClick(book)}><i className="bi bi-trash me-1"></i>Sil</Dropdown.Item>
-                                            <Dropdown.Item className="icon-link icon-link-hover">
-                                                <i className="bi bi-book me-1"></i>
-                                                {book.publish ? (
-                                                    <button
-                                                        className="p-0 m-0"
-                                                        style={{
-                                                            background: 'none',
-                                                            border: 'none',
-                                                            padding: '0',
-                                                            color: 'inherit',
-                                                            cursor: 'pointer',
-                                                            fontSize: 'inherit',
-                                                        }}
-                                                        onClick={(e) => {
-                                                            e.stopPropagation();
-                                                            togglePublish(book.id, book.title);
-                                                        }}
-                                                    >
-                                                        Yayından Kaldır
-                                                    </button>
-                                                ) : (
-                                                    <button
-                                                        className="p-0 m-0"
-                                                        style={{
-                                                            background: 'none',
-                                                            border: 'none',
-                                                            padding: '0',
-                                                            color: 'inherit',
-                                                            cursor: 'pointer',
-                                                            fontSize: 'inherit',
-                                                        }}
-                                                        onClick={(e) => {
-                                                            e.stopPropagation();
-                                                            togglePublish(book.id, book.title);
-                                                        }}
-                                                    >
-                                                        Yayınla
-                                                    </button>
-                                                )}
-                                            </Dropdown.Item>
-                                        </Dropdown.Menu>
-                                    </Dropdown>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                )}
-                <Modal show={showModal} onHide={() => setShowModal(false)} centered className='stories-delete-modal'>
-                    <Modal.Header closeButton>
-                        <Modal.Title>Kitabını silmek mi istiyorsun?</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <p>Kitabını silmek istediğin için üzgünüz. Bu işlem geri alınamaz. Emin misin?</p>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button onClick={() => setShowModal(false)}>
-                            İptal
-                        </Button>
-                        <Button onClick={confirmDelete}>
-                            Sil
-                        </Button>
-                    </Modal.Footer>
-                </Modal>
-    </>
-)
+                    {/* Silme Modalı */}
+                    <Modal show={showModal} onHide={() => setShowModal(false)} centered className='stories-delete-modal'>
+                        <Modal.Header closeButton>
+                            <Modal.Title>Kitabını silmek mi istiyorsun?</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            <p>Kitabını silmek istediğin için üzgünüz. Bu işlem geri alınamaz. Emin misin?</p>
+                        </Modal.Body>
+                        <Modal.Footer>
+                            <Button onClick={() => setShowModal(false)}>
+                                İptal
+                            </Button>
+                            <Button onClick={confirmDelete}>
+                                Sil
+                            </Button>
+                        </Modal.Footer>
+                    </Modal>
+
+                    {/* Yayinlanma Animasyonu */}
+                    <AnimatePresence>
+                        {showToast && (
+                            <motion.div 
+                                className="toast-overlay"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                transition={{ duration: 0.3 }}
+                            >
+                                <motion.div 
+                                    className={`toast-box ${isSuccess ? "success" : "error"}`} 
+                                    initial={{ scale: 0 }}
+                                    animate={{ scale: 1, rotate: 360 }}
+                                    exit={{ scale: 0 }}
+                                    transition={{ duration: 0.5 }}
+                                >
+                                    <CheckCircle size={100} />
+                                    <p className='mt-4'>
+                                        {isSuccess ? "Hikaye başarıyla yayınlandı!" : "Hikaye başarıyla yayından kaldırıldı!"}
+                                    </p>
+                                </motion.div>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+        </>
+    )
 }
 
 export default Books

@@ -29,7 +29,7 @@ import BookDetails from './pages/bookdetails/BookDetails';
 import AudioBookDetails from './pages/audiobookdetails/AudioBookDetails';
 import ReadBook from './pages/readbook/ReadBook';
 import ListenAudioBook from './pages/listenaudiobook/ListenAudioBook';
-import Library from './pages/library/Library';
+import BookCase from './pages/bookcase/BookCase';
 import Settings from './pages/settings/Settings';
 import CustomNavbar from './layouts/navbar/Navbar';
 import { UserProvider } from './User.Context';
@@ -37,7 +37,7 @@ import { UserProvider } from './User.Context';
 function Layout() {
   const location = useLocation();
 
-  const noNavbarRoutes = ['/', '/signup', '/signin', '/emailconfirm', '/emailconfirm/codeverification', '/emailconfirm/codeverification/passwordrenewal, /categoryselection'];
+  const noNavbarRoutes = ['/', '/signup', '/signin', '/emailconfirm', '/emailconfirm/codeverification', '/categoryselection', '/emailconfirm/codeverification/passwordrenewal', ''];
 
   const shouldShowNavbar = !noNavbarRoutes.includes(location.pathname);
 
@@ -81,9 +81,9 @@ const routes = createBrowserRouter([
       { path: '/user/:username', element: <UserProfile /> },
       { path: '/book-details/:bookName', element: <BookDetails /> },
       { path: '/audio-book-details/:bookName', element: <AudioBookDetails/>},
-      { path: '/read-book/:bookName', element: <ReadBook/>},
-      { path: '/listen-audio-book/:bookName', element: <ListenAudioBook/>},
-      { path: '/library', element: <Library/>},
+      { path: '/read-book/:bookName/:chapterId', element: <ReadBook/>},
+      { path: '/listen-audio-book/:bookName/:episodeId', element: <ListenAudioBook/>},
+      { path: '/book-case', element: <BookCase/>},
       { path: '/settings', element: <Settings/>},
     ],
   },

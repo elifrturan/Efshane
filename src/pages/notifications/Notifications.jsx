@@ -3,8 +3,10 @@ import './Notifications.css'
 import Footer from "../../layouts/footer/Footer"
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { io } from 'socket.io-client';
 
 const backendBaseUrl = 'http://localhost:3000';
+const socket = io(backendBaseUrl);
 
 function Notifications() {
     const navigate = useNavigate();
@@ -26,6 +28,20 @@ function Notifications() {
                 });
                 console.log(response.data);
                 setNotifications(response.data);
+
+                const userId = localStorage.getItem("userId");
+                if (userId) {
+                    socket.emit('joinRoom', { userId: Number(userId) });
+                }
+
+                socket.on('notification', (data) => {
+                    console.log("Yeni Bildirim:", data);
+                    setNotifications((prev) => [data, ...prev]); 
+                });
+
+                return () => {
+                    socket.off('notification');
+                };
             } catch (error) {
                 console.error("Bildirimler yüklenirken bir hata oluştu:", error);
             }
@@ -58,7 +74,7 @@ function Notifications() {
 
     }
 
-    const handleDeleteIcon = async (id) => {
+    const handleDeleteNotification = async (id) => {
         try {
             await axios.delete(`http://localhost:3000/notify/${id}`, {
                 headers: {
@@ -107,25 +123,25 @@ function Notifications() {
                         <div className='d-flex'>
                             <img 
                                 src={
-                                    notification?.user.profile_image
-                                        ? notification.user.profile_image.startsWith('uploads')
-                                            ? `${backendBaseUrl}/${notification.user.profile_image}`
-                                            : notification.user.profile_image
+                                    notification?.author?.profile_image
+                                        ? notification.author?.profile_image.startsWith('uploads')
+                                            ? `${backendBaseUrl}/${notification.author?.profile_image}`
+                                            : notification.author?.profile_image
                                         : 'default-book-cover.jpg'
                                 }
                                 alt="" 
                                 className="rounded-circle object-fit-cover notification-image" 
                                 width="60px" 
                                 height="60px" 
-                                onClick={() => handleProfileClick(notification.user.username)}
+                                onClick={() => handleProfileClick(notification.author?.username)}
                             />
                             <div className="notification-content d-flex flex-column justify-content-between ms-3">
-                                <b>@{notification.user.username}:</b>
+                                <b>@{notification.author?.username}:</b>
                                 <p>{notification.message}</p>
                             </div>
                         </div>
                         <div className="delete-button d-flex flex-column justify-content-between">
-                                <i className="bi bi-trash3-fill" onClick={() => handleDeleteIcon(notification.id)}></i>
+                                <i className="bi bi-trash3-fill" onClick={() => handleDeleteNotification(notification.id)}></i>
                                 <p className='notification-time m-0 text-end'>{timeAgo(notification.createdAt)}</p>
                         </div>
                 </div>

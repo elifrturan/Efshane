@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import './AudioBooks.css'
-import { Button, Dropdown, Modal } from 'react-bootstrap';
+import { Button, Dropdown, Modal, Toast, ToastContainer } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios'
+import { motion, AnimatePresence } from "framer-motion";
+import { CheckCircle } from 'react-feather';
+import axios from 'axios';
 
 const backendBaseUrl = 'http://localhost:3000';
 
@@ -11,7 +13,9 @@ function AudioBooks() {
     const [showModal, setShowModal] = useState(false);
     const [bookToDelete, setBookToDelete] = useState(null);
     const navigate = useNavigate();
-    const [audioBooks, setAudioBooks] = useState([])
+    const [audioBooks, setAudioBooks] = useState([]);
+    const [showToast, setShowToast] = useState(false); 
+    const [isSuccess, setIsSuccess] = useState(false);
 
     useEffect(() => {
         const fetchAudioBooks = async () => {
@@ -129,15 +133,33 @@ function AudioBooks() {
                 )
             );
     
-            const statusMessage = updatedAudioBook.publish
-                ? 'Kitap başarıyla yayınlandı!'
-                : 'Kitap yayından kaldırıldı.';
-            alert(statusMessage);
+            if(!updatedAudioBook.publish) {
+                setIsSuccess(false);
+            } else {
+                setIsSuccess(true);
+                setTimeout(() => setShowToast(false), 4000);
+            }
+    
+            setShowToast(true);
+            setTimeout(() => setShowToast(false), 4000);
         } catch (error) {
             console.error('Bölümün yayın durumu değiştirilirken hata oluştu:', error);
             alert('Bir hata oluştu. Lütfen tekrar deneyin.');
         }
     };    
+
+    function formatNumber(num) {
+        if (num >= 1_000_000_000) {
+            return (num / 1_000_000_000).toFixed(1).replace(/\.0$/, '') + 'B';
+        }
+        if (num >= 1_000_000) {
+            return (num / 1_000_000).toFixed(1).replace(/\.0$/, '') + 'M';
+        }
+        if (num >= 1_000) {
+            return (num / 1_000).toFixed(1).replace(/\.0$/, '') + 'K';
+        }
+        return num.toString();
+    }
 
     return (
         <>
@@ -159,18 +181,16 @@ function AudioBooks() {
                                 <div className="audio-book-left-right">
                                     <p className='audio-book-name'>{audioBook.title}</p>
                                     <p className='stories-date'>
-                                    Yayınlanma Tarihi: {new Date(audioBook.publish_date).toLocaleDateString('tr-TR', {
-                                        year: 'numeric',
-                                        month: 'long',
-                                        day: 'numeric',
-                                        hour: '2-digit',
-                                        minute: '2-digit',
-                                    })}
+                                        Yayınlanma Tarihi: {new Date(audioBook.publish_date).toLocaleDateString('tr-TR', {
+                                            year: 'numeric',
+                                            month: 'long',
+                                            day: 'numeric'
+                                        })}
                                     </p>                                
                                     <div className="audio-book-istatistic">
-                                        <p className='me-2'><i className="bi bi-eye-fill me-1"></i>{audioBook.read_count || 0}</p>
-                                        <p className='me-2'><i className="bi bi-heart-fill me-1"></i>{audioBook.like_count || 0}</p>
-                                        <p><i className="bi bi-chat-fill me-1"></i>{audioBook.comment_count || 0}</p>
+                                        <p className='me-2'><i className="bi bi-eye-fill me-1"></i>{formatNumber(audioBook.read_count || 0)}</p>
+                                        <p className='me-2'><i className="bi bi-heart-fill me-1"></i>{formatNumber(audioBook.like_count || 0)}</p>
+                                        <p><i className="bi bi-chat-fill me-1"></i>{formatNumber(audioBook.comment_count || 0)}</p>
                                     </div>
                                     <p className='audio-book-total-time'>Toplam Süre: {audioBook.duration}</p>
                                 </div>
@@ -231,6 +251,8 @@ function AudioBooks() {
                     ))}
                 </div>
             )}
+
+            {/* Silme Modalı */}
             <Modal show={showModal} onHide={() => setShowModal(false)} centered className='audio-book-delete-modal'>
                 <Modal.Header closeButton>
                     <Modal.Title>Sesli kitabını silmek mi istiyorsun?</Modal.Title>
@@ -247,6 +269,32 @@ function AudioBooks() {
                     </Button>
                 </Modal.Footer>
             </Modal>
+
+            {/* Yayinlanma Animasyonu */}
+            <AnimatePresence>
+                {showToast && (
+                    <motion.div 
+                        className="toast-overlay"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.3 }}
+                    >
+                        <motion.div 
+                            className={`toast-box ${isSuccess ? "success" : "error"}`} 
+                            initial={{ scale: 0 }}
+                            animate={{ scale: 1, rotate: 360 }}
+                            exit={{ scale: 0 }}
+                            transition={{ duration: 0.5 }}
+                    >
+                            <CheckCircle size={100} />
+                            <p className='mt-4'>
+                                {isSuccess ? "Hikaye başarıyla yayınlandı!" : "Hikaye başarıyla yayından kaldırıldı!"}
+                            </p>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </>
     )
 }

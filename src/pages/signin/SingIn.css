@@ -1,11 +1,11 @@
 .signin-page{
-  margin: 0;
-  padding: 0;
-  height: 100vh;
-  background: url('/images/bg.jpg') no-repeat center center fixed;
-  background-size: cover;
-  background-attachment: fixed;
-  background-position: center;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    background: url('/images/bg.jpg') no-repeat center center fixed;
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
 }
 
 .signin-container {
@@ -72,6 +72,10 @@
     justify-content: space-between;
 }
 
+.text-danger {
+    color: white !important;  
+}
+
 .google{
     border: 1px solid white;
     padding: 10px 20px;
@@ -87,19 +91,89 @@
     width: 50%;
 }
 
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: black;
+    color: white; 
+    padding: 20px; 
+    border-radius: 8px;
+    text-align: center;
+    width: 300px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.modal-icon {
+    color: red;
+    font-size: 40px;
+    margin-bottom: 10px;
+}
+
+.modal-content h2 {
+    color: white !important;  
+    font-size: 18px;
+    margin-bottom: 10px;
+}  
+
+.modal-content p {
+    color: #333;
+    font-size: 14px;
+    margin-bottom: 15px;
+}
+
+.modal-button {
+    background: #d9534f;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.modal-button:hover {
+    background: #c9302c;
+}
+
+.error-border {
+    border: 2px solid rgb(253, 252, 252) !important;
+    animation: shake 0.3s ease-in-out;
+}
+
+  /* Shake Animasyonu */
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+    100% { transform: translateX(0); }
+}
+
 /* responsive */ 
 @media (max-width: 895px) {
-   body, html, .google, .apple{
-    font-size: 12px;
-   }
-   .signin-container{
-    width: 45%;
-   }
+    body, html, .google, .apple{
+        font-size: 12px;
+    }
+    .signin-container{
+        width: 45%;
+    }
 }
 
 @media (max-width: 770px) {
     .signin-container{
-     width: 50%;
+        width: 50%;
     }
 }
 
