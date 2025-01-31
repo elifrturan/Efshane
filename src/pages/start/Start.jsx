@@ -6,10 +6,10 @@ function Start() {
   return (
     <div className="start-page container-fluid d-flex flex-column justify-content-center align-items-center vh-100">
       <div className="background-image ">
-        <h1 className="display-5 text-white text-center">Okuma, yazma ve daha fazlasının</h1> 
+        <h1 className="display-5 text-center">Okuma, yazma ve daha fazlasının</h1> 
         <h1 className='display-4 text-center efshane fw-medium'> EFSHANE </h1>
-        <h1 className='display-5 text-white text-center'>dünyasına hoş geldiniz</h1>
-        <p className="text-white text-center fw-lighter">
+        <h1 className='display-5 text-center'>dünyasına hoş geldiniz</h1>
+        <p className="text-center">
         Favori kitaplarını keşfet, kendi hikayeni yaz, yazarları ve okuyucuları takip et, sesli kitaplarla dinleyerek keyif al...
         </p>
         <div className="mt-4 container d-flex start-buttons">

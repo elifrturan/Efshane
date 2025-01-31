@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './CodeVerification.css';
 import axios from 'axios'; 
 import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Form } from 'react-bootstrap';
 
 function CodeVerification() {
     const location = useLocation();
@@ -79,26 +80,26 @@ function CodeVerification() {
     return (
         <div className="code-page">
             <div className="code-container">
-                <h2 className='text-center text-white'>Doğrulama Kodu Girin</h2>
-                <p className='text-center text-white opacity-50'>
+                <h2 className='text-center'>Doğrulama Kodu Girin</h2>
+                <p className='text-center opacity-50'>
                     E-posta adresinize gönderilen doğrulama kodunu aşağıya girin. 
                     Bu adımı tamamladıktan sonra şifrenizi sıfırlayabileceksiniz.
                 </p>
-                <form onSubmit={handleSubmit}>
+                <Form onSubmit={handleSubmit}>
                     <div className='d-flex justify-content-center align-items-center mb-3'>
-                        <div className="d-flex gap-2 box">
+                        <Form.Group className="d-flex gap-2 box">
                             {code.map((digit, index) => (
-                                <input 
+                                <Form.Control 
                                     key={index}
                                     type="text" 
                                     maxLength="1" 
-                                    className='form-control text-center bg-transparent text-white me-2'
+                                    className='text-center'
                                     value={digit}
                                     onChange={(e) => handleChange(e, index)}
                                     name={`code-${index}`}
                                 />
                             ))}
-                        </div>
+                        </Form.Group>
                     </div>
                     <div className="d-flex justify-content-between align-items-center">
                         <div>
@@ -113,8 +114,8 @@ function CodeVerification() {
                         </div>
                     </div>
                     
-                    <Link className='btn btn-verify text-center' onClick={handleSubmit} >Kodu Doğrula</Link>
-                </form>
+                    <Link className='btn btn-verify' onClick={handleSubmit} >Kodu Doğrula</Link>
+                </Form>
             </div>
         </div>
     );

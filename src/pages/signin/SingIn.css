@@ -6,194 +6,126 @@
     background-size: cover;
     background-attachment: fixed;
     background-position: center;
-}
-
-.signin-container {
-    background-color: rgba(89, 63, 44, 0.74);
+    color: var(--white-color);
+  }
+  
+  .signin-page .signin-container {
+    background-color: var(--container-bg-color);
     padding: 40px;
     border-radius: 10px;
     width: 30%;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: rgba(255, 255, 255, 0.1) 8px 8px 20px;
     display: flex;
     flex-direction: column;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-}
-
-.subtitle{
-    color: var(--theme-color);
-    font-weight: bold;
-}
-
-.form-control{
-    border: 2px rgba(89, 63, 44, 0.74) solid;
-}
-
-.form-control::placeholder{
-    color: white !important;
-    opacity: 0.5 !important;
-}
-
-.form-check label{
-    font-size: 12px;
-}
-
-.label-link{
-    font-weight: bold;
-    color: var(--theme-color);
-    text-decoration: none;
-}
-
-.rememberMe div input{
-    width: 20px;
-    height: 20px;
-}
-
-.forgetpassword{
-    cursor: pointer;
-}
-
-.btn-login {
+  }
+  
+  .signin-page .signin-container .have-account span{
+    opacity: 0.65;
+    font-size: 0.9rem;
+  }
+  
+  .signin-page .signin-container .have-account .subtitle {
+    color: var(--white-color);
+    font-size: 0.9rem;
+  }
+  
+  .signin-page .signin-container form .forgot-password {
+    color: var(--white-color) !important;
+    font-size: 0.8rem;
+    transition: all 0.2s ease-in-out;
+    display: inline-block;
+  }
+  
+  .signin-page .signin-container form .forgot-password:hover {
+    transform: scale(1.02);
+  }
+  
+  .signin-page .signin-container form .btn-login {
     background-color: var(--theme-color) !important;
-    color: white !important;
+    color: var(--white-color) !important;
     border: 2px solid var(--theme-color) !important;
+    font-size: 1rem;
     border-radius: 8px;
     text-align: center;
     width: 100%; 
-    padding: 10px 24px; 
+    padding: 6px; 
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
     text-decoration: none;
-}
-
-.options{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-}
-
-.text-danger {
-    color: white !important;  
-}
-
-.google{
-    border: 1px solid white;
-    padding: 10px 20px;
-    border-radius: 5px;
-    width: 50%;
-    margin-right: 10px;
-}
-
-.apple{
-    border: 1px solid white;
-    padding: 10px 20px;
-    border-radius: 5px;
-    width: 50%;
-}
-
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.6);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-}
-
-.modal-content {
-    background: black;
-    color: white; 
-    padding: 20px; 
-    border-radius: 8px;
-    text-align: center;
-    width: 300px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
-    animation: fadeIn 0.3s ease-in-out;
-}
-
-.modal-icon {
-    color: red;
-    font-size: 40px;
-    margin-bottom: 10px;
-}
-
-.modal-content h2 {
-    color: white !important;  
-    font-size: 18px;
-    margin-bottom: 10px;
-}  
-
-.modal-content p {
-    color: #333;
-    font-size: 14px;
-    margin-bottom: 15px;
-}
-
-.modal-button {
-    background: #d9534f;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-.modal-button:hover {
-    background: #c9302c;
-}
-
-.error-border {
-    border: 2px solid rgb(253, 252, 252) !important;
-    animation: shake 0.3s ease-in-out;
-}
-
-  /* Shake Animasyonu */
-@keyframes shake {
-    0% { transform: translateX(0); }
-    25% { transform: translateX(-5px); }
-    50% { transform: translateX(5px); }
-    75% { transform: translateX(-5px); }
-    100% { transform: translateX(0); }
-}
-
-/* responsive */ 
-@media (max-width: 895px) {
-    body, html, .google, .apple{
-        font-size: 12px;
-    }
-    .signin-container{
-        width: 45%;
-    }
-}
-
-@media (max-width: 770px) {
-    .signin-container{
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .signin-page .signin-container form .btn-login:hover {
+    transform: scale(1.05);
+  }
+  
+  /* responsive */ 
+  @media (max-width: 1200px) {
+      .signin-page .signin-container {
+        width: 40%;
+        padding: 30px;
+      }
+  }
+  
+  @media (max-width: 768px) {
+      .signin-page .signin-container {
         width: 50%;
-    }
-}
-
-@media (max-width: 665px) {
-    .options{
-        display: flex;
-        flex-direction: column;
-    }
-    .google, .apple{
-        width: 100%;
-        margin-bottom: 5px;
-    }
-}
-
-@media (max-width: 370px) {
-    body, html{
-        font-size: 10px;
-    }
-    .rememberforget{
-        display: flex;
-        flex-direction: column;
-    }
-}
+        padding: 20px;
+      }
+    
+      .signin-page .signin-container h1 {
+        font-size: 2rem;
+      }
+    
+      .signin-page .signin-container form .forgot-password {
+        font-size: 0.9rem;
+      }
+    
+      .signin-page .signin-container form .btn-login {
+        font-size: 0.9rem;
+      }
+  }
+  
+  @media (max-width: 576px) {
+      .signin-page .signin-container {
+        width: 70%;
+        padding: 15px;
+      }
+    
+      .signin-page .signin-container h1 {
+        font-size: 1.4rem;
+      }
+    
+      .signin-page .signin-container .have-account span,
+      .signin-page .signin-container .have-account .subtitle {
+        font-size: 0.8rem;
+      }
+    
+      .signin-page .signin-container form .forgot-password {
+        font-size: 0.7rem;
+      }
+    
+      .signin-page .signin-container form .btn-login {
+        font-size: 0.85rem;
+        padding: 6px;
+      }
+  }
+  
+  @media (max-width: 370px) {
+      .signin-page .signin-container {
+        width: 85%;
+        padding: 10px;
+      }
+    
+      .signin-page .signin-container h1 {
+        font-size: 1.2rem;
+      }
+    
+      .signin-page .signin-container form .btn-login {
+        font-size: 0.8rem;
+        padding: 4px;
+      }
+  } 

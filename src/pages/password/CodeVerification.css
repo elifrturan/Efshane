@@ -1,19 +1,22 @@
 .code-page{
-  margin: 0;
-  padding: 0;
-  height: 100vh;
-  background: url('/images/bg.jpg') no-repeat center center fixed;
-  background-size: cover;
-  background-attachment: fixed;
-  background-position: center;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    background: url('/images/bg.jpg') no-repeat center center fixed;
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+    color: var(--white-color);
+    display: flex;
+    flex-direction: column;
 }
 
 .code-container {
-    background-color: rgba(89, 63, 44, 0.74);
+    background-color: var(--container-bg-color);
     padding: 40px;
     border-radius: 10px;
     width: 35%;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: rgba(255, 255, 255, 0.1) 8px 8px 20px;
     display: flex;
     flex-direction: column;
     position: absolute;
@@ -22,82 +25,102 @@
     transform: translate(-50%, -50%);
 }
 
-.box input{
+.code-page .code-container p {
+    font-size: 0.9rem;
+}
+
+.code-page .code-container .box input{
     width: 40px;
     height: 40px;
-    border: 2px solid white;
+    border: 2px solid var(--white-color);
 }
 
-.btn-verify{
+.code-page .code-container .btn-verify{
     background-color: var(--theme-color) !important;
-    color: white !important;
-    width: 100%;
-    height: 40px;
-    padding: 10px 24px;
+    color: var(--white-color) !important;
+    border: 2px solid var(--theme-color) !important;
+    font-size: 1rem;
+    border-radius: 8px;
+    text-align: center;
+    width: 100%; 
+    padding: 6px; 
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    text-decoration: none;
+    transition: all 0.3s ease-in-out;
 }
 
-@media (max-width: 1126px) {
-    body, html{
-     font-size: 14px;
+.code-page .code-container .btn-verify:hover {
+    transform: scale(1.05);
+}
+
+@media (max-width: 1024px) {
+    .code-page .code-container {
+        width: 80%;
+        padding: 30px;
     }
-    .code-container{
-     width: 40%;
+
+    .code-page .code-container h2 {
+        font-size: 1.5rem;
+    }
+
+    .code-page .code-container p {
+        font-size: 0.9rem;
+    }
+
+    .code-page .code-container .box input {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
     }
 }
 
-@media (max-width: 915px) {
-    body, html{
-     font-size: 14px;
+@media (max-width: 768px) {
+    .code-page .code-container {
+        width: 90%;
+        padding: 30px;
     }
-    .code-container{
-     width: 50%;
+
+    .code-page .code-container h2 {
+        font-size: 1.5rem;
+    }
+
+    .code-page .code-container p {
+        font-size: 0.9rem;
+    }
+
+    .code-page .code-container .box input {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
     }
 }
 
-@media (max-width: 745px) {
-    .box input{
+@media (max-width: 480px) {
+    .code-page .code-container {
+        width: 95%;
+        padding: 25px;
+    }
+
+    .code-page .code-container h2 {
+        font-size: 1.3rem;
+    }
+
+    .code-page .code-container p {
+        font-size: 0.85rem;
+    }
+
+    .code-page .code-container .box {
+        gap: 5px;
+    }
+
+    .code-page .code-container .box input {
         width: 35px;
         height: 35px;
+        font-size: 1rem;
     }
-    p{
-        font-size: 12px;
-    }
-    .btn-verify{
-        width: 100%;
-        height: 35px;
-        padding: 10px 24px;
+
+    .code-page .code-container .btn-verify {
+        font-size: 0.9rem;
+        padding: 8px;
     }
 }
-
-@media (max-width: 655px) {
-    .box input{
-        width: 30px;
-        height: 30px;
-    }
-    .code-container{
-        width: 55%;
-    }
-}
-
-@media (max-width: 540px) {
-    .box input{
-        width: 25px;
-        height: 25px;
-    }
-    .code-container{
-        width: 65%;
-    }
-}
-
-@media (max-width: 425px) {
-    .box input{
-        width: 25px;
-        height: 25px;
-    }
-    .code-container{
-        width: 75%;
-    }
-}
-
-
-

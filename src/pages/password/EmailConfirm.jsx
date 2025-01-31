@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios'; 
 import './EmailConfirm.css';
 import { useNavigate, Link } from 'react-router-dom'; 
+import { Form } from 'react-bootstrap';
 
 function EmailConfirm() {
     const [email, setEmail] = useState('');
@@ -26,22 +27,23 @@ function EmailConfirm() {
     return (
         <div className="confirm-page">
             <div className="email-container">
-                <h2 className='text-center text-white'>Şifrenizi Yenileyin</h2>
-                <p className='text-white text-center opacity-50'>E-posta adresinizi girerek şifre yenileme talebinde bulunun. 
+                <h2 className='text-center'>Şifrenizi Yenileyin</h2>
+                <p className='text-center opacity-50'>
+                    E-posta adresinizi girerek şifre yenileme talebinde bulunun. 
                     Size gönderilecek doğrulama koduyla şifrenizi kolayca sıfırlayabilirsiniz.
                 </p>
-                <form onSubmit={handleSubmit}>
-                    <input 
+                <Form onSubmit={handleSubmit}>
+                    <Form.Control 
                         type="email" 
                         name='email' 
                         id='email' 
-                        className='form-control bg-transparent text-white mb-3' 
+                        className='mb-3' 
                         placeholder='Email' 
                         value={email} 
                         onChange={(e) => setEmail(e.target.value)} 
                     />
                     <Link className='btn btn-confirm' onClick={handleSubmit}>Şifre Sıfırlama E-Postası Gönder</Link>
-                </form>
+                </Form>
             </div>
         </div>
     );
