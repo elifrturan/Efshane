@@ -68,7 +68,6 @@ function AudioBooks() {
 
     const handleEdit = (e, bookName) => {
         e.preventDefault();
-        console.log("edit");
         const formattedTitle = formatTitleForUrl(bookName);
         navigate(`/add-voice-section/${formattedTitle}`)        
     }
@@ -128,7 +127,7 @@ function AudioBooks() {
             setAudioBooks((prevAudioBooks) =>
                 prevAudioBooks.map((audioBook) =>
                     audioBook.id === audioBookId
-                        ? { ...audioBook, publish: updatedAudioBook.publish }
+                        ? { ...audioBook, publish: updatedAudioBook.publish, title: decodeURIComponent(updatedAudioBook.title) }
                         : audioBook
                 )
             );
@@ -195,54 +194,33 @@ function AudioBooks() {
                                     <p className='audio-book-total-time'>Toplam Süre: {audioBook.duration}</p>
                                 </div>
                             </div>
-                            <div className="audio-book-right d-flex gap-2">
+                            <div className="my-stories-book-right d-flex gap-2">
                                 <Dropdown>
-                                    <Dropdown.Toggle className='no-toggle'>
+                                    <Dropdown.Toggle className="no-toggle">
                                         <i className="bi bi-three-dots-vertical"></i>
                                     </Dropdown.Toggle>
-
                                     <Dropdown.Menu>
-                                        <Dropdown.Item className='icon-link icon-link-hover' onClick={(e) => handleEdit(e, audioBook.title)}><i className="bi bi-pen me-1"></i>Düzenle</Dropdown.Item>
-                                        <Dropdown.Item className='icon-link icon-link-hover' onClick={() => handleDeleteClick(audioBook)}><i className="bi bi-trash me-1"></i>Sil</Dropdown.Item>
-                                        <Dropdown.Item className="icon-link icon-link-hover">
+                                        <Dropdown.Item 
+                                            className="icon-link icon-link-hover"
+                                            onClick={(e) => handleEdit(e, audioBook.title)}
+                                        >
+                                            <i className="bi bi-pen me-1"></i> Düzenle
+                                        </Dropdown.Item>
+                                        <Dropdown.Item 
+                                            className="icon-link icon-link-hover"
+                                            onClick={() => handleDeleteClick(audioBook)}
+                                        >
+                                            <i className="bi bi-trash me-1"></i> Sil
+                                        </Dropdown.Item>
+                                        <Dropdown.Item 
+                                            className="icon-link icon-link-hover"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                togglePublish(audioBook.id, audioBook.title);
+                                            }}
+                                        >
                                             <i className="bi bi-book me-1"></i>
-                                            {audioBook.publish ? (
-                                                <button
-                                                    className="p-0 m-0"
-                                                    style={{
-                                                        background: 'none',
-                                                        border: 'none',
-                                                        padding: '0',
-                                                        color: 'inherit',
-                                                        cursor: 'pointer',
-                                                        fontSize: 'inherit',
-                                                    }}
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        togglePublish(audioBook.id, audioBook.title);
-                                                    }}
-                                                >
-                                                    Yayından Kaldır
-                                                </button>
-                                            ) : (
-                                                <button
-                                                    className="p-0 m-0"
-                                                    style={{
-                                                        background: 'none',
-                                                        border: 'none',
-                                                        padding: '0',
-                                                        color: 'inherit',
-                                                        cursor: 'pointer',
-                                                        fontSize: 'inherit',
-                                                    }}
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        togglePublish(audioBook.id, audioBook.title);
-                                                    }}
-                                                >
-                                                    Yayınla
-                                                </button>
-                                            )}
+                                            {audioBook.publish ? 'Yayından Kaldır' : 'Yayınla'}
                                         </Dropdown.Item>
                                     </Dropdown.Menu>
                                 </Dropdown>

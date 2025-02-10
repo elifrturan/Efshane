@@ -450,8 +450,8 @@ html, body {
     overflow-wrap: break-word;
     word-break: break-word;
     font-size: 1rem;
-    color: #000;
-    opacity: 0.8;
+    color: #000 !important;
+    opacity: 1 !important; 
 }
 
 .add-announcement .add-announcement-right textarea::placeholder {

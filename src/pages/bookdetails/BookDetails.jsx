@@ -31,7 +31,6 @@ function BookDetails() {
                 const isBookInReadingList = response.data[0]?.isReadingList;
                 setIsAddedToReadingList(isBookInReadingList); 
                 const isBookInBookCase = response.data[0]?.isBookCase;
-                console.log("isBookInBookCase", isBookInBookCase);
                 setIsAddedToLibrary(isBookInBookCase);
             } catch (error) {
                 console.error("Error fetching book details:", error);
@@ -58,12 +57,10 @@ function BookDetails() {
     }, [formattedBookName]);
 
     const handleAddToLibrary = async () => {
-        console.log("tıklandı");
         const previousState = isAddedToLibrary; 
         setIsAddedToLibrary(!previousState); 
     
         try {
-            console.log("formattedBookName", formattedBookName);
             const response = await axios.post(
                 `http://localhost:3000/book-case/book/${formattedBookName}`,
                 {},
@@ -146,7 +143,6 @@ function BookDetails() {
             );
         
             if (response.status === 200) {
-                console.log('Kitap başarıyla başlatıldı:', response.data);
             } else {
                 console.warn('Beklenmeyen durum:', response);
             }

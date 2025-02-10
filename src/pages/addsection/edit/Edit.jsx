@@ -53,7 +53,6 @@ function Edit() {
                 );
 
                 const data = response.data;
-                console.log(data);
                 setTitle(data.title);
                 setImage(data.image);
                 setContent(data.content);
@@ -226,10 +225,8 @@ function Edit() {
                     },
                 }
             );
-            console.log(response);
             handleSuccessSaveShow(); 
             navigate(`/addsection/${encodedTitle}`);
-            console.log(response.data);
         } catch (error) {
             console.error(error);
             alert('Bölüm kaydedilirken bir hata oluştu. Lütfen tekrar deneyin.');
@@ -265,7 +262,6 @@ function Edit() {
                     },
                 }
             );
-            console.log(response);
             handleSuccessPublishShow(); 
             navigate(`/addsection/${encodedTitle}`);
         } catch (error) {

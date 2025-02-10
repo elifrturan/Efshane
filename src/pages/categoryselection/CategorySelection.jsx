@@ -41,7 +41,6 @@ function CategorySelection() {
                 categoryIds: selectedCategories  
             });
     
-            console.log('İşlem başarılı', response.data);
             navigate(`/home`);
         } catch (error) {
             console.error('Kategori seçme işlemi başarısız:', error);

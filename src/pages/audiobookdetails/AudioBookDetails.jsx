@@ -53,7 +53,6 @@ function AudioBookDetails() {
                         Authorization: `Bearer ${localStorage.getItem('token')}`,
                     },
                 });
-                console.log("Episode:", response.data);
                 setChapters(response.data);
             } catch (error) {
                 console.error("Error fetching comments:", error);
@@ -148,7 +147,6 @@ function AudioBookDetails() {
             );
     
             if (response.status === 200) {
-                console.log('Kitap başarıyla başlatıldı:', response.data);
             } else {
                 console.warn('Beklenmeyen durum:', response);
             }

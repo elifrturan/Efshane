@@ -7,7 +7,7 @@ const backendBaseUrl = 'http://localhost:3000';
 
 function Suggestion(initialLastActivity) {
     const scrollRef = useRef(null);
-    const [books, setBooks] = useState([]);
+    const [books, setBooks] = useState(null);
     const navigate = useNavigate();
 
     const handleProfileClick = (username) => {
@@ -27,7 +27,8 @@ function Suggestion(initialLastActivity) {
                         Authorization: `Bearer ${token}`, 
                     },
                 });
-                setBooks(response.data); 
+                const filteredBooks = response.data.filter(book => book.publish === true);
+                setBooks(filteredBooks);
             } catch (error) {
                 console.error("Kitap alınırken hata oluştu:", error.response?.data || error.message);
             }

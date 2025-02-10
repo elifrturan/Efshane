@@ -55,11 +55,9 @@ function Messages() {
             );
     
             if (response.data && response.data.message) {
-                console.log(response.data.message);
             }
     
             setMessages(prevMessages => prevMessages.filter(msg => msg.id !== messageId));
-            console.log("Mesaj başarıyla gizlendi.");
         } catch (error) {
             console.error("Mesajlar gizlenirken hata oluştu:", error.message);
         }
@@ -68,11 +66,7 @@ function Messages() {
     
     function timeAgo(date) {
         const past = moment(date); 
-        console.log('Parsed past date:', past.format()); 
-    
         const now = moment();
-        console.log('Current date:', now.format()); 
-    
         const diffInSeconds = now.diff(past, 'seconds'); 
     
         const minutes = Math.floor(diffInSeconds / 60);

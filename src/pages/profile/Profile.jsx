@@ -68,7 +68,6 @@ function Profile() {
                         Authorization: `Bearer ${localStorage.getItem('token')}`,
                     },
                 });
-                console.log(response.data);
                 setBooks(response.data || []);
             } catch (error) {
                 console.error("Error fetching comments:", error);
@@ -123,7 +122,6 @@ function Profile() {
             }));
     
             reader.readAsDataURL(file);
-            console.log(file);
         }
     };    
 
@@ -141,7 +139,6 @@ function Profile() {
                 formData.append('image_background', tempProfile.image_backgroundFile); 
             }
     
-            console.log(formData);
             const response = await axios.put(
                 'http://localhost:3000/users/updateUser',
                 formData,
@@ -187,7 +184,6 @@ function Profile() {
                         Authorization: `Bearer ${localStorage.getItem("token")}`,
                     },
                 });
-                console.log(response.data);
                 setUserLists(response.data);
             } catch (error) {
                 console.error("Kitap listeleri alınırken bir hata oluştu:", error);
@@ -241,6 +237,7 @@ function Profile() {
             return;
         }
     
+        
         try {
             const response = await axios.post(
                 "http://localhost:3000/anons/create",

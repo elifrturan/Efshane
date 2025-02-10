@@ -65,7 +65,6 @@ function AddSection() {
         const fetchBookDetails = async () => {
             try {
                 const encodeBookTitle = encodeURIComponent(encodedBookTitle);
-                console.log('Frontend Encoded Title:', encodeBookTitle); 
                 
                 const response = await axios.get(
                     `http://localhost:3000/book/${encodeBookTitle}`,
@@ -76,7 +75,6 @@ function AddSection() {
                     }
                 );    
                 const data = response.data;
-                console.log(data);
                 
                 setBookTitle(data.title); 
                 setBookSummary(data.summary);
@@ -166,7 +164,6 @@ function AddSection() {
         } else if (action === "edit") {
             const section = sections.find((sec) => sec.id === sectionId);
             if (section) {
-                console.log("Sections:", sections);
                 const chapterTitlee = section.title;
                 const formattedChapterName = formatTitleForUrl(chapterTitlee); 
                 const formattedBookTitle = formatTitleForUrl(encodedBookTitle);
@@ -183,7 +180,6 @@ function AddSection() {
     const handleNewSectionButtonClick = () => {
         const formattedTitle = formatTitleForUrl(encodedBookTitle);
         navigate(`/addsection/${formattedTitle}/newsection`);
-        console.log(encodedBookTitle);
     }
 
     useEffect(() => {
@@ -230,7 +226,6 @@ function AddSection() {
         axios.get('http://localhost:3000/book/copyright')
             .then(response => {
                 if (Array.isArray(response.data)) {
-                    console.log(response.data);
                     setCopyrightStatuses(response.data);
                 } else {
                     console.error("Beklenmeyen veri formatı:", response.data);
@@ -274,7 +269,6 @@ function AddSection() {
         try {
             const encodedTitle = encodeURIComponent(title);
             const encodedChapterTitle = encodeURIComponent(chapterTitle);
-
             const url = `http://localhost:3000/chapter/${encodedTitle}/${encodedChapterTitle}`;
             const response = await axios.put(
                 url,
@@ -285,7 +279,6 @@ function AddSection() {
                     },
                 }
             );
-    
             const updatedChapter = response.data;
             setSections((prevSections) =>
                 prevSections.map((section) =>
@@ -356,8 +349,6 @@ function AddSection() {
             hashtags: Array.isArray(bookTags) ? bookTags.map(tag => String(tag)) : [],
         };
     
-        console.log("Gönderilen Payload:", payload);
-    
         try {
             const response = await axios.put(
                 `http://localhost:3000/book/${encodedBookTitle}`,
@@ -370,7 +361,6 @@ function AddSection() {
             );
     
             const updatedData = response.data;
-            console.log("Güncellenen Veri:", updatedData);
     
             setBookTitle(updatedData.title);
             setBookSummary(updatedData.summary);

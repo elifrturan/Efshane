@@ -19,13 +19,12 @@ function SignIn() {
     const enteredEmail = e.target.value;
     setEmail(enteredEmail);
 
-    // Eğer bu e-posta için kayıtlı bir şifre varsa, şifreyi otomatik doldur
     const savedPassword = localStorage.getItem(`passwordFor_${enteredEmail}`);
     if (savedPassword) {
       setPassword(savedPassword);
-      setRememberMe(true); // Eğer şifre kayıtlıysa, "Beni Hatırla" kutusu işaretli hale gelsin
+      setRememberMe(true);
     } else {
-      setPassword(""); // Şifre yoksa, şifre alanını boşalt
+      setPassword(""); 
       setRememberMe(false);
     }
   };
@@ -51,8 +50,7 @@ function SignIn() {
       } else {
         localStorage.removeItem(`passwordFor_${email}`);
       }
-
-      navigate(`/home`);
+      navigate('/home');
     } catch (error) {
       console.error('Giriş başarısız:', error.response?.data || error.message);
       setError('Giriş başarısız, lütfen tekrar deneyin.');
@@ -113,7 +111,7 @@ function SignIn() {
           </Form.Group>
 
           {/* button */}
-          <Link className='btn btn-login' to="/home">Giriş Yap</Link>
+          <button className='btn btn-login' >Giriş Yap</button>
 
           {error && <p className="text-danger">{error}</p>}
         </Form>

@@ -89,7 +89,6 @@ function Books() {
                     },
                 }
             );
-            console.log("Response:", response.data);
             navigate(`/add-voice-section/${formattedTitle}`);
         } catch (error) {
             console.error("Sesli kitap oluşturulurken hata:", error);
@@ -135,11 +134,10 @@ function Books() {
     const togglePublish = async (bookId, title) => {
         try {
             const encodedTitle = encodeURIComponent(title);
-    
             const url = `http://localhost:3000/book/toggle/${encodedTitle}`;
             const response = await axios.put(
                 url,
-                {}, 
+                {},
                 {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -148,7 +146,6 @@ function Books() {
             );
     
             const updatedBook = response.data;
-    
             setBooks((prevBooks) =>
                 prevBooks.map((book) =>
                     book.id === bookId
@@ -161,11 +158,11 @@ function Books() {
                 setIsSuccess(false);
             } else {
                 setIsSuccess(true);
-                setTimeout(() => setShowToast(false), 4000);
+                setTimeout(() => setShowToast(false), 2000);
             }
     
             setShowToast(true);
-            setTimeout(() => setShowToast(false), 4000);
+            setTimeout(() => setShowToast(false), 2000);
         } catch (error) {
             console.error('Yayın durumu değiştirilirken hata oluştu:', error);
             alert('Bir hata oluştu. Lütfen tekrar deneyin.');
@@ -227,52 +224,31 @@ function Books() {
                                     </div>
                                     <div className="my-stories-book-right d-flex gap-2">
                                         <Dropdown>
-                                            <Dropdown.Toggle className='no-toggle'>
+                                            <Dropdown.Toggle className="no-toggle">
                                                 <i className="bi bi-three-dots-vertical"></i>
                                             </Dropdown.Toggle>
-
                                             <Dropdown.Menu>
-                                                <Dropdown.Item className='icon-link icon-link-hover' onClick={(e) => handleEdit(e, book.title)}><i className="bi bi-pen me-1"></i>Düzenle</Dropdown.Item>
-                                                <Dropdown.Item className='icon-link icon-link-hover' onClick={() => handleDeleteClick(book)}><i className="bi bi-trash me-1"></i>Sil</Dropdown.Item>
-                                                <Dropdown.Item className="icon-link icon-link-hover">
+                                                <Dropdown.Item 
+                                                    className="icon-link icon-link-hover"
+                                                    onClick={(e) => handleEdit(e, book.title)}
+                                                >
+                                                    <i className="bi bi-pen me-1"></i> Düzenle
+                                                </Dropdown.Item>
+                                                <Dropdown.Item 
+                                                    className="icon-link icon-link-hover"
+                                                    onClick={() => handleDeleteClick(book)}
+                                                >
+                                                    <i className="bi bi-trash me-1"></i> Sil
+                                                </Dropdown.Item>
+                                                <Dropdown.Item 
+                                                    className="icon-link icon-link-hover"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        togglePublish(book.id, book.title);
+                                                    }}
+                                                >
                                                     <i className="bi bi-book me-1"></i>
-                                                    {book.publish ? (
-                                                        <button
-                                                            className="p-0 m-0"
-                                                            style={{
-                                                                background: 'none',
-                                                                border: 'none',
-                                                                padding: '0',
-                                                                color: 'inherit',
-                                                                cursor: 'pointer',
-                                                                fontSize: 'inherit',
-                                                            }}
-                                                            onClick={(e) => {
-                                                                e.stopPropagation();
-                                                                togglePublish(book.id, book.title);
-                                                            }}
-                                                        >
-                                                            Yayından Kaldır
-                                                        </button>
-                                                    ) : (
-                                                        <button
-                                                            className="p-0 m-0"
-                                                            style={{
-                                                                background: 'none',
-                                                                border: 'none',
-                                                                padding: '0',
-                                                                color: 'inherit',
-                                                                cursor: 'pointer',
-                                                                fontSize: 'inherit',
-                                                            }}
-                                                            onClick={(e) => {
-                                                                e.stopPropagation();
-                                                                togglePublish(book.id, book.title);
-                                                            }}
-                                                        >
-                                                            Yayınla
-                                                        </button>
-                                                    )}
+                                                    {book.publish ? 'Yayından Kaldır' : 'Yayınla'}
                                                 </Dropdown.Item>
                                             </Dropdown.Menu>
                                         </Dropdown>
@@ -281,7 +257,6 @@ function Books() {
                             ))}
                         </div>
                     )}
-
                     {/* Silme Modalı */}
                     <Modal show={showModal} onHide={() => setShowModal(false)} centered className='stories-delete-modal'>
                         <Modal.Header closeButton>

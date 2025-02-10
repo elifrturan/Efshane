@@ -18,6 +18,7 @@ function Notifications() {
         window.scrollTo(0,0);
     }, []);
 
+
     useEffect(() => {
         const fetchNotifications = async () => {
             try {
@@ -26,7 +27,6 @@ function Notifications() {
                         Authorization: `Bearer ${localStorage.getItem("token")}`,
                     },
                 });
-                console.log(response.data);
                 setNotifications(response.data);
 
                 const userId = localStorage.getItem("userId");
@@ -35,7 +35,6 @@ function Notifications() {
                 }
 
                 socket.on('notification', (data) => {
-                    console.log("Yeni Bildirim:", data);
                     setNotifications((prev) => [data, ...prev]); 
                 });
 
@@ -107,8 +106,31 @@ function Notifications() {
         }
     }
 
+    function formatBookNameForURL(bookName) {
+        return bookName
+            .toLowerCase()
+            .replace(/ğ/g, "g")
+            .replace(/ü/g, "u")
+            .replace(/ş/g, "s")
+            .replace(/ı/g, "i")
+            .replace(/ö/g, "o")
+            .replace(/ç/g, "c")
+            .replace(/[^a-z0-9\s-]/g, "")
+            .trim()
+            .replace(/\s+/g, "-");
+        }
+    
     const handleProfileClick = (username) => {
         navigate(`/user/${username}`);
+    }
+
+    const handleBookClick = (notification) => {
+        const formattedBookName = formatBookNameForURL(notification.bookTitle);
+        if (notification.isAudioBook) {
+            navigate(`/audio-book-details/${formattedBookName}`)
+        } else {
+            navigate(`/book-details/${formattedBookName}`);
+        }
     }
 
     return (
@@ -135,9 +157,45 @@ function Notifications() {
                                 height="60px" 
                                 onClick={() => handleProfileClick(notification.author?.username)}
                             />
-                            <div className="notification-content d-flex flex-column justify-content-between ms-3">
-                                <b>@{notification.author?.username}:</b>
-                                <p>{notification.message}</p>
+                            <div className="notification-content d-flex justify-content-center align-items-center ms-3">
+                                <p className="m-0">
+                                    {notification.bookTitle ? (
+                                        <>
+                                            <span 
+                                                className="fw-bold" 
+                                                style={{ cursor: 'pointer' }} 
+                                                onClick={() => handleProfileClick(notification.author?.username)}
+                                            >
+                                                {"“" + notification.author?.username + "”"}
+                                            </span>{" "}
+                                            adlı kullanıcının{" "}
+                                            <span style={{ cursor: 'pointer' }} onClick={() => handleBookClick(notification)}>
+                                                {notification.chapterTitle ? (
+                                                    <>
+                                                        <span className="fw-bold">“{notification.bookTitle}”</span> kitabının{" "}
+                                                        <span className="fw-bold">“{notification.chapterTitle}”</span> bölümü
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <span className="fw-bold">“{notification.bookTitle}”</span> kitabı
+                                                    </>
+                                                )}
+                                            </span>{" "}
+                                            yayınlandı. Keşfetmeye ne dersin? 📖🎉🎧
+                                        </>
+                                    ) : (
+                                        <>
+                                            <span 
+                                                className="fw-bold" 
+                                                style={{ cursor: 'pointer' }} 
+                                                onClick={() => handleProfileClick(notification.author?.username)}
+                                            >
+                                                {"@" + notification.author?.username}
+                                            </span>{" "}
+                                            yeni bir duyuru yayınladı🎯 : {notification.message}
+                                        </>
+                                    )}
+                                </p>
                             </div>
                         </div>
                         <div className="delete-button d-flex flex-column justify-content-between">

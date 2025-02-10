@@ -82,7 +82,6 @@ function AddVoice() {
             setShowModal(true);
         } else if (action === "edit") {
             const section = sections.find((sec) => sec.id === sectionId);
-            console.log("edit yapıcaz.");
         }
     };
 
@@ -124,7 +123,6 @@ function AddVoice() {
                     }
                 );    
                 const data = response.data;
-                console.log(data);
                 
                 setBookTitle(data.title); 
                 setBookSummary(data.summary);
@@ -246,7 +244,6 @@ function AddVoice() {
             hashtags: Array.isArray(bookTags) ? bookTags.map(tag => String(tag)) : [],
         };
     
-        console.log("Gönderilen Payload:", payload);
     
         try {
             const response = await axios.put(
@@ -260,7 +257,6 @@ function AddVoice() {
             );
     
             const updatedData = response.data;
-            console.log("Güncellenen Veri:", updatedData);
     
             setBookTitle(updatedData.title);
             setBookSummary(updatedData.summary);
@@ -299,7 +295,7 @@ function AddVoice() {
                             },
                         }
                     );
-                    console.log("API Yanıtı:", response.data); 
+
                     if (Array.isArray(response.data.episodes)) {
                         setSections(response.data.episodes);
                     } else {
@@ -371,6 +367,7 @@ function AddVoice() {
 
     const togglePublish = async (sectionId, episodeTitle) => {
         try {
+            const encodedAudioBookTitle = encodeURIComponent(title);
             const encodedEpisodeTitle = encodeURIComponent(episodeTitle);
     
             const url = `http://localhost:3000/episode/toggle/${encodedAudioBookTitle}/${encodedEpisodeTitle}`;
@@ -516,7 +513,6 @@ function AddVoice() {
     
     const handleImageFileSelect = (e) => {
         const file = e.target.files[0];
-        console.log("Selected Image File:", file); 
         setImageFile(file);
     };
 
@@ -544,7 +540,6 @@ function AddVoice() {
     
                 if (response.status === 201) {
                     const data = response.data;
-                    console.log("Backend'den dönen data:", data);
                     setImageFile(file); 
                     const uploadedImage = response.data.imagePath;
                     setImageFilePath(uploadedImage);
@@ -581,7 +576,6 @@ function AddVoice() {
                 try {
                     const formData = new FormData();
                     formData.append('audioFile', file);
-                    console.log("Uploading audio file...");
 
                     const response = await axios.post(
                         `http://localhost:3000/episode/upload`, 
@@ -597,7 +591,6 @@ function AddVoice() {
                     if (response.status === 201) {
                         const data = response.data;
                         setAudioFile(file);
-                        console.log("Ses dosyası başarıyla yüklendi:", data);
                     } else {
                         throw new Error('Dosya yüklenemedi');
                     }
@@ -638,7 +631,6 @@ function AddVoice() {
     
                 if (response.status === 201) {
                     const data = response.data;
-                    console.log("Backend'den dönen data:", data);
                     setTextFile(file);
                 } else {
                     throw new Error("Metin dosyası yüklenemedi");
@@ -666,7 +658,6 @@ function AddVoice() {
                     const audioFile = new File([audioBlob], 'recorded-audio.wav', { type: 'audio/wav' });
                     setAudioFile(audioFile); 
                     const audioUrl = URL.createObjectURL(audioBlob);
-                    console.log("Audio Url:",audioUrl);
                     setAudioUrl(audioUrl);
                 };
 
@@ -741,7 +732,6 @@ function AddVoice() {
     };
 
     const handlePublishSection = async (publish = true) => {
-        console.log("publish");
         if (!title) {
             alert("Bölüm başlığı gerekli!");
             return;
@@ -761,7 +751,6 @@ function AddVoice() {
         }
     
         formData.append("title", title);
-        console.log(title);
         formData.append("duration", audioDuration.toString());
         formData.append("publish", publish.toString());
     
@@ -778,10 +767,8 @@ function AddVoice() {
                     },
                 }
             );
-            console.log("dngkalsg");
             if (response.status === 201) {
                 const newSection = response.data; 
-                console.log(response.data);
                 setSections((prevSections) => [...prevSections, newSection]);
                 setShowSuccessModal(true); 
                 handleClose(); 
@@ -801,7 +788,6 @@ function AddVoice() {
     };    
 
     const handleSaveSection = async (publish = false) => {
-        console.log("save");
         if (!title) {
             alert("Bölüm başlığı gerekli!");
             return;
@@ -851,8 +837,6 @@ function AddVoice() {
     };    
 
     const handleUpdateSaveSection = async (publish = false, title) => {
-        console.log("update save");
-        console.log("Title:", title)
         const formData = new FormData();
 
         formData.append("title", title);
@@ -873,8 +857,6 @@ function AddVoice() {
 
         const formattedEpisodeTitle = formatTitleForUrl(title);
         const formattedAudioBookTitle = formatTitleForUrl(encodedAudioBookTitle);
-        console.log("Formatted Episode Title:", formattedEpisodeTitle);
-        console.log("Formatted Audio Book Title:", formattedAudioBookTitle);
         try {
             const response = await axios.put(
             `http://localhost:3000/episode/save/${formattedAudioBookTitle}/${formattedEpisodeTitle}`,

@@ -4,7 +4,7 @@ import './PasswordRenewal.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Form, InputGroup } from 'react-bootstrap';
+import { Form, InputGroup, Alert } from 'react-bootstrap';
 
 function PasswordRenewal() {
   const location = useLocation();
@@ -16,10 +16,10 @@ function PasswordRenewal() {
     return;
   }
   const navigate = useNavigate();
-
   const [showPassword, setShowPassword] = useState(false);
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [error, setError] = useState(null);
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -29,22 +29,18 @@ function PasswordRenewal() {
     e.preventDefault(); 
 
     if (password !== confirmPassword) {
-      alert('Şifreler eşleşmiyor!');
+      setError('Şifreler eşleşmiyor!');
       return;
     }
     
-    console.log(email);
     try {
       const response = await axios.put('http://localhost:3000/users', {
         email,
         pass: password
       });
-      console.log('Şifre güncelleme işlemi başarılı:', response.data);
-      alert('Şifre güncelleme işlemi başarılı!');
       navigate(`/emailconfirm/codeverification/passwordrenewal?email=${encodeURIComponent(email)}`);
     } catch (error) {
-      console.log('Şifre güncelleme işlemi başarısız:', error);
-      alert('Şifre güncelleme işlemi başarısız, lütfen tekrar deneyin.');
+      setError('Şifre güncelleme işlemi başarısız, lütfen tekrar deneyin.');
     }
   }
 
@@ -56,6 +52,13 @@ function PasswordRenewal() {
           Güvenli bir şifre belirleyin ve şifrenizi doğrulamak için aynı şifreyi iki kez girin. 
           Şifreniz en az 8 karakter, büyük ve küçük harf, sayı içermelidir.
         </p>
+
+        {/* Hata Mesajı */}
+        {error && (
+          <Alert variant="danger" className="d-flex align-items-center">
+            <i className="bi bi-info-circle-fill me-2"></i> {error}
+          </Alert>
+        )}
         <Form onSubmit={handleSubmit}> {}
           <InputGroup className="mb-3">
             <Form.Control

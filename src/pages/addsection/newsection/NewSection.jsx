@@ -196,7 +196,6 @@ function NewSection() {
             return;
         }
         const encodedTitle = encodeURIComponent(encodedBookTitle);
-        console.log(encodedTitle);
     
         const formData = new FormData();
         formData.append('image', image); 
@@ -215,7 +214,6 @@ function NewSection() {
                         Authorization: `Bearer ${localStorage.getItem("token")}`,
                     },
                 });
-            console.log(response);
             handleSuccessSaveShow(); 
         } catch (error) {
             console.error(error);

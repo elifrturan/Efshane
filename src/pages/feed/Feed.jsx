@@ -28,7 +28,6 @@ function Feed() {
                         Authorization: `Bearer ${localStorage.getItem('token')}`,
                     },
                 });
-                console.log('Backend Response:', response.data); 
                 setPosts(response.data);
             } catch (error) {
                 console.error('Hata:', error);
@@ -59,7 +58,6 @@ function Feed() {
                     Authorization: `Bearer ${localStorage.getItem('token')}`,
                 },
             });
-            console.log("Fetched comments:", response.data);
 
             if (!Array.isArray(response.data)) {
                 console.error("API did not return an array:", response.data);
@@ -159,7 +157,6 @@ function Feed() {
                 },
             });
     
-            console.log('Fetched Replies for Comment ID:', commentId, response.data);
     
             if (!Array.isArray(response.data)) {
                 console.error("API did not return an array:", response.data);
@@ -298,7 +295,6 @@ function Feed() {
                         : post
                 )
             );
-            console.log('Beğenme durumu değiştirildi:', response.data);
         } catch (error) {
             console.error('Beğenme işlemi başarısız:', error);
         }
@@ -332,7 +328,6 @@ function Feed() {
                 )
             );
     
-            console.log('Repost sonrası güncellenmiş post:', originalPost);
         } catch (error) {
             console.error('Repost işlemi başarısız:', error);
         }
@@ -388,7 +383,6 @@ function Feed() {
         //   console.error("Comments is not an array:", comments);
         //    return comments; 
         //}
-        console.log("aaa");
         // return comments.map((comment) => (
         //     <div key={comment.id} className="comment-item">
         //         <div className="comment-header">

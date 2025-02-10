@@ -30,7 +30,6 @@ function CategoryDetails() {
                     },
                 });
 
-                console.log("API'den gelen veri:", response.data);
                 setCategoryDetails(response.data);
             } catch (error) {
                 console.error("Kategoriler alınırken hata oluştu:", error.response?.data || error.message);

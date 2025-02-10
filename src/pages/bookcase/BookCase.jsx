@@ -28,7 +28,6 @@ function BookCase() {
                         Authorization: `Bearer ${token}`,
                     },
                 });
-                console.log('Tüm öğeler:', response.data);
 
                 const books = response.data.filter(item => item.type === 'book');
                 const audioBooks = response.data.filter(item => item.type === 'audioBook');
@@ -58,7 +57,6 @@ function BookCase() {
                         },
                     }
                 );
-                console.log('Sesli kitap kaldırıldı:', response.data);
 
                 setAudioBooks(audioBooks.filter(audioBook => audioBook.title !== selectedBook));
             } else {
@@ -71,7 +69,6 @@ function BookCase() {
                         },
                     }
                 );
-                console.log('Kitap kaldırıldı:', response.data);
 
                 setBooks(books.filter(book => book.title !== selectedBook));
             }

@@ -15,11 +15,8 @@ function EmailConfirm() {
             const response = await axios.post('http://localhost:3000/mail/sendCode', {
                 email
             });
-            console.log('E-posta gönderme işlemi başarılı:', response.data);
-            alert('E-posta gönderme işlemi başarılı!');
             navigate(`/emailconfirm/codeverification?email=${encodeURIComponent(email)}`);
         } catch (error) {
-            console.log('E-posta gönderme işlemi başarısız:', error);
             alert('E-posta gönderme işlemi başarısız, lütfen tekrar deneyin.');
         }
     };

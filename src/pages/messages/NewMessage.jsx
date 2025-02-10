@@ -28,7 +28,6 @@ function NewMessage() {
                 },
             });
 
-            console.log("Mesaj gönderildi:", response.data);
             navigate("/messages"); 
         } catch (error) {
             console.error("Mesaj gönderilirken hata oluştu:", error.response?.data || error.message);

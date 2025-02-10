@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './Footer.css';
-import { FaInstagram, FaLinkedin, FaTwitter } from 'react-icons/fa';
+import { FaInstagram, FaLinkedin, FaTwitter, FaYoutube } from 'react-icons/fa';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 
@@ -29,8 +29,8 @@ function Footer() {
                   </div>
 
                   <ul className="nav col-md-4 justify-content-end list-unstyled d-flex">
-                        <li className="ms-3"><a className="text-body-secondary" href="#"><FaTwitter size={24} /></a></li>
-                        <li className="ms-3"><a className="text-body-secondary" href="#"><FaInstagram size={24} /></a></li>
+                        <li className="ms-3"><a className="text-body-secondary" href="https://www.youtube.com/@efshaneapp"><FaYoutube size={24} /></a></li>
+                        <li className="ms-3"><a className="text-body-secondary" href="https://www.instagram.com/efshaneapp/"><FaInstagram size={24} /></a></li>
                         <li className="ms-3"><a className="text-body-secondary" href="#"><FaLinkedin size={24} /></a></li>
                     </ul>
                 </div>                

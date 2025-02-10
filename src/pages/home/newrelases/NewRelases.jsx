@@ -26,7 +26,8 @@ function NewRelases(initialLastActivity) {
               Authorization: `Bearer ${parsedToken}`,
             },
           });
-          setBook(response.data);
+          const filteredBooks = response.data.filter(book => book.publish === true);
+          setBook(filteredBooks);
         } catch (error) {
           console.error("Kitap alınırken hata oluştu:", error.response?.data || error.message);
         }

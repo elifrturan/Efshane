@@ -5,10 +5,10 @@ const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
     const [user, setUser] = useState([]);
-
     useEffect(() => {
         const fetchUser = async () => {
             try {
+                const token = localStorage.getItem('token');
                 const response = await axios.get('http://localhost:3000/users/me/me', {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`,

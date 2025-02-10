@@ -48,7 +48,6 @@ function SignUp() {
         password
       });
 
-      console.log('Kayıt başarılı:', response.data);
       alert('Kayıt başarılı! E-postanızı kontrol edin.');
       navigate(`/categoryselection?email=${encodeURIComponent(email)}`);
     } catch (error) {

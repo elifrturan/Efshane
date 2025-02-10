@@ -32,7 +32,6 @@ function MessageDetails() {
                 },
             });
 
-            console.log("Mesaj gönderildi:", response.data);
 
             setMessages((prevMessages) => [
                 ...prevMessages,
@@ -66,7 +65,6 @@ function MessageDetails() {
                 });
     
                 const updatedMessages = response.data.map((message) => {
-                    console.log("Message Object:", message);
                     return {
                         ...message,
                         sentByCurrentUser: message.username !== username,
@@ -106,7 +104,6 @@ function MessageDetails() {
                         messageIds.includes(msg.id) ? { ...msg, isRead: true } : msg
                     )
                 );
-                console.log("Mesajlar okundu olarak işaretlendi");
             } catch (error) {
                 console.error("Mesajlar okundu olarak işaretlenirken hata oluştu:", error.message);
             }

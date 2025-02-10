@@ -35,11 +35,8 @@ function CodeVerification() {
                 email,  
                 code: fullCode
             });
-            console.log('Kod doğrulama başarılı:', response.data);
-            alert('Kod doğrulama başarılı!');
             navigate(`/emailconfirm/codeverification/passwordrenewal?email=${encodeURIComponent(email)}`);
         } catch (error) {
-            console.log('Kod doğrulama başarısız:', error);
             alert('Kod doğrulama başarısız, lütfen tekrar deneyin.');
         }
 
@@ -51,11 +48,8 @@ function CodeVerification() {
             const response = await axios.post('http://localhost:3000/mail/sendCode', {
                 email
             });
-            console.log('Kod başarıyla tekrar gönderildi:', response.data);
-            alert('Doğrulama kodu başarıyla gönderildi.');
             setTimeLeft(120); 
         } catch (error) {
-            console.log('Kod gönderme başarısız:', error);
             alert('Kod gönderme başarısız, lütfen tekrar deneyin.');
         } finally {
             setIsSending(false); 
