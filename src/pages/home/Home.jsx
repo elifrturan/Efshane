@@ -87,7 +87,7 @@ function Home() {
     <div className="home-page">
       <div className="search-section">
         <div className="search-overlay">
-          <div className="container text-start text-white">
+          <div className="container text-start">
             <h1 className="search-title">Kitapların Sonsuz Dünyasını
               <br /> Keşfetmeye Hazır Mısınız?</h1>
             <p className="search-subtitle mb-4">
@@ -127,8 +127,8 @@ function Home() {
                         style={{ width: "60px", height: "90px" }}
                       />
                       <div className="search-book-info d-flex flex-column align-items-start">
-                        <h6 className="search-book-title mb-1 text-muted">{book.title}</h6>
-                        <p className="search-book-author text-muted mb-0">{book.user?.username}</p>
+                        <h6 className="search-book-title mb-1">{book.title}</h6>
+                        <p className="search-book-author mb-0">{book.user?.username}</p>
                       </div>
                     </div>
                   ))}
@@ -146,8 +146,8 @@ function Home() {
                         style={{ width: "60px", height: "90px" }}
                       />
                       <div className="search-book-info d-flex flex-column align-items-start">
-                        <h6 className="search-book-title mb-1 text-muted">{audioBook.title}</h6>
-                        <p className="search-book-author text-muted mb-0">{audioBook.user?.username}</p>
+                        <h6 className="search-book-title mb-1">{audioBook.title}</h6>
+                        <p className="search-book-author mb-0">{audioBook.user?.username}</p>
                       </div>
                     </div>
                   ))}
@@ -167,7 +167,7 @@ function Home() {
                         style={{ width: "50px", height: "50px", borderRadius: "50%" }}
                       />
                       <div className="search-author-info">
-                        <h6 className="search-author-name mb-0 text-muted d-flex">{user.username}</h6>
+                        <h6 className="search-author-name mb-0 d-flex">{user.username}</h6>
                       </div>
                     </div>
                   ))}

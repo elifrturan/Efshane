@@ -78,64 +78,62 @@ function Popular() {
     }
 
     return (
-        <div className="popular-books mt-5 mb-3">
+        <div className="popular-books mt-5">
             <div className="container">
-                <h3 className='ms-3 mb-3'>Popülerler</h3>
+                <h4 className='mb-4'>Popülerler</h4>
                 <div className="popular-books-wrapper d-flex align-items-center">
-                    <i className="popular-left-arrow bi bi-arrow-left-circle-fill" onClick={scrollLeft}></i>
+                    <i className="left-arrow bi bi-arrow-left-short" onClick={scrollLeft}></i>
                     <div className="book-list-popular" ref={scrollRef} style={{ overflowX: 'auto', whiteSpace: 'nowrap' }}>
-                    {books && books.map((book) => (
-                        <div key={book.id} className="popularBook d-flex flex-column align-items-center justify-content-center ms-2 me-5">
-                            <div
-                                className="popular-book-cover"
-                                onClick={() =>
-                                    book.isAudioBook ? handleAudioBookClick(book.title) : handleBookClick(book.title)
-                                }
-                                style={{ cursor: 'pointer' }}
-                            >
-                                <img
-                                    src={
-                                            book.bookCover?.startsWith('uploads')
-                                            ? `${backendBaseUrl}/${book.bookCover}`
-                                            : book.bookCover
-                                        }
-                                    alt={book.title}
-                                    width="80"
-                                    height="120"
-                                />
-                                {book.isAudioBook && (
-                                    <img
-                                        src="/images/headphone-icon.svg"
-                                        className="headphone-icon"
-                                    />
-                                )}
-                            </div>
-                            <div className="popular-book-content d-flex flex-column align-items-center">
-                                <div className="popular-book-title mt-1">
-                                    <h6>{book.title}</h6>
-                                </div>
-                                <div className="popular-book-writer d-flex mb-3">
+                        {books && books.map((book) => (
+                            <div key={book.id} className="populerBook d-flex flex-column">
+                                <div
+                                    className="popular-book-cover"
+                                    onClick={() =>
+                                        book.isAudioBook ? handleAudioBookClick(book.title) : handleBookClick(book.title)
+                                    }
+                                    style={{ cursor: 'pointer' }}
+                                >
                                     <img
                                         src={
-                                            book?.profile_image
-                                                ? book.profile_image.startsWith('uploads')
-                                                    ? `${backendBaseUrl}/${book.profile_image}`
-                                                    : book.profile_image
-                                                : 'default-background.jpg' 
-                                        }
-                                        alt=""
-                                        className="rounded-circle object-fit-cover"
-                                        width="20px"
-                                        height="20px"
-                                        onClick={() => handleProfileClick(book.username)}
+                                                book.bookCover?.startsWith('uploads')
+                                                ? `${backendBaseUrl}/${book.bookCover}`
+                                                : book.bookCover
+                                            }
+                                        alt={book.title}
                                     />
-                                    <p>{book.username}</p>
+                                    {book.isAudioBook && (
+                                        <img
+                                            src="/images/headphone-icon.svg"
+                                            className="headphone-icon"
+                                        />
+                                    )}
+                                </div>
+                                <div className="popular-book-content d-flex flex-column align-items-center">
+                                    <div className="popular-book-title mt-3">
+                                        <h6>{book.title}</h6>
+                                    </div>
+                                    <div className="popular-book-writer d-flex">
+                                        <img
+                                            src={
+                                                book?.profile_image
+                                                    ? book.profile_image.startsWith('uploads')
+                                                        ? `${backendBaseUrl}/${book.profile_image}`
+                                                        : book.profile_image
+                                                    : 'default-background.jpg' 
+                                            }
+                                            alt=""
+                                            className="rounded-circle object-fit-cover"
+                                            width="20px"
+                                            height="20px"
+                                            onClick={() => handleProfileClick(book.username)}
+                                        />
+                                        <span>{book.username}</span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    ))}
+                        ))}
                     </div>
-                    <i className="popular-right-arrow bi bi-arrow-right-circle-fill" onClick={scrollRight}></i>
+                    <i className="right-arrow bi bi-arrow-right-short" onClick={scrollRight}></i>
                 </div>
             </div>
         </div>

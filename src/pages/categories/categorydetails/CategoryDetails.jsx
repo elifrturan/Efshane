@@ -101,7 +101,7 @@ function CategoryDetails() {
                                 )}
                             </div>
                             <div className="details-book-content d-flex flex-column align-items-center">
-                                <p className='mt-1'>{book.title}</p>
+                                <span className='mt-1'>{book.title}</span>
                                 <div className="details-book-writer d-flex">
                                     <img 
                                         src={
@@ -117,7 +117,7 @@ function CategoryDetails() {
                                         height="24px" 
                                         onClick={() => handleProfileClick(book.username)} 
                                     />
-                                    <p>{book.username}</p>
+                                    <span>{book.username}</span>
                                 </div>
                             </div>
                         </div>

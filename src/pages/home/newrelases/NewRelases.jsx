@@ -77,64 +77,62 @@ function NewRelases(initialLastActivity) {
     }
 
   return (
-    <div className="new-relases mt-5 mb-3">
+    <div className="new-relases mt-5">
       <div className="container">
-        <h3 className='ms-3'>Yeni Çıkanlar</h3>
+        <h4 className='mb-4'>Yeni Çıkanlar</h4>
         <div className="new-books d-flex align-items-center">
-          <i className="left-arrow bi bi-arrow-left-circle-fill" onClick={scrollLeft} ></i>
+          <i className="left-arrow bi bi-arrow-left-short" onClick={scrollLeft}></i>
           <div className="book-list-newrelases" ref={scrollRef} style={{ overflowX: 'auto', whiteSpace: 'nowrap' }}>
-          {books && books.map((book) => (
-                    <div key={book.id} className="book1 d-flex flex-column align-items-center justify-content-center ms-2 me-5">
-                        <div
-                            className="new-book-cover"
-                            onClick={() =>
-                                book.isAudioBook ? handleAudioBookClick(book.title) : handleBookClick(book.title)
-                            }
-                            style={{ cursor: 'pointer' }}
-                        >
-                            <img
-                              src={
-                                    book.bookCover?.startsWith('uploads')
-                                      ? `${backendBaseUrl}/${book.bookCover}`
-                                      : book.bookCover
-                                  }
-                              alt={book.title}
-                              width="80"
-                              height="120"
-                            />
-                            {book.isAudioBook && (
-                                <img
-                                    src="/images/headphone-icon.svg"
-                                    className="headphone-icon"
-                                />
-                            )}
-                        </div>
-                        <div className="newrelases-book-content d-flex flex-column align-items-center">
-                            <div className="newrelases-book-title mt-1">
-                                <h6>{book.title}</h6>
-                            </div>
-                            <div className="newrelases-book-writer d-flex mb-3">
-                                <img
-                                    src={
-                                        book?.profile_image
-                                            ? book.profile_image.startsWith('uploads')
-                                                ? `${backendBaseUrl}/${book.profile_image}`
-                                                : book.profile_image
-                                            : 'default-background.jpg' 
-                                    }
-                                    alt=""
-                                    className="rounded-circle object-fit-cover"
-                                    width="20px"
-                                    height="20px"
-                                    onClick={() => handleProfileClick(book.username)}
-                                />
-                                <p>{book.username}</p>
-                            </div>
-                        </div>
-                    </div>
-                ))}
+            {books && books.map((book) => (
+              <div key={book.id} className="book1 d-flex flex-column">
+                <div
+                  className="new-book-cover"
+                  onClick={() =>
+                    book.isAudioBook ? handleAudioBookClick(book.title) : handleBookClick(book.title)
+                  }
+                  style={{ cursor: 'pointer' }}
+                >
+                <img
+                  src={
+                    book.bookCover?.startsWith('uploads')
+                    ? `${backendBaseUrl}/${book.bookCover}`
+                    : book.bookCover
+                  }
+                  alt={book.title}
+                />
+                {book.isAudioBook && (
+                  <img
+                    src="/images/headphone-icon.svg"
+                    className="headphone-icon"
+                  />
+                )}
+              </div>
+              <div className="new-book-content d-flex flex-column align-items-center">
+                <div className="new-book-title mt-3">
+                  <h6>{book.title}</h6>
+                </div>
+                <div className="new-book-writer d-flex">
+                  <img
+                    src={
+                      book?.profile_image
+                      ? book.profile_image.startsWith('uploads')
+                      ? `${backendBaseUrl}/${book.profile_image}`
+                      : book.profile_image
+                      : 'default-background.jpg' 
+                    }
+                    alt=""
+                    className="rounded-circle object-fit-cover"
+                    width="20px"
+                    height="20px"
+                    onClick={() => handleProfileClick(book.username)}
+                  />
+                  <span>{book.username}</span>
+                </div>
+              </div>
+              </div>
+            ))}
           </div>
-          <i className="right-arrow bi bi-arrow-right-circle-fill" onClick={scrollRight}></i>
+          <i className="right-arrow bi bi-arrow-right-short" onClick={scrollRight}></i>
         </div>
       </div>
     </div>

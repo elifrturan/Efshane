@@ -73,65 +73,62 @@ function Suggestion(initialLastActivity) {
     }
 
     return (
-        <div className="suggestion-books-container mt-5 mb-3">
+        <div className="suggestion-books-container mt-5">
             <div className="container">
-                <h3 className='ms-3 mb-3'>Beğenebileceklerin</h3>
+                <h4 className='mb-4'>Beğenebileceklerin</h4>
                 <div className="suggestion-books d-flex align-items-center">
-                    <i className="suggestion-left-arrow bi bi-arrow-left-circle-fill" onClick={scrollLeft}></i>
-                    <div className="books-list d-flex" ref={scrollRef} style={{ overflowX: 'auto', whiteSpace: 'nowrap' }}>
-                    {books && books.map((book) => (
-                    <div key={book.id} className="suggestionBook d-flex flex-column align-items-center justify-content-center ms-2 me-5">
-                        <div
-                            className="suggestion-book-cover"
-                            onClick={() =>
-                                book.isAudioBook ? handleAudioBookClick(book.title) : handleBookClick(book.title)
-                            }
-                            style={{ cursor: 'pointer' }}
-                        >
-                            <img
-                                src={
-                                        book.bookCover?.startsWith('uploads')
-                                        ? `${backendBaseUrl}/${book.bookCover}`
-                                        : book.bookCover
+                    <i className="left-arrow bi bi-arrow-left-short" onClick={scrollLeft}></i>
+                    <div className="books-list" ref={scrollRef} style={{ overflowX: 'auto', whiteSpace: 'nowrap' }}>
+                        {books && books.map((book) => (
+                            <div key={book.id} className="suggestionBook d-flex flex-column">
+                                <div
+                                    className="suggestion-book-cover"
+                                    onClick={() =>
+                                        book.isAudioBook ? handleAudioBookClick(book.title) : handleBookClick(book.title)
                                     }
-                                alt={book.title}
-                                width="80"
-                                height="120"
-                            />
-                            {book.isAudioBook && (
-                                <img
-                                    src="/images/headphone-icon.svg"
-                                    className="headphone-icon"
-                                />
-                            )}
-                        </div>
-                        <div className="suggestion-book-content d-flex flex-column align-items-center">
-                            <div className="suggestion-book-title mt-1">
-                                <h6>{book.title}</h6>
+                                    style={{ cursor: 'pointer' }}
+                                >
+                                    <img
+                                        src={
+                                                book.bookCover?.startsWith('uploads')
+                                                ? `${backendBaseUrl}/${book.bookCover}`
+                                                : book.bookCover
+                                            }
+                                        alt={book.title}
+                                    />
+                                    {book.isAudioBook && (
+                                        <img
+                                            src="/images/headphone-icon.svg"
+                                            className="headphone-icon"
+                                        />
+                                    )}
+                                </div>
+                                <div className="suggestion-book-content d-flex flex-column align-items-center">
+                                    <div className="suggestion-book-title mt-3">
+                                        <h6>{book.title}</h6>
+                                    </div>
+                                    <div className="suggestion-book-writer d-flex">
+                                        <img
+                                            src={
+                                                book?.profile_image
+                                                    ? book.profile_image.startsWith('uploads')
+                                                        ? `${backendBaseUrl}/${book.profile_image}`
+                                                        : book.profile_image
+                                                    : 'default-background.jpg' 
+                                            }
+                                            alt=""
+                                            className="rounded-circle object-fit-cover"
+                                            width="20px"
+                                            height="20px"
+                                            onClick={() => handleProfileClick(book.username)}
+                                        />
+                                        <span>{book.username}</span>
+                                    </div>
+                                </div>
                             </div>
-                            <div className="suggestion-book-writer d-flex mb-3">
-                                <img
-                                    src={
-                                        book?.profile_image
-                                            ? book.profile_image.startsWith('uploads')
-                                                ? `${backendBaseUrl}/${book.profile_image}`
-                                                : book.profile_image
-                                            : 'default-background.jpg' 
-                                    }
-                                    alt=""
-                                    className="rounded-circle object-fit-cover"
-                                    width="20px"
-                                    height="20px"
-                                    onClick={() => handleProfileClick(book.username)}
-                                />
-                                <p>{book.username}</p>
-                            </div>
-                        </div>
+                        ))}
                     </div>
-                ))}
-
-                    </div>
-                    <i className="suggestion-right-arrow bi bi-arrow-right-circle-fill" onClick={scrollRight}></i>
+                    <i className="right-arrow bi bi-arrow-right-short" onClick={scrollRight}></i>
                 </div>
             </div>
         </div>

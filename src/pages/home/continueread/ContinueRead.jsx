@@ -150,13 +150,13 @@ function ContinueRead({initialLastActivity}) {
     return (
         <div className="continue-read-row">
             {lastActivity ? (
-                <div className="container mt-5 mb-5">
+                <div className="container mb-5">
                     <div className="continue-read text-center">
-                        <div className="row">
-                            <div className="col-lg-3 book-cover">
-                                <h2 className='text-start ms-5 mb-3'>
+                        <div className="continue-read-div d-flex gap-5">
+                            <div className="book-cover">
+                                <span>
                                     {lastActivity.type === 'book' ? "Okumaya Devam Et" : "Dinlemeye Devam Et"}
-                                </h2>
+                                </span>
                                 <img
                                     src={
                                         (lastActivity.type === 'book' 
@@ -182,94 +182,92 @@ function ContinueRead({initialLastActivity}) {
                                     style={{ cursor: 'pointer' }}
                                 />
                             </div>
-                            <div className="col-lg-8">
-                                <div className="book-content text-start"> 
-                                    <div className="book-content-up mt-5">
-                                        <div className="bookName">
-                                            <h4 
-                                                onClick={() =>
-                                                    lastActivity.type === 'book' 
-                                                        ? handleBookClick(lastActivity.book?.title) 
-                                                        : handleAudioBookClick(lastActivity.audioBooks?.title)
-                                                } 
+                            <div className="book-content text-start"> 
+                                <div className="book-content-up">
+                                    <div className="bookName">
+                                        <h4 
+                                            onClick={() =>
+                                                lastActivity.type === 'book' 
+                                                ? handleBookClick(lastActivity.book?.title) 
+                                                : handleAudioBookClick(lastActivity.audioBooks?.title)
+                                            } 
                                                 style={{cursor: 'pointer'}}
-                                            >
-                                                {lastActivity.type === 'book' ? lastActivity.book?.title : lastActivity.audioBooks?.title}
-                                            </h4> 
-                                        </div>
-                                        <div className="writer-info d-flex flex-row align-items-center" 
+                                        >
+                                            {lastActivity.type === 'book' ? lastActivity.book?.title : lastActivity.audioBooks?.title}
+                                        </h4> 
+                                    </div>
+                                    <div className="writer-info d-flex flex-row align-items-center mb-4" 
                                         onClick={() => handleProfileClick(
-                                        lastActivity.type === 'book' 
+                                            lastActivity.type === 'book' 
                                             ? lastActivity.book?.user?.username 
                                             : lastActivity.audioBooks?.user?.username
                                         )}>
-                                            <img 
-                                                src={
-                                                    lastActivity.type === 'book' 
-                                                        ? lastActivity.book?.user?.profile_image
-                                                            ? lastActivity.book.user.profile_image.startsWith('uploads')
-                                                                ? `${backendBaseUrl}/${lastActivity.book.user.profile_image}`
-                                                                : lastActivity.book.user.profile_image
-                                                            : 'default-background.jpg'
-                                                        : lastActivity.audioBooks?.user?.profile_image
-                                                            ? lastActivity.audioBooks.user.profile_image.startsWith('uploads')
-                                                                ? `${backendBaseUrl}/${lastActivity.audioBooks.user.profile_image}`
-                                                                : lastActivity.audioBooks.user.profile_image
-                                                            : 'default-background.jpg'
-                                                }                                          
-                                                alt="30x30" 
-                                                width="25px" 
-                                                height="25px" 
-                                                className='img-fuild rounded-circle object-fit-cover'
+                                        <img 
+                                            src={
+                                                lastActivity.type === 'book' 
+                                                ? lastActivity.book?.user?.profile_image
+                                                ? lastActivity.book.user.profile_image.startsWith('uploads')
+                                                ? `${backendBaseUrl}/${lastActivity.book.user.profile_image}`
+                                                : lastActivity.book.user.profile_image
+                                                : 'default-background.jpg'
+                                                : lastActivity.audioBooks?.user?.profile_image
+                                                ? lastActivity.audioBooks.user.profile_image.startsWith('uploads')
+                                                ? `${backendBaseUrl}/${lastActivity.audioBooks.user.profile_image}`
+                                                : lastActivity.audioBooks.user.profile_image
+                                                : 'default-background.jpg'
+                                            }                                          
+                                            alt="30x30" 
+                                            width="25px" 
+                                            height="25px" 
+                                            className='rounded-circle object-fit-cover'
                                             />
-                                            <p className='ms-2 d-flex mt-2'>
-                                            {lastActivity.type === 'book' 
-                                                ? lastActivity.book?.user?.username 
-                                                : lastActivity.audioBooks?.user?.username}
-                                            </p>                                    </div>
-                                        <div className="book-info mt-2">
-                                            {lastActivity.type === 'book' ? lastActivity.book?.summary : lastActivity.audioBooks?.summary}
+                                            <span>
+                                                {lastActivity.type === 'book' 
+                                                    ? lastActivity.book?.user?.username 
+                                                    : lastActivity.audioBooks?.user?.username}
+                                            </span>
+                                    </div>
+                                    <div className="book-info">
+                                        {lastActivity.type === 'book' ? lastActivity.book?.summary : lastActivity.audioBooks?.summary}
+                                    </div>
+                                </div>
+                                <div className="book-content-down">
+                                    <div className="interaction d-flex">
+                                        <div className="read-count me-3">
+                                            <p>
+                                                <i className="bi bi-eye-fill"></i> 
+                                                {lastActivity.type === 'book' 
+                                                ? formatNumber(lastActivity.book?.analysis[0]?.read_count || 0) 
+                                                : formatNumber(lastActivity.audioBooks?.analysis[0]?.read_count || 0)}
+                                            </p>
+                                        </div>
+                                        <div className="like-count me-3">
+                                            <p>
+                                                <i className="bi bi-heart-fill"></i>
+                                                {lastActivity.type === 'book' 
+                                                ? formatNumber(lastActivity.book?.analysis[0]?.like_count || 0) 
+                                                : formatNumber(lastActivity.audioBooks?.analysis[0]?.like_count || 0)}
+                                            </p>
+                                        </div>
+                                        <div className="comment-count">
+                                            <p>
+                                                <i className="bi bi-chat-fill"></i> 
+                                                {lastActivity.type === 'book' 
+                                                ? formatNumber(lastActivity.book?.analysis[0]?.comment_count || 0) 
+                                                : formatNumber(lastActivity.audioBooks?.analysis[0]?.comment_count || 0)}
+                                            </p>
                                         </div>
                                     </div>
-                                    <div className="book-content-down">
-                                        <div className="interaction d-flex">
-                                            <div className="read-count me-3">
-                                                <p>
-                                                    <i className="bi bi-eye-fill text-muted me-1"></i> 
-                                                    {lastActivity.type === 'book' 
-                                                        ? formatNumber(lastActivity.book?.analysis[0]?.read_count || 0) 
-                                                        : formatNumber(lastActivity.audioBooks?.analysis[0]?.read_count || 0)}
-                                                </p>
-                                            </div>
-                                            <div className="like-count me-3">
-                                                <p>
-                                                    <i className="bi bi-heart-fill text-muted me-1"></i>
-                                                    {lastActivity.type === 'book' 
-                                                        ? formatNumber(lastActivity.book?.analysis[0]?.like_count || 0) 
-                                                        : formatNumber(lastActivity.audioBooks?.analysis[0]?.like_count || 0)}
-                                                </p>
-                                            </div>
-                                            <div className="comment-count me-3">
-                                                <p>
-                                                    <i className="bi bi-chat-fill text-muted me-1"></i> 
-                                                    {lastActivity.type === 'book' 
-                                                        ? formatNumber(lastActivity.book?.analysis[0]?.comment_count || 0) 
-                                                        : formatNumber(lastActivity.audioBooks?.analysis[0]?.comment_count || 0)}
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <div className="continue-read-button">
-
+                                    <div className="continue-read-button">
                                         {lastActivity.type === 'book' ? (
                                             <Button className="btn btn-read-continue" onClick={() => handleReadBookClick(lastActivity.book?.title)}>
                                                 Okumaya Devam Et
                                             </Button>
-                                            ) : (
+                                        ) : (
                                             <Button className="btn btn-read-continue" onClick={() => handleListenAudioBookClick(lastActivity.audioBooks?.title)}>
                                                 Dinlemeye Devam Et
                                             </Button>
                                         )}
-                                        </div>
                                     </div>
                                 </div>
                             </div>

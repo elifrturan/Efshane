@@ -1,7 +1,7 @@
 .add-post {
     display: flex;
     align-items: flex-start;
-    border: 1px solid #eee;
+    border: 1px solid var(--gray2-color);
     padding: 12px;
     border-radius: 8px 8px 0 0;
 }
@@ -31,8 +31,12 @@
     overflow-wrap: break-word;
     word-break: break-word;
     font-size: 1rem;
-    color: #000;
+    color: var(--black-color);
     opacity: 0.8;
+}
+
+.add-post-right textarea::placeholder {
+    color: var(--black-color) !important;
 }
 
 .add-post-right textarea:focus {
@@ -40,7 +44,7 @@
 }
 
 .add-post-right hr {
-    color: #ccc;
+    color: var(--gray4-color);
 }
 
 .add-post-right .down {
@@ -81,7 +85,7 @@
     width: 80px;
     height: 100px;
     object-fit: cover;
-    border: 1px solid #aaa;
+    border: 1px solid var(--gray3-color);
 }
 
 .add-post-right .remove-image-button {
@@ -90,7 +94,7 @@
     right: 2%;
     padding: 0;
     background-color: rgba(0, 0, 0, 0.7);
-    color: white;
+    color: var(--white-color);
     border: none;
     border-radius: 50%;
     width: 25px;
@@ -107,7 +111,7 @@
     font-size: 0.9rem;
     padding: 6px 12px;
     border-radius: 25px;
-    background-color: #333;
+    background-color: var(--second-color);
     border: none;
     opacity: 0.8;
     transition: all 0.3s ease-in;

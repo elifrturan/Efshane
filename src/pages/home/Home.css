@@ -17,7 +17,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: var(--overlay-color);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -26,11 +26,13 @@
 .search-title {
     font-size: 2.25rem;
     font-weight: 600;
+    color: var(--white-color);
 }
   
 .search-subtitle {
     font-size: 0.9rem;
     opacity: 50%;
+    color: var(--white-color);
 }
   
 .search-bar {
@@ -47,30 +49,27 @@
   
 .search-input {
     width: 100%;
-    border: 1px solid rgba(245, 245, 245, 0.5) !important;
+    border: 1px solid var(--input-border) !important;
     border-radius: 0.8rem 0 0 0.8rem!important;
     border-right: none !important;
     opacity: 75%;
     padding: 0.75rem;
     background: transparent !important;
-    color: whitesmoke !important;
-}
-
-.search-input::placeholder{
-    color: #F8F8F8 !important;
+    color: var(--white-color) !important;
 }
 
 .search-icon {
-    background-color: #F8F8F8 !important;
-    border: 1px solid rgba(245, 245, 245, 0.5) !important;
+    background-color: var(--bg-color) !important;
+    border: 1px solid var(--bg-color) !important;
     border-left: none !important;
     border-radius: 0 0.8rem 0.8rem 0 !important;
     opacity: 75%;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #000 !important;
+    color: var(--second-color) !important;
     padding: 0.35rem 1.25rem !important;
+    transition: all 0.2s ease-in-out;
 }
   
 .search-icon i {
@@ -78,7 +77,7 @@
 }
 
 .search-icon:hover {
-    background-color: ghostwhite !important;
+    background-color: var(--white-color) !important;
 }
 
 .search-results {
@@ -87,8 +86,8 @@
     left: 0;
     width: 100%;
     z-index: 10;
-    background: #fff !important;
-    border: 1px solid #ddd !important;
+    background: var(--white-color) !important;
+    border: 1px solid var(--gray-color) !important;
     border-radius: 8px !important;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     max-height: 300px;
@@ -101,7 +100,7 @@
     display: flex;
     align-items: center;
     padding: 8px;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid var(--gray2-color);
     cursor: pointer;
 }
   
@@ -112,7 +111,7 @@
 
 .search-book-item:hover,
 .search-author-item:hover {
-  background-color: #f8f8f8;
+  background-color: var(--bg-color);
 }
   
 .search-book-cover,
@@ -124,6 +123,7 @@
 .search-book-info,
 .search-author-info {
     flex-grow: 1;
+    color: var(--text-muted);
 }
   
 .search-book-title,
@@ -135,5 +135,6 @@
   
 .search-book-author {
     font-size: 0.85rem;
-    color: #6c757d !important;
+    color: var(--text-muted);
+    opacity: 0.8;
 }

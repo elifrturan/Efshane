@@ -21,14 +21,22 @@
   --second-color: #333;
   --gray-color: #cecece;
   --gray2-color: #eee;
+  --gray3-color: #aaa;
+  --gray4-color: #ccc;
   --text-muted: #212529BF;
   --bg-color: #f5f5f5;
   --white-color: #ffffff;
+  --black-color: #000;
+  --red-color: #ff0000;
+  --green-color: #084208;
+  --tag-color: #f8d9e0;
+  --tag2-color: #d9534f;
   --container-bg-color: rgba(110, 100, 87, 0.9);
   --shadow-color: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
   --text-shadow: rgb(128, 128, 128) 1px 0 10px;
   --overlay-color: rgba(0, 0, 0, 0.2);
   --input-border: rgba(245, 245, 245, 0.5);
+  --continue-read-bg: rgba(0, 0, 0, 0.062);
   font-family: 'SF Pro Display', sans-serif;;
   font-optical-sizing: auto;
   font-style: normal;
@@ -68,7 +76,8 @@ main{
   color: var(--theme-color);
 }
 
-.form-control  {
+.form-control, 
+.form-select {
   opacity: 0.75;
   cursor: text;
   background-color: transparent;
@@ -87,12 +96,6 @@ main{
   box-shadow: none;
   background: none;
   border: 1px solid var(--white-color);
-}
-
-.form-check {
-  display: flex;
-  align-items: center;
-  gap: 4px;
 }
 
 .form-check-input {
@@ -134,4 +137,38 @@ main{
   background-color: var(--second-color);
   color: var(--white-color);
   opacity: 0.5;
+}
+
+.left-arrow, .right-arrow {
+  font-size: 2rem;
+  cursor: pointer;
+  color: var(--second-color);
+  position: absolute;
+  top: 45%;
+  transform: translateY(-50%);
+  z-index: 1;
+}
+
+.left-arrow {
+  left: -50px;
+  margin-right: 10px;
+}
+
+.right-arrow {
+  right: -50px;
+  margin-left: 10px;
+}
+
+.error-message-cover {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  background-color: var(--red-color);
+  color: var(--white-color);
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 14px;
+  max-width: 300px;
+  text-align: center;
+  transition: opacity 0.5s ease-out;
 }

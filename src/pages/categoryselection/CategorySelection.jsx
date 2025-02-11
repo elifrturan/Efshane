@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import './CategorySelection.css'
 import axios from 'axios';
 import { Link, useNavigate, useLocation} from 'react-router-dom';
+import { Button, Modal } from 'react-bootstrap';
 
 function CategorySelection() {
     const [selectedCard, setSelectedCard] = useState([]);
@@ -63,24 +64,31 @@ function CategorySelection() {
     return (
         <div className="selection-page">
             <div className="container">
-                <div className="container-fluid mt-3">
-                    <h1 className='text-center title'>
+                <div className="selection-navbar">
+                    <div className="d-flex align-items-center justify-content-start">
+                        <img src="/logo/efshane_logo.svg" alt="Logo" className="logo"/>
+                    </div>
+                </div>
+
+                <div className="mt-3 title">
+                    <h1 className='text-center'>
                         <span className='ef'>EF</span>shane’nin Sonsuz Kitap Dünyasına Hoş Geldin
                     </h1>
-                    <p className='text-center mt-2 me-2 ms-2 opacity-75'>
+                    <p className='text-center m-2 opacity-75'>
                         İlgi alanlarını daha yakından tanıyabilmemiz için en az 3 kitap kategorisi seçmeni rica ediyoruz. 
                         Seçtiğin kategorilerden sana özel kitap önerileri sunarak, kitaplığına dilediğin kitapları 
                         ekleyebilmeni sağlayacağız. Böylece okuma deneyimini tam anlamıyla kişiselleştirebiliriz.
                     </p>
                 </div>
-                <div className="row">
+                
+                <div className="category-list">
                     {categories.map((category, index) => (
-                        <div className="col-lg-3 col-md-4 col-sm-6 col-xs-12 mt-4 mb-3 cards" key={category.id}>
+                        <div className="mt-4 mb-3 cards" key={category.id}>
                             <div 
                                 className={`card category ${selectedCard.includes(index) ? 'border-red shadow' : ''}`}
                                 onClick={() => handleCardClick(index)}
                             >
-                                <img src={category.imageUrl} alt={category.name} className='card-img-top' />    
+                                <img src={category.imageUrl} alt={category.name} className='card-img' />    
                                 <div className="card-body">
                                     <h5 className="text-center">{category.name}</h5>
                                 </div>
@@ -90,30 +98,19 @@ function CategorySelection() {
                     ))}             
                 </div>
                 <div className="d-flex justify-content-center">
-                    <Link className='btn btn-category-register text-white mt-2 mb-4' onClick={handleSubmit} >Devam Et</Link>
+                    <Button className='btn btn-category-register text-white mt-4 mb-4' onClick={handleSubmit} >Devam Et</Button>
                 </div>
 
                 {/* Modal */ }
-                {showModal && (
-                    <div className="modal fade show" style={{ display: 'block' }} id='warningModal' tabIndex="-1" aria-labelledby="warningModalLabel" aria-hidden="true">
-                    <div className="modal-dialog">
-                        <div className="modal-content">
-                            <div className="modal-header">
-                                <h5 className="modal-title" id='warningModalLabel'>Uyarı!</h5>
-                                <button type='button' className='btn-close' data-bs-dismiss="modal" aria-label="Close" onClick={handleCloseModal}></button>
-                            </div>
-                            <div className="modal-body">
-                                <p>Lütfen en az 3 kategori seçimi yapınız.</p>
-                            </div>
-                            <div className="modal-footer">
-                                <button type='button' className="btn btn-secondary" data-bs-dismiss="modal" onClick={handleCloseModal}>
-                                    Kapat
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                )}   
+                <Modal show={showModal} centered>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Uyarı!</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>Lütfen en az 3 adet kategori seçiniz.</Modal.Body>
+                    <Modal.Footer>
+                        <Button onClick={handleCloseModal}>Anladım</Button>
+                    </Modal.Footer>
+                </Modal> 
             </div>
         </div>
     )
