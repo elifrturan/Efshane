@@ -72,13 +72,21 @@ function ContinueRead({initialLastActivity}) {
             try {
                 const token = localStorage.getItem('token');
                 const parsedToken = token && token.startsWith('{') ? JSON.parse(token) : token;
+
+                await axios.post(`${backendBaseUrl}/book/read_count/${encodeURIComponent(lastActivity.book.title)}`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${parsedToken}`,
+                        },
+                    }
+                );
                 
                 const progressResponse = await axios.get(`${backendBaseUrl}/progress/book/${lastActivity.book.title}`, {
                     headers: {
                         Authorization: `Bearer ${parsedToken}`,
                     },
                 });
-                                
+                
                 if (progressResponse.data && progressResponse.data.chapters) {
                     navigate(`/read-book/${formattedBookName}/${progressResponse.data.chapters.id}`);
                 } else {

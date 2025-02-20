@@ -4,7 +4,7 @@ import { faEye, faEyeSlash, faTimesCircle } from '@fortawesome/free-solid-svg-ic
 import './SingIn.css'
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios'; 
-import { Form, InputGroup } from 'react-bootstrap';
+import { Form, InputGroup, Modal, Button } from 'react-bootstrap';
 
 function SignIn() {
   const navigate = useNavigate(); 
@@ -111,22 +111,21 @@ function SignIn() {
           </Form.Group>
 
           {/* button */}
-          <button className='btn btn-login' >Giriş Yap</button>
-
-          {error && <p className="text-danger">{error}</p>}
+          <button className='btn btn-login mb-2'>Giriş Yap</button>
         </Form>
 
         {/* Modal Popup */}
-        {showModal && (
-          <div className="modal-overlay">
-            <div className="modal-content">
-              <FontAwesomeIcon icon={faTimesCircle} className="modal-icon" />
-              <h2>Giriş Hatası</h2>
-              <p>{error}</p>
-              <button className="modal-button" onClick={() => setShowModal(false)}>Tamam</button>
-            </div>
-          </div>
-        )}
+        <Modal show={showModal} centered>
+            <Modal.Header closeButton>
+              <Modal.Title>Giriş Hatası</Modal.Title> 
+            </Modal.Header>
+            <Modal.Body>
+              <span>{error}</span>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button onClick={() => setShowModal(false)}>Tamam</Button>
+            </Modal.Footer>
+          </Modal>
       </div>
     </div>
   )

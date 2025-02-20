@@ -83,6 +83,8 @@ const routes = createBrowserRouter([
       { path: '/audio-book-details/:bookName', element: <AudioBookDetails/>},
       { path: '/read-book/:bookName', element: <ReadBook/>},
       { path: '/listen-audio-book/:bookName', element: <ListenAudioBook/>},
+      { path: '/read-book/:bookName/:chapterId', element: <ReadBook/>},
+      { path: '/listen-audio-book/:bookName/:episodeId', element: <ListenAudioBook/>},
       { path: '/book-case', element: <BookCase/>},
       { path: '/settings', element: <Settings/>},
     ],

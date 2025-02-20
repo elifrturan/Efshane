@@ -18,6 +18,7 @@ function SignUp() {
   const [showModal, setShowModal] = useState(false);
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [termsError, setTermsError] = useState('');
+  const [usernameError, setUsernameError] = useState('');
 
   const handleClose = () => setShowModal(false);
 
@@ -27,6 +28,8 @@ function SignUp() {
 
   const handleSubmit = async (e) => {
     e.preventDefault(); 
+    setUsernameError(''); 
+
     if (password !== passwordAgain) {
       alert('Şifreler eşleşmiyor!');
       return;
@@ -51,7 +54,11 @@ function SignUp() {
       alert('Kayıt başarılı! E-postanızı kontrol edin.');
       navigate(`/categoryselection?email=${encodeURIComponent(email)}`);
     } catch (error) {
-      alert('Kayıt başarısız, lütfen tekrar deneyin.');
+      if (error.response && error.response.data && error.response.data.message === 'Bu kullanıcı adına ait bir hesap mevcut') {
+        setUsernameError('Bu kullanıcı adına ait bir hesap mevcut');
+      } else {
+        alert('Kayıt başarısız, lütfen tekrar deneyin.');
+      }
     }
   }
 
@@ -86,7 +93,11 @@ function SignUp() {
             className='mb-3'
             placeholder='Kullanıcı Adı'
             value={username}
-            onChange={(e) => setUsername(e.target.value)} 
+            onChange={(e) => {
+              setUsername(e.target.value);
+              setUsernameError(''); 
+            }}
+            isInvalid={!!usernameError}
           />
           <Form.Control
             type="date" 
@@ -97,6 +108,11 @@ function SignUp() {
             value={birthdate}
             onChange={(e) => setBirthdate(e.target.value)} 
           />
+          {usernameError && (
+            <Form.Control.Feedback type="invalid">
+                {usernameError}
+            </Form.Control.Feedback>
+          )}
           <InputGroup className="mb-3">
             <Form.Control
               type={showPassword ? "text" : "password"}

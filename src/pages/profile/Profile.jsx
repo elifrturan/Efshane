@@ -35,10 +35,10 @@ function Profile() {
 
     const handleShow = () => {
         setTempProfile({
-            name: user.name,
-            profile_image: user.profile_image,
-            image_background: user.image_background,
-            about: user.about,
+            name: user.name || '',
+            profile_image: user.profile_image || '',
+            image_background: user.image_background || '',
+            about: user.about || ''
         });
         setShowEdit(true);
     };
@@ -423,21 +423,21 @@ function Profile() {
                     
                     <div className="profile-user-details">
                         <div className="username-name">
-                            <p>{user.name}</p>
-                            <span>@{user.username}</span>
+                            <p>{user?.name}</p>
+                            <span>@{user?.username}</span>
                         </div>
 
                         <div className="about-section">
-                            <span>{user.about}</span>
+                            <span>{user?.about}</span>
                         </div>
                                 
                         <div className="attend-date">
-                            <p><span><i className="bi bi-calendar-week me-2"></i></span>{formatDate(user.date)} tarihinde katıldı</p>
+                            <p><span><i className="bi bi-calendar-week me-2"></i></span>{formatDate(user?.date)} tarihinde katıldı</p>
                         </div>
                                 
                         <div className="follower-statistics">
-                            <p><b>{user.followingCount}</b> <span>Takip Edilen</span></p>
-                            <p><b>{user.followersCount}</b> <span>Takipçi</span></p>
+                            <p><b>{user?.followingCount}</b> <span>Takip Edilen</span></p>
+                            <p><b>{user?.followersCount}</b> <span>Takipçi</span></p>
                         </div>
                     </div>
 

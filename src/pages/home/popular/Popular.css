@@ -12,6 +12,7 @@
 .popular-books .container .popular-books-wrapper .book-list-popular{
     display: flex;
     overflow-x: auto;
+    overflow-y: hidden;
     white-space: nowrap;
     scroll-behavior: smooth;
     gap: 40px;
@@ -20,8 +21,8 @@
 .popular-books .container .popular-books-wrapper .book-list-popular .populerBook {
     color: var(--second-color);
     transition: all 0.3s ease-in-out;
-    border: 1px dashed var(--gray2-color);
     border-radius: 8px;
+    padding: 8px 0;
 }
 
 .popular-books .container .popular-books-wrapper .book-list-popular .populerBook:hover {
@@ -58,6 +59,15 @@
     display: none;
 }
 
+.popular-books .container .popular-books-wrapper .book-list-popular .populerBook .popular-book-content .popular-book-title h6 {
+    max-width: 140px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    text-align: center;
+    white-space: normal;
+    font-size: 0.9rem;
+}
+
 .popular-books .container .popular-books-wrapper .book-list-popular .popular-book-writer {
     display: flex;
     gap: 5px;
@@ -75,7 +85,7 @@
     .left-arrow {
         left: -40px !important;
     }
-      
+
     .right-arrow {
         right: -40px !important;
     }

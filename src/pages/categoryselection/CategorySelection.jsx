@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import './CategorySelection.css'
 import axios from 'axios';
-import { Link, useNavigate, useLocation} from 'react-router-dom';
+import { useNavigate, useLocation} from 'react-router-dom';
 import { Button, Modal } from 'react-bootstrap';
 
 function CategorySelection() {
@@ -42,7 +42,7 @@ function CategorySelection() {
                 categoryIds: selectedCategories  
             });
     
-            navigate(`/home`);
+            navigate(`/signin`);
         } catch (error) {
             console.error('Kategori seçme işlemi başarısız:', error);
             alert('Kategori seçme işlemi başarısız, lütfen tekrar deneyin.');

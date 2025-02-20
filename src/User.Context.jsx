@@ -4,24 +4,38 @@ import axios from 'axios';
 const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
-    const [user, setUser] = useState([]);
+    const [user, setUser] = useState(null);
+    const [token, setToken] = useState(localStorage.getItem('token'));
+
     useEffect(() => {
         const fetchUser = async () => {
+            if (!token) {
+                setUser(null);
+                return;
+            }
             try {
-                const token = localStorage.getItem('token');
                 const response = await axios.get('http://localhost:3000/users/me/me', {
                     headers: {
-                        Authorization: `Bearer ${localStorage.getItem('token')}`,
+                        Authorization: `Bearer ${token}`,
                     },
                 });
                 setUser(response.data);
-            } catch(error) {
+            } catch (error) {
                 console.error('Kullanıcılar alınamadı:', error);
+                setUser(null); 
             }
         };
         fetchUser();
-    }, []);
+    }, [token]); 
     
+    useEffect(() => {
+        const handleStorageChange = () => {
+            setToken(localStorage.getItem('token'));
+        };
+    
+        window.addEventListener('storage', handleStorageChange);
+        return () => window.removeEventListener('storage', handleStorageChange);
+    }, []);
     return (
         <UserContext.Provider value={{ user, setUser }}>
         {children}

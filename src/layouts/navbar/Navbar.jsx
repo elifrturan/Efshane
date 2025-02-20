@@ -1,15 +1,41 @@
-import React from 'react';
+import React, { useEffect, useState} from 'react';
 import './Navbar.css'
 import { Navbar, Nav, Dropdown, Container} from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {useUser } from '../../User.Context';
+import { useUser } from '../../User.Context';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const backendBaseUrl = 'http://localhost:3000';
 
 function CustomNavbar() {
   const { user, setUser } = useUser();
   const navigate = useNavigate(); 
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        setUser(null);
+        return;
+      }
+
+      try {
+        const response = await axios.get('http://localhost:3000/users/me/me', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setUser(response.data);
+      } catch (error) {
+        console.error('Kullanıcılar alınamadı:', error);
+        setUser(null);
+      } finally {
+      }
+    };
+
+    fetchUser();
+  }, [setUser]);
 
   const handleLogout = () => {
     localStorage.removeItem('token'); 
