@@ -56,6 +56,24 @@ function Feed() {
         e.stopPropagation();  
         navigate(`/contact-us`);
     }; 
+
+    const notInterestPost = async (postId) => {
+        try {
+            await axios.post(
+                `http://localhost:3000/feed/hide/${postId}`,
+                {},
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    },
+                }
+            );
+            console.log("Post gizleme işlemi başarılı:", postId);
+            setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postId));
+        } catch (error) {
+            console.error('Post gizleme işlemi başarısız:', error);
+        }
+    }; 
     
     const likeComment = async (commentId, postId) => {
         try {
@@ -473,7 +491,12 @@ function Feed() {
                                                     <i className="bi bi-three-dots"></i>
                                                 </Dropdown.Toggle>
                                                 <Dropdown.Menu>
-                                                    <Dropdown.Item><i className="bi bi-emoji-frown me-2"></i>Bu gönderi ilgimi çekmiyor</Dropdown.Item>
+                                                    <Dropdown.Item onClick={() => {
+                                                        notInterestPost(post.id);
+                                                    }}>
+                                                        <i className="bi bi-emoji-frown me-2"></i>
+                                                        Bu gönderi ilgimi çekmiyor
+                                                    </Dropdown.Item>
                                                     <Dropdown.Item onClick={reportPost}>
                                                         <i className="bi bi-flag me-2"></i>
                                                         Bu gönderiyi bildir
