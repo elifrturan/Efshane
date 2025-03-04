@@ -1,6 +1,12 @@
 .selection-page{
-    height: 100vh;
-    color: var(--second-color);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    color: var(--black-color);
+}
+
+.selection-page .container {
+    flex: 1;
 }
 
 .selection-page .selection-navbar {
@@ -12,7 +18,8 @@
 }
 
 .selection-page .title p {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
+    opacity: 0.5;
 }
 
 .selection-page .category-list {
@@ -31,9 +38,13 @@
 
 .selection-page .category-list .card-img{
     border-radius: 8px 8px 0px 0px;
-    width: 250px;
-    height: 300px;
+    width: 200px;
+    height: 260px;
     object-fit: cover;
+}
+
+.selection-page .category-list .card-body h5 {
+    color: var(--black-color);
 }
 
 .selection-page .category-list .border-red {
@@ -44,15 +55,17 @@
     box-shadow: rgba(255, 255, 255, 0.1) 8px 8px 20px;
 }
 
-.selection-page .btn-category-register{
+.selection-page .btn-category-register {
     width: 30%;
     background-color: var(--theme-color) !important;
     opacity: 0.9;
     transition: all 0.3s ease-in-out;
+    border: 1px solid var(--theme-color);
 }
 
 .selection-page .btn-category-register:hover{
     background-color: var(--theme-color) !important;
     opacity: 1;
     transform: scale(1.05);
+    border: 1px solid var(--theme-color);
 }

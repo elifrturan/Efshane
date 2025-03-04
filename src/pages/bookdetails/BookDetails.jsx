@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import './BookDetails.css'
 import Footer from '../../layouts/footer/Footer'
-import { Button } from 'react-bootstrap'
+import { Button, Form, Modal } from 'react-bootstrap'
 import { useNavigate, useParams } from 'react-router-dom'
 import axios from 'axios'
 
@@ -17,7 +17,28 @@ function BookDetails() {
     const [comments, setComments] = useState([]);
     const [isAddedToLibrary, setIsAddedToLibrary] = useState(formattedBookName.isBookCase);
     const [isAddedToReadingList, setIsAddedToReadingList] = useState(formattedBookName.isReadingList);
+    const [showModal, setShowModal] = useState(false);
+    const [selectedListId, setSelectedListId] = useState(null);
+    const [showNewListModal, setShowNewListModal] = useState(false);
 
+    const handleClose = () => {
+        if (selectedListId !== null) {
+            setIsAddedToReadingList(true); 
+        } else {
+            setIsAddedToReadingList(false);
+        }
+        setShowModal(false);
+    }
+
+    const handleNewListClose = () => {
+        setShowNewListModal(false);
+        setShowModal(true);
+    }
+
+    const handleNewListOpen = () => {
+        setShowNewListModal(true);
+        setShowModal(close);
+    }
     
     useEffect(() => {
         const fetchBookDetails = async () => {
@@ -83,7 +104,9 @@ function BookDetails() {
     };
 
     const handleAddToReadingList = async () => {
-        try {
+        setShowModal(true);
+
+        /*try {
             const response = await axios.post(
                 `http://localhost:3000/reading-list/${bookDetails[0]?.id}`,
                 { name: bookDetails[0]?.title },
@@ -107,7 +130,7 @@ function BookDetails() {
             });
         } catch (error) {
             console.error("Error adding/removing from reading list:", error);
-        }
+        }*/
     };
 
     const handleProfileClick = (username) => {
@@ -229,6 +252,33 @@ function BookDetails() {
         window.scrollTo(0,0);
     }, [])
 
+    const readingList = [
+        {
+            id: 1,
+            name: "En sevdiklerim",
+            img: "/images/seker-portakali.jpg"
+        },
+        {
+            id: 2,
+            name: "Okumaya devam ettiklerim",
+            img: "/images/book.jpg"
+        },
+        {
+            id: 3,
+            name: "Canlarımm",
+            img: "/images/ask-ve-gurur.jpg"
+        },
+        {
+            id: 4,
+            name: "Canlarımmm2",
+            img: "/images/ask-ve-gurur.jpg"
+        },
+    ]
+
+    const handleReadingListClick = (id) => {
+        setSelectedListId(selectedListId === id ? null : id);
+    }
+
     return (
         <>
             <div className="book-details-page">
@@ -264,16 +314,60 @@ function BookDetails() {
                                     </Button>
                                 )}
                                 {isAddedToReadingList ? (
-                                    <Button className="btn-book" onClick={() => handleAddToReadingList(bookDetails[0]?.id)}>
-                                        <i className="bi bi-bookmark-check-fill me-1"></i> Okuma Listesinden Kaldır
+                                    <Button className="btn-book" onClick={handleAddToReadingList}>
+                                        <i className="bi bi-bookmark-check-fill me-1"></i> Okuma Listesine Eklendi
                                     </Button>
                                 ) : (
-                                    <Button className="btn-book" onClick={() => handleAddToReadingList(bookDetails[0]?.id)}>
+                                    <Button className="btn-book" onClick={handleAddToReadingList}>
                                         <i className="bi bi-bookmark me-1"></i> Okuma Listesine Ekle
                                     </Button>
                                 )}
                             </div>
                         </div>
+
+                        <Modal show={showModal} onHide={handleClose} centered>
+                            <Modal.Header closeButton>
+                                <Modal.Title>Okuma Listesi Seçiniz</Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body>
+                                <div className="add-read-list-button">
+                                    <Button className='d-flex gap-1' onClick={handleNewListOpen}><i class="bi bi-bookmark-check-fill"></i> Yeni Okuma Listesi Oluştur</Button>
+                                </div>
+                                <div className='d-flex flex-wrap justify-content-center'>
+                                    {readingList.map((list) => (
+                                        <div className="d-flex flex-column read-list" key={list.id} onClick={() => handleReadingListClick(list.id)}>
+                                            <img src={list.img} alt=""/>
+                                            <span>{list.name}</span>
+                                            {selectedListId === list.id && (
+                                                <i 
+                                                    className="bi bi-check-circle-fill position-absolute" 
+                                                    style={{ top: 5, right: 5, fontSize: "1.2rem" }}
+                                                ></i>
+                                            )}
+                                        </div>
+                                    ))}
+                                </div>
+                            </Modal.Body>
+                        </Modal>
+
+                        <Modal show={showNewListModal} onHide={handleNewListClose} centered className='new-list-form'>
+                            <Modal.Body>
+                                <Form className='d-flex flex-column gap-3 modal-form'>
+                                    <Form.Group>
+                                        <Form.Label className='d-flex justify-content-center'>Okuma listene bir isim ver</Form.Label>
+                                        <Form.Control
+                                            type='text'
+                                            placeholder='Ör: En sevdiğim kitaplar...'
+                                            className='text-center'
+                                        />
+                                    </Form.Group>
+                                </Form>         
+                            </Modal.Body>
+                            <Modal.Footer>
+                                <Button onClick={handleNewListClose}>Oluştur</Button>
+                            </Modal.Footer>
+                        </Modal>
+                    
                         <div className="book-info d-flex flex-column mt-3">
                         {bookDetails[0]?.user && (
                             <div className="author-info d-flex align-items-center gap-2" onClick={() => handleProfileClick(bookDetails[0]?.user.username)}>
@@ -412,7 +506,9 @@ function BookDetails() {
                     </div>
                 </div>
             </div>
-            <Footer/>
+            <div style={{display: 'flex', flexDirection: 'column'}}>
+                <Footer/>
+            </div>
         </>
     )
 }

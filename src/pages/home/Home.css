@@ -1,6 +1,12 @@
 .home-page{
-    height: 100vh;
-    color: var(--second-color);
+    min-height: 100vh;
+    color: var(--black-color);
+    display: flex;
+    flex-direction: column;
+}
+
+.home-page .container {
+    flex: 1;
 }
 
 .search-section {
@@ -53,7 +59,7 @@
     border-radius: 0.8rem 0 0 0.8rem!important;
     border-right: none !important;
     opacity: 75%;
-    padding: 0.75rem;
+    padding: 0.75rem !important;
     background: transparent !important;
     color: var(--white-color) !important;
 }
@@ -67,7 +73,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--second-color) !important;
+    color: var(--black-color) !important;
     padding: 0.35rem 1.25rem !important;
     transition: all 0.2s ease-in-out;
 }
@@ -100,7 +106,7 @@
     display: flex;
     align-items: center;
     padding: 8px;
-    border-bottom: 1px solid var(--gray2-color);
+    border-bottom: 1px solid var(--gray4-color);
     cursor: pointer;
 }
   
@@ -123,7 +129,8 @@
 .search-book-info,
 .search-author-info {
     flex-grow: 1;
-    color: var(--text-muted);
+    color: var(--black-color);
+    opacity: 0.7;
 }
   
 .search-book-title,
@@ -135,6 +142,6 @@
   
 .search-book-author {
     font-size: 0.85rem;
-    color: var(--text-muted);
-    opacity: 0.8;
+    color: var(--black-color);
+    opacity: 0.7;
 }

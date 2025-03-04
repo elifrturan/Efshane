@@ -128,61 +128,64 @@ function BookCase() {
         <>
             <div className="library-page">
                 <h2 className='text-center mt-5'>Kitaplığım</h2>
-                <div className="book-list">
-                {books.map((book) => (
-                    <div className="book" key={book.id}>
-                        <div className="book-img">
-                            <img 
-                                src={
-                                    book?.bookCover
-                                        ? book?.bookCover.startsWith('uploads')
-                                            ? `${backendBaseUrl}/${book?.bookCover}`
-                                            : book?.bookCover
-                                        : 'default-background.jpg' 
-                                    } 
-                                alt={book.title} 
-                            />
-                            <div className="book-overlay">
-                                <Button className="book-button" onClick={() => handleBookClick(book.title)}>Detay</Button>
-                                <Button className="book-button" onClick={() => handleReadBookClick(book.title)}>Okumaya Devam Et</Button>
-                                <Button className="book-button" onClick={() => handleShowModal(book.title)}>Kitaplıktan Kaldır</Button>
-                            </div>
-                        </div>
-                        <div className="book-name">
-                            {book.title}
-                        </div>
-                    </div>
-                ))}
-
-                {audioBooks.map((audioBook) => (
-                    <div className="book" key={audioBook.id}>
-                        <div className="book-img">
-                            <img 
-                                src={
-                                    audioBook?.bookCover
-                                        ? audioBook?.bookCover.startsWith('uploads')
-                                            ? `${backendBaseUrl}/${audioBook?.bookCover}`
-                                            : audioBook?.bookCover
-                                        : 'default-background.jpg' 
-                                } 
-                                alt={audioBook.title} 
-                            />
-                            {audioBook && (
-                                <img
-                                    src="/images/headphone-icon.svg"
-                                    className="headphone-icon"
+                <div className="container">
+                    <div className="book-list">
+                    {books.map((book) => (
+                        <div className="book" key={book.id}>
+                            <div className="book-img">
+                                <img 
+                                    src={
+                                        book?.bookCover
+                                            ? book?.bookCover.startsWith('uploads')
+                                                ? `${backendBaseUrl}/${book?.bookCover}`
+                                                : book?.bookCover
+                                            : 'default-background.jpg' 
+                                        } 
+                                    alt={book.title} 
                                 />
-                            )}
-                            <div className="book-overlay">
-                                <Button className="book-button" onClick={() => handleAudioBookClick(audioBook.title)}>Detay</Button>
-                                <Button className="book-button" onClick={() => handleListenAudioBookClick(audioBook.title)}>Dinlemeye Devam Et</Button>
-                                <Button className="book-button" onClick={() => handleShowModal(audioBook.title)}>Kitaplıktan Kaldır</Button>
+                                <div className="book-overlay">
+                                    <Button className="book-button" onClick={() => handleBookClick(book.title)}>Detay</Button>
+                                    <Button className="book-button" onClick={() => handleReadBookClick(book.title)}>Okumaya Devam Et</Button>
+                                    <Button className="book-button" onClick={() => handleShowModal(book.title)}>Kitaplıktan Kaldır</Button>
+                                </div>
+                            </div>
+                            <div className="book-name">
+                                {book.title}
                             </div>
                         </div>
-                        <div className="book-name">{audioBook.title}</div>
-                    </div>
-                ))}
-                </div>  
+                    ))}
+
+                    {audioBooks.map((audioBook) => (
+                        <div className="book" key={audioBook.id}>
+                            <div className="book-img">
+                                <img 
+                                    src={
+                                        audioBook?.bookCover
+                                            ? audioBook?.bookCover.startsWith('uploads')
+                                                ? `${backendBaseUrl}/${audioBook?.bookCover}`
+                                                : audioBook?.bookCover
+                                            : 'default-background.jpg' 
+                                    } 
+                                    alt={audioBook.title} 
+                                />
+                                {audioBook && (
+                                    <img
+                                        src="/images/headphone-icon.svg"
+                                        className="headphone-icon"
+                                    />
+                                )}
+                                <div className="book-overlay">
+                                    <Button className="book-button" onClick={() => handleAudioBookClick(audioBook.title)}>Detay</Button>
+                                    <Button className="book-button" onClick={() => handleListenAudioBookClick(audioBook.title)}>Dinlemeye Devam Et</Button>
+                                    <Button className="book-button" onClick={() => handleShowModal(audioBook.title)}>Kitaplıktan Kaldır</Button>
+                                </div>
+                            </div>
+                            <div className="book-name">{audioBook.title}</div>
+                        </div>
+                    ))}
+                    </div>  
+                </div>
+                <Footer/>
             </div>
 
             <Modal show={showModal} onHide={handleCloseModal} className='library-modal' centered>
@@ -197,7 +200,6 @@ function BookCase() {
                     <Button onClick={handleConfirmRemove}>Evet, Kaldır</Button>
                 </Modal.Footer>
             </Modal>
-            <Footer/>
         </>
     )
 }

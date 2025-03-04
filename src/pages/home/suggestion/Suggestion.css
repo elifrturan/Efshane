@@ -1,6 +1,6 @@
 .suggestion-books-container {
     padding: 8px;
-    color: var(--second-color);
+    color: var(--black-color);
 }
 
 .suggestion-books-container .container .suggestion-books {
@@ -19,7 +19,7 @@
 }
 
 .suggestion-books-container .container .suggestion-books .books-list .suggestionBook {
-    color: var(--second-color);
+    color: var(--black-color);
     transition: all 0.3s ease-in-out;
     border-radius: 8px;
     padding: 8px 0;
@@ -85,7 +85,7 @@
     .left-arrow {
         left: -40px !important;
     }
-    
+      
     .right-arrow {
         right: -40px !important;
     }

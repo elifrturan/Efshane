@@ -1,6 +1,6 @@
 .popular-books {
     padding: 8px;
-    color: var(--second-color);
+    color: var(--black-color);
 }
 
 .popular-books .container .popular-books-wrapper {
@@ -19,7 +19,7 @@
 }
 
 .popular-books .container .popular-books-wrapper .book-list-popular .populerBook {
-    color: var(--second-color);
+    color: var(--black-color);
     transition: all 0.3s ease-in-out;
     border-radius: 8px;
     padding: 8px 0;
@@ -85,7 +85,7 @@
     .left-arrow {
         left: -40px !important;
     }
-
+      
     .right-arrow {
         right: -40px !important;
     }

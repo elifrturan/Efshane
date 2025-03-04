@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { motion, AnimatePresence } from "framer-motion";
 import { CheckCircle } from 'react-feather';
 import axios from 'axios';
+import { Alert, Button, Form, InputGroup, Modal } from 'react-bootstrap';
 
 function AddSection() {
     const { bookTitle: encodedBookTitle } = useParams();
@@ -416,27 +417,26 @@ function AddSection() {
                 </div>
             )}
             <div className="container">
-                <h2 className='text-center mt-5 mb-5'> Kitap Detay Sayfasına Hoş Geldiniz</h2>
-                <div className="add-section-main">
+                <h2 className='text-center mt-5 mb-5'>Kitap Detay Sayfasına Hoş Geldiniz</h2>
+                <div className="add-section-main mt-5">
                     <div className="add-section-left">
                         {bookImage ? (
                             <img 
                                 src={bookImage.startsWith('uploads') ? `${backendBaseUrl}/${bookImage}` : bookImage} 
                                 alt="uploaded" 
-                                width="200px" 
-                                height="281px" 
+                                className='uploaded-image'
                             />
                         ) : (
-                            <img src="/images/upload-image.svg" alt="upload-image" width="200px" height="281px" />
+                            <img src="/images/upload-image.svg" alt="upload-image"/>
                         )}
-                        <input
+                        <Form.Control
                             type="file"
                             accept="image/*"
                             id="image-upload"
                             style={{ display: 'none' }}
                             onChange={handleImageUpload}
                         />
-                        <button onClick={() => document.getElementById('image-upload').click()}>Görsel Yükle <i className="bi bi-cloud-arrow-up-fill ms-1"></i></button>
+                        <button onClick={() => document.getElementById('image-upload').click()}>Görsel Yükle <i className="bi bi-cloud-arrow-up-fill ms-2"></i></button>
                         {error && <p className='error-message-cover'>{error}</p>}
                         <i className='left-description'>Kitabınız kapağını değiştirmek istiyorsanız
                             görsel yükle butonuna tıklamanız yeterli olacaktır.
@@ -463,27 +463,26 @@ function AddSection() {
                             {/* Details */}
                             {activeTab === 'details' && (
                                 <div id="details" className={`tab-pane ${activeTab === 'details' ? 'active' : ''}`}>
-                                    <form className = 'm-0' onSubmit={handleSubmit}>
-                                        <div className="form-group mb-3">
-                                            <label className='form-label'>Kitap Adı</label>
-                                            <input 
+                                    <Form className='d-flex flex-column gap-4' onSubmit={handleSubmit}>
+                                        <Form.Group>
+                                            <Form.Label>Kitap Adı</Form.Label>
+                                            <Form.Control 
                                                 type="text" 
-                                                className='form-control'
                                                 value={title}
                                                 onChange={(e) => setBookTitle(e.target.value)}/>
-                                        </div>
-                                        <div className="form-group mb-3">
-                                            <label className='form-label'>Kitap Özeti</label>
-                                            <textarea 
-                                                rows="4" 
-                                                className='form-control'
+                                        </Form.Group>
+                                        <Form.Group>
+                                            <Form.Label>Kitap Özeti</Form.Label>
+                                            <Form.Control 
+                                                as="textarea"
+                                                rows={4} 
                                                 value={summary}
                                                 onChange={(e) => setBookSummary(e.target.value)}/>
-                                        </div>
-                                        <div className="form-group mb-3">
-                                            <label className='form-label'>Kategori</label>
-                                            <select
-                                                className="form-select form-select-sm form-select-create"
+                                        </Form.Group>
+                                        <Form.Group>
+                                            <Form.Label>Kategori</Form.Label>
+                                            <Form.Select
+                                                size='sm'
                                                 value={bookCategory}  
                                                 onChange={handleCategoryChange} 
                                             >
@@ -495,33 +494,32 @@ function AddSection() {
                                                         </option>
                                                     ))
                                                 )}
-                                            </select>
-                                        </div>
-                                        <div className="form-group mb-3">
-                                        <label className='form-label'>Etiketler</label>
-                                        <div className="tags-container">
-                                        {Array.isArray(bookTags) && bookTags.map((bookTag, index) => (
-                                            <div className="tag-item" key={index}>
-                                                <span className="tag-text">{bookTag}</span>
-                                                <span className="remove-tag" onClick={() => handleRemoveTag(bookTag)}>x</span>
+                                            </Form.Select>
+                                        </Form.Group>
+                                        <Form.Group>
+                                            <Form.Label>Etiketler</Form.Label>
+                                            <div className="tags-container">
+                                                {Array.isArray(bookTags) && bookTags.map((bookTag, index) => (
+                                                    <div className="tag-item" key={index}>
+                                                        <span className="tag-text">{bookTag}</span>
+                                                        <span className="remove-tag" onClick={() => handleRemoveTag(bookTag)}>x</span>
+                                                    </div>
+                                                ))}
                                             </div>
-                                        ))}
-                                        </div>
-                                        <div className="input-group">
-                                            <input  
-                                                className='form-control'
-                                                value={currentTag}
-                                                onChange={(e) => setCurrentTag(e.target.value)}
-                                                onKeyDown={handleKeyDown}
-                                                placeholder='Etiket ekleyiniz...'
-                                            />
-                                            <span className='input-group-text span-plus' onClick={handleAddTag}>+</span>
-                                        </div>
-                                        </div>
-                                        <div className="mb-3">
-                                            <label className='form-label'>Yaş Aralığı</label>
-                                            <select
-                                                className="form-select form-select-sm form-select-create"
+                                            <InputGroup>
+                                                <Form.Control  
+                                                    value={currentTag}
+                                                    onChange={(e) => setCurrentTag(e.target.value)}
+                                                    onKeyDown={handleKeyDown}
+                                                    placeholder='Etiket ekleyiniz...'
+                                                />
+                                                <InputGroup.Text className='span-plus' onClick={handleAddTag}>+</InputGroup.Text>
+                                            </InputGroup>
+                                        </Form.Group>
+                                        <Form.Group>
+                                            <Form.Label>Yaş Aralığı</Form.Label>
+                                            <Form.Select
+                                                size='sm'
                                                 value={ageRange} 
                                                 onChange={handleRangeChange} 
                                             >
@@ -533,8 +531,8 @@ function AddSection() {
                                                         </option>
                                                     ))
                                                 )}
-                                            </select>
-                                        </div>
+                                            </Form.Select>
+                                        </Form.Group>
                                         {showCopyrightAlert && (
                                             <div className="alert alert-warning d-flex" role="alert">
                                                 <i className="bi bi-exclamation-triangle-fill me-3"></i>
@@ -543,11 +541,11 @@ function AddSection() {
                                                 </div>
                                             </div>
                                         )}
-                                        <div className="form-group mb-3">
-                                            <label className='form-label'>Telif Hakkı</label>
-                                            <select className="form-select form-select-sm form-select-create" 
-                                            value={bookContentChoice} 
-                                            onChange={handleContentChoiceChange}
+                                        <Form.Group>
+                                            <Form.Label>Telif Hakkı</Form.Label>
+                                            <Form.Select 
+                                                value={bookContentChoice} 
+                                                onChange={handleContentChoiceChange}
                                             >
                                                 <option value="" selected>Seçiniz...</option>
                                                 {Array.isArray(copyrightStatuses) && 
@@ -556,23 +554,25 @@ function AddSection() {
                                                         {status.copyright}
                                                     </option>
                                                 ))}
-                                            </select>
-                                        </div>
+                                            </Form.Select>
+                                        </Form.Group>
                                         {showCopyrightAlert && bookContentChoice === "1" && (
-                                        <div className="alert alert-danger d-flex align-items-start" role="alert">
+                                        <Alert key="danger" variant='danger'className='d-flex mb-0'>
                                             <i className="bi bi-exclamation-triangle-fill me-2"></i>
-                                            <div>
+                                            <span>
                                                 "Kitabın içeriği tamamen bana aittir. 
                                                 Hiçbir dış kaynaktan alıntı yapılmamıştır." 
                                                 seçeneğini seçmiş olmanız durumunda, kitabınızın içeriği 
                                                 ile ilgili tüm sorumluluk size aittir. Herhangi bir telif hakkı 
                                                 ihlali veya yasal yükümlülük durumunda sorumluluk tamamen 
                                                 size ait olacaktır.
-                                            </div>
-                                        </div>
+                                            </span>
+                                        </Alert>
                                         )} 
-                                        <button className='add-section-btn mb-3' type='submit'>Kaydet</button> 
-                                    </form>
+                                        <div className="add-section-btn">
+                                            <Button className='add-section-btn mb-4' type='submit'>Kaydet</Button>
+                                        </div>
+                                    </Form>
                                 </div>
                             )}
                             { /* Sections */ }
@@ -580,7 +580,7 @@ function AddSection() {
                                 <div id="sections" className={`tab-pane ${activeTab === 'sections' ? 'active' : ''}`}>
                                     <div className="d-flex justify-content-between align-items-center mb-3">
                                         <h6>{sections.length} adet bölüm</h6>
-                                        <button className='add-new-section-btn' onClick={handleNewSectionButtonClick}>Yeni Bölüm Ekle</button>
+                                        <Button className='add-new-section-btn' onClick={handleNewSectionButtonClick}>Yeni Bölüm Ekle</Button>
                                     </div>
                                     {sections.map(section => (
                                         <div 
@@ -590,18 +590,18 @@ function AddSection() {
                                             style={{ cursor: 'pointer' }}
                                         >
                                             <span>{section.title}</span>
-                                            <div className="istatistic d-flex me-3">
-                                            {section.analysis && section.analysis.length > 0 ? (
-                                                section.analysis.map((stat, index) => (
-                                                    <span key={index} className="d-flex align-items-center me-4">
-                                                        <p><i className="bi bi-eye-fill me-1"></i>{formatNumber(stat.read_count)}</p>
-                                                        <p><i className="bi bi-balloon-heart-fill ms-4 me-1"></i>{formatNumber(stat.like_count)}</p>
-                                                        <p><i className="bi bi-chat-heart-fill ms-4 me-1"></i>{formatNumber(stat.comment_count)}</p>
-                                                    </span>
-                                                ))
-                                            ) : (
-                                                <p className="no-analysis mb-0">Bu bölüm için analiz verisi yok.</p>
-                                            )}
+                                            <div className="statistics d-flex gap-3">
+                                                {section.analysis && section.analysis.length > 0 ? (
+                                                    section.analysis.map((stat, index) => (
+                                                        <span key={index} className="d-flex align-items-center">
+                                                            <span className='d-flex gap-1'><i className="bi bi-eye"></i>{formatNumber(stat.read_count)}</span>
+                                                            <span className='d-flex gap-1'><i className="bi bi-heart"></i>{formatNumber(stat.like_count)}</span>
+                                                            <span className='d-flex gap-1'><i className="bi bi-chat"></i>{formatNumber(stat.comment_count)}</span>
+                                                        </span>
+                                                    ))
+                                                ) : (
+                                                    <p className="no-analysis mb-0">Bu bölüm için analiz verisi yok.</p>
+                                                )}
                                             </div>
                                             <div className="dropdown dropdown-section">
                                                 <i
@@ -663,41 +663,20 @@ function AddSection() {
                 </div>
             )}
             { /* Modal */ }
-            <div className={`modal fade ${showModal ? 'show d-block' : ''}`} tabIndex="-1" role="dialog">
-                <div className="modal-dialog" role="document">
-                    <div className="modal-content">
-                        <div className="modal-header">
-                            <h5 className="modal-title">Bölüm Sil</h5>
-                            <button 
-                                type="button" 
-                                className="btn-close" 
-                                aria-label="Close" 
-                                onClick={handleDeleteCancel}
-                            ></button>
-                        </div>
-                        <div className="modal-body">
-                            <p>Bu bölümü silmek istediğinize emin misiniz?</p>
-                        </div>
-                        <div className="modal-footer">
-                            <button 
-                                type="button" 
-                                className="btn btn-danger" 
-                                onClick={handleDeleteConfirm} 
-                            >
-                                Sil
-                            </button>
-                            <button 
-                                type="button" 
-                                className="btn btn-secondary" 
-                                onClick={handleDeleteCancel}
-                            >
-                                İptal
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
             
+            <Modal show={showModal} onHide={() => setShowModal(false)} centered className='delete-modal'>
+                <Modal.Header closeButton>
+                    <Modal.Title>Emin Misiniz?</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    Bu bölümü silmek istediğinizden emin misiniz?
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button onClick={handleDeleteCancel} className='cancel'>İptal</Button>
+                    <Button onClick={handleDeleteConfirm} className='delete'>Sil</Button>
+                </Modal.Footer>
+            </Modal>
+
             {/* Yayinlanma Animasyonu */}
             <AnimatePresence>
                 {showToast && (

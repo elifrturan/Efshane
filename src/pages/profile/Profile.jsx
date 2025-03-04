@@ -30,8 +30,27 @@ function Profile() {
     const [selectedList, setSelectedList] = useState(null);
     const [listBooks, setListBooks] = useState([]);
     const { user, setUser } = useUser();
+    const [newListName, setNewListName] = useState("");
+    const [showReadListModal, setShowReadListModal] = useState(false);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [listToDelete, setListToDelete] = useState(null);
+    const [showBookDeleteModal, setShowBookDeleteModal] = useState(false);
+    const [bookToDelete, setBookToDelete] = useState(null);
 
     const handleClose = () => setShowEdit(false);
+
+    const handleReadListClose = () => setShowReadListModal(false);
+    const handleReadListOpen = () => setShowReadListModal(true);
+
+    const handleDeleteModalOpen = (list) => {
+        setListToDelete(list);
+        setShowDeleteModal(true);
+    };  
+
+    const handleBookDeleteModalOpen = (book) => {
+        setBookToDelete(book);
+        setShowBookDeleteModal(true);
+    }
 
     const handleShow = () => {
         setTempProfile({
@@ -368,22 +387,67 @@ function Profile() {
         navigate(`/book-details/${formattedBookName}`)
     }  
 
+    const [readingLists, setReadingLists] = useState([
+        {
+            id: 1,
+            name: "Favorilerim",
+            books: [
+                {id: 101, storyName: "Aşk ve Gurur", image: "/images/ask-ve-gurur.jpg"},
+                {id: 102, storyName: "Şeker Portakalı", image: "/images/seker-portakali.jpg"},
+                {id: 103, storyName: "Simyacı", image: "/images/simyaci.jpg"},
+            ],
+        },
+        {
+            id: 2,
+            name: "Bilim Kurgu",
+            books: [
+                {id: 201, storyName: "Şeker Portakalı", image: "/images/seker-portakali.jpg"},
+                {id: 202, storyName: "Simyacı", image: "/images/simyaci.jpg"},
+            ],
+        }
+    ].map(list => ({
+        ...list,
+        cover: list.books.length > 0 ? list.books[0].image : "/images/default-cover.jpg",
+    })));
+
+    const handleDeleteList = () => {
+        if (listToDelete) {
+            setReadingLists((prevLists) =>
+                prevLists.filter((list) => list.id !== listToDelete.id)
+            );
+            setShowDeleteModal(false);
+        }
+    };  
+
+    const handleDeleteBook = () => {
+        if (bookToDelete) {
+            const updatedBooks = selectedStory.books.filter((book) => book.id !== bookToDelete.id);
+
+            const updatedStory = { ...selectedStory, books: updatedBooks };
+            setSelectedStory(updatedStory);
+            setShowBookDeleteModal(false);
+            setBookToDelete(null);
+        }
+    };
+
     return (
         <>
             <div className="profile-page">
                 <div className="profile-page-up">
-                    <img
-                        src={
-                            user?.image_background
-                                ? user.image_background.startsWith('uploads')
-                                    ? `${backendBaseUrl}/${user.image_background}`
-                                    : user.image_background
-                                : 'default-background.jpg' 
-                        }
-                        alt="Background"
-                        onClick={() => openModal(user.image_background)}
-                        className="clickable-photo"
-                    />
+                    <div className="cover-photo">
+                        <img
+                            src={
+                                user?.image_background
+                                    ? user.image_background.startsWith('uploads')
+                                        ? `${backendBaseUrl}/${user.image_background}`
+                                        : user.image_background
+                                    : 'default-background.jpg' 
+                            }
+                            alt="Background"
+                            onClick={() => openModal(user.image_background)}
+                            className="clickable-photo"
+                        />
+                    </div>
                     <div className="profile-details">
                         <div className="profile-photo">
                             <img
@@ -573,7 +637,7 @@ function Profile() {
                     </div>
                     <div className="my-read-list mt-4">
                         <div className="read-list-title d-flex align-items-center justify-content-start">
-                            <p className="text-start fw-bold m-0 p-0">Okuma Listem</p>
+                            <p className="text-start fw-bold m-0 p-0" onClick={handleReadListOpen}>Okuma Listelerim</p>
                             <div className="read-list-controls">
                                 <button onClick={() => scrollLeft(readListScrollRef)} className="scroll-btn">
                                     <i className="bi bi-chevron-left"></i>
@@ -610,6 +674,52 @@ function Profile() {
                             ))}
                         </div>
 
+                        <Modal show={showReadListModal} onHide={handleReadListClose} centered>
+                            <Modal.Header closeButton>
+                                <Modal.Title>
+                                    Okuma Listelerim
+                                </Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body>
+                                <div className="book-list">
+                                    <div className="d-flex flex-wrap justify-content-around">
+                                        {readingLists.map((story) => (
+                                            <div className="book-item m-3 text-center d-flex flex-column gap-2" key={story.id}>
+                                                <>
+                                                    <img src={story.cover} width="100px" height="150px" className="object-fit-cover" />
+                                                    <i 
+                                                        className="bi bi-trash-fill text-danger ms-2"
+                                                        style={{ cursor: "pointer" }}
+                                                        onClick={() => handleDeleteModalOpen(story)}
+                                                    ></i>
+                                                    <span className="mt-1">{story.name}</span>
+                                                </>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </Modal.Body>
+                        </Modal>
+
+                        <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)} centered>
+                            <Modal.Header closeButton>
+                                <Modal.Title>Okuma Listesini Sil</Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body>
+                                <p>
+                                    "{listToDelete?.name}" isimli okuma listenizi silmek istediğinizden emin misiniz?
+                                </p>
+                            </Modal.Body>
+                            <Modal.Footer>
+                                <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
+                                    İptal
+                                </Button>
+                                <Button variant="danger" onClick={handleDeleteList}>
+                                    Evet, Sil
+                                </Button>
+                            </Modal.Footer>
+                        </Modal>
+
                         <Modal show={showListModal} onHide={handleListModalClose} centered className='read-list-modal'>
                             <Modal.Header closeButton>
                                 <Modal.Title>
@@ -641,31 +751,47 @@ function Profile() {
                             </Modal.Header>
                             <Modal.Body>
                                 <div className="book-list">
-                                    {selectedList && (
+                                    {selectedStory?.books?.length > 0 ? (
                                         <div className="d-flex flex-wrap justify-content-around">
-                                            {listBooks.map((book) => (
-                                                <div className="book-item m-3 text-center d-flex flex-column gap-2" key={book.book.id} onClick={handleBookClick}>
-                                                    <img 
-                                                        src={
-                                                            book.book.bookCover
-                                                                ? book.book.bookCover.startsWith("uploads")
-                                                                    ? `${backendBaseUrl}/${book.book.bookCover}`
-                                                                    : book.book.bookCover
-                                                                : "default-book-cover.jpg"
-                                                        }
-                                                        alt={book.book.title} 
-                                                        width="100px" 
-                                                        height="150px" 
-                                                        className="object-fit-cover" 
-                                                    />
-                                                    <span className="mt-1">{book.book.title}</span>
+                                            {selectedStory.books.map((book) => (
+                                                <div className="book-item m-3 text-center d-flex flex-column gap-2" key={book.id} onClick={handleBookClick}>
+                                                    <img src={book.image} alt={book.storyName} width="100px" height="150px" className="object-fit-cover" />
+                                                    <i
+                                                        className="bi bi-trash-fill text-danger position-absolute"
+                                                        style={{ top: '5px', right: '5px', cursor: 'pointer' }}
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            handleBookDeleteModalOpen(book);
+                                                        }}
+                                                    ></i>
+                                                    <span className="mt-1">{book.storyName}</span>
                                                 </div>
                                             ))}
                                         </div>
+                                    ) : (
+                                        <p>Bu listede kitap bulunmamaktadır.</p>
                                     )}
                                 </div>
                             </Modal.Body>
                         </Modal>
+
+                        <Modal show={showBookDeleteModal} onHide={() => setShowBookDeleteModal(false)} centered>
+                            <Modal.Header closeButton>
+                                <Modal.Title>Kitap Silme</Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body>
+                                <p>Bu kitabı silmek istediğinizden emin misiniz?</p>
+                            </Modal.Body>
+                            <Modal.Footer>
+                                <Button onClick={() => setShowBookDeleteModal(false)}>
+                                    İptal
+                                </Button>
+                                <Button onClick={handleDeleteBook}>
+                                    Sil
+                                </Button>
+                            </Modal.Footer>
+                        </Modal>
+                        
                     </div>
                     </div>
                     <div className="right">
@@ -779,7 +905,9 @@ function Profile() {
                     </div>
                 </div>
             </div>
-            <Footer/>
+            <div style={{display: 'flex', flexDirection: 'column'}}>
+                <Footer/>
+            </div>
         </>
     )
 }

@@ -1,6 +1,6 @@
 .continue-read-row {
     background-color: var(--continue-read-bg);
-    color: var(--second-color);
+    color: var(--black-color);
     padding: 5% 1%;
 }
 
@@ -60,7 +60,7 @@
 
 .continue-read-row .container .continue-read .book-content .book-content-up .writer-info img:hover {
     transform: scale(1.1);
-    border: 2px solid var(--second-color);
+    border: 2px solid var(--black-color);
 }
 
 .continue-read-row .container .continue-read .book-content .book-content-up .book-info {
@@ -84,8 +84,9 @@
 
 .continue-read-row .container .continue-read .book-content-down .continue-read-button button {
     font-size: 0.9rem;
-    background-color: var(--second-color);
-    border: 1px solid var(--second-color);
+    background-color: var(--black-color);
+    border: 1px solid var(--black-color);
+    color: var(--white-color);
     padding: 8px 24px;
     border-radius: 28px;
     box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px;

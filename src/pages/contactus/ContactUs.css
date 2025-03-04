@@ -1,34 +1,45 @@
-.contact-us h1{
-    color: var(--second-color) !important;
+.contact-us {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    color: var(--black-color);
 }
 
-.contact-us-main{
+.contact-us .container {
+    flex: 1;
+}
+
+.contact-us-main {
     display: flex;
+    gap: 55px;
+    padding: 0 5%;
 }
 
 .contact-us-left {
-    padding: 2%;
-    flex: 50%;
+    flex: 1;
 }
 
 .contact-us-right {
-    padding: 2%;
-    flex: 50%;
+    flex: 1;
+    opacity: 0.9;
 }
 
-.contact-us-title p, .contact-us-frame-title span {
+.contact-us-title span, .contact-us-frame-title span {
     font-size: 0.8rem;
-    opacity: 75%;
+    opacity: 0.75;
 }
 
-.contact-us-body Form.Control, .contact-us-body Form.Control{
-    border: 1px solid var(--second-color);
-    color: var(--second-color) !important;
+.contact-us-body .form-control {
+    color: var(--black-color) !important;
     font-size: 0.9rem !important;
 }
 
-.contact-us-body Form.Label {
-    font-size: 0.9rem !important;
+.contact-us-body .form-control:focus {
+    border: 1px solid var(--black-color);
+}
+
+.contact-us-body .form-label {
+    font-size: 0.85rem !important;
 }
 
 .btn-contact-us {
@@ -36,11 +47,17 @@
     justify-content: center;
 }
 
-.btn-contact-us Button{
-    border: 1px solid #b85c5c !important;
-    width: 50%;
-    background-color: #b85c5c !important;
+.btn-contact-us button {
+    border: 1px solid var(--theme-color) !important;
+    width: 40%;
+    background-color: var(--theme-color) !important;
     color: var(--bg-color) !important;
+    transition: all 0.3s ease-in-out ;
+    font-size: 0.9rem;
+}
+
+.btn-contact-us button:hover {
+    transform: scale(1.02);
 }
 
 .contact-us-frame-title  {
@@ -52,56 +69,27 @@
 
 .contact-us-frame-title h5{
     font-weight: 600;
-    color: #212529BF;
+    color: var(--black-color);
     font-size: large;
 }
 
-.contact-us-frame-row{
+.contact-us-frame-row {
     font-size: 0.9rem;
-    color: #212529BF;
+    color: var(--black-color);
 }
 
-@media (max-width: 1120px){
-    .contact-us-frame-row iframe{
-        width: 350px;
-    }
-}
-
-@media (max-width: 1000px){
+@media (max-width: 426px) {
     .contact-us-main {
-        flex-direction: column;
-    }
-    .contact-us-right {
         display: flex;
         flex-direction: column;
+        align-self: center;
+        gap: 25px;
+    }    
+
+    .contact-us-left, .contact-us-div {
+        margin: 0 !important;
+        justify-content: center;
         align-items: center;
-        width: 100%;
     }
-    .contact-us-frame-row iframe{
-        width: 420px;
-    }
-}
 
-@media (max-width: 545px) {
-    .contact-us-frame-row iframe{
-        width: 350px;
-    }
-}
-
-@media (max-width: 490px) {
-    .contact-us-frame-row iframe{
-        width: 300px;
-    }
-}
-
-@media (max-width: 440px) {
-    .contact-us-frame-row iframe{
-        width: 280px;
-    }
-}
-
-@media (max-width: 390px) {
-    .contact-us-frame-row iframe{
-        width: 220px;
-    }
 }

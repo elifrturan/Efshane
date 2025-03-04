@@ -211,9 +211,9 @@ function Books() {
                                             })}
                                             </p>
                                             <div className="stories-istatistic">
-                                                <p className='me-2'><i className="bi bi-eye-fill me-1"></i>{formatNumber(book.read_count || 0)}</p>
-                                                <p className='me-2'><i className="bi bi-heart-fill me-1"></i>{formatNumber(book.like_count || 0)}</p>
-                                                <p><i className="bi bi-chat-fill me-1"></i>{formatNumber(book.comment_count || 0)}</p>
+                                                <span className='d-flex gap-1'><i className="bi bi-eye"></i>{formatNumber(book.read_count || 0)}</span>
+                                                <span className='d-flex gap-1'><i className="bi bi-heart"></i>{formatNumber(book.like_count || 0)}</span>
+                                                <span className='d-flex gap-1'><i className="bi bi-chat"></i>{formatNumber(book.comment_count || 0)}</span>
                                             </div>
                                             {!book.isAudioBook && (
                                                 <Button onClick={(e) => convertAudioBook(e, book.title)}>
@@ -263,7 +263,7 @@ function Books() {
                             <Modal.Title>Kitabını silmek mi istiyorsun?</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
-                            <p>Kitabını silmek istediğin için üzgünüz. Bu işlem geri alınamaz. Emin misin?</p>
+                            <span>Kitabını silmek istediğin için üzgünüz. Bu işlem geri alınamaz. Emin misin?</span>
                         </Modal.Body>
                         <Modal.Footer>
                             <Button onClick={() => setShowModal(false)}>

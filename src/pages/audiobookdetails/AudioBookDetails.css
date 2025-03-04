@@ -1,13 +1,17 @@
-* {
-    box-sizing: border-box;
-}
-
 .audio-book-details-page {
-    width: 100%;
     max-width: 1000px;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
+    min-height: 100vh;
+}
+
+.audio-book-details-page .container {
+    flex: 1;
+}
+
+.audio-book-details-page input::placeholder {
+    color: var(--black-color) !important;
 }
 
 .audio-book-details-up {
@@ -68,7 +72,7 @@
 
 .audio-book-details-up .book-header .book-name .category {
     font-size: 0.75rem;
-    color: #aaa;
+    color: var(--gray3-color);
     font-weight: 600;
     margin-top: 2%;
 }
@@ -77,8 +81,8 @@
     font-size: 0.8rem;
     font-weight: 600;
     border-radius: 25px;
-    text-shadow: 1px 1px 2px #ddd;
-    background-color: #ddd;
+    text-shadow: 1px 1px 2px var(--gray5-color);
+    background-color: var(--gray5-color);
     padding: 4px 8px;
 }
 
@@ -92,12 +96,12 @@
 
 .audio-book-details-up .book-header .book-name .buttons button:hover {
     transform: scale(1.01);
-    text-shadow: 1px 1px 2px #ddd;
+    text-shadow: 1px 1px 2px var(--gray5-color);
 }
 
 .audio-book-details-up .book-header .book-name .buttons .btn-book {
     background: transparent;
-    color: var(--second-color);
+    color: var(--black-color);
     border: none;
     font-size: 0.9rem;
 }
@@ -107,7 +111,7 @@
 }
 
 .audio-book-details-up .book-header .book-name .buttons .bi.bi-bookmark-check-fill {
-    color: red;
+    color: var(--red-color);
 }
 
 .audio-book-details-up .book-header .book-info {
@@ -140,7 +144,7 @@
 
 .audio-book-details-up .book-header .book-info .statistics {
     font-size: 0.95rem;
-    color: var(--second-color);
+    color: var(--black-color);
     cursor: default;
     margin-top: 5px;
 }
@@ -150,8 +154,9 @@
 }
 
 .audio-book-details-up .book-header .book-info .read-button button {
-    background-color: #000;
-    border: 1px solid  #000;
+    background-color: var(--black-color);
+    border: 1px solid  var(--black-color);
+    color: var(--white-color);
     width: 210px;
     font-weight: 600;
     font-size: 0.8rem;
@@ -173,7 +178,7 @@
 
 .audio-book-details-down .book-summary p:last-child {
     text-align: justify;
-    color: #333;
+    color: var(--black-color);
     font-size: 0.95rem;
     opacity: 0.9;
 }
@@ -197,8 +202,8 @@
 }
 
 .audio-book-details-down .book-tags .tags-container .tag {
-    background-color: #ececec;
-    color: var(--second-color);
+    background-color: var(--gray8-color);
+    color: var(--black-color);
     padding: 8px 16px;
     border-radius: 30px;
     font-size: 0.9rem;
@@ -208,8 +213,8 @@
 }
 
 .audio-book-details-down .book-tags .tags-container .tag:hover {
-    background-color: #e2e2e2;
-    color: var(--second-color);
+    background-color: var(--gray4-color);
+    color: var(--black-color);
 }
 
 .audio-book-details-down .book-info-details {
@@ -233,7 +238,8 @@
 .audio-book-details-down .book-tabs .tabs .tab-button {
     flex: 1;
     padding: 10px;
-    background-color: #f8f9fa;
+    background-color: var(--tabs-bg-color);
+    color: var(--black-color);
     border: none;
     border-bottom: 3px solid transparent;
     font-size: 0.95rem;
@@ -296,7 +302,7 @@
 
 .audio-book-details-down .book-tabs .tab-content .section-item {
     padding: 12px;
-    border-bottom: 1px solid #e2e2e2;
+    border-bottom: 1px solid var(--gray8-color);
     font-size: 0.95rem;
     opacity: 0.9;
     transition: all 0.3s ease-in-out;
@@ -310,7 +316,7 @@
 
 .audio-book-details-down .book-tabs .tab-content .comment-item {
     padding: 6px 12px;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid var(--gray5-color);
 }
 
 .audio-book-details-down .book-tabs .tab-content .comment-item img {
@@ -351,7 +357,8 @@
 .audio-book-details-down .book-tabs .tab-content .comment-input {
     flex: 1;
     padding: 10px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--gray4-color);
+    color: var(--black-color) !important;
     border-radius: 5px;
     font-size: 0.9rem;
     background: transparent;
@@ -359,13 +366,13 @@
 
 .audio-book-details-down .book-tabs .tab-content .comment-submit-button {
     background-color: var(--theme-color);
-    color: #fff;
+    color: var(--white-color);
     padding: 8px 12px;
     border: none;
     border-radius: 5px;
     font-size: 0.9rem;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: all 0.3s ease-in-out;
 }
 
 .audio-book-details-down .book-tabs .tab-content .comment-submit-button:hover {

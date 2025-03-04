@@ -1,18 +1,11 @@
-* {
-    box-sizing: border-box;
-}
-
-html, body {
-    background-color: whitesmoke;
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    color: var(--second-color);
-}
-
 .my-stories-page {
     display: flex;
     flex-direction: column;
+    min-height: 100vh;
+}
+
+.my-stories-page .container {
+    flex: 1;
 }
 
 .my-stories-page button {
@@ -26,26 +19,26 @@ html, body {
     margin-bottom: 20px;
 }
 
-.stories-tab-button {
+.my-stories-tabs button {
     flex: 1;
     padding: 10px;
-    background-color: #f8f9fa !important;
+    background-color: var(--tabs-bg-color) !important;
     border: none !important;
-    font-size: 16px;
+    font-size: 1rem;
     cursor: pointer;
     transition: all 0.3s ease-out;
-    color: var(--second-color);
+    color: var(--black-color);
 }
 
 .stories-tab-button.active {
-    border-bottom: 3px solid #0A58CA !important;
-    color: #0A58CA;
+    border-bottom: 3px solid var(--theme-color) !important;
+    color: var(--theme-color);
     font-weight: bold;
 }
 
 .stories-tab-button:hover {
-    color: #333;
-    background-color: #f0f0f0 !important;
+    color: var(--black-color);
+    background-color: var(--gray7-color) !important;
 }
 
 .my-stories-tabs-content {
@@ -60,4 +53,56 @@ html, body {
 #books {
     display: block;
     opacity: 1;
+}
+
+@media (max-width: 426px) {
+    .my-stories-tabs {
+        flex-direction: column;
+        align-items: center;
+        padding: 0 3% !important;
+        margin-bottom: 5% !important;
+    }
+
+    .my-stories-tabs button {
+        width: 100%;
+        padding: 8px;
+        font-size: 0.6rem !important;
+    }
+
+    .my-stories-tabs-content {
+        padding: 0 3% !important;
+    }
+
+    .stories-tab-button.active {
+        border-bottom: 2px solid var(--theme-color) !important;
+    }
+}
+
+@media (max-width: 992px) {
+    .my-stories-tabs {
+        padding: 0 10% !important;
+    }
+
+    .my-stories-tabs button {
+        font-size: 1rem !important;
+        padding: 10px !important;
+    }
+
+    .my-stories-tabs-content {
+        padding: 0 10% !important;
+    }
+}
+
+@media (min-width: 993px) {
+    .my-stories-tabs {
+        padding: 0 15% !important;
+    }
+
+    .stories-tab-button {
+        font-size: 1rem !important;
+    }
+
+    .my-stories-tabs-content {
+        padding: 0 15% !important;
+    }
 }

@@ -17,29 +17,76 @@
 }
 
 :root {
+  font-family: 'SF Pro Display', sans-serif;;
+  font-optical-sizing: auto;
+  font-style: normal;
+}
+
+[data-theme="light"] {
   --theme-color: #1c427a; /* Tema rengi */
-  --second-color: #333;
+  --black-color: #333;
   --gray-color: #cecece;
   --gray2-color: #eee;
   --gray3-color: #aaa;
   --gray4-color: #ccc;
+  --gray5-color: #ddd;
+  --gray6-color: #f1f1f1;
+  --gray7-color: #f0f0f0;
+  --gray8-color: #ececec;
   --text-muted: #212529BF;
   --bg-color: #f5f5f5;
   --white-color: #ffffff;
+  --tabs-bg-color: #f8f9fa;
   --black-color: #000;
   --red-color: #ff0000;
   --green-color: #084208;
   --tag-color: #f8d9e0;
   --tag2-color: #d9534f;
+  --blue-color: #007bff;
+  --blue2-color: #007bff23;
+  --yellow-color: #ffae00;
+  --yellow2-color: #ffae002d;
   --container-bg-color: rgba(110, 100, 87, 0.9);
   --shadow-color: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
   --text-shadow: rgb(128, 128, 128) 1px 0 10px;
   --overlay-color: rgba(0, 0, 0, 0.2);
   --input-border: rgba(245, 245, 245, 0.5);
   --continue-read-bg: rgba(0, 0, 0, 0.062);
-  font-family: 'SF Pro Display', sans-serif;;
-  font-optical-sizing: auto;
-  font-style: normal;
+} 
+
+/* Dark tema */
+[data-theme="dark"] { 
+  --bg-color: #000000bc !important; 
+  --theme-color: #e3bd85; /* Tema renginin zıttı */
+  --black-color: #ccc;
+  --gray-color: #313131;
+  --gray2-color: #111;
+  --gray3-color: #555;
+  --gray4-color: #333;
+  --gray5-color: #222;
+  --gray6-color: #0e0e0e;
+  --gray7-color: #0f0f0f;
+  --gray8-color: #131313;
+  --text-muted: #f0f0f079;
+  --bg-color: #0a0a0a;
+  --white-color: #000000;
+  --tabs-bg-color: #ffffff3a;
+  --black-color: #ffffff;
+  --red-color: #ff0000;
+  --green-color: #084208;
+  --tag-color: #f8d9e0;
+  --tag2-color: #d9534f;
+  --blue-color: #007bff;
+  --blue2-color: #007bff23;
+  --yellow-color: #ffae00;
+  --yellow2-color: #ffae002d;
+  --container-bg-color: rgba(145, 155, 168, 0.9);
+  --shadow-color: rgba(156, 156, 156, 0.8) 0px -2px -8px 0px;
+  --text-shadow: rgb(127, 127, 127) -1px 0 -10px;
+  --overlay-color: rgba(255, 255, 255, 0.2);
+  --input-border: rgba(10, 10, 10, 0.5);
+  --continue-read-bg: rgba(44, 44, 44, 0.938);
+
 }
 
 * {
@@ -49,8 +96,7 @@
 html, body {
   background-color: var(--bg-color);
   padding: 0;
-  color: var(--second-color);
-  height: 100%;
+  color: var(--black-color);
   margin: 0;
   width: 100%;
   display: flex;
@@ -112,6 +158,11 @@ main{
   font-size: 0.8rem !important;
 }
 
+.modal-content {
+  background-color: var(--white-color);
+  border: 1px solid var(--black-color) !important;
+}
+
 .modal-content .modal-header .modal-title{
   font-size: 1rem;
 }
@@ -122,19 +173,19 @@ main{
 }
 
 .btn-close {
-  font-size: 0.75rem;
+  font-size: 0.6rem;
 }
 
 .modal-content .modal-footer button {
   font-size: 0.9rem;
   background: none;
-  color: var(--second-color);
-  border: 1px solid var(--second-color);
+  color: var(--black-color);
+  border: 1px solid var(--black-color);
   transition: all 0.3s ease-in-out;
 }
 
 .modal-content .modal-footer button:hover {
-  background-color: var(--second-color);
+  background-color: var(--black-color);
   color: var(--white-color);
   opacity: 0.5;
 }
@@ -142,7 +193,7 @@ main{
 .left-arrow, .right-arrow {
   font-size: 2rem;
   cursor: pointer;
-  color: var(--second-color);
+  color: var(--black-color);
   position: absolute;
   top: 45%;
   transform: translateY(-50%);

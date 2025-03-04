@@ -1,41 +1,44 @@
-* {
-    box-sizing: border-box;
-}
-
-html, body {
-    background-color: whitesmoke;
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    color: var(--second-color);
-}
-
 .settings-page {
     width: 100%;
     max-width: 1000px;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
+    min-height: 100vh;
 }
 
 .settings-page h4{
     margin-bottom: 3%;
     font-size: 1.4rem;
-    color: var(--second-color);
+    color: var(--black-color);
     font-weight: 600;
+}
+
+.settings-page .card {
+    background: transparent !important;
+    border: 1px solid var(--gray-color) !important;
 }
 
 .settings-page .personal-info .form-label {
     font-size: 0.9rem;
-    color: var(--second-color);
+    color: var(--black-color);
+    opacity: 0.9;
+}
+
+.settings-page .form-check-label {
+    color: var(--black-color) !important;
     opacity: 0.9;
 }
 
 .settings-page .personal-info .form-control,
 .settings-page .personal-info span {
     font-size: 0.9rem;
-    color: var(--second-color);
+    color: var(--black-color) !important;
     opacity: 0.9;
+}
+
+.settings-page .personal-info .form-control:focus {
+    border: 1px solid var(--black-color) !important;
 }
 
 .settings-page .personal-info .password-label span{
@@ -75,7 +78,7 @@ html, body {
 }
 
 .settings-modal .modal-body .form-control::placeholder {
-    color: var(--second-color) !important;
+    color: var(--black-color) !important;
     font-size: 0.8rem;
 }
 
@@ -115,9 +118,9 @@ html, body {
 }
 
 .settings-page .account-settings .buttons button:last-child {
-    background-color: red;
+    background-color: var(--red-color);
     color: var(--bg-color);
-    border: 1px solid red;
+    border: 1px solid var(--red-color);
 }
 
 .settings-page .account-settings .buttons button:hover,
@@ -127,9 +130,9 @@ html, body {
 }
 
 .settings-page .help-settings .buttons button:last-child {
-    background-color: gray;
+    background-color: var(--black-color);
     color: var(--bg-color);
-    border: 1px solid gray;
+    border: 1px solid var(--black-color);
 }
 
 @media (max-width: 1200px) {

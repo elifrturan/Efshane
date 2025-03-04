@@ -1,12 +1,14 @@
-.book-card  {
+.book-card {
     display: flex;
     justify-content: space-between;
     padding: 2% 3%;
-    background-color: #f0f0f0;
+    background-color: var(--gray7-color);
 }
 
 .stories-left-right {
-    gap: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     padding: 1% 0;
 }
 
@@ -15,41 +17,40 @@
 }
 
 .stories-left-right .stories-date {
-    color: #000;
+    color: var(--black-color);
     font-size: 0.75rem;
     opacity: 0.3;
 }
 
-.stories-left-right .stories-istatistic {
+.stories-left-right .stories-statistics {
     display: flex;
-    gap: 1%;
+    gap: 1px;
     width: 100%;
-    font-size: 0.8rem;
-    color: #000;
-    opacity: 0.50;
-}
-
-.stories-left-right .stories-istatistic p {
-    display: flex;
+    font-size: 0.75rem;
+    color: var(--black-color);
+    opacity: 0.75;
 }
 
 .stories-left-right button {
-    background-color: var(--second-color);
+    background-color: var(--black-color);
+    color: var(--white-color) !important;
     border: none;
-    padding: 3px 10px;
+    padding: 4px 10px;
     font-size: 0.75rem;
     opacity: 1;
     border-radius: 3px !important;
+    text-align: start;
+    margin-top: 2%;
     transition: all 0.2s ease-in;
 }
 
 .stories-left-right button:hover {
-    background-color: var(--second-color);
+    background-color: var(--black-color);
     opacity: 0.9;
 }
 
 .stories-left-right button:active {
-    background-color: var(--second-color) !important;
+    background-color: var(--black-color) !important;
     opacity: 0.8;
     transform: scale(0.9);
 }
@@ -57,7 +58,7 @@
 .my-stories-book-right .dropdown-toggle {
     background: none;
     border: none;
-    color: #333;
+    color: var(--black-color);
     padding: 1% 0;
     font-size: 1.2rem;
 }
@@ -69,7 +70,7 @@
 .my-stories-book-right .no-toggle:focus {
     background: none;
     border: none;
-    color: var(--second-color);
+    color: var(--black-color);
 }
 
 .my-stories-book-right div.dropdown-menu.show {
@@ -80,21 +81,19 @@
 .my-stories-book-right a.dropdown-item {
     opacity: 0.9;
     display: flex;
+    padding: 8px 14px;
+    font-size: 0.9rem;
 }
 
-.my-stories-book-right a.dropdown-item:nth-child(1):hover {
-    background-color: #eee;
-    color: #000;
+.my-stories-book-right a.dropdown-item:nth-child(1):hover,
+.my-stories-book-right a.dropdown-item:nth-child(3):hover {
+    background-color: var(--gray2-color);
+    color: var(--black-color);
 }
 
 .my-stories-book-right a.dropdown-item:nth-child(2):hover {
-    background-color: red;
-    color: #fff;
-}
-
-.my-stories-book-right a.dropdown-item:nth-child(3):hover {
-    background-color: #eee;
-    color: #000;
+    background-color: var(--red-color);
+    color: var(--white-color);
 }
 
 .my-stories-book-right a.dropdown-item:active {
@@ -103,7 +102,6 @@
 }
 
 .stories-delete-modal .modal-content {
-    border: #dfdfdf;
     border-radius: 5px;
 }
 
@@ -112,66 +110,203 @@
 }
 
 .stories-delete-modal .modal-title {
-    color: #000;
+    color: var(--red-color);
     font-size: 1rem;
     font-weight: 600;
 }
 
 .stories-delete-modal .modal-body {
-    color: #000;
-    font-size: 0.85rem;
-    opacity: 0.75;
+    color: var(--black-color);
+    font-size: 0.85rem !important;
+    opacity: 0.75 !important;
+}
+
+.stories-delete-modal .modal-footer button {
+    transition: all 0.3s ease-in-out;
+    padding: 6px 20px;
 }
 
 .stories-delete-modal .modal-footer button:nth-child(1) {
     font-size: 0.8rem;
     background: none;
-    border: 1px solid #0A58CA;
-    color: #0A58CA;
+    border: 1px solid var(--red-color);
+    color: var(--red-color);
+}
+
+.stories-delete-modal .modal-footer button:nth-child(1):hover {
+    background: none;
+    border: 1px solid var(--red-color);
+    color: var(--red-color);
+    opacity: 1;
 }
 
 .stories-delete-modal .modal-footer button:nth-child(2) {
     font-size: 0.8rem;
-    background-color: #0A58CA;
-    border: 1px solid #0A58CA;
+    background-color: var(--red-color);
+    border: 1px solid var(--red-color);
+    color: var(--white-color);
+    padding: 6px 24px;
 }
 
-.toast-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 9999;
+.stories-delete-modal .modal-footer button:nth-child(2):hover {
+    background-color: var(--red-color);
+    border: 1px solid var(--red-color);
+    color: var(--white-color);
+    opacity: 1;
 }
 
-.toast-box {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 40px;
-    border-radius: 20px;
-    text-align: center;
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: white;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+.stories-delete-modal .modal-footer button:hover {
+    transform: scale(1.1);
 }
 
-.toast-box.success {
-    background-color: #28a745;
+@media (max-width: 426px) {
+    .book-card {
+        flex-direction: column;
+    }
+
+    .stories-left-right {
+        padding: 0 !important;
+        display: flex;
+    }
+
+    .stories-left-right .stories-name {
+        font-size: 0.85rem !important;
+    }
+
+    .stories-left-right .stories-date,
+    .stories-left-right .stories-statistics {
+        font-size: 0.7rem !important;
+    }
+
+    .stories-left-right button {
+        width: 100%;
+        display: flex;
+        padding: 4px 12px!important;
+        font-size: 0.7rem !important;
+    }
+
+    .my-stories-book-right {
+        display: flex;
+        align-items: flex-start;
+        justify-content: flex-end;
+    }
+
+    .my-stories-book-right .dropdown-toggle {
+        font-size: 0.8rem !important;
+    }
+
+    .my-stories-book-right div.dropdown-menu.show {
+        padding: 0 !important;
+    }
+
+    .my-stories-book-right a.dropdown-item {
+        font-size: 0.7rem !important;
+        padding: 8px !important;
+    }
+
+    .stories-delete-modal .modal-content {
+        width: 90%;
+        margin: auto;
+    }
+
+    .stories-delete-modal .modal-title {
+        font-size: 0.9rem;
+    }
+
+    .stories-delete-modal .modal-body {
+        font-size: 0.8rem;
+    }
+
+    .stories-delete-modal .modal-footer {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .stories-delete-modal .modal-footer button {
+        width: 100%;
+        margin-bottom: 5px;
+    }
 }
 
-.toast-box.error {
-    background-color: #dc3545;
+@media (max-width: 992px) {
+    .book-card {
+        flex-direction: row;
+    }
+
+    .stories-left-right {
+        padding: 0 !important;
+        display: flex;
+    }
+
+    .stories-left-right .stories-name {
+        font-size: 0.9rem !important;
+    }
+
+    .stories-left-right .stories-date,
+    .stories-left-right .stories-statistics {
+        font-size: 0.7rem !important;
+    }
+
+    .stories-left-right button {
+        width: 100%;
+        display: flex;
+        padding: 4px 12px!important;
+        font-size: 0.65rem !important;
+    }
+
+    .my-stories-book-right {
+        display: flex;
+        align-items: flex-start;
+        justify-content: flex-end;
+    }
+
+    .my-stories-book-right .dropdown-toggle {
+        font-size: 0.9rem !important;
+    }
+
+    .my-stories-book-right a.dropdown-item {
+        font-size: 0.85rem !important;
+        padding: 8px !important;
+    }
+
+    .stories-delete-modal .modal-content {
+        width: 100%;
+        margin: auto;
+    }
+
+    .stories-delete-modal .modal-title {
+        font-size: 0.9rem !important;
+    }
+
+    .stories-delete-modal .modal-body {
+        font-size: 0.8rem !important;
+    }
+
+    .stories-delete-modal .modal-footer {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .stories-delete-modal .modal-footer button {
+        width: 100%;
+        margin-bottom: 5px;
+    }
 }
 
-.blur-background {
-    filter: blur(5px);
-    transition: filter 0.3s ease-in-out;
+@media (min-width: 993px) {
+    .book-card {
+        padding: 2% 3%;
+        max-width: 1200px;
+        margin: auto;
+    }
+
+    .stories-left-right .stories-name {
+        font-size: 0.9rem;
+    }
+
+    .stories-left-right .stories-date,
+    .stories-left-right .stories-statistics {
+        font-size: 0.7rem;
+    }
 }
+

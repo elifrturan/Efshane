@@ -1,16 +1,18 @@
-import React, { useEffect, useState} from 'react';
+import React, { useContext, useEffect, useState} from 'react';
 import './Navbar.css'
 import { Navbar, Nav, Dropdown, Container} from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useUser } from '../../User.Context';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { ThemeContext } from '../../contexts/ThemeContext';
 
 const backendBaseUrl = 'http://localhost:3000';
 
 function CustomNavbar() {
   const { user, setUser } = useUser();
   const navigate = useNavigate(); 
+  const { theme } = useContext(ThemeContext);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -49,7 +51,7 @@ function CustomNavbar() {
         <Container>
           <Navbar.Brand href="/home" className='my-auto w-25'>
             <img
-              src="/logo/logo.svg"
+              src={theme === 'dark' ? '/logo/efshane_logo_dark.svg' : '/logo/efshane_logo.svg'}
               alt="Logo"
               className="object-fit-cover"
               style={{ width: '100px', height: '40px' }}
@@ -84,15 +86,15 @@ function CustomNavbar() {
                   />
                 </Dropdown.Toggle>
                 <Dropdown.Menu className='navbar-dropdown'>
-                  <Dropdown.Item href={`/profile/${user.username}`} className="text-muted"><i className="bi bi-person me-2"></i>Profilim</Dropdown.Item>
-                  <Dropdown.Item href="/messages" className="text-muted"><i className="bi bi-chat me-2"></i>Mesajlar</Dropdown.Item>
-                  <Dropdown.Item href="/book-case" className="text-muted"><i className="bi bi-book me-2"></i>Kitaplık</Dropdown.Item>
-                  <Dropdown.Item href="/settings" className="text-muted"><i className="bi bi-gear me-2"></i>Ayarlar</Dropdown.Item>
-                  <Dropdown.Item href="/contact-us" className="text-muted"><i className="bi bi-question-circle me-2"></i>Bize Ulaşın</Dropdown.Item>
+                  <Dropdown.Item href={`/profile/${user.username}`} className="icon-link icon-link-hover"><i className="bi bi-person me-1"></i>Profilim</Dropdown.Item>
+                  <Dropdown.Item href="/messages" className="icon-link icon-link-hover"><i className="bi bi-chat me-1"></i>Mesajlar</Dropdown.Item>
+                  <Dropdown.Item href="/book-case" className="icon-link icon-link-hover"><i className="bi bi-book me-1"></i>Kitaplık</Dropdown.Item>
+                  <Dropdown.Item href="/settings" className="icon-link icon-link-hover"><i className="bi bi-gear me-1"></i>Ayarlar</Dropdown.Item>
+                  <Dropdown.Item href="/contact-us" className="icon-link icon-link-hover"><i className="bi bi-question-circle me-1"></i>Bize Ulaşın</Dropdown.Item>
                   <Dropdown.Item  onClick={handleLogout}
-                    className="text-danger logout"
+                    className="logout icon-link icon-link-hover"
                   >
-                    <i className="bi bi-box-arrow-left me-2"></i>Çıkış Yap
+                    <i className="bi bi-box-arrow-left me-1"></i>Çıkış Yap
                   </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>

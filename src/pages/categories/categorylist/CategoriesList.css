@@ -1,5 +1,12 @@
 .categories-page {
-    color: var(--second-color);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    color: var(--black-color);
+}
+
+.categories-page .container {
+    flex: 1;
 }
 
 .categories-page .container .categories-list .category-card{

@@ -11,7 +11,13 @@
 }
 
 .feed-page {
-    color: #333;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.feed-page .container {
+    flex: 1;
 }
 
 .feed-page .feed-page-main {
@@ -20,7 +26,7 @@
 
 .feed-post {
     padding: 16px 16px 0 16px;
-    border: 1px solid #eee;
+    border: 1px solid var(--gray2-color);
     border-top: none;
     display: flex;
     align-items: flex-start;
@@ -53,7 +59,7 @@
 .feed-post .feed-post-right .user-info .dropdown-toggle {
     background: none;
     border: none;
-    color: #333;
+    color: var(--black-color);
     padding: 1% 0;
     margin-right: 2%;
     font-size: 1.2rem;
@@ -89,7 +95,7 @@
 }
 
 .feed-post .feed-post-right .interaction, .feed-post .feed-post-right .interaction i {
-    color: #333 !important;
+    color: var(--black-color) !important;
     opacity: 0.9;
     font-size: 0.9rem;
 }
@@ -105,7 +111,7 @@
 }
 
 .feed-post .feed-post-right .interaction .bi-chat:hover{
-    color: black !important;
+    color: var(--black-color) !important;
     transform: scale(1.2);
 }
 
@@ -119,7 +125,7 @@
 }
 
 .feed-post .feed-post-right .interaction .bi-heart-fill::before{
-    color: red;
+    color: var(--red-color);
     animation: pop 0.3s ease;
     cursor: pointer;
 }
@@ -134,7 +140,7 @@
 }
 
 .feed-post .feed-post-right .interaction .bi-repeat.active::before {
-    color: #084208 !important;
+    color: var(--green-color) !important;
     font-weight: 600 !important;
     animation: pop 0.3s ease;
     cursor: pointer;
@@ -161,14 +167,14 @@
 
 .comment-item-left .reply-input input {
     font-size: 0.8rem !important;
-    border: 1px solid #aaa;
+    border: 1px solid var(--gray3-color);
     width: 100%;
     padding: 2%;
     margin-top: 3%;
     border-radius: 5px;
     background: transparent;
     opacity: 0.6;
-    color: #333;
+    color: var(--black-color);
 }
 
 .comment-item-left .reply-input input:focus {
@@ -179,14 +185,14 @@
 .comment-section .comment-item p span{
     font-size: 0.85rem;
     font-weight: 600;
-    color: #000;
+    color: var(--black-color);
     opacity: 0.9;
 }
 
 .comment-section .comment-item p {
     font-size: 0.9rem;
     opacity: 0.9;
-    color: #333;
+    color: var(--black-color);
 }
 
 .comment-section .comment-item div small {
@@ -210,7 +216,7 @@
 }
 
 .comment-section .comment-item .comment-item-right .bi-heart-fill::before {
-    color: red;
+    color: var(--red-color);
     animation: pop 0.3s ease;
     cursor: pointer;
 }
@@ -218,15 +224,17 @@
 .comment-input input {
     flex: 1;
     border-radius: 5px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--gray4-color);
     opacity: 0.5;
     font-size: 0.9rem;
     background: transparent;
+    color: var(--black-color) !important;
 }
 
-.comment-input input::placeholder {
-    color: #000 !important;
-    font-size: 0.8rem;
+.comment-input input::placeholder,
+.comment-item-left .reply-input input::placeholder {
+    color: var(--black-color) !important;
+    font-size: 0.7rem !important;
 }
 
 .comment-input input:focus {
@@ -234,15 +242,24 @@
     opacity: 0.8;
     outline: none;
     font-size: 0.9rem;
-    border: 1px solid #ccc;
+    border: 1px solid var(--gray4-color);
 }
 
 .comment-input button {
     font-size: 0.8rem;
     padding: 2px 16px;
-    background-color: #333;
-    border: #333;
+    color: var(--white-color);
+    background-color: var(--black-color);
+    border: var(--black-color);
     opacity: 0.8;
+    transition: all 0.3s ease-in-out;
+}
+
+.comment-input button:hover {
+    background-color: var(--black-color);
+    border: var(--black-color);
+    color: var(--white-color);
+    transform: scale(1.05);
 }
 
 .feed-post .modal-overlay {
@@ -281,7 +298,7 @@
     top: 10px;
     right: 10px;
     background: transparent;
-    color: white;
+    color: var(--white-color);
     border: none;
     font-size: 2rem;
     cursor: pointer;
@@ -290,7 +307,7 @@
 }
 
 .close-modal:hover {
-    background-color: #333;
+    background-color: var(--black-color);
 }
 
 .feed-page-main .follow-other {
@@ -298,39 +315,45 @@
     justify-content: flex-end;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 1025px) {
     .feed-page .feed-page-main {
         display: flex;
-        justify-content: flex-start;
-        gap: 3%;
+        justify-content: space-between;
+        align-items: flex-start;
+        padding: 0 8%;
     }
-  
-    .feed-page .feed-page-main .posts {
-        flex: 2;
+
+    .feed-page .feed-page-main .posts,
+    .feed-page .feed-page-main .follow-other {
+        width: 48%; /* Eşit genişlikte olmasını sağlar */
+    }
+
+    .feed-post {
+        width: 100%;
+        flex-direction: row;
+        padding: 16px;
+    }
+
+    .feed-post .feed-post-left {
+        margin-right: 12px;
+    }
+
+    .feed-post .feed-post-right {
+        padding: 12px 0;
     }
 
     .feed-page .feed-page-main .follow-other {
-        flex: 1;
-        margin-right: 10px;
-    }
-
-    .feed-post .feed-post-right .interaction {
-        gap: 50%;
-    }
-
-    .feed-post .feed-post-right .interaction .left p{
         display: flex;
-        margin-right: 25%;
-    }
-
-    .feed-post .feed-post-right .interaction .bi.bi-share::before {
-        float: right;
+        justify-content: center;
     }
 }
-  
-@media (max-width: 767px) {
+
+@media (min-width: 768px) and (max-width: 1024px) {
     .feed-page .feed-page-main {
-        display: block;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 0 5%;
     }
 
     .feed-page .feed-page-main .posts {
@@ -338,19 +361,46 @@
     }
 
     .feed-page .feed-page-main .follow-other {
-        display: none;
+        display: flex;
+        justify-content: center;
+        margin-top: 40px;
+        width: 100%;
     }
 
-    .feed-post .feed-post-right .interaction {
-        gap: 50%;
+    .feed-post {
+        flex-direction: row;
+        padding: 16px;
     }
 
-    .feed-post .feed-post-right .interaction .left p{
-        margin-right: 25%;
+    .feed-post .feed-post-left {
+        margin-right: 12px;
     }
 
-    .feed-post .feed-post-right .interaction .bi.bi-share::before {
-        float: right;
+    .feed-post .feed-post-right {
+        padding: 12px 0;
     }
 }
-  
+
+@media (max-width: 320px) {
+    .feed-page .feed-page-main {
+        padding: 0 4%;
+    }
+
+    .feed-post {
+        flex-direction: column;
+        padding: 12px;
+    }
+
+    .feed-post .feed-post-left {
+        margin-bottom: 8px;
+    }
+
+    .feed-post .feed-post-right {
+        padding: 10px 0 0 0;
+        margin-left: 0;
+    }
+
+    .feed-page-main .follow-other {
+        display: none;
+    }
+}

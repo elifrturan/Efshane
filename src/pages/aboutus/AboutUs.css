@@ -1,27 +1,47 @@
 .about-us-page {
-    color: #212529BF;
-}
-
-.about-us-page h2{
-    color:rgb(65, 63, 63);
-    font-weight: 600;
+    color: var(--black-color);
+    margin-top: 5%;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 .about-us-content {
-    font-size: 0.9rem;
-    opacity: 50%;
+    font-size: 0.8rem;
+    opacity: 0.5;
+}
+
+.about-story {
+    padding: 0 15%;
 }
 
 .about-story-text {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    flex: 1;
 }
 
-.about-story-text p{
+.about-story .about-image {
+    flex: 1;
+}
+
+.about-story .about-image img {
+    height: auto;
+    width: 500px;
+}
+
+.about-story-text span {
     font-size: 0.9rem;
-    opacity: 90%;
-    color: #212529BF;
+    line-height: 125%;
+    word-spacing: 5px;
+    opacity: 0.8;
+    color: var(--text-muted);
+}
+
+.about-features {
+    background-color: var(--white-color);
+    padding: 6% 0;
 }
 
 .about-features h2 {
@@ -35,7 +55,7 @@
 }
 
 .slick-slide div {
-    transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+    transition: all 0.5s ease-in-out;
 }
 
 .slick-slide img {
@@ -72,24 +92,209 @@
     padding: 10px;
 }
 
-.slick-slide p {
-    font-size: 14px;
+.slick-slide span {
+    font-size: 0.8rem;
+    opacity: 0.9;
     line-height: 1.5;
     margin-top: 10px;
+}
+
+.about-team {
+    padding: 0 15%;
 }
 
 .about-team h2 {
     margin-top: 2%;
     font-size: 1.8rem;
 }
- 
+
 .team-member .line-wrapper {
-    display: block;
-    width: 455px;
     line-height: 1.6;
-    word-break: break-all;
+    font-size: 0.9rem;
+    opacity: 0.9;
+    text-align: justify;
 }
 
 .member-degree {
     font-size: 0.8rem;
+}
+
+@media (max-width: 1024px) {
+    .about-story {
+        padding: 0 5%;
+    }
+    .about-team {
+        padding: 0 5%;
+    }
+}
+
+@media (max-width: 768px) {
+    .about-story {
+        flex-direction: column;
+        padding: 0 3%;
+    }
+
+    .about-story div:first-child {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .about-story-text {
+        order: 2;
+    }
+    .about-story .about-image {
+        order: 1;
+    }
+    .about-features h2, .about-team h2 {
+        font-size: 1.5rem;
+    }
+    .about-features {
+        padding: 8% 3%;
+    }
+
+    .about-features h2, .about-team h2 {
+        font-size: 1.2rem;
+    }
+
+    .about-team .about-team-main {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 426px) {
+    .about-us-page {
+        margin-top: 3%;
+    }
+    .about-story {
+        padding: 0 2%;
+    }
+
+    .about-story div:first-child {
+        flex-direction: column;
+    }
+
+    .about-story .about-image {
+        margin: 0;
+    }
+
+    .about-story .about-image img {
+        width: 250px;
+    }
+
+    .about-story .about-story-text {
+        padding: 5%;
+    }
+
+    .about-story-text span {
+        font-size: 0.7rem;
+        word-spacing: 2px;
+        text-align: justify;
+    }
+
+    .about-story-text span {
+        font-size: 0.8rem;
+        word-spacing: 3px;
+    }
+
+    .about-features {
+        padding: 10% 0;
+    }
+
+    .about-features h2, .about-team h2 {
+        font-size: 1.3rem;
+    }
+      
+    .slick-center div {
+       display: flex;
+       justify-content: flex-start;
+       align-items: flex-start;
+        margin-top: 2%;
+        transform: scale(1);
+        opacity: 1;
+    }
+      
+    .slick-slide:not(.slick-center) div {
+        display: none;
+        opacity: 0.5;
+    }
+    
+    .slick-slide .feature-content {
+        padding: 10px;
+    }
+    
+    .slick-slide span {
+        font-size: 0.8rem;
+        opacity: 0.9;
+        line-height: 1.5;
+        margin-top: 10px;
+    }
+}
+
+@media (max-width: 376px) {
+    .about-story div:first-child {
+        flex-direction: column;
+    }
+
+    .about-story .about-image {
+        margin: 0;
+    }
+
+    .about-story .about-image img {
+        width: 250px;
+    }
+
+    .about-story .about-story-text {
+        padding: 5%;
+    }
+
+    .about-story-text span {
+        font-size: 0.7rem;
+        word-spacing: 2px;
+        text-align: justify;
+    }
+
+    .about-features h2, .about-team h2 {
+        font-size: 1.2rem;
+    }
+
+    .about-team .about-team-main {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 321px) {
+    .about-us-page {
+        margin-top: 2%;
+    }
+
+    .about-story div:first-child {
+        flex-direction: column;
+    }
+
+    .about-story .about-image {
+        margin: 0;
+    }
+
+    .about-story .about-image img {
+        width: 250px;
+    }
+
+    .about-story .about-story-text {
+        padding: 5%;
+    }
+
+    .about-story-text span {
+        font-size: 0.7rem;
+        word-spacing: 2px;
+        text-align: justify;
+    }
+
+    .about-features h2, .about-team h2 {
+        font-size: 1.2rem;
+    }
+
+    .about-team .about-team-main {
+        flex-direction: column;
+    }
 }

@@ -9,19 +9,64 @@
     }
 }
 
-.edit-section-page{
-    color: var(--second-color);
-    background-color: whitesmoke;
+.edit-section-page {
+    color: var(--black-color);
+    background-color: var(--bg-color);
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
 }
 
-.edit-image-upload-area{
+.edit-section-page .edit-fixed-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    background-color: var(--tabs-bg-color);
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 0 25px;
+    box-shadow: 0 px 5px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+.edit-section-page .edit-fixed-header .edit-header-buttons {
+    display: flex;
+    gap: 20px;
+}
+
+.edit-section-page .edit-fixed-header button {
+    padding: 10px 15px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    transition: all 0.3s ease-in-out;
+}
+
+.edit-section-page .edit-fixed-header button.save{
+    border: 1px solid var(--theme-color);
+    background-color: var(--tabs-bg-color);
+    color: var(--theme-color);
+}
+
+.edit-section-page .edit-fixed-header button.publish{
+    background-color: var(--theme-color);
+    color: var(--white-color);
+}
+
+.edit-section-page .edit-fixed-header button:hover{
+    opacity: 0.9;
+    transform: scale(1.1);
+}
+
+.edit-section-page .edit-image-upload-area {
     position: relative;
-    margin: 0 10%;
-    height: 250px;
-    border: 2px dashed #ddd;
+    margin: 0 10% !important;
+    height: 300px;
+    border: 2px dashed var(--gray5-color);
+    border-radius: 5px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -31,13 +76,14 @@
     overflow: hidden;
 }
 
-.edit-image-upload-label{
+.edit-section-page .edit-image-upload-area .edit-image-upload-label {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-size: 20px;
-    color: #888;
+    font-size: 1.3rem;
+    color: var(--black-color);
+    opacity: 0.8;
     text-align: center;
     font-weight: bold;
     display: flex;
@@ -45,20 +91,19 @@
     justify-content: center;
     width: 100%;
     height: 100%;
-    object-fit: cover;
 }
 
-.edit-image-upload-input{
+.edit-section-page .edit-image-upload-area .edit-image-upload-input {
     display: none;
 }
 
-.edit-uploaded-image{
+.edit-section-page .edit-image-upload-area .edit-uploaded-image{
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
 
-.edit-overlay{
+.edit-section-page .edit-image-upload-area .edit-image-upload-label .edit-overlay{
     position: absolute;
     margin: 0 10%;
     width: 100%;
@@ -67,14 +112,14 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #fff;
-    font-size: 18px;
+    color: var(--white-color);
+    font-size: 1.3rem;
     font-weight: bold;
     opacity: 0;
-    transition: opacity 0.3s ease;
+    transition: all 0.3s ease;
 }
 
-.edit-image-upload-area:hover .overlay{
+.edit-section-page .edit-image-upload-area:hover .overlay{
     opacity: 1;
 }
 
@@ -82,27 +127,57 @@
     margin: 0 10%;
 }
 
-.edit-section-title{
-    font-size: 18px !important;
-    color: var(--second-color) !important;
+.edit-section-page .container form .edit-section-title{
+    font-size: 1.1rem !important;
+    color: var(--black-color) !important;
     border: none !important;
     background: none !important;
     outline: none !important;
     box-shadow: none !important;
     text-align: center;
+    margin-top: 2%;
 }
 
-.edit-section-title::placeholder{
-    color: var(--second-color) !important;
-    font-size: 16px;
+.edit-section-page .container form .edit-section-title::placeholder{
+    color: var(--black-color) !important;
 }
 
-.edit-section-content{
+.edit-section-page .container form .edit-content-toolbar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+    gap: 15px;
+}
+
+.edit-section-page .container form .edit-content-toolbar button {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: var(--black-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.edit-section-page .container form .edit-content-toolbar button:hover {
+    color: var(--theme-color);
+}
+
+.edit-section-page .container form .edit-content-toolbar button.active {
+    background-color: var(--theme-color) !important;
+    color: var(--white-color) !important;
+    border-radius: 4px;
+}
+
+.edit-section-page .container form .edit-section-content {
     position: relative;
     resize: none !important;
     min-height: 300px;
-    font-size: 16px;
-    color: black !important;
+    margin-top: 2%;
+    font-size: 1rem;
+    color: var(--black-color) !important;
     border: none !important;
     background: none !important;
     outline: none !important;
@@ -111,76 +186,7 @@
     width: 100%;
 }
 
-.edit-content-toolbar {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 10px;
-    gap: 15px;
-}
-
-.edit-content-toolbar button {
-    background: none;
-    border: none;
-    font-size: 20px;
-    cursor: pointer;
-    color: var(--second-color);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.edit-content-toolbar button:hover {
-    color: #007bff;
-}
-
-.edit-content-toolbar button.active {
-    background-color: #007bff;
-    color: #fff;
-    border-radius: 4px;
-}
-
-.edit-fixed-header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 60px;
-    background-color: #f8f9fa;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    padding: 0 20px;
-    box-shadow: 0 px 5px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
-}
-
-.edit-fixed-header .edit-header-buttons {
-    display: flex;
-    gap: 10px;
-}
-
-.edit-fixed-header button {
-    padding: 10px 15px;
-    font-size: 14px;
-    cursor: pointer;
-    border: none;
-    border-radius: 5px;
-    transition: background-color 0.3s;
-}
-
-.edit-fixed-header button.save{
-    border: 1px solid #007bff;
-    background-color: #fff;
-    color: #007bff;
-}
-
-.edit-fixed-header button.publish{
-    background-color: #007bff;
-    color: white;
-}
-
-.edit-robot {
+.edit-section-page .edit-robot {
     position: fixed;
     bottom: 5%; 
     right: 5%;
@@ -192,39 +198,35 @@
     animation: fadeIn 0.5s ease-in;
 }
 
-button.edit-help{
+.edit-section-page .edit-robot button.edit-help{
     width: 60px;
     height: 60px;
     font-size: 2rem;
     border-radius: 50%;
-    background: linear-gradient(145deg, #ffeeba, #ffae00);
+    background: linear-gradient(145deg, #ffeeba, #e7e7e7);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2), inset 0 -3px 5px rgba(255, 255, 255, 0.5);
     border: none;
-    color: #fff;
-    transition: transform 0.2s ease, box-shadow 0.3s ease;
+    color: var(--white-color);
+    transition: all 0.2s ease-in-out;
 }
 
-button.edit-help:hover {
+.edit-section-page .edit-robot button.edit-help:hover {
     transform: scale(1.1);
     box-shadow: 0 8px 20px rgba(255, 193, 7, 0.1), inset 0 -5px 10px rgba(255, 255, 255, 0.6);
 }
 
-button.edit-help:active {
+.edit-section-page .edit-robot button.edit-help:active {
     transform: scale(0.95);
     box-shadow: 0 3px 8px rgba(255, 193, 7, 0.3), inset 0 -2px 5px rgba(255, 255, 255, 0.3);
 }
 
-.edit-fixed-header button:hover{
-    opacity: 0.8;
-}
-
-.edit-chat-modal {
+.edit-section-page .edit-chat-modal {
     position: fixed;
     bottom: 14%;
     right: 20px;
-    width: 200px;
+    width: 280px;
     height: 400px;
-    background-color: white;
+    background-color: var(--white-color);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     border-radius: 10px;
     display: none;
@@ -233,31 +235,31 @@ button.edit-help:active {
     animation: fadeIn 0.3s ease;
 }
 
-.edit-chat-modal.active{
+.edit-section-page .edit-chat-modal.active{
     display: flex;
 }
 
-.edit-chat-modal-header{
-    background-color: #007bff;
-    color: white;
+.edit-section-page .edit-chat-modal-header{
+    background-color: var(--theme-color);
+    color: var(--white-color);
     padding: 10px;
     font-weight: bold;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     border-radius: 10px 10px 0 0;
 }
 
-.edit-chat-modal-header .edit-close-btn {
+.edit-section-page .edit-chat-modal-header .edit-close-btn {
     background: none;
     border: none;
     font-size: 1.2rem;
-    color: white;
+    color: var(--white-color);
     cursor: pointer;
 }
 
-.edit-chat-modal-body{
+.edit-section-page .edit-chat-modal-body{
     flex: 1;
     padding: 15px;
     overflow-y: auto;
@@ -268,11 +270,11 @@ button.edit-help:active {
     line-height: 1.5;
 }
 
-.edit-chat-modal-body p {
-    opacity: 60%;
+.edit-section-page .edit-chat-modal-body p {
+    opacity: 0.6;
 }
 
-.edit-chat-message{
+.edit-section-page .edit-chat-message{
     max-width: 70%;
     padding: 10px;
     border-radius: 10px;
@@ -281,77 +283,198 @@ button.edit-help:active {
     margin-bottom: 10px;
 }
 
-.edit-chat-message.user{
+.edit-section-page .edit-chat-message.user{
     align-self: flex-end;
-    background-color: #007bff;
-    color: white;
+    background-color: var(--theme-color);
+    color: var(--white-color);
     border-top-right-radius: 0;
     font-size: 0.8rem;
 }
 
-.edit-chat-message.bot{
+.edit-section-page .edit-chat-message.bot{
     align-self: flex-start;
-    background-color: #f1f1f1;
-    color: #333;
+    background-color: var(--gray6-color);
+    color: var(--black-color);
     border-top-left-radius: 0;
     font-size: 0.8rem;
 }
 
-.edit-chat-modal-footer{
+.edit-section-page .edit-chat-modal-footer{
     padding: 10px;
-    border-top: 1px solid #ddd;
+    border-top: 1px solid var(--gray5-color);
     display: flex;
     gap: 2px;
 }
 
-.edit-chat-modal-footer input {
+.edit-section-page .edit-chat-modal-footer input {
     width: 100%;
     padding: 8px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--gray4-color);
     border-radius: 5px;
     font-size: 0.8rem;
     opacity: 75%;
 }
 
-
-.edit-chat-modal-footer button{
+.edit-section-page .edit-chat-modal-footer button{
     padding: 6px 10px;
     border: none;
-    background-color: #007bff;
-    color: white;
+    background-color: var(--theme-color);
+    color: var(--white-color);
     border-radius: 5px;
     font-size: 0.8rem;
     margin-left: 1%;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: all 0.3s ease-in-out;
 }
 
-.edit-chat-modal-footer button:hover{
-    opacity: 80%;
+.edit-section-page .edit-chat-modal-footer button:hover{
+    transform: scale(1.05);
 }
 
-@media (max-width: 500px) {
-    .edit-chat-modal {
-        width: 90%;
-        right: 5%;
+@media (max-width: 426px) {
+    .edit-section-page .edit-fixed-header {
+        height: 50px;
+        padding: 0 20px;
+    }
+    
+    .edit-section-page .edit-fixed-header button {
+        padding: 8px 18px;
+        font-size: 0.7rem;
+    }
+    
+    .edit-section-page .container .edit-image-upload-area {
+        height: 200px;
+        margin-top: 15%;
+    }
+    
+    .edit-section-page .container .edit-image-upload-area .edit-image-upload-label {
+        font-size: 0.9rem;
+    }
+    
+    .edit-section-page .container .edit-image-upload-area .edit-uploaded-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .edit-section-page .container form .edit-section-title {
+        font-size: 0.9rem !important;
+    }
+    
+    .edit-section-page .container form .edit-content-toolbar {
+        gap: 8px;
+    }
+    
+    .edit-section-page .container form .edit-content-toolbar button {
+        font-size: 0.9rem;
+        padding: 4px 8px;
+    }
+    
+    .edit-section-page .container form .edit-section-content {
+        margin-top: 4%;
+        font-size: 0.9rem !important;
+    }
+
+    .edit-section-page .edit-robot img {
+        width: 110px;
+    }
+    
+    .edit-section-page .edit-robot button.edit-help{
+        width: 40px;
+        height: 40px;
+    }
+    
+    .edit-section-page .edit-chat-modal {
+        width: 180px;
+        height: 300px;
+    }
+    
+    .edit-section-page .edit-chat-modal .edit-chat-modal-header .edit-close-btn {
+        font-size: 0.9rem;
+    }
+    
+    .edit-section-page .edit-chat-modal .edit-chat-modal-body p {
+        opacity: 0.6;
+        font-size: 0.5rem;
+    }
+    
+    .edit-section-page .edit-chat-modal .edit-chat-modal-body .edit-chat-message,
+    .edit-section-page .edit-chat-modal .edit-chat-modal-footer input,
+    .edit-section-page .edit-chat-modal .edit-chat-modal-footer button {
+        font-size: 0.6rem !important;
+    }
+    
+    .edit-section-page .edit-chat-modal .edit-chat-modal-footer {
+        gap: 4px;
+    }
+}
+
+@media (max-width: 769px) {
+    .edit-section-page .edit-fixed-header {
+        height: 50px;
+    }
+    
+    .edit-section-page .edit-fixed-header button {
+        padding: 10px 18px;
+        font-size: 0.7rem;
+    }
+    
+    .edit-section-page .container .edit-image-upload-area {
+        height: 250px;
+        margin-top: 10%;
+    }
+    
+    .edit-section-page .container .edit-image-upload-area .edit-upload-label {
+        font-size: 1rem;
+    }
+
+    .edit-section-page .container form .edit-section-title {
+        font-size: 0.9rem !important;
+    }
+    
+    .edit-section-page .container form .edit-content-toolbar {
+        gap: 15px;
+    }
+    
+    .edit-section-page .container form .edit-content-toolbar button {
+        font-size: 1rem;
+    }
+    
+    .edit-section-page .container form .edit-section-content {
+        margin-top: 4%;
+        font-size: 0.9rem !important;
+    }
+
+    .edit-section-page .edit-robot img {
         width: 150px;
     }
     
-    .edit-chat-modal-body{
-        padding: 5px;
-    }
-
-    .edit-chat-modal-footer{
-        padding: 5px;
-    }
-    
-    .edit-chat-modal-footer input {
-        flex: 1;
+    .edit-section-page .edit-robot button.edit-help{
         width: 50px;
-        padding: 6px;
+        height: 50px;
     }
     
-    .edit-chat-modal-footer button{
-        padding: 6px;
+    .edit-section-page .edit-chat-modal {
+        width: 200px;
+        height: 300px;
+    }
+    
+    .edit-section-page .edit-chat-modal .edit-chat-modal-header .edit-close-btn {
+        font-size: 0.9rem;
+    }
+    
+    .edit-section-page .edit-chat-modal .edit-chat-modal-body p {
+        opacity: 0.6;
+        font-size: 0.7rem;
+    }
+    
+    .edit-section-page .edit-chat-modal .edit-chat-body .edit-chat-message,
+    .edit-section-page .edit-chat-modal .edit-chat-modal-footer input,
+    .edit-section-page .edit-chat-modal .edit-chat-modal-footer button {
+        font-size: 0.7rem !important;
+    }
+    
+    .edit-section-page .edit-chat-modal .edit-chat-modal-footer {
+        gap: 4px;
     }
 }

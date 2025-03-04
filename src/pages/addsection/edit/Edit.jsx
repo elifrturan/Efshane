@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react'
 import './Edit.css'
 import { useParams, useNavigate } from 'react-router-dom';
-import { Button, Modal } from 'react-bootstrap';
+import { Button, Form, Modal } from 'react-bootstrap';
 import axios from 'axios';
 
 const backendBaseUrl = 'http://localhost:3000';
@@ -313,74 +313,68 @@ function Edit() {
             <div className="container">
                 {/* Add Image */}
                     <div className='m-0'>
-                    <div className="edit-image-upload-area" onClick={triggerFileInput}>
-                        <form>
-                            <label className="form-label edit-image-upload-label">
-                            <img
-                                src={
-                                    image
-                                        ? image?.startsWith('uploads')
-                                            ? `${backendBaseUrl}/${image}` 
-                                            : image 
-                                        : '/default-image.png'
-                                }
-                                alt="Bölüm Görseli"
-                                className="edit-uploaded-image"
-                            />
-                                <div className="edit-overlay">
-                                    <span>Görsel Yükle</span>
-                                </div>
-                            </label>
-                            <input
-                                id="file-input"
-                                type="file"
-                                className="edit-image-upload-input form-control"
-                                onChange={handleImageUpload}
-                                accept="image/*"
-                            />
-                        </form>
-                    </div>
-                        <form>
+                        <div className="edit-image-upload-area" onClick={triggerFileInput}>
+                            <Form>
+                                <Form.Label className="edit-image-upload-label">
+                                <img
+                                    src={
+                                        image
+                                            ? image?.startsWith('uploads')
+                                                ? `${backendBaseUrl}/${image}` 
+                                                : image 
+                                            : '/default-image.png'
+                                    }
+                                    alt="Bölüm Görseli"
+                                    className="edit-uploaded-image"
+                                />
+                                    <div className="edit-overlay">
+                                        <span>Görsel Yükle</span>
+                                    </div>
+                                </Form.Label>
+                                <Form.Control
+                                    id="file-input"
+                                    type="file"
+                                    className="edit-image-upload-input"
+                                    onChange={handleImageUpload}
+                                    accept="image/*"
+                                />
+                            </Form>
+                        </div>
+                        <Form>
                             {/* Add Title */ }
-                            <input 
+                            <Form.Control 
                                 type="text"
-                                className='form-control edit-section-title'
+                                className='edit-section-title'
                                 placeholder='Bir başlık ekleyin...'  
                                 value={title}  
                             />
                             <hr />
                             {/* Add Content */ }
                             <div className="edit-content-toolbar">
-                                <button
-                                    type='button'
+                                <Button
                                     onClick={() => handleFormat('bold')}
                                     className={activeStyle.bold ? 'active' : ''}
-                                ><b>B</b></button>
-                                <button
-                                    type='button'
+                                ><b>B</b></Button>
+                                <Button
                                     onClick={() => handleFormat('italic')}
                                     className={activeStyle.italic ? 'active' : ''}
-                                ><i>I</i></button>
-                                <button
-                                    type='button'
+                                ><i>I</i></Button>
+                                <Button
                                     onClick={() => handleFormat('underline')}
                                     className={activeStyle.underline ? 'active' : ''}
-                                ><u>U</u></button>
-                                <button
-                                    type='button'
+                                ><u>U</u></Button>
+                                <Button
                                     onClick={() => handleFormat('left')}
                                     className={activeStyle.left ? 'active' : ''}
-                                ><i className="bi bi-text-left"></i></button>
-                                <button
-                                    type='button'
+                                ><i className="bi bi-text-left"></i></Button>
+                                <Button
                                     onClick={() => handleFormat('center')}
                                     className={activeStyle.center ? 'active' : ''}
-                                ><i className="bi bi-text-center"></i></button>
-                                <button
-                                    type='button'
+                                ><i className="bi bi-text-center"></i></Button>
+                                <Button
                                     onClick={() => handleFormat('right')}
                                     className={activeStyle.right ? 'active' : ''}
-                                ><i className="bi bi-text-right"></i></button>
+                                ><i className="bi bi-text-right"></i></Button>
                             </div>
                             <div
                                 ref={contentRef} 
@@ -392,7 +386,7 @@ function Edit() {
                             >
                                 {content}
                             </div>
-                        </form>
+                        </Form>
                     </div>
             </div>
             {/* Chatbot modal */}

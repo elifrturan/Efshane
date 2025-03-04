@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import './CategorySelection.css'
 import axios from 'axios';
 import { useNavigate, useLocation} from 'react-router-dom';
 import { Button, Modal } from 'react-bootstrap';
+import { ThemeContext } from '../../contexts/ThemeContext';
 
 function CategorySelection() {
     const [selectedCard, setSelectedCard] = useState([]);
@@ -12,6 +13,7 @@ function CategorySelection() {
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
     const email = queryParams.get('email');
+    const { theme } = useContext(ThemeContext);
 
     useEffect(() => {
         const fetchCategories = async () => {
@@ -66,7 +68,12 @@ function CategorySelection() {
             <div className="container">
                 <div className="selection-navbar">
                     <div className="d-flex align-items-center justify-content-start">
-                        <img src="/logo/efshane_logo.svg" alt="Logo" className="logo"/>
+                    <img
+                        src={theme === 'dark' ? '/logo/efshane_logo_dark.svg' : '/logo/efshane_logo.svg'}
+                        alt="Logo"
+                        className="object-fit-cover"
+                        style={{ width: '120px', height: '50px' }}
+                        />
                     </div>
                 </div>
 
@@ -74,7 +81,7 @@ function CategorySelection() {
                     <h1 className='text-center'>
                         <span className='ef'>EF</span>shane’nin Sonsuz Kitap Dünyasına Hoş Geldin
                     </h1>
-                    <p className='text-center m-2 opacity-75'>
+                    <p className='text-center m-2'>
                         İlgi alanlarını daha yakından tanıyabilmemiz için en az 3 kitap kategorisi seçmeni rica ediyoruz. 
                         Seçtiğin kategorilerden sana özel kitap önerileri sunarak, kitaplığına dilediğin kitapları 
                         ekleyebilmeni sağlayacağız. Böylece okuma deneyimini tam anlamıyla kişiselleştirebiliriz.

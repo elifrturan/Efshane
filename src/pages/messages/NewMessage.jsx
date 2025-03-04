@@ -3,6 +3,7 @@ import './NewMessage.css';
 import Navbar from "../../layouts/navbar/Navbar";
 import { useNavigate } from 'react-router-dom'; 
 import axios from 'axios';
+import { Form, InputGroup } from 'react-bootstrap';
 
 function NewMessage() {
     const [username, setUsername] = useState(''); 
@@ -39,32 +40,31 @@ function NewMessage() {
             <div className="container">
                 <div className="new-message-container mt-5 mb-5">
                     <h2 className='text-center mt-3 mb-2'>Yeni Mesaj Oluştur</h2>
-                    <p className='text-center opacity-50 new-message-description'><i>Kullanıcı adını girerek, istediğiniz mesajı dilediğiniz kişiye kolayca gönderebilirsiniz.</i></p>
-                    <form onSubmit={handleSendMessage}>
-                        <div className="input-group mb-3">
-                            <span className='input-group-text'>@</span>
-                            <input 
+                    <span className='text-center new-message-description'><span>Kullanıcı adını girerek, istediğiniz mesajı dilediğiniz kişiye kolayca gönderebilirsiniz.</span></span>
+                    <Form onSubmit={handleSendMessage} className='d-flex flex-column gap-3 mt-4'>
+                        <InputGroup>
+                            <InputGroup.Text>@</InputGroup.Text>
+                            <Form.Control 
                                 type="text" 
-                                className='form-control' 
                                 placeholder='Kullanıcı Adı' 
                                 value={username}
                                 onChange={(e) => setUsername(e.target.value)} 
                             />
-                        </div>
-                        <div className="input-group mb-3 d-flex flex-column">
-                            <label className='form-label'>Mesajınız</label>
-                            <textarea 
-                                className='form-control w-100' 
+                        </InputGroup>
+                        <Form.Group>
+                            <Form.Label>Mesajınız</Form.Label>
+                            <Form.Control
+                                as='textarea' 
                                 rows="6" 
                                 placeholder='Lütfen mesaj içeriğinizi giriniz...' 
                                 value={messageContent}
                                 onChange={(e) => setMessageContent(e.target.value)} 
-                            ></textarea>
-                        </div>
-                        <div className="mb-3 d-flex justify-content-center">
+                            ></Form.Control>
+                        </Form.Group>
+                        <div className="btn-new-message-send">
                             <button type="submit" className="btn-new-message-send">Gönder</button>
                         </div>
-                    </form>
+                    </Form>
                 </div>
             </div>
         </div>

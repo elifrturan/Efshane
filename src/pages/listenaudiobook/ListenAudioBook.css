@@ -1,59 +1,55 @@
-* {
-    box-sizing: border-box;
-}
-
 .listen-book-page {
-    width: 100%;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    background-color: #f5f5f5;
+    min-height: 100vh;
 }
 
-.listen-book-nav {
+.listen-book-page .listen-book-nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 1% 5%;
-    background-color: #f0f0f0;
-    border-bottom: 1px solid #eee;
+    background-color: var(--gray7-color);
+    border-bottom: 1px solid var(--gray2-color);
 }
 
-.listen-book-nav .episode-dropdown button {
+.listen-book-page .listen-book-nav .episode-dropdown button {
     background: none;
-    color: var(--second-color);
+    color: var(--black-color);
     border: none;
-    text-shadow: 1px 1px 2px #ddd;
+    text-shadow: 1px 1px 2px var(--gray5-color);
     font-size: 1rem;
 }
 
-.listen-book-nav .episode-dropdown button:focus {
+.listen-book-page .listen-book-nav .episode-dropdown button:focus {
     background: none;
-    color: var(--second-color);
+    color: var(--black-color);
     border: none;
 }
 
-.listen-book-nav .episode-dropdown div.dropdown-menu.show {
+.listen-book-page .listen-book-nav .episode-dropdown div.dropdown-menu.show {
     border-radius: 0%;
-    border: 1px solid #f0f0f0;
+    border: 1px solid var(--gray7-color);
     box-shadow: none;
     margin-top: 13%;
     width: 240px;
     margin-left: -80px;
-    background-color: #f0f0f0;
+    background-color: var(--gray7-color);
     transition: all 0.3s ease-in-out;
     padding-bottom: 0%;
 }
 
-.listen-book-nav .episode-dropdown .dropdown-item {
+.listen-book-page .listen-book-nav .episode-dropdown .dropdown-item {
     padding: 10px 20px;
     cursor: pointer;
     text-align: center;
-    border-bottom: 1px solid #fff;
+    border-bottom: 1px solid var(--white-color);
+    color: var(--black-color);
 }
 
-.listen-book-nav .episode-dropdown .dropdown-item:hover {
-    background-color: #eee;
+.listen-book-page .listen-book-nav .episode-dropdown .dropdown-item:hover {
+    background-color: var(--gray2-color);
     font-weight: 600;
 }
 
@@ -68,7 +64,7 @@
 }
 
 .listen-book-nav .book-title span {
-    text-shadow: 1px 1px 2px #ddd;
+    text-shadow: 1px 1px 2px var(--gray5-color);
     font-weight: 600;
     font-size: 1.25rem;
     cursor: default;
@@ -84,11 +80,11 @@
 
 .listen-book-nav .actions span:hover {
     transform: scale(1.02);
-    text-shadow: 1px 1px 2px #ddd;
+    text-shadow: 1px 1px 2px var(--gray5-color);
 }
 
 .listen-book-nav .actions i.bi-heart-fill::before {
-    color: red;
+    color: var(--red-color);
 }
 
 .listen-book-content {
@@ -118,8 +114,8 @@
 
 .listen-book-content .audio-player .play-button {
     padding: 10px 20px;
-    background-color: #000000;
-    color: white;
+    background-color: var(--black-color);
+    color: var(--white-color);
     border: none;
     border-radius: 25px;
     cursor: pointer;
@@ -128,7 +124,7 @@
 }
 
 .listen-book-content .audio-player .play-button:hover {
-    background-color: #000000;
+    background-color: var(--black-color);
     opacity: 0.9;
     transform: scale(1.02);
 }
@@ -146,14 +142,14 @@
 
 .listen-book-content .episode-header h2 {
     font-size: 1.5rem;
-    color: var(--main-color);
+    color: var(--black-color);
     margin-top: 4%;
 }
 
 .listen-book-content .episode-header .statistics {
     margin: 2% auto;
     font-size: 0.85rem;
-    color: var(--second-color);
+    color: var(--black-color);
     font-weight: 500;
     justify-content: center;
     align-items: center;
@@ -201,7 +197,7 @@
     display: flex;
     align-items: center;
     margin-bottom: 1%;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid var(--gray2-color);
     padding: 25px 0px;
 }
 
@@ -218,7 +214,7 @@
 
 .listen-book-content .comment-content {
     font-size: 0.9rem;
-    color: var(--second-color);
+    color: var(--black-color);
 }
 
 .listen-book-content .comment-input {
@@ -226,15 +222,19 @@
 }
 
 .listen-book-content .comment-input textarea {
-    border: none;
-    color: var(--second-color);
+    border: 1px solid var(--gray5-color);
+    color: var(--black-color) !important;
     resize: none;
     margin-bottom: 1%;
     font-size: 0.95rem;
 }
 
+.listen-book-content .comment-input textarea:focus {
+    border: 1px solid var(--black-color) !important;
+}
+
 .listen-book-content .comment-input textarea::placeholder {
-    color: var(--second-color) !important;
+    color: var(--black-color) !important;
     font-size: 0.95rem;
 }
 
@@ -243,18 +243,18 @@
     right: 0;
     padding: 6px 12px;
     transition: all 0.3s ease-in-out;
-    background-color: var(--second-color);
+    background-color: var(--black-color);
     opacity: 1;
 }
 
 .listen-book-content .comment-input button:hover {
     opacity: 0.8;
-    background-color: var(--second-color);
+    background-color: var(--black-color);
 }
 
 .listen-book-content .comment-input button:focus {
     opacity: 0.8;
-    background-color: var(--second-color);
+    background-color: var(--black-color);
 }
 
 @media (max-width: 1200px) {
@@ -306,7 +306,7 @@
         padding: 2% 5%;
     }
 
-    .listen-book-nav .episode-dropdown {
+    .listen-book-nav .episodes-dropdown {
         margin-bottom: 5%;
     }
 
@@ -328,7 +328,7 @@
         gap: 10px;
     }
 
-    .listen-book-content .audio-player #waveform {
+    listen-book-content .audio-player #waveform {
         max-width: 350px;
     }
 

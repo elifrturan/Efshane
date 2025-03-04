@@ -239,9 +239,9 @@ function CreateStory() {
                 <div className="create-story-title">
                     <h2 className='text-center'>Hikaye Oluştur</h2>
                     <span >
-                        <i className='text-center'>
-                        Kitabınızın başlık, açıklama, kategori gibi bilgilerini girin ve bir kapak resmi yükleyin. Etiketler ekleyerek kitabınızı daha görünür hale getirebilirsiniz. Tüm alanları doldurduğunuzda kitabınızı kaydedebilirsiniz.
-                        </i>
+                        <span className='text-center'>
+                            Kitabınızın başlık, açıklama, kategori gibi bilgilerini girin ve bir kapak resmi yükleyin. Etiketler ekleyerek kitabınızı daha görünür hale getirebilirsiniz. Tüm alanları doldurduğunuzda kitabınızı kaydedebilirsiniz.
+                        </span>
                     </span>
                 </div>
                 <div className="create-story-main mt-5">
@@ -250,11 +250,10 @@ function CreateStory() {
                             <img 
                                 src={typeof image === "string" ? image : URL.createObjectURL(image)}
                                 alt="uploaded" 
-                                width="200px" 
-                                height="281px" 
+                                className='uploaded-image'
                             />
                         ) : (
-                            <img src="/images/upload-image.svg" alt="upload-image" width="200px" height="281px" />
+                            <img src="/images/upload-image.svg" alt="upload-image"/>
                         )}
                         <input
                             type="file"
@@ -263,27 +262,26 @@ function CreateStory() {
                             style={{ display: 'none' }}
                             onChange={handleImageUpload}
                         />
-                        <button onClick={() => document.getElementById('image-upload').click()}>Görsel Yükle <i className="bi bi-cloud-arrow-up-fill ms-1"></i></button>
-                        {error && <p className='error-message-cover'>{error}</p>}
-                        <i className='left-description'>Kitabınız için bir kapak resmi yükleyin. 
+                        <button onClick={() => document.getElementById('image-upload').click()}>Görsel Yükle <i className="bi bi-cloud-arrow-up-fill ms-2"></i></button>
+                        <span className='left-description'>
+                            Kitabınız için bir kapak resmi yükleyin. 
                             Bu, kitabınızın daha çekici görünmesini sağlayacaktır.
-                        </i>
+                        </span>
                     </div>
                     <div className="create-right">
-                        <Form onSubmit={handleSubmit}>
-                            <Form.Group className="mb-3">
+                        <Form onSubmit={handleSubmit} className='d-flex flex-column gap-4'>
+                            <Form.Group>
                                 <Form.Label>Kitap Adı</Form.Label>
-                                <Form.Control type="text" className='bg-transparent' value={bookTitle} onChange={(e) => setBookTitle(e.target.value)}/>
+                                <Form.Control type="text" value={bookTitle} onChange={(e) => setBookTitle(e.target.value)}/>
                             </Form.Group>
-                            <Form.Group className="mb-3">
+                            <Form.Group>
                                 <Form.Label>Kitap Özeti</Form.Label>
-                                <Form.Control className='bg-transparent' as="textarea" rows={4} value={bookSummary} onChange={(e) => setBookSummary(e.target.value)}/>
+                                <Form.Control as="textarea" rows={4} value={bookSummary} onChange={(e) => setBookSummary(e.target.value)}/>
                             </Form.Group>
-                            <Form.Group className="mb-3">
+                            <Form.Group>
                                 <Form.Label>Kategori</Form.Label>
                                 <Form.Select 
                                     size='sm' 
-                                    className='form-select-create bg-transparent'
                                     value={selectedCategory}  
                                     onChange={handleCategoryChange} 
                                 >
@@ -300,23 +298,23 @@ function CreateStory() {
                                 </Form.Select>
                             </Form.Group>
                             <Form.Label>Sesli kitap mı?</Form.Label>
-                            <Form.Group className="d-flex align-items-center mb-3">
+                            <Form.Group className="d-flex flex-column">
                                 <Form.Check
                                     type='radio'
                                     label='Evet'
-                                    className='d-flex align-items-center gap-2 m-0 me-3 bg-transparent'
+                                    className='d-flex align-items-center gap-2'
                                     checked={isAudioBook === true} 
                                     onChange={() => setIsAudioBook(true)}    
                                 />
                                 <Form.Check
                                     type='radio'
                                     label='Hayır'
-                                    className='d-flex align-items-center gap-2 m-0 bg-transparent'
+                                    className='d-flex align-items-center gap-2'
                                     checked={isAudioBook === false} 
                                     onChange={() => setIsAudioBook(false)}
                                 />
                             </Form.Group>
-                            <Form.Group className="mb-3">
+                            <Form.Group>
                                 <Form.Label>Etiketler</Form.Label>
                                 <div className="tags-container">
                                     {tags.map((tag, index) => (
@@ -328,19 +326,19 @@ function CreateStory() {
                                 </div>
                                 <InputGroup>
                                     <Form.Control
-                                        className='bg-transparent'
+                                        style={{padding: '7px'}}
+                                        placeholder='Etiket ekleyiniz...'
                                         value={currentTag}
                                         onChange={(e) => setCurrentTag(e.target.value)}
                                         onKeyDown={handleKeyDown}
                                     />
-                                    <span className='input-group-text span-plus' onClick={handleAddTag}>+</span>
+                                    <InputGroup.Text className='span-plus' onClick={handleAddTag}>+</InputGroup.Text>
                                 </InputGroup>
                             </Form.Group>
-                            <Form.Group className="mb-3">
+                            <Form.Group>
                                 <Form.Label>Yaş Aralığı</Form.Label>
                                 <Form.Select
                                     size='sm' 
-                                    className='form-select-create bg-transparent'
                                     value={selectedAgeRange} 
                                     onChange={handleRangeChange} 
                                 >
@@ -366,7 +364,7 @@ function CreateStory() {
                                 )}
                                 <Form.Group className="mb-4">
                                     <Form.Label>Telif Hakkı</Form.Label>
-                                    <Form.Select size='sm' className='form-select-create bg-transparent' value={contentChoice} onChange={handleContentChoiceChange}>
+                                    <Form.Select size='sm' className='form-select-create' value={contentChoice} onChange={handleContentChoiceChange}>
                                         <option value="" selected>Seçiniz...</option>
                                         {copyrightStatuses.map((status) => (
                                             <option key={status.id} value={status.id}>

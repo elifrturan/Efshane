@@ -37,7 +37,8 @@
 }
 
 .follow-others .user button{
-    background: var(--second-color);
+    background: var(--black-color);
+    color: var(--white-color);
     border: 1px solid var(--white-color);
     font-size: 0.9rem;
     padding: 4px 16px;
@@ -58,7 +59,6 @@
     }
 }
 
-/* 📊 Tablet Görünüm (600px - 1024px) */
 @media (min-width: 601px) and (max-width: 1024px) {
     .follow-others {
         max-width: 1000px;

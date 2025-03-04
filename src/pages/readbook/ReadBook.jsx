@@ -242,7 +242,7 @@ function ReadBook() {
     }    
 
     return (
-        <>
+
             <div className="read-book-page">
                 <div className="read-book-nav">
                     {/* Bölümler Dropdown */}
@@ -290,94 +290,95 @@ function ReadBook() {
                     </div>
                 </div>
                 {/* Seçili Bölüm İçeriği */}
-                <div className="read-book-content">
-                    {chapters[selectedSection - 1] && (
-                        <div className="chapter-details">
-                            {chapters[selectedSection - 1].image && (
-                                <img 
-                                    src={
-                                        chapters[selectedSection - 1].image.startsWith('uploads')
-                                            ? `${backendBaseUrl}/${chapters[selectedSection - 1].image}`
-                                            : chapters[selectedSection - 1].image
-                                    } 
-                                    alt={chapters[selectedSection - 1].title} 
-                                    className="chapter-image"
-                                />
-                            )}
-                            <h3>{chapters[selectedSection - 1].title}</h3>
-                            <div className="statistics d-flex gap-3">
-                                <p className="d-flex"><i className="bi bi-eye me-2"></i>{formatNumber(chapters[selectedSection - 1].analysis[0]?.read_count)}</p>
-                                <p className="d-flex"><i className="bi bi-heart me-2"></i>{formatNumber(chapters[selectedSection - 1].analysis[0]?.like_count)}</p>
-                                <p className="d-flex" onClick={handleCommentScroll} style={{ cursor: "pointer" }}><i className="bi bi-chat me-2"></i>{formatNumber(chapters[selectedSection - 1].analysis[0]?.comment_count)}</p>
+                <div className="container">
+                    <div className="read-book-content">
+                        {chapters[selectedSection - 1] && (
+                            <div className="chapter-details">
+                                {chapters[selectedSection - 1].image && (
+                                    <img 
+                                        src={
+                                            chapters[selectedSection - 1].image.startsWith('uploads')
+                                                ? `${backendBaseUrl}/${chapters[selectedSection - 1].image}`
+                                                : chapters[selectedSection - 1].image
+                                        } 
+                                        alt={chapters[selectedSection - 1].title} 
+                                        className="chapter-image"
+                                    />
+                                )}
+                                <h3>{chapters[selectedSection - 1].title}</h3>
+                                <div className="statistics d-flex gap-3">
+                                    <p className="d-flex"><i className="bi bi-eye me-2"></i>{formatNumber(chapters[selectedSection - 1].analysis[0]?.read_count)}</p>
+                                    <p className="d-flex"><i className="bi bi-heart me-2"></i>{formatNumber(chapters[selectedSection - 1].analysis[0]?.like_count)}</p>
+                                    <p className="d-flex" onClick={handleCommentScroll} style={{ cursor: "pointer" }}><i className="bi bi-chat me-2"></i>{formatNumber(chapters[selectedSection - 1].analysis[0]?.comment_count)}</p>
+                                </div>
+                                <div className="content">
+                                {chapters[selectedSection - 1].content}
+                                </div>
                             </div>
-                            <div className="content">
-                            {chapters[selectedSection - 1].content}
-                            </div>
-                        </div>
-                    )}
-    
-                    {/* Sonraki Bölüme Geçiş */}
-                    {selectedSection < chapters.length && (
-                        <Button className="next-chapter-btn" onClick={goToNextSection}>
-                            Sonraki Bölüme Geç <i className="bi bi-chevron-right ms-2"></i>
-                        </Button>
-                    )}
-                    {selectedSection === chapters.length && (
-                        <div className="alert alert-success mt-3" role="alert">
-                            Hikayenin sonuna geldiniz. 
-                            <br />
-                            Başka bir hikayede tekrar buluşmak dileğiyle...
-                        </div>
-                    )}
-    
-                    {/* Yorumlar */}
-                    <div className="comments-chapter mt-4">
-                        <h4 className="mb-2">Yorumlar</h4>
-                        {chapters.length > 0 && chapters[selectedSection - 1] ? (
-                            chapters[selectedSection - 1].comments?.length === 0 ? (
-                                <p style={{ fontSize: "0.9rem", opacity: "0.8" }}>Henüz yorum yapılmadı.</p>
-                            ) : (
-                                chapters[selectedSection - 1].comments.map((comment, index) => (
-                                    <div className="comment d-flex" key={comment.id}>
-                                        <img 
-                                            src={comment.user?.profile_image || '/default-profile.png'} 
-                                            alt={comment.user?.username || 'Anonim'} 
-                                            className="user-profile-img" 
-                                        />
-                                        <div className="comment-details ms-3">
-                                            <p className="user-name mb-1">
-                                                <strong>{comment.user?.username || 'Anonim'}</strong>
-                                            </p>
-                                            <p className="comment-content mb-0">{comment.content}</p>
-                                        </div>
-                                    </div>
-                                ))
-                            )
-                        ) : (
-                            <p style={{ fontSize: "0.9rem", opacity: "0.8" }}>Bölüm yükleniyor...</p>
                         )}
-                    </div>
-    
-                    {/* Yorum Ekleme */}
-                    <div className="comment-input mt-3">
-                        <textarea
-                            className="form-control"
-                            value={newComment}
-                            onChange={handleCommentChange}
-                            rows="3"
-                            placeholder="Siz de bir yorum ekleyin..."
-                        />
-                        <Button
-                            className="mt-2"
-                            onClick={() => handleCommentSubmit(formattedBookName, chapters[selectedSection - 1].title , newComment)}
-                        >
-                            Yorum Yap
-                        </Button>
+        
+                        {/* Sonraki Bölüme Geçiş */}
+                        {selectedSection < chapters.length && (
+                            <Button className="next-chapter-btn" onClick={goToNextSection}>
+                                Sonraki Bölüme Geç <i className="bi bi-chevron-right ms-2"></i>
+                            </Button>
+                        )}
+                        {selectedSection === chapters.length && (
+                            <div className="alert alert-success mt-3" role="alert">
+                                Hikayenin sonuna geldiniz. 
+                                <br />
+                                Başka bir hikayede tekrar buluşmak dileğiyle...
+                            </div>
+                        )}
+        
+                        {/* Yorumlar */}
+                        <div className="comments-chapter mt-4">
+                            <h4 className="mb-2">Yorumlar</h4>
+                            {chapters.length > 0 && chapters[selectedSection - 1] ? (
+                                chapters[selectedSection - 1].comments?.length === 0 ? (
+                                    <p style={{ fontSize: "0.9rem", opacity: "0.8" }}>Henüz yorum yapılmadı.</p>
+                                ) : (
+                                    chapters[selectedSection - 1].comments.map((comment, index) => (
+                                        <div className="comment d-flex" key={comment.id}>
+                                            <img 
+                                                src={comment.user?.profile_image || '/default-profile.png'} 
+                                                alt={comment.user?.username || 'Anonim'} 
+                                                className="user-profile-img" 
+                                            />
+                                            <div className="comment-details ms-3">
+                                                <p className="user-name mb-1">
+                                                    <strong>{comment.user?.username || 'Anonim'}</strong>
+                                                </p>
+                                                <p className="comment-content mb-0">{comment.content}</p>
+                                            </div>
+                                        </div>
+                                    ))
+                                )
+                            ) : (
+                                <p style={{ fontSize: "0.9rem", opacity: "0.8" }}>Bölüm yükleniyor...</p>
+                            )}
+                        </div>
+        
+                        {/* Yorum Ekleme */}
+                        <div className="comment-input mt-3">
+                            <textarea
+                                className="form-control"
+                                value={newComment}
+                                onChange={handleCommentChange}
+                                rows="3"
+                                placeholder="Siz de bir yorum ekleyin..."
+                            />
+                            <Button
+                                className="mt-2"
+                                onClick={() => handleCommentSubmit(formattedBookName, chapters[selectedSection - 1].title , newComment)}
+                            >
+                                Yorum Yap
+                            </Button>
+                        </div>
                     </div>
                 </div>
+                <Footer />
             </div>
-            <Footer />
-        </>
     );
     
 }

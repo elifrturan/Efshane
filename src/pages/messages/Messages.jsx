@@ -4,6 +4,8 @@ import Navbar from "../../layouts/navbar/Navbar"
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 import moment from 'moment';
+import { Button } from 'react-bootstrap'
+import Footer from '../../layouts/footer/Footer'
 
 function Messages() {
     const [currentPage, setCurrentPage] = useState(1);
@@ -106,59 +108,62 @@ function Messages() {
 
 return (
     <div className='messages-page'>
-        <div className="messages-container container d-flex flex-column justify-content-between">
-            <div className="messages-up">
-                <h2 className="text-center mt-5 mb-5">Mesajlar</h2>
-                <div className="d-flex justify-content-between align-items-center mb-5">
-                    <p className='m-0'>Toplam <b>{messages.length}</b> adet mesaj</p>
-                    <Link className='btn-new-message-create' to="/newmessage">Yeni Mesaj Oluştur <i className="bi bi-pencil-square ms-2"></i></Link>
+        <div className="container">
+            <h2 className="text-center mt-5 mb-5">Mesajlar</h2>
+                <div className="messages-up d-flex justify-content-between align-items-center mb-5">
+                    <span className='m-0'>Toplam <b>{messages.length}</b> adet mesaj</span>
+                    <Link className='btn-new-message-create d-flex gap-2' to="/newmessage">Yeni Mesaj Oluştur <i className="bi bi-pencil-square"></i></Link>
                 </div>
                 {currentMessages.map(message => (
-                    <Link className="message-container" to={`/messages/${message.otherUsername}`} key={message.id}>
-                        <div className="message mb-3">
+                    <div className="message-container">
+                        <div className="message" key={message.id}>
                             <div className="d-flex justify-content-between">
-                                <div className="message-content d-flex align-items-center">
-                                    <img src={message.otherImage} alt="" className="rounded-circle" width="60px" height="60px"/>
-                                    <div className="ms-3">
-                                        <span className='m-0'>
-                                            <b>{message.isSender ? "@" + message.otherUsername : " "}</b>
-                                            <br />
-                                            <b>{message.isSender ? "Siz" : "@" + message.otherUsername}: </b>
-                                        </span>
-                                        <span style={{ fontWeight: message.isRead ? 'normal' : 'bold' }}>
-                                            {message.content.length > 120 
-                                                ? `${message.content.slice(0, 120)}...`
-                                                : message.content}
-                                        </span>
+                                <Link to={`/messages/${message.otherUsername}`} style={{textDecoration: 'none'}}>
+                                    <div className="message-content d-flex align-items-center">
+                                        <img src={message.otherImage} alt="" className="rounded-circle" width="60px" height="60px"/>
+                                        <div className="ms-3">
+                                            <span className='m-0'>
+                                                <b>{message.isSender ? "@" + message.otherUsername : " "}</b>
+                                                <br />
+                                                <b>{message.isSender ? "Siz" : "@" + message.otherUsername}: </b>
+                                            </span>
+                                            <span style={{ fontWeight: message.isRead ? 'normal' : 'bold' }}>
+                                                {message.content.length > 120 
+                                                    ? `${message.content.slice(0, 120)}...`
+                                                    : message.content}
+                                            </span>
+                                        </div>
                                     </div>
-                                </div>
+                                </Link>
+                                
                                 <div className="delete-button d-flex flex-column justify-content-between">
-                                    <Link 
+                                    <i 
                                         className="bi bi-trash3-fill" 
                                         onClick={async (e) => {
                                             e.preventDefault(); 
                                             await handleHideConversation(e, message.id)
                                         }}
-                                    > </Link>
-                                    <p className='message-time m-0 text-end'>{timeAgo(message.sendDate)}</p>
+                                    > </i>
+                                    <span className='message-time'>{timeAgo(message.sendDate)}</span>
                                 </div>
                             </div>
                         </div>
-                </Link>            
+                    </div>            
                 ))}
-            </div>
+
             {messages.length > 0 && (
-                <div className="pagination-messages d-flex justify-content-center mt-3 mb-3">
-                <button onClick={handlePreviousPage} disabled={currentPage === 1}>
-                    <i className="bi bi-arrow-left-square-fill"></i>
-                </button>
-                <button onClick={handleNextPage} disabled={currentPage === totalPages}>
-                    <i className="bi bi-arrow-right-square-fill"></i>
-                </button>
+                <div className="pagination-messages d-flex justify-content-center mt-5 mb-5">
+                    <Button onClick={handlePreviousPage} disabled={currentPage === 1}>
+                        <i className="bi bi-arrow-left-circle"></i>
+                    </Button>
+                    <Button onClick={handleNextPage} disabled={currentPage === totalPages}>
+                        <i className="bi bi-arrow-right-circle"></i>
+                    </Button>
             </div>
             )}
             
         </div>
+        <Footer/>
     </div>
     )
 }

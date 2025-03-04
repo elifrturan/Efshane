@@ -135,78 +135,78 @@ function Notifications() {
 
     return (
         <div className="notifications-page">
-            <div className="container">
-                <h2 className='text-center mt-5 mb-5'>Bildirimler</h2>
-                <div className="row">
-                    <p>Toplam <b>{notifications.length}</b> adet bildirim</p>
-                </div>
-                {currentNotifications.map(notification => (
-                    <div className="notification d-flex justify-content-between mb-3" key={notification.id}>
-                        <div className='d-flex'>
-                            <img 
-                                src={
-                                    notification?.author?.profile_image
-                                        ? notification.author?.profile_image.startsWith('uploads')
-                                            ? `${backendBaseUrl}/${notification.author?.profile_image}`
-                                            : notification.author?.profile_image
-                                        : 'default-book-cover.jpg'
-                                }
-                                alt="" 
-                                className="rounded-circle object-fit-cover notification-image" 
-                                width="60px" 
-                                height="60px" 
-                                onClick={() => handleProfileClick(notification.author?.username)}
-                            />
-                            <div className="notification-content d-flex justify-content-center align-items-center ms-3">
-                                <p className="m-0">
-                                    {notification.bookTitle ? (
-                                        <>
-                                            <span 
-                                                className="fw-bold" 
-                                                style={{ cursor: 'pointer' }} 
-                                                onClick={() => handleProfileClick(notification.author?.username)}
-                                            >
-                                                {"“" + notification.author?.username + "”"}
-                                            </span>{" "}
-                                            adlı kullanıcının{" "}
-                                            <span style={{ cursor: 'pointer' }} onClick={() => handleBookClick(notification)}>
-                                                {notification.chapterTitle ? (
-                                                    <>
-                                                        <span className="fw-bold">“{notification.bookTitle}”</span> kitabının{" "}
-                                                        <span className="fw-bold">“{notification.chapterTitle}”</span> bölümü
-                                                    </>
-                                                ) : (
-                                                    <>
-                                                        <span className="fw-bold">“{notification.bookTitle}”</span> kitabı
-                                                    </>
-                                                )}
-                                            </span>{" "}
-                                            yayınlandı. Keşfetmeye ne dersin? 📖🎉🎧
-                                        </>
-                                    ) : (
-                                        <>
-                                            <span 
-                                                className="fw-bold" 
-                                                style={{ cursor: 'pointer' }} 
-                                                onClick={() => handleProfileClick(notification.author?.username)}
-                                            >
-                                                {"@" + notification.author?.username}
-                                            </span>{" "}
-                                            yeni bir duyuru yayınladı🎯 : {notification.message}
-                                        </>
-                                    )}
-                                </p>
+            <div className="container d-flex flex-column justify-content-between gap-2">
+                <div>
+                    <h2 className='text-center mt-5 mb-5'>Bildirimler</h2>
+                    <span>Toplam <b>{notifications.length}</b> adet bildirim</span>
+                    {currentNotifications.map(notification => (
+                        <div className="notification d-flex justify-content-between mb-3" key={notification.id}>
+                            <div className='d-flex'>
+                                <img 
+                                    src={
+                                        notification?.author?.profile_image
+                                            ? notification.author?.profile_image.startsWith('uploads')
+                                                ? `${backendBaseUrl}/${notification.author?.profile_image}`
+                                                : notification.author?.profile_image
+                                            : 'default-book-cover.jpg'
+                                    }
+                                    alt="" 
+                                    className="rounded-circle object-fit-cover notification-image" 
+                                    width="50px" 
+                                    height="50px" 
+                                    onClick={() => handleProfileClick(notification.author?.username)}
+                                />
+                                <div className="notification-content d-flex justify-content-center align-items-center ms-3">
+                                    <p className="m-0">
+                                        {notification.bookTitle ? (
+                                            <>
+                                                <span 
+                                                    className="fw-bold" 
+                                                    style={{ cursor: 'pointer' }} 
+                                                    onClick={() => handleProfileClick(notification.author?.username)}
+                                                >
+                                                    {"“" + notification.author?.username + "”"}
+                                                </span>{" "}
+                                                adlı kullanıcının{" "}
+                                                <span style={{ cursor: 'pointer' }} onClick={() => handleBookClick(notification)}>
+                                                    {notification.chapterTitle ? (
+                                                        <>
+                                                            <span className="fw-bold">“{notification.bookTitle}”</span> kitabının{" "}
+                                                            <span className="fw-bold">“{notification.chapterTitle}”</span> bölümü
+                                                        </>
+                                                    ) : (
+                                                        <>
+                                                            <span className="fw-bold">“{notification.bookTitle}”</span> kitabı
+                                                        </>
+                                                    )}
+                                                </span>{" "}
+                                                yayınlandı. Keşfetmeye ne dersin? 📖🎉🎧
+                                            </>
+                                        ) : (
+                                            <>
+                                                <span 
+                                                    className="fw-bold" 
+                                                    style={{ cursor: 'pointer' }} 
+                                                    onClick={() => handleProfileClick(notification.author?.username)}
+                                                >
+                                                    {"@" + notification.author?.username}
+                                                </span>{" "}
+                                                yeni bir duyuru yayınladı🎯 : {notification.message}
+                                            </>
+                                        )}
+                                    </p>
+                                </div>
                             </div>
-                        </div>
-                        <div className="delete-button d-flex flex-column justify-content-between">
-                                <i className="bi bi-trash3-fill" onClick={() => handleDeleteNotification(notification.id)}></i>
-                                <p className='notification-time m-0 text-end'>{timeAgo(notification.createdAt)}</p>
-                        </div>
+                            <div className="delete-button d-flex flex-column justify-content-between">
+                                    <i className="bi bi-trash3-fill" onClick={() => handleDeleteNotification(notification.id)}></i>
+                                    <p className='notification-time m-0 text-end'>{timeAgo(notification.createdAt)}</p>
+                            </div>
+                    </div>
+                    ))}
                 </div>
-                ))}
                 <div className="pagination d-flex justify-content-center mt-3 mb-3">
-                    <button onClick={handlePreviousPage} disabled={currentPage === 1}><i class="bi bi-arrow-left-square-fill"></i></button>
-                    <button onClick={handleNextPage} disabled={currentPage === totalPages}><i class="bi bi-arrow-right-square-fill"></i></button>
+                    <button onClick={handlePreviousPage} disabled={currentPage === 1}><i className="bi bi-arrow-left-square-fill"></i></button>
+                    <button onClick={handleNextPage} disabled={currentPage === totalPages}><i className="bi bi-arrow-right-square-fill"></i></button>
                 </div>
             </div>
             <Footer/>

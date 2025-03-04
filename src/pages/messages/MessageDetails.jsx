@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import './MessageDetails.css';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import { Form } from 'react-bootstrap';
 
 const backendBaseUrl = 'http://localhost:3000';
 
@@ -119,13 +120,13 @@ function MessageDetails() {
     return (
         <div className='message-details-page'>
             <div className='chat-page text-center mt-5 mb-5'>
-                <h2>{username} ile Sohbet</h2>
+                <h3 className='mb-5 mt-3'>{username} ile Sohbet</h3>
 
                 <div className="chat-messages mt-4">
                     {messages.map((message) => (
                         <div
                             key={message.id}
-                            className={`message-details ${message.sentByCurrentUser ? 'sent' : 'received'} mb-3`}
+                            className={`message-details ${message.sentByCurrentUser ? 'sent' : 'received'}`}
                         >
                             <img
                                 src={
@@ -147,15 +148,15 @@ function MessageDetails() {
                     <div ref={chatEndRef} />
                 </div>
 
-                <form onSubmit={handleSendMessage} className="message-input mt-3">
-                    <input
+                <Form onSubmit={handleSendMessage} className="message-input mt-3">
+                    <Form.Control
                         type="text"
                         placeholder="Bir mesaj yaz..."
                         value={newMessage}
                         onChange={(e) => setNewMessage(e.target.value)}
                     />
                     <button type="submit">Gönder</button>
-                </form>
+                </Form>
             </div>
         </div>
     );

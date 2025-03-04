@@ -330,7 +330,6 @@ function ListenAudioBook() {
     } 
 
     return (
-        <>
             <div className="listen-book-page">
                 <div className="listen-book-nav">
                     <div className="episode-dropdown">
@@ -364,117 +363,118 @@ function ListenAudioBook() {
                         </span>
                     </div>
                 </div>
-                <div className="listen-book-content">
-                    <div className="episode-header">
-                        {episode[selectedSection - 1]?.image ? (
-                            <img 
-                                src={
-                                    episode[selectedSection - 1]?.image
-                                        ? episode[selectedSection - 1].image.startsWith('/')
-                                            ? `${backendBaseUrl}${episode[selectedSection - 1].image}`
-                                            : episode[selectedSection - 1].image
-                                        : 'default-background.jpg' 
-                                }
-                                alt={episode[selectedSection - 1]?.title} 
-                                className="episode-image"
-                            />
-                        ) : null}
-                        <h2>{episode[selectedSection - 1]?.title}</h2>
-                        <div className="statistics d-flex gap-3">
-                            <span>
-                                <i className="bi bi-eye"></i> {formatNumber(episode[selectedSection - 1]?.analysis[0]?.read_count)}
-                            </span>
-                            <span>
-                                <i className="bi bi-heart"></i> {formatNumber(episode[selectedSection - 1]?.analysis[0]?.like_count)}
-                            </span>
-                            <span>
-                                <i className="bi bi-chat" onClick={handleCommentScroll} style={{cursor: 'pointer'}}></i> {formatNumber(episode[selectedSection - 1]?.analysis[0]?.comment_count)}
-                            </span>
-                        </div>
-                    </div>
-
-                    <div className="audio-player">
-                        <div id="waveform" ref={waveformRef}></div>
-                            <div className="time-display">
+                <div className="container">
+                    <div className="listen-book-content">
+                        <div className="episode-header">
+                            {episode[selectedSection - 1]?.image ? (
+                                <img 
+                                    src={
+                                        episode[selectedSection - 1]?.image
+                                            ? episode[selectedSection - 1].image.startsWith('/')
+                                                ? `${backendBaseUrl}${episode[selectedSection - 1].image}`
+                                                : episode[selectedSection - 1].image
+                                            : 'default-background.jpg' 
+                                    }
+                                    alt={episode[selectedSection - 1]?.title} 
+                                    className="episode-image"
+                                />
+                            ) : null}
+                            <h2>{episode[selectedSection - 1]?.title}</h2>
+                            <div className="statistics d-flex gap-3">
                                 <span>
-                                    {audioDuration > 0
-                                        ? `${formatTime(currentTime)} / ${formatTime(audioDuration)}`
-                                        : '0:00 / 0:00'}
+                                    <i className="bi bi-eye"></i> {formatNumber(episode[selectedSection - 1]?.analysis[0]?.read_count)}
+                                </span>
+                                <span>
+                                    <i className="bi bi-heart"></i> {formatNumber(episode[selectedSection - 1]?.analysis[0]?.like_count)}
+                                </span>
+                                <span>
+                                    <i className="bi bi-chat" onClick={handleCommentScroll} style={{cursor: 'pointer'}}></i> {formatNumber(episode[selectedSection - 1]?.analysis[0]?.comment_count)}
                                 </span>
                             </div>
-                            <button
-                                className="play-button"
-                                onClick={togglePlayPause}
-                            >
-                                Oynat/Duraklat
-                            </button>
-                    </div>
-
-                    {selectedSection == episode.length && (
-                        <div className="alert alert-success mt-3" role="alert">
-                            Hikayenin sonuna geldiniz. 
-                            <br />
-                            Başka bir hikayede tekrar buluşmak dileğiyle...
                         </div>
-                    )}
 
-                    {selectedSection < episode.length && (
-                        <Button className='next-episode-btn' onClick={goToNextSection}>
-                            Sonraki Bölüme Geç <i className="bi bi-chevron-right ms-2"></i>
-                        </Button>
-                    )}
+                        <div className="audio-player">
+                            <div id="waveform" ref={waveformRef}></div>
+                                <div className="time-display">
+                                    <span>
+                                        {audioDuration > 0
+                                            ? `${formatTime(currentTime)} / ${formatTime(audioDuration)}`
+                                            : '0:00 / 0:00'}
+                                    </span>
+                                </div>
+                                <button
+                                    className="play-button"
+                                    onClick={togglePlayPause}
+                                >
+                                    Oynat/Duraklat
+                                </button>
+                        </div>
 
-                    <div className="comments-chapter mt-4">
-                        <h4 className="mb-2">Yorumlar</h4>
-                        {episode.length > 0 && episode[selectedSection - 1] ? (
-                            episode[selectedSection - 1].comments?.length === 0 ? (
-                                <p style={{ fontSize: "0.9rem", opacity: "0.8" }}>Henüz yorum yapılmadı.</p>
-                            ) : (
-                                episode[selectedSection - 1].comments.map((comment, index) => (
-                                    <div className="comment d-flex" key={comment.id}>
-                                        <img 
-                                            src={
-                                                comment?.user?.profile_image
-                                                    ? comment.user?.profile_image.startsWith('uploads')
-                                                        ? `${backendBaseUrl}/${comment.user?.profile_image}`
-                                                        : comment.user?.profile_image
-                                                    : 'default-background.jpg' 
-                                            }
-                                            alt={comment.user?.username || 'Anonim'} 
-                                            className="user-profile-img" 
-                                        />
-                                        <div className="comment-details ms-3">
-                                            <p className="user-name mb-1">
-                                                <strong>{comment.user?.username || 'Anonim'}</strong>
-                                            </p>
-                                            <p className="comment-content mb-0">{comment.content}</p>
-                                        </div>
-                                    </div>
-                                ))
-                            )
-                        ) : (
-                            <p style={{ fontSize: "0.9rem", opacity: "0.8" }}>Bölüm yükleniyor...</p>
+                        {selectedSection == episode.length && (
+                            <div className="alert alert-success mt-3" role="alert">
+                                Hikayenin sonuna geldiniz. 
+                                <br />
+                                Başka bir hikayede tekrar buluşmak dileğiyle...
+                            </div>
                         )}
-                    </div>
-                    <div className="comment-input mt-3">
-                        <textarea
-                            className="form-control"
-                            value={newComment}
-                            onChange={handleCommentChange}
-                            rows="3"
-                            placeholder="Siz de bir yorum ekleyin..."
-                        />
-                        <Button
-                            className="mt-2"
-                            onClick={() => handleCommentSubmit(formattedBookName, episode[selectedSection - 1].title , newComment)}
-                        >
-                            Yorum Yap
-                        </Button>
+
+                        {selectedSection < episode.length && (
+                            <Button className='next-episode-btn' onClick={goToNextSection}>
+                                Sonraki Bölüme Geç <i className="bi bi-chevron-right ms-2"></i>
+                            </Button>
+                        )}
+
+                        <div className="comments-chapter mt-4">
+                            <h4 className="mb-2">Yorumlar</h4>
+                            {episode.length > 0 && episode[selectedSection - 1] ? (
+                                episode[selectedSection - 1].comments?.length === 0 ? (
+                                    <p style={{ fontSize: "0.9rem", opacity: "0.8" }}>Henüz yorum yapılmadı.</p>
+                                ) : (
+                                    episode[selectedSection - 1].comments.map((comment, index) => (
+                                        <div className="comment d-flex" key={comment.id}>
+                                            <img 
+                                                src={
+                                                    comment?.user?.profile_image
+                                                        ? comment.user?.profile_image.startsWith('uploads')
+                                                            ? `${backendBaseUrl}/${comment.user?.profile_image}`
+                                                            : comment.user?.profile_image
+                                                        : 'default-background.jpg' 
+                                                }
+                                                alt={comment.user?.username || 'Anonim'} 
+                                                className="user-profile-img" 
+                                            />
+                                            <div className="comment-details ms-3">
+                                                <p className="user-name mb-1">
+                                                    <strong>{comment.user?.username || 'Anonim'}</strong>
+                                                </p>
+                                                <p className="comment-content mb-0">{comment.content}</p>
+                                            </div>
+                                        </div>
+                                    ))
+                                )
+                            ) : (
+                                <p style={{ fontSize: "0.9rem", opacity: "0.8" }}>Bölüm yükleniyor...</p>
+                            )}
+                        </div>
+                        <div className="comment-input mt-3">
+                            <textarea
+                                className="form-control"
+                                value={newComment}
+                                onChange={handleCommentChange}
+                                rows="3"
+                                placeholder="Siz de bir yorum ekleyin..."
+                            />
+                            <Button
+                                className="mt-2"
+                                onClick={() => handleCommentSubmit(formattedBookName, episode[selectedSection - 1].title , newComment)}
+                            >
+                                Yorum Yap
+                            </Button>
+                        </div>
                     </div>
                 </div>
+                <Footer/>
             </div>
-            <Footer/>
-        </>
     )
 }
 

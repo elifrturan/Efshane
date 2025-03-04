@@ -1,59 +1,132 @@
-.messages-page{
-    color: var(--second-color);
-    height: 100vh;
+.messages-page {
     display: flex;
     flex-direction: column;
+    min-height: 100vh;
+    color: var(--black-color);
 }
 
-.btn-new-message-create{
-    border: 1px solid var(--theme-color) !important;
-    border-radius: 8px;
+.messages-page .container {
+    flex: 1;
+}
+
+.messages-page .container .messages-up {
+    font-size: 0.89rem;
+    background-color: var(--gray2-color);
+    padding: 2%;
+}
+
+.messages-page .container .messages-up .btn-new-message-create {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid var(--gray4-color) !important;
+    background-color: var(--gray7-color);
+    border-radius: 6px;
     text-decoration: none;
-    padding: 8px 12px;
-    color: var(--second-color);
-    transition: background-color 0.4s, color 0.4s;
+    padding: 9px 12px;
+    color: var(--black-color);
+    transition: all 0.3s ease-in-out;
 }
 
-.btn-new-message-create:hover{
-    background-color: #3568b6;
-    color: whitesmoke;
+.messages-page .container .messages-up .btn-new-message-create:hover {
+    transform: scale(1.05);
 }
 
-.message-container{
+.messages-page .container .message-container {
     text-decoration: none;
-    color: var(--second-color);    
+    color: var(--black-color);  
 }
 
-.message{
-    padding: 24px 12px;
-    border-bottom: 1px solid gainsboro;
+.messages-page .container .message-container .message {
+    margin: 1% 0;
+    padding: 20px 12px;
+    border-bottom: 1px solid var(--gray2-color);
     cursor: pointer;
     text-decoration: none;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 1px 0px;
+    transition: all 0.3s ease-in-out;
 }
 
-.delete-button .bi-trash3-fill{
-    display: flex;
-    justify-content: end;
-    text-decoration: none;
-    color: var(--second-color);
+.messages-page .container .message-container .message:hover {
+    transform: scale(1.01);
 }
 
-.message-time{
-    font-size: 14px;
+.messages-page .container .message-container .message .message-content img {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
 }
 
-.pagination-messages button{
+.messages-page .container .message-container .message .message-content p {
+    opacity: 1;
+    font-size: 0.9rem;    
+    color: var(--text-muted) !important;
+}
+
+.messages-page .container .message-container .message .message-content span:first-child {
+    color: var(--black-color);
+}
+
+.messages-page .container .message-container .delete-button .message-time {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    opacity: 0.9;
+    text-align: end;
+}
+
+.messages-page .container .pagination-messages button {
     background: none;
     border: none;
+    transition: all 0.3s ease-in-out;
 }
 
-.pagination-messages i{
-    font-size: 28px;
-    color: var(--second-color);
+.messages-page .container .pagination-messages button:hover {
+    transform: scale(1.05) !important;
 }
 
-.pagination-messages button:disabled {
-    color: gray;
+.messages-page .container .pagination-messages i{
+    font-size: 1.8rem;
+    color: var(--black-color);
+}
+
+.messages-page .container .pagination-messages button:disabled {
+    color: var(--gray-color);
     opacity: 0.6;
     cursor: default;
+}
+
+@media (max-width: 426px) {
+    .messages-page .container .message-container .message .message-content p{
+        font-size: 0.7rem;
+    }
+
+    .messages-page .container .message-container .delete-button .message-time {
+        font-size: 0.6rem;
+    }
+
+    .messages-page .container .message-container .delete-button {
+        align-items: flex-end;
+        gap: 15px;
+        flex: 1;
+    }
+
+    .messages-page .container .pagination-messages i {
+        font-size: 1.4rem;
+    }
+}
+
+@media (max-width: 376px) {
+    .messages-page .container .message-container .message .message-content p{
+        font-size: 0.7rem;
+    }
+
+    .messages-page .container .message-container .delete-button .message-time {
+        font-size: 0.6rem;
+    }
+
+    .messages-page .container .message-container .delete-button {
+        align-items: flex-end;
+        gap: 15px;
+        flex: 1;
+    }
 }

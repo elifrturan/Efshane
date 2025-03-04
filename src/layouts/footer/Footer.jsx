@@ -1,37 +1,44 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import './Footer.css';
 import { FaInstagram, FaLinkedin, FaTwitter, FaYoutube } from 'react-icons/fa';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import { ThemeContext } from '../../contexts/ThemeContext';
 
 function Footer() {
   const [show, setShow] = useState(false);
+  const { theme } = useContext(ThemeContext);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
     return (
-        <div className="container">
+        <span style={{paddingRight: '5%', paddingLeft: '5%'}}>
             <footer className="py-3 my-5">
                 <ul className="nav justify-content-center border-bottom pb-3 mb-3">
-                    <li className="nav-item"><a href="/home" className="nav-link px-2 text-body-secondary">Ana Sayfa</a></li>
-                    <li className="nav-item"><a href="/about-us" className="nav-link px-2 text-body-secondary">Hakkımızda</a></li>
-                    <li className="nav-item"><a href="/contact-us" className="nav-link px-2 text-body-secondary">İletişim</a></li>
-                    <li className="nav-item"><a href="#" className="nav-link px-2 text-body-secondary" onClick={handleShow}>Şartlar & Koşullar</a></li>
+                    <li className="nav-item"><a href="/home" className="nav-link px-2">Ana Sayfa</a></li>
+                    <li className="nav-item"><a href="/about-us" className="nav-link px-2">Hakkımızda</a></li>
+                    <li className="nav-item"><a href="/contact-us" className="nav-link px-2">İletişim</a></li>
+                    <li className="nav-item"><a href="#" className="nav-link px-2" onClick={handleShow}>Şartlar & Koşullar</a></li>
                 </ul>
 
                 <div className="d-flex flex-wrap justify-content-between align-items-center down">
                   <div className="col-md-4 d-flex align-items center">
-                    <a href="/" className="mb-3 me-2 mb-md-0 text-body-secondary text-decoration-none lh-1">
-                      <img src="/logo/logo.svg" alt="" width="30px" height="24px"/>
+                    <a href="/home" className="mb-3 me-2 mb-md-0 text-decoration-none lh-1">
+                      <img
+                        src={theme === 'dark' ? '/logo/efshane_logo_dark.svg' : '/logo/efshane_logo.svg'}
+                        alt="Logo"
+                        className="object-fit-cover"
+                        style={{ width: '30px', height: '20px' }}
+                      />
                     </a>
-                    <span className='mb-3 mb-md-0 text-body-secondary'>&copy; 2024 EFshane, Tüm Hakları Saklıdır</span>
+                    <span className='d-flex justify-content-center align-items-center' style={{fontSize: '0.7rem', opacity: '0.8'}}>&copy; 2024 EFshane, Tüm Hakları Saklıdır</span>
                   </div>
 
                   <ul className="nav col-md-4 justify-content-end list-unstyled d-flex">
-                        <li className="ms-3"><a className="text-body-secondary" href="https://www.youtube.com/@efshaneapp"><FaYoutube size={24} /></a></li>
-                        <li className="ms-3"><a className="text-body-secondary" href="https://www.instagram.com/efshaneapp/"><FaInstagram size={24} /></a></li>
-                        <li className="ms-3"><a className="text-body-secondary" href="#"><FaLinkedin size={24} /></a></li>
+                        <li className="ms-3"><a className="" href="https://www.youtube.com/@efshaneapp"><FaYoutube size={24} /></a></li>
+                        <li className="ms-3"><a className="" href="https://www.instagram.com/efshaneapp/"><FaInstagram size={24} /></a></li>
+                        <li className="ms-3"><a className="" href="#"><FaLinkedin size={24} /></a></li>
                     </ul>
                 </div>                
             </footer>
@@ -129,8 +136,8 @@ function Footer() {
                 </Button>
               </Modal.Footer>
             </Modal>
-            
-        </div>
+        </span>  
+
     );
 }
 

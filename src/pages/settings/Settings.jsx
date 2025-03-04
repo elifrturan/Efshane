@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import './Settings.css'
 import Footer from '../../layouts/footer/Footer'
 import { Button, Form, Modal } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios'; 
+import { ThemeContext } from '../../contexts/ThemeContext';
 
 function Settings() {
-    const [theme, setTheme] = useState("light");
+    const {theme, toggleTheme } = useContext(ThemeContext);
     const [notification, setNotification] = useState(true);
     const [showPasswordModal, setShowPasswordModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -28,8 +29,7 @@ function Settings() {
     const handleShowDeleteModal = () => setShowDeleteModal(true);
 
     const handleThemeChange = () => {
-        const newTheme = theme === "light" ? "dark" : "light";
-        setTheme(newTheme);
+        toggleTheme();
     }
 
     useEffect(() => {
@@ -184,87 +184,106 @@ function Settings() {
                 <div className="card p-4 personal-info">
                     <h4 className='mb-4'>Kişisel Bilgiler</h4>
                     <Form>
-                    <Form.Group className="mb-4">
-                        <Form.Label>Kullanıcı Adı</Form.Label>
-                        <div className="d-flex justify-content-between align-items-center gap-2">
-                            {editMode.username ? (
+                        <Form.Group className="mb-4">
+                            <Form.Label>Kullanıcı Adı</Form.Label>
+                            <div className="d-flex justify-content-between align-items-center gap-2">
+                                {editMode.username ? (
+                                    <Form.Control
+                                    type="text"
+                                    name="username"
+                                    value={user.username}
+                                    onChange={handleInputChange}
+                                    style={{ color: "black" }}
+                                />
+                                ) : (
+                                    <Form.Control value={`@${user.username}`} readOnly></Form.Control>
+                                )}
+                                <span
+                                    className="edit-btn"
+                                    onClick={() => handleEditToggle('username')}
+                                >
+                                    <i className={editMode.username ? 'bi bi-check-circle-fill' : 'bi bi-pen-fill'}></i>
+                                </span>
+                            </div>
+                        </Form.Group>
+                        <Form.Group className="mb-4">
+                            <Form.Label>Doğum Tarihi</Form.Label>
+                            <div className="d-flex justify-content-between align-items-center gap-2">
+                                {editMode.birthdate ? (
+                                    <Form.Control
+                                        type="date"
+                                        name="birthdate"
+                                        value={user.birthdate}
+                                        onChange={handleInputChange}
+                                    />
+                                ) : (
+                                    <Form.Control value={formatDate(user.birthdate)} readOnly></Form.Control>
+                                )}
+                                <span
+                                    className="edit-btn"
+                                    onClick={() => handleEditToggle('birthdate')}
+                                >
+                                    <i className={editMode.birthdate ? 'bi bi-check-circle-fill' : 'bi bi-pen-fill'}></i>
+                                </span>
+                            </div>
+                        </Form.Group>
+                        <Form.Group className="mb-4">
+                            <Form.Label>E-Posta</Form.Label>
+                            <div className="d-flex justify-content-between align-items-center gap-2">
+                                {editMode.email ? (
                                 <Form.Control
-                                type="text"
-                                name="username"
-                                value={user.username}
-                                onChange={handleInputChange}
-                                style={{ color: "black" }}
-                            />
-                            ) : (
-                                <Form.Control value={`@${user.username}`} readOnly></Form.Control>
-                            )}
-                            <span
-                                className="edit-btn"
-                                onClick={() => handleEditToggle('username')}
-                            >
-                                <i className={editMode.username ? 'bi bi-check-circle-fill' : 'bi bi-pen-fill'}></i>
-                            </span>
-                        </div>
-                    </Form.Group>
-                    <Form.Group className="mb-4">
-                        <Form.Label>Doğum Tarihi</Form.Label>
-                        <div className="d-flex justify-content-between align-items-center gap-2">
-                            {editMode.birthdate ? (
-                                <Form.Control
-                                    type="date"
-                                    name="birthdate"
-                                    value={user.birthdate}
+                                    type="email"
+                                    name="email"
+                                    value={user.email}
                                     onChange={handleInputChange}
                                 />
-                            ) : (
-                                <Form.Control value={formatDate(user.birthdate)} readOnly></Form.Control>
-                            )}
-                            <span
-                                className="edit-btn"
-                                onClick={() => handleEditToggle('birthdate')}
-                            >
-                                <i className={editMode.birthdate ? 'bi bi-check-circle-fill' : 'bi bi-pen-fill'}></i>
-                            </span>
-                        </div>
-                    </Form.Group>
-                    <Form.Group className="mb-4">
-                        <Form.Label>E-Posta</Form.Label>
-                        <div className="d-flex justify-content-between align-items-center gap-2">
-                            {editMode.email ? (
-                            <Form.Control
-                                type="email"
-                                name="email"
-                                value={user.email}
+                                ) : (
+                                    <Form.Control value={user.email} readOnly></Form.Control>
+                                )}
+                                <span
+                                    className="edit-btn"
+                                    onClick={() => handleEditToggle('email')}
+                                >
+                                    <i className={editMode.email ? 'bi bi-check-circle-fill' : 'bi bi-pen-fill'}></i>
+                                </span>
+                            </div>
+                        </Form.Group>
+                        <Form.Group className="mb-4">
+                            <div className="password-label d-flex justify-content-between">
+                                <Form.Label>Şifre</Form.Label>
+                                <span style={{cursor: 'pointer', fontSize: '0.8rem'}} onClick={handleShowPasswordModal}>Değiştir</span>
+                            </div>
+                            <Form.Control 
+                                type="password"
+                                value={user.password}
                                 onChange={handleInputChange}
                             />
-                            ) : (
-                                <Form.Control value={user.email} readOnly></Form.Control>
-                            )}
-                            <span
-                                className="edit-btn"
-                                onClick={() => handleEditToggle('email')}
-                            >
-                                <i className={editMode.email ? 'bi bi-check-circle-fill' : 'bi bi-pen-fill'}></i>
-                            </span>
-                        </div>
-                    </Form.Group>
-                    <Form.Group className="mb-4">
-                        <div className="password-label d-flex justify-content-between">
-                            <Form.Label>Şifre</Form.Label>
-                            <span style={{cursor: 'pointer', fontSize: '0.8rem'}} onClick={handleShowPasswordModal}>Değiştir</span>
-                        </div>
-                        <Form.Control 
-                            type="password"
-                            value={user.password}
-                            onChange={handleInputChange}
-                        />
-                    </Form.Group>
-                    <button type="submit" className="btn btn-primary" 
-                    onClick={handleSaveChanges}>Kaydet</button>
+                        </Form.Group>
+                        <button 
+                            type="submit" 
+                            className="btn btn-primary" 
+                            onClick={handleSaveChanges}>Kaydet
+                        </button>
                     </Form>
                 </div>
 
                 <div className="card p-4 mt-5 mb-5">
+                    <h4>Tema Ayarları</h4>
+                    <div className="form-check form-switch">
+                        <input
+                            className="form-check-input"
+                            type="checkbox"
+                            id="themeSwitch"
+                            onChange={handleThemeChange}
+                            checked={theme === "dark"}
+                        />
+                        <label className="form-check-label" htmlFor="themeSwitch">
+                            {theme === "light" ? "Açık Tema" : "Koyu Tema"}
+                        </label>
+                    </div>
+                </div>
+
+                <div className="card p-4 mb-5">
                     <h4>Bildirim Ayarları</h4>
                     <div className="form-check form-switch">
                         <input
@@ -352,7 +371,9 @@ function Settings() {
                     </div>
                 </div>
             </div>
-            <Footer/>
+            <div style={{display: 'flex', flexDirection: 'column'}}>
+                <Footer/>
+            </div>
         </>
     )
 }

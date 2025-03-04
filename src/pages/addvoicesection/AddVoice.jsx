@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import './AddVoice.css'
-import { Button, Dropdown, Form, Modal, Spinner } from 'react-bootstrap';
+import { Button, Dropdown, Form, InputGroup, Modal, Spinner } from 'react-bootstrap';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from "framer-motion";
 import { CheckCircle } from 'react-feather';
@@ -890,11 +890,10 @@ function AddVoice() {
                             <img 
                                 src={bookImage.startsWith('uploads') ? `${backendBaseUrl}/${bookImage}` : bookImage} 
                                 alt="uploaded" 
-                                width="200px" 
-                                height="281px" 
+                                className='uploaded-image'
                             />
                             ) : (
-                            <img src="/images/upload-image.svg" alt="upload-image" width="200px" height="281px" />
+                            <img src="/images/upload-image.svg" alt="upload-image"/>
                         )}
                         <input
                             type="file"
@@ -903,11 +902,12 @@ function AddVoice() {
                             style={{ display: 'none' }}
                             onChange={handleImageUpload}
                         />
-                        <button onClick={() => document.getElementById('image-upload').click()}>Görsel Yükle <i className="bi bi-cloud-arrow-up-fill ms-1"></i></button>
+                        <button onClick={() => document.getElementById('image-upload').click()}>Görsel Yükle <i className="bi bi-cloud-arrow-up-fill ms-2"></i></button>
                         {error && <p className='error-message-cover'>{error}</p>}
-                        <i className='left-description'>Kitabınız kapağını değiştirmek istiyorsanız
+                        <span className='voice-left-description'>
+                            Kitabınız kapağını değiştirmek istiyorsanız
                             görsel yükle butonuna tıklamanız yeterli olacaktır.
-                        </i>
+                        </span>
                     </div>
                     <div className="add-voice-section-right">
                         {/* Tabs */}
@@ -916,7 +916,7 @@ function AddVoice() {
                                 className={`voice-tab-button ${activeTab === 'details' ? 'active' : ''}`}
                                 onClick={() => handleTabClick('details')}
                             >
-                            Detay
+                                Detay
                             </button>
                             <button
                                 className={`voice-tab-button ${activeTab === 'sections' ? 'active' : ''}`}
@@ -944,32 +944,31 @@ function AddVoice() {
                             )}                            
                             {activeTab === 'details' && (
                                 <div id="details" className={`tab-pane ${activeTab === 'details' ? 'active' : ''}`}>
-                                    <form className = 'm-0' onSubmit={handleSubmit}>
-                                        <div className="form-group mb-3">
-                                            <label className='form-label'>Kitap Adı</label>
-                                                <input 
-                                                    type="text" 
-                                                    className='form-control'
-                                                    value={title}
-                                                    onChange={(e) => setBookTitle(e.target.value)}
-                                                />
-                                        </div>
-                                        <div className="form-group mb-3">
-                                            <label className='form-label'>Kitap Özeti</label>
-                                                <textarea 
-                                                    rows="4" 
-                                                    className='form-control'
-                                                    value={summary}
-                                                    onChange={(e) => setBookSummary(e.target.value)}
-                                                />
-                                        </div>
-                                        <div className="form-group mb-3">
-                                            <label className='form-label'>Kategori</label>
-                                                <select
-                                                    className="form-select form-select-sm form-select-create"
-                                                    value={bookCategory}  
-                                                    onChange={handleCategoryChange} 
-                                                >
+                                    <Form className='d-flex flex-column gap-4' onSubmit={handleSubmit}>
+                                        <Form.Group>
+                                            <Form.Label>Kitap Adı</Form.Label>
+                                            <Form.Control 
+                                                type="text" 
+                                                value={title}
+                                                onChange={(e) => setBookTitle(e.target.value)}
+                                            />
+                                        </Form.Group>
+                                        <Form.Group>
+                                            <Form.Label>Kitap Özeti</Form.Label>
+                                            <Form.Control 
+                                                as="textarea"
+                                                rows={4}
+                                                value={summary}
+                                                onChange={(e) => setBookSummary(e.target.value)}
+                                            />
+                                        </Form.Group>
+                                        <Form.Group>
+                                            <Form.Label>Kategori</Form.Label>
+                                            <Form.Select
+                                                size='sm'
+                                                value={bookCategory}  
+                                                onChange={handleCategoryChange} 
+                                            >
                                                 <option value="">Kategori Seçiniz...</option>
                                                 {Array.isArray(category) && (
                                                     category.map((categories) => (
@@ -978,36 +977,35 @@ function AddVoice() {
                                                         </option>
                                                     ))
                                                 )}
-                                                </select>
-                                        </div>
-                                            <div className="form-group mb-3">
-                                                <label className='form-label'>Etiketler</label>
+                                                </Form.Select>
+                                        </Form.Group>
+                                            <Form.Group>
+                                                <Form.Label>Etiketler</Form.Label>
                                                     <div className="tags-container">
-                                                    {Array.isArray(bookTags) && bookTags.map((bookTag, index) => (
-                                                        <div className="tag-item" key={index}>
-                                                            <span className="tag-text">{bookTag}</span>
-                                                            <span className="remove-tag" onClick={() => handleRemoveTag(bookTag)}>x</span>
-                                                        </div>
-                                                    ))}
-                                            </div>
-                                            <div className="input-group">
-                                                <input  
-                                                    className='form-control'
-                                                    value={currentTag}
-                                                    onChange={(e) => setCurrentTag(e.target.value)}
-                                                    onKeyDown={handleKeyDown}
-                                                    placeholder='Etiket ekleyiniz...'
-                                                />
-                                                <span className='input-group-text span-plus' onClick={handleAddTag}>+</span>
-                                            </div>
-                                        </div>
-                                        <div className="mb-3">
-                                            <label className='form-label'>Yaş Aralığı</label>
-                                                <select
-                                                    className="form-select form-select-sm form-select-create"
-                                                    value={ageRange} 
-                                                    onChange={handleRangeChange} 
-                                                >
+                                                        {Array.isArray(bookTags) && bookTags.map((bookTag, index) => (
+                                                            <div className="tag-item" key={index}>
+                                                                <span className="tag-text">{bookTag}</span>
+                                                                <span className="remove-tag" onClick={() => handleRemoveTag(bookTag)}>x</span>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                    <InputGroup>
+                                                        <Form.Control  
+                                                            value={currentTag}
+                                                            onChange={(e) => setCurrentTag(e.target.value)}
+                                                            onKeyDown={handleKeyDown}
+                                                            placeholder='Etiket ekleyiniz...'
+                                                        />
+                                                        <InputGroup.Text className='span-plus' onClick={handleAddTag}>+</InputGroup.Text>
+                                                    </InputGroup>
+                                        </Form.Group>
+                                        <Form.Group>
+                                            <Form.Label>Yaş Aralığı</Form.Label>
+                                            <Form.Select
+                                                size='sm'
+                                                value={ageRange} 
+                                                onChange={handleRangeChange} 
+                                            >
                                                 <option value="">Yaş Aralığı Seçiniz...</option>
                                                 {Array.isArray(ageRanges) && (
                                                     ageRanges.map((range) => (
@@ -1016,8 +1014,8 @@ function AddVoice() {
                                                         </option>
                                                     ))
                                                 )}
-                                                </select>
-                                        </div>
+                                            </Form.Select>
+                                        </Form.Group>
                                         {showCopyrightAlert && (
                                             <div className="alert alert-warning d-flex" role="alert">
                                                 <i className="bi bi-exclamation-triangle-fill me-3"></i>
@@ -1026,37 +1024,39 @@ function AddVoice() {
                                                     </div>
                                             </div>
                                         )}
-                                        <div className="form-group mb-3">
-                                            <label className='form-label'>Telif Hakkı</label>
-                                                <select 
-                                                    className="form-select form-select-sm form-select-create" 
-                                                    value={bookContentChoice} 
-                                                    onChange={handleContentChoiceChange}
-                                                    >
-                                                    <option value="" selected>Seçiniz...</option>
-                                                    {Array.isArray(copyrightStatuses) && 
-                                                        copyrightStatuses.map(status => (
-                                                            <option key={status.id} value={status.id}>
-                                                                {status.copyright}
-                                                            </option>
-                                                    ))}
-                                                </select>
+                                        <Form.Group>
+                                            <Form.Label>Telif Hakkı</Form.Label>
+                                            <Form.Select
+                                                size='sm' 
+                                                value={bookContentChoice} 
+                                                onChange={handleContentChoiceChange}
+                                            >
+                                                <option value="" selected>Seçiniz...</option>
+                                                {Array.isArray(copyrightStatuses) && 
+                                                    copyrightStatuses.map(status => (
+                                                        <option key={status.id} value={status.id}>
+                                                            {status.copyright}
+                                                        </option>
+                                                ))}
+                                            </Form.Select>
+                                        </Form.Group>
+                                        {showCopyrightAlert && bookContentChoice === "1" && (
+                                            <div className="alert alert-danger d-flex align-items-start" role="alert">
+                                                <i className="bi bi-exclamation-triangle-fill me-2"></i>
+                                                <div>
+                                                    "Kitaın içeriği tamamen bana aittir. 
+                                                    Hiçbir dış kaynaktan alıntı yapılmamıştır." 
+                                                    seçeneğini seçmiş olmanız durumunda, kitabınızın içeriği 
+                                                    ile ilgili tüm sorumluluk size aittir. Herhangi bir telif hakkı 
+                                                    ihlali veya yasal yükümlülük durumunda sorumluluk tamamen 
+                                                    size ait olacaktır.
                                                 </div>
-                                                {showCopyrightAlert && bookContentChoice === "1" && (
-                                                    <div className="alert alert-danger d-flex align-items-start" role="alert">
-                                                        <i className="bi bi-exclamation-triangle-fill me-2"></i>
-                                                            <div>
-                                                                "Kitaın içeriği tamamen bana aittir. 
-                                                                Hiçbir dış kaynaktan alıntı yapılmamıştır." 
-                                                                seçeneğini seçmiş olmanız durumunda, kitabınızın içeriği 
-                                                                ile ilgili tüm sorumluluk size aittir. Herhangi bir telif hakkı 
-                                                                ihlali veya yasal yükümlülük durumunda sorumluluk tamamen 
-                                                                size ait olacaktır.
-                                                            </div>
-                                                    </div>
-                                                )} 
-                                        <button className='add-voice-section-btn mb-3' type='submit'>Kaydet</button> 
-                                    </form>
+                                            </div>
+                                        )} 
+                                         <div className="add-voice-section-btn">
+                                            <Button className='add-voice-section-btn mb-4' type='submit'>Kaydet</Button>
+                                        </div>
+                                    </Form>
                                 </div>
                             )}
                             { /* Sections */ }
@@ -1074,14 +1074,14 @@ function AddVoice() {
                             {activeTab === 'sections' && (
                                 <div id="sections" className={`voice-tab-pane ${activeTab === 'sections' ? 'active' : ''}`}>
                                     <div className="d-flex justify-content-between align-items-center mb-3">
-                                        <h6 className='fw-bold'>
+                                        <h6>
                                             Toplam {sections.length} adet bölüm 
                                             <span className='calculateTotal ms-2 fw-light'>({(calculateTotalDuration())})</span>
                                         </h6>
-                                        <button className='add-voice-new-section-btn' onClick={handleShow}>Yeni Bölüm Ekle</button>
+                                        <Button className='add-voice-new-section-btn' onClick={handleShow}>Yeni Bölüm Ekle</Button>
                                     </div>
                                     {/* Add New Section */ }
-                                    <Modal show={showNewSectionModal} onHide={handleClose} className='custom-modal' centered backdrop='static'>
+                                    <Modal show={showNewSectionModal} onHide={handleClose} className='custom-modal' centered>
                                         <Modal.Header closeButton className='custom-modal-header'>
                                             <Modal.Title className='fs-6 text-dark me-2'>Yeni Bölüm Ekle</Modal.Title>
                                             <i className="bi bi-question-circle-fill" onClick={handleInfoShow}></i>
@@ -1166,7 +1166,7 @@ function AddVoice() {
                                                                             ? imageFile
                                                                             : URL.createObjectURL(imageFile)
                                                                     }
-                                                                    className='img-fluid mb-4'  
+                                                                    className='object-fit-cover mb-4'  
                                                                     alt="Bölüm Görseli" 
                                                                     width="300" 
                                                                     height="200"
@@ -1326,13 +1326,13 @@ function AddVoice() {
                                             style={{ cursor: 'pointer' }}
                                         >
                                             <span>{section.title}</span>
-                                            <div className="voice-istatistic d-flex me-3">
+                                            <div className="voice-statistics d-flex gap-3">
                                             {section.analysis && section.analysis.length > 0 ? (
                                                 section.analysis.map((stat, index) => (
                                                     <span key={index} className="d-flex align-items-center me-4">
-                                                        <p><i className="bi bi-eye-fill me-1"></i>{formatNumber(stat.read_count)}</p>
-                                                        <p><i className="bi bi-balloon-heart-fill ms-4 me-1"></i>{formatNumber(stat.like_count)}</p>
-                                                        <p><i className="bi bi-chat-heart-fill ms-4 me-1"></i>{formatNumber(stat.comment_count)}</p>
+                                                        <span className='d-flex gap-1'><i className="bi bi-eye"></i>{formatNumber(stat.read_count)}</span>
+                                                        <span className='d-flex gap-1'><i className="bi bi-heart"></i>{formatNumber(stat.like_count)}</span>
+                                                        <span className='d-flex gap-1'><i className="bi bi-chat"></i>{formatNumber(stat.comment_count)}</span>
                                                     </span>
                                                 ))
                                             ) : (
@@ -1350,9 +1350,9 @@ function AddVoice() {
                                                     </span>
                                                     <Dropdown.Menu>
                                                         <Dropdown.Item onClick={handleEditShow}>Düzenle</Dropdown.Item>
-                                                        <Modal show={showEditModal} onHide={handleEditClose} className='edit-modal' centered backdrop='static'>
+                                                        <Modal show={showEditModal} onHide={handleEditClose} className='edit-modal' centered>
                                                             <Modal.Header closeButton className='edit-modal-header'>
-                                                                <Modal.Title className='fs-6 text-dark me-2'>Düzenle</Modal.Title>
+                                                                <Modal.Title className='fs-6 me-2'>Düzenle</Modal.Title>
                                                             </Modal.Header>
                                                             <Modal.Body>
                                                                 <Form>
@@ -1370,7 +1370,7 @@ function AddVoice() {
                                                                                                     : section.image
                                                                                                 : 'default-book-cover.jpg'
                                                                                         }
-                                                                                        className='img-fluid mb-4'  
+                                                                                        className='object-fit-cover mb-4'  
                                                                                         alt="Bölüm Görseli" 
                                                                                         width="300" 
                                                                                         height="200"

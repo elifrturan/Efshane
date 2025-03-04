@@ -89,9 +89,9 @@ function SignIn() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            <span className='input-group-text bg-transparent text-white' onClick={togglePasswordVisibility}>
-              <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
-            </span>
+            <InputGroup.Text className='bg-transparent text-white' onClick={togglePasswordVisibility}>
+              <i className={showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'} style={{fontSize: '0.9rem'}}/>
+            </InputGroup.Text>
           </InputGroup>
 
           {/* remember me and forget password*/}

@@ -1,5 +1,12 @@
 .category-details-page{
-    color: var(--second-color);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    color: var(--black-color);
+}
+
+.category-details-page .container {
+    flex: 1;
 }
 
 .category-details-page .container .details-book-list {

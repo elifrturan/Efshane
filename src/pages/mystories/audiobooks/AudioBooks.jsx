@@ -179,19 +179,19 @@ function AudioBooks() {
                                 />
                                 <div className="audio-book-left-right">
                                     <p className='audio-book-name'>{audioBook.title}</p>
-                                    <p className='stories-date'>
+                                    <p className='audio-book-date'>
                                         Yayınlanma Tarihi: {new Date(audioBook.publish_date).toLocaleDateString('tr-TR', {
                                             year: 'numeric',
                                             month: 'long',
                                             day: 'numeric'
                                         })}
                                     </p>                                
-                                    <div className="audio-book-istatistic">
-                                        <p className='me-2'><i className="bi bi-eye-fill me-1"></i>{formatNumber(audioBook.read_count || 0)}</p>
-                                        <p className='me-2'><i className="bi bi-heart-fill me-1"></i>{formatNumber(audioBook.like_count || 0)}</p>
-                                        <p><i className="bi bi-chat-fill me-1"></i>{formatNumber(audioBook.comment_count || 0)}</p>
+                                    <div className="audio-book-statistics d-flex gap-2">
+                                        <span className='d-flex gap-1'><i className="bi bi-eye"></i>{formatNumber(audioBook.read_count || 0)}</span>
+                                        <span className='d-flex gap-1'><i className="bi bi-heart"></i>{formatNumber(audioBook.like_count || 0)}</span>
+                                        <span className='d-flex gap-1'><i className="bi bi-chat"></i>{formatNumber(audioBook.comment_count || 0)}</span>
                                     </div>
-                                    <p className='audio-book-total-time'>Toplam Süre: {audioBook.duration}</p>
+                                    <span className='audio-book-total-time'>Toplam Süre: {audioBook.duration}</span>
                                 </div>
                             </div>
                             <div className="my-stories-book-right d-flex gap-2">
@@ -236,7 +236,7 @@ function AudioBooks() {
                     <Modal.Title>Sesli kitabını silmek mi istiyorsun?</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <p>Kitabını silmek istediğin için üzgünüz. Bu işlem geri alınamaz. Emin misin?</p>
+                    <span>Kitabını silmek istediğin için üzgünüz. Bu işlem geri alınamaz. Emin misin?</span>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button onClick={() => setShowModal(false)}>

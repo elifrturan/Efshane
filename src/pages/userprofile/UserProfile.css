@@ -1,28 +1,17 @@
-* {
-    box-sizing: border-box;
-}
-
-html, body {
-    background-color: whitesmoke;
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    color: var(--second-color);
-}
-
 .profile2-page {
     width: 100%;
     max-width: 1000px;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
+    min-height: 100vh;
 }
 
 .profile2-page .profile2-page-up .cover-photo img {
     width: 100%;
-    height: 400px;
+    height: 200px;
     object-fit: cover;
-    border-bottom: 2px solid #ddd;
+    border-bottom: 2px solid var( --gray5-color);
     cursor: pointer;
 }
 
@@ -34,7 +23,7 @@ html, body {
 }
 
 .profile2-details .profile-photo {
-    border: 4px solid #fff;
+    border: 4px solid var(--white-color);
     border-radius: 50%;
     overflow: hidden;
     width: 140px;
@@ -58,8 +47,8 @@ html, body {
     margin-right: 20px;
     font-size: 0.9rem;
     font-weight: 600;
-    color: #333;
-    border: 1px solid #aaa;
+    color: var(--black-color);
+    border: 1px solid var(--gray3-color);
     border-radius: 25px;
     background: transparent;
     transition: all 0.3 ease-in-out;
@@ -69,8 +58,8 @@ html, body {
 }
 
 .profile2-details .unfollow-btn:hover {
-    color: red;
-    border: 1px solid red;
+    color: var(--red-color);
+    border: 1px solid var(--red-color);
     background-color: rgba(255, 0, 0, 0.082);
     opacity: 0.9;
 }
@@ -84,10 +73,10 @@ html, body {
     margin-right: 20px;
     font-size: 0.9rem;
     font-weight: 600;
-    color: #fff;
-    border: 1px solid #aaa;
+    color: var(--white-color);
+    border: 1px solid var(--gray3-color);
     border-radius: 25px;
-    background: #333;
+    background: var(--black-color);
     transition: all 0.3 ease-in-out;
     opacity: 1;
     cursor: pointer;
@@ -95,9 +84,9 @@ html, body {
 }
 
 .profile2-details .follow-btn:hover {
-    color: #fff;
-    border: 1px solid #333;
-    background-color: #333;
+    color: var(--white-color);
+    border: 1px solid var(--black-color);
+    background-color: var(--black-color);
     opacity: 0.9;
 }
 
@@ -138,7 +127,7 @@ html, body {
     top: 10px;
     right: 10px;
     background: transparent;
-    color: white;
+    color: var(--white-color);
     border: none;
     font-size: 2rem;
     cursor: pointer;
@@ -148,7 +137,7 @@ html, body {
 }
 
 .profile2-modal .close-modal:hover {
-    background-color: #99999950;
+    background-color: var(--gray3-color) !important;
 }
 
 .profile2-user-details {
@@ -160,13 +149,13 @@ html, body {
     font-weight: 600;
     font-size: 1.25rem;
     margin: 0;
-    color: #333;
+    color: var(--black-color);
 }
 
 .profile2-user-details .username-name span {
     font-size: 0.9rem;
     font-weight: lighter;
-    color: #536471;
+    color: var(--text-muted);
     opacity: 0.7;
     letter-spacing: 0.3px;
 }
@@ -174,14 +163,14 @@ html, body {
 .profile2-user-details .about-section {
     margin-top: 3%;
     font-size: 0.95rem;
-    color: #333;
+    color: var(--black-color);
 }
 
 .profile2-user-details .attend-date {
     margin-top: 3%;
     font-size: 0.95rem;
     font-weight: 400;
-    color: #536471;
+    color: var(--text-muted);
 }
 
 .profile2-user-details .follower-statistics {
@@ -196,7 +185,7 @@ html, body {
 }
 
 .profile2-user-details .follower-statistics p:hover {
-    border-bottom: 1px solid #aaa;
+    border-bottom: 1px solid var(--gray3-color);
     cursor: pointer;
 }
 
@@ -215,7 +204,7 @@ html, body {
 .profile2-page-down .right {
     padding: 0;
     flex: 2;
-    border-left: 1px solid #ddd;
+    border-left: 1px solid var(--gray5-color);
 }
 
 .profile2-page-down .right .right-main {
@@ -229,7 +218,7 @@ html, body {
 
 .profile2-page-down .left .stories, .profile2-page-down .left .my-read-list {
     max-width: 400px;
-    background-color: #ececec62;
+    background-color: var(--gray7-color);
     padding: 8px;
     border-radius: 4px;
 }
@@ -260,14 +249,14 @@ html, body {
     border: none;
     font-size: 0.75rem;
     cursor: pointer;
-    color: #333;
+    color: var(--black-color);
     opacity: 0.5;
     transition: color 0.2s ease;
     padding: 0;
 }
 
 .scroll-btn:hover {
-    color: #000;
+    color: var(--black-color);
 }
 
 .profile2-page-down .left .stories .stories-title .story-controls i.bi.bi-chevron-left::before, 
@@ -318,7 +307,7 @@ html, body {
 .profile2-page-down .left .stories .story .statistics p,
 .profile2-page-down .left .my-read-list .story .statistics p {
     font-size: 0.6rem !important;
-    color: #333;
+    color: var(--black-color);
     opacity: 0.6;
     font-weight: 500;
 }
@@ -326,7 +315,7 @@ html, body {
 
 .profile2-announcement {
     padding: 16px;
-    border: 1px solid #eee;
+    border: 1px solid var(--gray2-color);
     border-radius: 8px;
     display: flex;
     align-items: flex-start;
@@ -371,7 +360,7 @@ html, body {
 
 .profile2-announcement .profile2-announcement-right .interaction, 
 .profile2-announcement .profile2-announcement-right .interaction i {
-    color: #333 !important;
+    color: var(--black-color) !important;
     opacity: 0.9;
     font-size: 0.8rem;
 }
@@ -390,11 +379,6 @@ html, body {
     font-size: 0.8rem;
 }
 
-.profile2-announcement .profile2-announcement-right .interaction .bi-chat:hover{
-    color: black !important;
-    transform: scale(1.2);
-}
-
 .profile2-announcement .profile2-announcement-right .interaction .bi-heart::before {
     cursor: pointer;
     transition: transform 0.3s ease, color 0.3s ease;
@@ -405,114 +389,9 @@ html, body {
 }
 
 .profile2-announcement .profile2-announcement-right .interaction .bi-heart-fill::before{
-    color: red;
+    color: var(--red-color);
     animation: pop 0.3s ease;
     cursor: pointer;
-}
-
-.profile2-comment-section .comment-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 10px;
-}
-
-.profile2-comment-section .comment-item-left {
-    flex: 1;
-    display: flex;
-}
-
-.profile2-comment-section .comment-item-right {
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.profile2-comment-section .comment-item-left .reply-input input {
-    font-size: 0.8rem !important;
-    border: 1px solid #aaa;
-    width: 100%;
-    padding: 2%;
-    margin-top: 3%;
-    border-radius: 5px;
-    background: transparent;
-    opacity: 0.6;
-    color: #333;
-}
-
-.profile2-comment-section .comment-item-left .reply-input input:focus {
-    outline: none;
-    opacity: 0.8;
-}
-
-.profile2-comment-section .comment-item p span{
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: #000;
-    opacity: 0.9;
-}
-
-.profile2-comment-section .comment-item p {
-    font-size: 0.9rem;
-    opacity: 0.9;
-    color: #333;
-}
-
-.profile2-comment-section .comment-item div small {
-    font-size: 0.75rem;
-    opacity: 0.6;
-}
-
-.profile2-comment-section .show-more-comments {
-    text-decoration: none;
-    font-size: 0.8rem;
-    width: 100%;
-}
-
-.profile2-comment-section .comment-item .comment-item-right .bi-heart::before {
-    cursor: pointer;
-    transition: transform 0.3s ease, color 0.3s ease;
-}
-
-.profile2-comment-section .comment-item .comment-item-right .bi-heart:hover::before {
-    transform: scale(1.2);
-}
-
-.profile2-comment-section .comment-item .comment-item-right .bi-heart-fill::before {
-    color: red;
-    animation: pop 0.3s ease;
-    cursor: pointer;
-}
-
-.profile2-comment-section .comment-input input {
-    flex: 1;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    opacity: 0.5;
-    font-size: 0.9rem;
-    background: transparent;
-}
-
-.profile2-comment-section .comment-input input::placeholder {
-    color: #000 !important;
-    font-size: 0.8rem;
-}
-
-.profile2-comment-section .comment-input input:focus {
-    background: transparent;
-    opacity: 0.8;
-    outline: none;
-    font-size: 0.9rem;
-    border: 1px solid #ccc;
-}
-
-.profile2-comment-section .comment-input button {
-    font-size: 0.8rem;
-    padding: 2px 16px;
-    background-color: #333;
-    border: #333;
-    opacity: 0.8;
 }
 
 @media (max-width: 480px) {

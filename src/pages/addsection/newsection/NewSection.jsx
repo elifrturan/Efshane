@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import './NewSection.css'
 import { useParams, useNavigate } from 'react-router-dom';
-import { Button, Modal } from 'react-bootstrap';
+import { Button, Form, Modal } from 'react-bootstrap';
 import axios from 'axios';
 
 const backendBaseUrl = 'http://localhost:3000';
@@ -364,20 +364,20 @@ function NewSection() {
             </Modal>
             <div className="fixed-header">
                 <div className="header-buttons">
-                <button className="save" onClick={saveChapter} disabled={loading}>
-                    {loading ? 'Kaydediliyor...' : 'Kaydet'}
-                </button>
-                <button className="publish" onClick={publishChapter} disabled={loading}>
-                    {loading ? 'Yayınlanıyor...' : 'Yayınla'}
-                </button>
+                    <button className="save" onClick={saveChapter} disabled={loading}>
+                        {loading ? 'Kaydediliyor...' : 'Kaydet'}
+                    </button>
+                    <button className="publish" onClick={publishChapter} disabled={loading}>
+                        {loading ? 'Yayınlanıyor...' : 'Yayınla'}
+                    </button>
                 </div>
             </div>
 
             <div className="container">
                 {/* Add Image */}
                 <div className="image-upload-area" onClick={triggerFileInput}>
-                    <form>
-                        <label className='form-label image-upload-label'>
+                    <Form>
+                        <Form.Label className='image-upload-label'>
                             {image ? (
                                 <>
                                     <img 
@@ -397,21 +397,21 @@ function NewSection() {
                             ) : (
                                 <span>Görsel Ekleyin</span>
                             )}
-                        </label>
-                        <input
+                        </Form.Label>
+                        <Form.Control
                             id='file-input' 
                             type="file"
-                            className='image-upload-input form-control'
+                            className='image-upload-input'
                             onChange={handleImageUpload}
                             onInput={handleInputResize}
                             accept='image/*' />
-                    </form>
+                    </Form>
                 </div>
-                <form>
+                <Form>
                     {/* Add Title */}
-                    <input 
+                    <Form.Control 
                         type="text"
-                        className='form-control section-title'
+                        className='section-title'
                         placeholder='Bir başlık ekleyin...'
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
@@ -419,36 +419,30 @@ function NewSection() {
                     <hr />
                     {/* Add Content */}
                     <div className="content-toolbar">
-                        <button
-                            type='button'
+                        <Button
                             onClick={() => handleFormat('bold')}
                             className={activeStyle.bold ? 'active' : ''}
-                        ><b>B</b></button>
-                        <button
-                            type='button'
+                        ><b>B</b></Button>
+                        <Button
                             onClick={() => handleFormat('italic')}
                             className={activeStyle.italic ? 'active' : ''}
-                        ><i>I</i></button>
-                        <button
-                            type='button'
+                        ><i>I</i></Button>
+                        <Button
                             onClick={() => handleFormat('underline')}
                             className={activeStyle.underline ? 'active' : ''}
-                        ><u>U</u></button>
-                        <button
-                            type='button'
+                        ><u>U</u></Button>
+                        <Button
                             onClick={() => handleFormat('left')}
                             className={activeStyle.left ? 'active' : ''}
-                        ><i className="bi bi-text-left"></i></button>
-                        <button
-                            type='button'
+                        ><i className="bi bi-text-left"></i></Button>
+                        <Button
                             onClick={() => handleFormat('center')}
                             className={activeStyle.center ? 'active' : ''}
-                        ><i className="bi bi-text-center"></i></button>
-                        <button
-                            type='button'
+                        ><i className="bi bi-text-center"></i></Button>
+                        <Button
                             onClick={() => handleFormat('right')}
                             className={activeStyle.right ? 'active' : ''}
-                        ><i className="bi bi-text-right"></i></button>
+                        ><i className="bi bi-text-right"></i></Button>
                     </div>
                     <div
                         ref={contentRef} 
@@ -458,7 +452,7 @@ function NewSection() {
                         placeholder='Bölümünüzü buraya yazın...'
                     >
                     </div>
-                </form>
+                </Form>
             </div>
             {/* Chatbot modal */}
             <div className={`chat-modal ${isChatOpen ? 'active' : ''}`}>

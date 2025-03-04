@@ -238,7 +238,7 @@ function UserProfile() {
         return num.toString();
     }
 
-    const readingLists = [
+    const [readingLists, setReadingLists] = useState([
         {
             id: 1,
             name: "Favorilerim",
@@ -259,7 +259,7 @@ function UserProfile() {
     ].map(list => ({
         ...list,
         cover: list.books.length > 0 ? list.books[0].image : "/images/default-cover.jpg",
-    }));
+    })));
 
     const handleListModalClose = () => setShowListModal(false)
 
@@ -473,7 +473,9 @@ function UserProfile() {
                         </div>
                 </div>
             </div>
-            <Footer/>
+            <div style={{display: 'flex', flexDirection: 'column'}}>
+                <Footer/>
+            </div>
         </>
     )
 }
