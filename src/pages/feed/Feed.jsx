@@ -540,21 +540,21 @@ function Feed() {
                                             <div className="left">
                                             <p>
                                                 <i
-                                                    className={`bi ${post.isLiked ? "bi-heart-fill me-2" : "bi-heart me-2"}`}
+                                                    className={`bi ${post.isLiked ? "bi-heart-fill" : "bi-heart"}`}
                                                     onClick={() => handleLike(post.id, post.isLiked)}
                                                 ></i>
                                                 {formatNumber(post.analysis?.like_count)}
                                             </p>
                                                 <p>
                                                     <i
-                                                        className={`bi ${post.isRepostedByUser  ? "bi-repeat active me-2 text-success" : "bi-repeat me-2"}`}
+                                                        className={`bi ${post.isRepostedByUser  ? "bi-repeat active me-2 text-success" : "bi-repeat"}`}
                                                         onClick={() => handleRepost(post.id)}
                                                     ></i>
                                                     {formatNumber(post.analysis?.repost_count)}
                                                 </p>
                                                 <div>
                                                     <p onClick={() => toggleComments(post.id)}>
-                                                        <i className="bi bi-chat me-2"></i>
+                                                        <i className="bi bi-chat"></i>
                                                         {formatNumber(post.analysis?.comment_count)}
                                                     </p>
                                                 </div>

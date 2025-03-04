@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import './ReadBook.css'
 import Footer from '../../layouts/footer/Footer'
-import { Button, Dropdown } from 'react-bootstrap'
+import { Button, Dropdown, ProgressBar } from 'react-bootstrap'
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
 
@@ -15,6 +15,9 @@ function ReadBook() {
     const [selectedSection, setSelectedSection] = useState(1);
     const [newComment, setNewComment] = useState('');
     const [comments, setComments] = useState([]);
+    //progress-bar islemleri
+    const [progress, setProgress] = useState(0);
+    const contentWrapperRef = useRef(null);
     
     useEffect(() => {
         window.scrollTo(0,0);
@@ -239,7 +242,22 @@ function ReadBook() {
             return (num / 1_000).toFixed(1).replace(/\.0$/, '') + 'K';
         }
         return num.toString();
-    }    
+    } 
+    
+    //progress-bar islemleri
+    useEffect(() => {
+        const contentWrapper = contentWrapperRef.current;
+        if (!contentWrapper) return;
+        const handleScroll = () => {
+            const { scrollTop, scrollHeight, clientHeight } = contentWrapper;
+            const scrollPercent = (scrollTop / (scrollHeight - clientHeight)) * 100;
+            setProgress(Math.min(scrollPercent, 100));
+        };
+
+        contentWrapper.addEventListener('scroll', handleScroll);
+        contentWrapper.scrollTop = 0;
+        return () => contentWrapper.removeEventListener('scroll', handleScroll);
+    }, [selectedSection])
 
     return (
 
@@ -289,8 +307,11 @@ function ReadBook() {
                             </span>
                     </div>
                 </div>
+                <div className="progress-container">
+                    <ProgressBar now={progress} label={`${Math.round(progress)}%`} />
+                </div>
                 {/* Seçili Bölüm İçeriği */}
-                <div className="container">
+                <div className="read-book-content-wrapper"  ref={contentWrapperRef}>
                     <div className="read-book-content">
                         {chapters[selectedSection - 1] && (
                             <div className="chapter-details">

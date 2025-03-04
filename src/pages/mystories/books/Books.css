@@ -24,7 +24,7 @@
 
 .stories-left-right .stories-statistics {
     display: flex;
-    gap: 1px;
+    gap: 8px;
     width: 100%;
     font-size: 0.75rem;
     color: var(--black-color);

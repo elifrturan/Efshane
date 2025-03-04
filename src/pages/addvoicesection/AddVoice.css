@@ -318,8 +318,14 @@
     color: var(--black-color);
 }
 
-.add-voice-file input, .add-text-file input, .image-modal, .edit-image-modal, .edit-voice-file, .edit-text-file {
+.add-voice-image input, .add-voice-file input, .add-text-file input, .image-modal, .edit-image-modal, .edit-voice-image input, .edit-voice-file input, .edit-text-file input {
     font-size: 0.8rem;
+    border: 1px solid var(--gray4-color);
+    color: var(--text-muted) !important;
+}
+
+.add-voice-file input:focus {
+    border: 1px solid var(--gray4-color);
 }
 
 .save-voice button, .edit-save-voice button {

@@ -1098,7 +1098,7 @@ function AddVoice() {
                                     {/* Add New Section */ }
                                     <Modal show={showNewSectionModal} onHide={handleClose} className='custom-modal' centered>
                                         <Modal.Header closeButton className='custom-modal-header'>
-                                            <Modal.Title className='fs-6 text-dark me-2'>Yeni Bölüm Ekle</Modal.Title>
+                                            <Modal.Title className='fs-6 me-2'>Yeni Bölüm Ekle</Modal.Title>
                                             <i className="bi bi-question-circle-fill" onClick={handleInfoShow}></i>
                                             {/* Info Modal */}
                                             <Modal show={showInfoModal} onHide={handleInfoClose} className='voice-help-modal'>

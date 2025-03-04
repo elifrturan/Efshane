@@ -94,6 +94,12 @@
     align-items: center;
 }
 
+.feed-post .feed-post-right .interaction p{
+    margin: 0;
+    display: flex;
+    gap: 4px;
+}
+
 .feed-post .feed-post-right .interaction, .feed-post .feed-post-right .interaction i {
     color: var(--black-color) !important;
     opacity: 0.9;
@@ -108,6 +114,7 @@
     width: 35%;
     display: flex;
     justify-content: space-between;
+    gap: 15px;
 }
 
 .feed-post .feed-post-right .interaction .bi-chat:hover{
