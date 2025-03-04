@@ -465,14 +465,23 @@ function AddVoice() {
         if (!Array.isArray(sections) || sections.length === 0) {
             return "0 dakika 0 saniye"; 
         }
-        const totalSeconds = sections.reduce((sum, section) => sum + (section.duration || 0), 0);
+        
+        const totalSeconds = sections.reduce((sum, section) => {
+            return sum + (Number(section.duration) || 0);
+        }, 0);
+    
         const hours = Math.floor(totalSeconds / 3600);
         const minutes = Math.floor((totalSeconds % 3600) / 60);
         const seconds = totalSeconds % 60;
-        return hours > 0 
-            ? `${hours} saat ${minutes} dakika ${seconds} saniye`
-            : `${minutes} dakika ${seconds} saniye`;
-    };    
+    
+        if (hours > 0) {
+            return `${hours} saat ${minutes} dakika ${seconds} saniye`;
+        } else if (minutes > 0) {
+            return `${minutes} dakika ${seconds} saniye`;
+        } else {
+            return `${seconds} saniye`;
+        }
+    };   
 
     const handleCancel = () => {
         setFileType(null);
@@ -565,6 +574,9 @@ function AddVoice() {
             const audio = new Audio(URL.createObjectURL(file));
             audio.onloadedmetadata = async () => {
                 const maxDurationInSeconds = 20 * 60;
+                const audioDuration = Math.floor(audio.duration);
+                setAudioDuration(audioDuration);
+
                 if (audio.duration > maxDurationInSeconds) {
                     setError("Ses dosyasının süresi 20 dakikadan uzun olamaz.");
                     setTimeout(() => setError(""), 5000);
@@ -591,6 +603,7 @@ function AddVoice() {
                     if (response.status === 201) {
                         const data = response.data;
                         setAudioFile(file);
+                        setAudioPlayerVisible(true);
                     } else {
                         throw new Error('Dosya yüklenemedi');
                     }
@@ -772,6 +785,7 @@ function AddVoice() {
                 setSections((prevSections) => [...prevSections, newSection]);
                 setShowSuccessModal(true); 
                 handleClose(); 
+                handleCancel();
             }
         } catch (error) {
             if (error.response && error.response.status === 400) {
@@ -828,6 +842,7 @@ function AddVoice() {
                 setSections((prevSections) => [...prevSections, newSection]);
                 setShowSuccessModal(true); 
                 handleClose(); 
+                handleCancel();
             } else {
                 console.error("Unexpected response:", response);
             }
@@ -1053,7 +1068,7 @@ function AddVoice() {
                                                 </div>
                                             </div>
                                         )} 
-                                         <div className="add-voice-section-btn">
+                                        <div className="add-voice-section-btn">
                                             <Button className='add-voice-section-btn mb-4' type='submit'>Kaydet</Button>
                                         </div>
                                     </Form>
@@ -1255,6 +1270,9 @@ function AddVoice() {
                                                                             <source src={URL.createObjectURL(audioFile)} />
                                                                             Tarayıcınız yüklediğiniz dosya uzantısını çalıştırmıyor.
                                                                         </audio>
+                                                                        <div className="audio-duration">
+                                                                            Süre: {Math.floor(audioDuration / 60)} dakika {audioDuration % 60} saniye
+                                                                        </div>
                                                                     </div>
                                                                 )}
                                                                 <Form.Control

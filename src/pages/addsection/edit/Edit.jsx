@@ -390,7 +390,7 @@ function Edit() {
                     </div>
             </div>
             {/* Chatbot modal */}
-            <div className={`chat-modal ${isChatOpen ? 'active' : ''}`}>
+            <div className={`edit-chat-modal ${isChatOpen ? 'active' : ''}`}>
                 <div className="edit-chat-modal-header">
                     <i className="bi bi-chat-left-text"></i> Yardım Al
                     <button className="edit-close-btn" onClick={toggleChat}>&times;</button>

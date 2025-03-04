@@ -246,7 +246,7 @@ function ReadBook() {
             <div className="read-book-page">
                 <div className="read-book-nav">
                     {/* Bölümler Dropdown */}
-                    <div className="sections-dropdown">
+                    <div className="chapters-dropdown">
                         <Dropdown>
                             <Dropdown.Toggle>
                                 Bölümler
@@ -341,7 +341,10 @@ function ReadBook() {
                                     chapters[selectedSection - 1].comments.map((comment, index) => (
                                         <div className="comment d-flex" key={comment.id}>
                                             <img 
-                                                src={comment.user?.profile_image || '/default-profile.png'} 
+                                                src={comment.user?.profile_image.startsWith('uploads')  
+                                                    ? `${backendBaseUrl}/${comment.user?.profile_image}`
+                                                    : comment.user?.profile_image
+                                                } 
                                                 alt={comment.user?.username || 'Anonim'} 
                                                 className="user-profile-img" 
                                             />

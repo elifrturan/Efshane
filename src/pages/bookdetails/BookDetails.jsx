@@ -218,22 +218,27 @@ function BookDetails() {
     }
 
     const handleCommentSubmit = async (bookId, newCommentContent) => {
-        if(newCommentContent.trim() === "") return;
-
+        if (newCommentContent.trim() === "") return;
+    
         try {
             const response = await axios.post(
                 `http://localhost:3000/comment/book/${bookId}`,
-                { content: newCommentContent }, 
+                { content: newCommentContent },
                 {
                     headers: {
-                        Authorization: `Bearer ${localStorage.getItem('token')}`, 
+                        Authorization: `Bearer ${localStorage.getItem('token')}`,
                     },
                 }
             );
-            const newComment = response.data.comment;
-
+    
+            let newComment = response.data.comment;
+    
+            if (!newComment.publish_date) {
+                newComment = { ...newComment, publish_date: new Date().toISOString() };
+            }
+    
             setComments((prevComments) => [newComment, ...prevComments]);
-
+    
             setBookDetails((prevDetails) => {
                 const updatedDetails = [...prevDetails];
                 if (updatedDetails[0]?.comments) {
@@ -243,10 +248,11 @@ function BookDetails() {
             });
         } catch (error) {
             console.error("Error adding comment:", error.response?.data || error.message);
-            throw error; 
+            throw error;
         }
+    
         setNewComment("");
-    }
+    };
 
     useEffect(() => {
         window.scrollTo(0,0);
