@@ -18,6 +18,7 @@ function ReadBook() {
     //progress-bar islemleri
     const [progress, setProgress] = useState(0);
     const contentWrapperRef = useRef(null);
+    const [initialScrollApplied, setInitialScrollApplied] = useState(false);
     
     useEffect(() => {
         window.scrollTo(0,0);
@@ -29,7 +30,6 @@ function ReadBook() {
         }
     }, [chapters]);
     
-
     useEffect(() => {
         const fetchChaptersDetails = async () => {
             try {
@@ -52,20 +52,48 @@ function ReadBook() {
                     }
                 );
 
-                const lastReadChapter = lastReadResponse.data?.chapters;
-                if (lastReadChapter) {
-                    const lastReadIndex = chapters.findIndex(chapter => chapter.id === lastReadChapter.id);
-                    setSelectedSection(lastReadIndex !== -1 ? lastReadIndex + 1 : 1);
+                if (lastReadResponse.data?.chapters) {
+                    const { chapters: lastReadChapter } = lastReadResponse.data;
+                    
+                    if (lastReadChapter.progressPercentage) {
+                        setProgress(lastReadChapter.progressPercentage);
+                    }
+                    
+                    if (lastReadChapter.id) {
+                        const chapterIndex = chapters.findIndex(chapter => chapter.id === lastReadChapter.id);
+                        if (chapterIndex !== -1) {
+                            setSelectedSection(chapterIndex + 1);
+                            setInitialScrollApplied(false);
+                        } else {
+                            setSelectedSection(1);
+                        }
+                    } else {
+                        setSelectedSection(1);
+                    }
                 } else {
                     setSelectedSection(1);
                 }
             } catch (error) {
                 console.error("Error fetching book details:", error);
+                setSelectedSection(1);
             }
         };
     
         fetchChaptersDetails();
     }, [formattedBookName]);
+    
+    useEffect(() => {
+        if (!initialScrollApplied && contentWrapperRef.current && progress > 0) {
+            const contentWrapper = contentWrapperRef.current;
+            const scrollPosition = (progress / 100) * (contentWrapper.scrollHeight - contentWrapper.clientHeight);
+            const timer = setTimeout(() => {
+                contentWrapper.scrollTop = scrollPosition;
+                setInitialScrollApplied(true);
+            }, 300);
+            
+            return () => clearTimeout(timer);
+        }
+    }, [progress, initialScrollApplied, selectedSection, chapters]);
     
     const handleCommentChange = (e) => {
         setNewComment(e.target.value);
@@ -118,11 +146,11 @@ function ReadBook() {
         }
     };
 
-    const updateProgress = async (formattedBookName, chapterId) => {
+    const updateProgress = async (bookName, chapterId, percentage = 0) => {
         try {
-            const response = await axios.post(
-                `${backendBaseUrl}/progress/book/${formattedBookName}/chapter/${chapterId}`,
-                {},
+            await axios.post(
+                `${backendBaseUrl}/progress/book/${bookName}/chapter/${chapterId}`,
+                { progressPercentage: percentage }, 
                 {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -138,22 +166,31 @@ function ReadBook() {
         if (selectedSection < chapters.length) {
             const nextSection = selectedSection + 1;
             setSelectedSection(nextSection);
-            window.scrollTo(0, 0);
+            setProgress(0); 
+            setInitialScrollApplied(true); 
     
             const chapterId = chapters[nextSection - 1]?.id; 
             if (chapterId) {
-                await updateProgress(formattedBookName, chapterId);
+                await updateProgress(formattedBookName, chapterId, 0); // Start at beginning of chapte
+            }
+            
+            if (contentWrapperRef.current) {
+                contentWrapperRef.current.scrollTop = 0;
             }
         }
     };    
 
     const handleSectionChange = async (index) => {
         setSelectedSection(index + 1);
-        window.scrollTo(0, 0);
+        setProgress(0); 
+        setInitialScrollApplied(true); 
     
         const chapterId = chapters[index]?.id; 
         if (chapterId) {
-            await updateProgress(formattedBookName, chapterId);
+            await updateProgress(formattedBookName, chapterId, 0); 
+        }
+        if (contentWrapperRef.current) {
+            contentWrapperRef.current.scrollTop = 0;
         }
     };    
 
@@ -248,19 +285,31 @@ function ReadBook() {
     useEffect(() => {
         const contentWrapper = contentWrapperRef.current;
         if (!contentWrapper) return;
+        
         const handleScroll = () => {
+            if (!initialScrollApplied) return;
+            
             const { scrollTop, scrollHeight, clientHeight } = contentWrapper;
             const scrollPercent = (scrollTop / (scrollHeight - clientHeight)) * 100;
-            setProgress(Math.min(scrollPercent, 100));
+            const roundedPercent = Math.min(Math.round(scrollPercent), 100);
+            
+            setProgress(roundedPercent);
+            
+            if (chapters.length > 0 && selectedSection > 0 && selectedSection <= chapters.length) {
+                const chapterId = chapters[selectedSection - 1]?.id;
+                if (chapterId) {
+                    if (roundedPercent % 5 === 0 || roundedPercent === 100) {
+                        updateProgress(formattedBookName, chapterId, roundedPercent);
+                    }
+                }
+            }
         };
 
         contentWrapper.addEventListener('scroll', handleScroll);
-        contentWrapper.scrollTop = 0;
         return () => contentWrapper.removeEventListener('scroll', handleScroll);
-    }, [selectedSection])
+    }, [selectedSection, chapters, formattedBookName, initialScrollApplied]);
 
     return (
-
             <div className="read-book-page">
                 <div className="read-book-nav">
                     {/* Bölümler Dropdown */}
@@ -311,7 +360,7 @@ function ReadBook() {
                     <ProgressBar now={progress} label={`${Math.round(progress)}%`} />
                 </div>
                 {/* Seçili Bölüm İçeriği */}
-                <div className="read-book-content-wrapper"  ref={contentWrapperRef}>
+                <div className="read-book-content-wrapper" ref={contentWrapperRef}>
                     <div className="read-book-content">
                         {chapters[selectedSection - 1] && (
                             <div className="chapter-details">

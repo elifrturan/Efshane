@@ -210,7 +210,7 @@ function Books() {
                                                 minute: '2-digit',
                                             })}
                                             </p>
-                                            <div className="stories-istatistic">
+                                            <div className="stories-statistics">
                                                 <span className='d-flex gap-1'><i className="bi bi-eye"></i>{formatNumber(book.read_count || 0)}</span>
                                                 <span className='d-flex gap-1'><i className="bi bi-heart"></i>{formatNumber(book.like_count || 0)}</span>
                                                 <span className='d-flex gap-1'><i className="bi bi-chat"></i>{formatNumber(book.comment_count || 0)}</span>

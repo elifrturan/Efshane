@@ -256,7 +256,7 @@
     border: none;
     font-size: 1.2rem;
     color: var(--white-color);
-    cursor: pointer;
+    cursor: pointer
 }
 
 .edit-section-page .edit-chat-modal-body{
@@ -274,7 +274,7 @@
     opacity: 0.6;
 }
 
-.edit-section-page .edit-chat-message{
+.edit-section-page .edit-chat-modal .edit-chat-modal-body .chat-message{
     max-width: 70%;
     padding: 10px;
     border-radius: 10px;
@@ -283,7 +283,7 @@
     margin-bottom: 10px;
 }
 
-.edit-section-page .edit-chat-message.user{
+.edit-section-page .edit-chat-modal .edit-chat-modal-body .chat-message.user{
     align-self: flex-end;
     background-color: var(--theme-color);
     color: var(--white-color);
@@ -291,10 +291,10 @@
     font-size: 0.8rem;
 }
 
-.edit-section-page .edit-chat-message.bot{
+.edit-section-page .edit-chat-modal .edit-chat-modal-body .edit-chat-message.bot{
     align-self: flex-start;
     background-color: var(--gray6-color);
-    color: var(--black-color);
+    color: var(--second-color);
     border-top-left-radius: 0;
     font-size: 0.8rem;
 }

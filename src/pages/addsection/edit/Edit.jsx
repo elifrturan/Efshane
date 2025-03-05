@@ -21,6 +21,7 @@ function Edit() {
     
     const [title, setTitle] = useState('');
     const [image, setImage] = useState('');
+    const [imagePreview, setImagePreview] = useState('');
     const [content, setContent] = useState('');    
     const [loading, setLoading] = useState(false);
     const [activeStyle, setActiveStyle] = useState({
@@ -67,10 +68,16 @@ function Edit() {
     const handleImageUpload = async (e) => {
         const file = e.target.files[0];
         if (file) {
-            const imgURL = URL.createObjectURL(file); 
-            setImage(imgURL); 
+            console.log("File selected:", file);
+            console.log("File type:", file.type);
+            console.log("File size:", file.size);
+            setImage(file);
+            // Create a preview URL for the file
+            setImagePreview(URL.createObjectURL(file));
+        } else {
+            console.log("No file selected");
         }
-    }; 
+    };
 
     const triggerFileInput = () => {
         document.getElementById('file-input').click();
@@ -203,19 +210,38 @@ function Edit() {
             alert('Lütfen başlık ve içerik alanlarını doldurun.');
             return;
         }
+        
         const encodedTitle = encodeURIComponent(bookTitle);
         const encodedChapterTitle = encodeURIComponent(chapterTitle);
-    
+        
         const formData = new FormData();
-        formData.append('image', image); 
+        
+        console.log("Image before append:", image);
+        console.log("Image type:", typeof image);
+        
+        if (image && image instanceof File) {
+            console.log("Appending file to FormData");
+            formData.append('image', image);
+        } else if (typeof image === 'string' && !image.includes('default-background')) {
+            // If you have an image URL from before, you might need to handle it differently
+            console.log("Image is a string URL:", image);
+            // You might need to modify your backend to handle this case
+        } else {
+            console.log("No valid image to append");
+        }
+        
         formData.append('title', title);
         formData.append('content', content);
-
+        
+        // Log FormData contents (for debugging)
+        for (let pair of formData.entries()) {
+            console.log(pair[0] + ': ' + pair[1]);
+        }
+        
         const url = `http://localhost:3000/chapter/save/${encodedTitle}/${encodedChapterTitle}`;
         setLoading(true);
         try {
-            const response = await axios.put
-            (
+            const response = await axios.put(
                 url, 
                 formData, 
                 {
@@ -228,7 +254,11 @@ function Edit() {
             handleSuccessSaveShow(); 
             navigate(`/addsection/${encodedTitle}`);
         } catch (error) {
-            console.error(error);
+            console.error("Full error:", error);
+            if (error.response) {
+                console.error("Response data:", error.response.data);
+                console.error("Response status:", error.response.status);
+            }
             alert('Bölüm kaydedilirken bir hata oluştu. Lütfen tekrar deneyin.');
         } finally {
             setLoading(false);
@@ -318,11 +348,13 @@ function Edit() {
                                 <Form.Label className="edit-image-upload-label">
                                 <img
                                     src={
-                                        image
-                                            ? image?.startsWith('uploads')
-                                                ? `${backendBaseUrl}/${image}` 
-                                                : image 
-                                            : '/default-image.png'
+                                        imagePreview
+                                        ? imagePreview
+                                        : image && typeof image === 'string' && image.startsWith('uploads')
+                                            ? `${backendBaseUrl}/${image}`
+                                            : image instanceof File
+                                            ? URL.createObjectURL(image)
+                                            : 'default-background.jpg'
                                     }
                                     alt="Bölüm Görseli"
                                     className="edit-uploaded-image"
