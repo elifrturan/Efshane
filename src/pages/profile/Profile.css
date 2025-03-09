@@ -359,6 +359,16 @@
 .read-list-modal .modal-body .book-list .book-item img {
     border-radius: 4px;
 }
+.read-list-modal .modal-body .book-list .book-item .headphone-icon {
+    position: absolute;
+    left: 25px;
+    width: 24px;
+    height: 24px;
+    pointer-events: none;
+    background-color: rgb(249, 249, 249);
+    padding: 5px;
+    border-radius: 50%;
+}
 
 .read-list-modal .modal-body .book-list .book-item span {
     font-size: 0.9rem;

@@ -15,6 +15,8 @@ function AudioBookDetails() {
     const [bookDetails, setBookDetails] = useState({});
     const [chapters, setChapters] = useState([]);
     const [comments, setComments] = useState([]);
+    const [newListName, setNewListName] = useState("");
+    const [readingList, setReadingList] = useState([]);
     const [isAddedToLibrary, setIsAddedToLibrary] = useState(formattedBookName.isAudioBookCase);
     const [isAddedToListeningList, setIsAddedListeningList] = useState(bookDetails.isListeningList);
     const [showModal, setShowModal] = useState(false);
@@ -39,6 +41,30 @@ function AudioBookDetails() {
     const handleNewListOpen = () => {
         setShowNewListModal(true);
         setShowModal(close);
+    }
+
+    const handleListNameChange = (e) => {
+        setNewListName(e.target.value);
+    }
+
+    const newReadingList = async (listName, formattedBookName) => {
+        try {
+            const response = await axios.post(
+                `http://localhost:3000/reading-list/list/${listName}`,
+                { formattedBookName },
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    },
+                }
+            );
+            console.log("Kitap eklendi:", response.data);
+            handleNewListClose();
+            fetchUserLists();
+        } catch (error) {
+            console.error("Kitap eklenirken hata oluştu:", error);
+            alert(error.response?.data?.message || "Kitap eklenirken hata oluştu.");
+        }
     }
 
     useEffect(() => {
@@ -125,35 +151,22 @@ function AudioBookDetails() {
     };
 
     const handleAddToListeningList = async () => {
-        /*const previousState = isAddedToListeningList; 
-        setIsAddedListeningList(!previousState); */
         setShowModal(true);
+        fetchUserLists();
+    };
 
-        /*try {
-            const response = await axios.post(
-                `http://localhost:3000/reading-list/audioBook/${bookDetails[0]?.id}`,
-                { name: bookDetails[0]?.title },
-                {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('token')}`,
-                    },
-                }
-            );
-    
-            if (response.data.message === "Kitap okuma listesine eklendi.") {
-                setIsAddedListeningList(true);
-            } else if (response.data.message === "Kitap okuma listesinden çıkarıldı.") {
-                setIsAddedListeningList(false);
-            }
-    
-            setBookDetails((prevDetails) => {
-                const updatedDetails = [...prevDetails];
-                updatedDetails[0].isListeningList = !setIsAddedListeningList;
-                return updatedDetails;
+    const fetchUserLists = async () => {
+        try {
+            const response = await axios.get(`http://localhost:3000/reading-list/list`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
             });
+            console.log(response.data);
+            setReadingList(response.data);
         } catch (error) {
-            console.error("Error adding/removing from listening list:", error);
-        }*/
+            console.error("Kitap listeleri alınırken bir hata oluştu:", error);
+        }
     };
 
     const handleListenAudioBookClick = async (bookName) => {
@@ -180,16 +193,6 @@ function AudioBookDetails() {
             console.error('Kitabı başlatırken bir hata oluştu:', error.response?.data || error.message);
         }
     };
-
-    const calculateTotalTime = (totalMinutes) => {
-        const hours = Math.floor(totalMinutes / 60);
-        const minutes = totalMinutes % 60;
-        if (hours < 1) {
-            return `${minutes} dakika`;
-        } else {
-            return `${hours} saat ${minutes} dakika`;
-        }
-    }
 
     function formatNumber(num) {
         if (num >= 1_000_000_000) {
@@ -270,31 +273,23 @@ function AudioBookDetails() {
         window.scrollTo(0,0);
     }, [])
 
-    const readingList = [
-        {
-            id: 1,
-            name: "En sevdiklerim",
-            img: "/images/seker-portakali.jpg"
-        },
-        {
-            id: 2,
-            name: "Okumaya devam ettiklerim",
-            img: "/images/book.jpg"
-        },
-        {
-            id: 3,
-            name: "Canlarımm",
-            img: "/images/ask-ve-gurur.jpg"
-        },
-        {
-            id: 4,
-            name: "Canlarımmm2",
-            img: "/images/ask-ve-gurur.jpg"
-        },
-    ]
-
-    const handleReadingListClick = (id) => {
-        setSelectedListId(selectedListId === id ? null : id);
+    const handleReadingListClick = async (listId, formattedBookName ) => {
+        try {
+            const response = await axios.post(
+                `http://localhost:3000/reading-list/${listId}`,
+                { formattedBookName },
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    },
+                }
+            );
+            console.log("Kitap eklendi:", response.data);
+            setSelectedListId(selectedListId === listId ? null : listId);
+        } catch (error) {
+            console.error("Kitap eklenirken hata oluştu:", error);
+        alert(error.response?.data?.message || "Kitap eklenirken hata oluştu.");
+        }
     }
 
     return (
@@ -354,8 +349,17 @@ function AudioBookDetails() {
                                         </div>
                                         <div className='d-flex flex-wrap justify-content-center'>
                                             {readingList.map((list) => (
-                                                <div className="d-flex flex-column read-list" key={list.id} onClick={() => handleReadingListClick(list.id)}>
-                                                    <img src={list.img} alt=""/>
+                                                <div className="d-flex flex-column read-list" key={list.id} onClick={() => handleReadingListClick(list.id, formattedBookName)}>
+                                                    <img 
+                                                        src={
+                                                        list?.image
+                                                            ? list?.image.startsWith('uploads')
+                                                                ? `${backendBaseUrl}/${list.image}`
+                                                                : list.image
+                                                            : 'default-background.jpg' 
+                                                        }
+                                                        alt=""
+                                                    />
                                                     <span>{list.name}</span>
                                                     {selectedListId === list.id && (
                                                         <i 
@@ -377,13 +381,15 @@ function AudioBookDetails() {
                                                 <Form.Control
                                                     type='text'
                                                     placeholder='Ör: En sevdiğim kitaplar...'
+                                                    value={newListName}
+                                                    onChange={handleListNameChange}
                                                     className='text-center'
                                                 />
                                             </Form.Group>
                                         </Form>         
                                     </Modal.Body>
                                     <Modal.Footer>
-                                        <Button onClick={handleNewListClose}>Oluştur</Button>
+                                        <Button onClick={() => newReadingList(newListName, formattedBookName)}>Oluştur</Button>
                                     </Modal.Footer>
                                 </Modal>
 
@@ -484,7 +490,13 @@ function AudioBookDetails() {
                                             <div className="d-flex align-items-center justify-content-between gap-2 mb-1">
                                                 <div className="left d-flex align-items-center gap-2">
                                                     <img
-                                                        src={comment.user?.profile_image}
+                                                        src={
+                                                            comment?.user?.profile_image
+                                                                ? comment.user.profile_image.startsWith('uploads')
+                                                                    ? `${backendBaseUrl}/${comment.user.profile_image}`
+                                                                    : comment.user.profile_image
+                                                                : 'default-background.jpg' 
+                                                        }
                                                         alt={comment.user?.username}
                                                         className="user-profile-image"
                                                         onClick={handleProfileClick}

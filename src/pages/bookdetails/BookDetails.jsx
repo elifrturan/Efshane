@@ -15,6 +15,8 @@ function BookDetails() {
     const [bookDetails, setBookDetails] = useState([]);
     const [chapters, setChapters] = useState([]);
     const [comments, setComments] = useState([]);
+    const [newListName, setNewListName] = useState("");
+    const [readingList, setReadingList] = useState([]);
     const [isAddedToLibrary, setIsAddedToLibrary] = useState(formattedBookName.isBookCase);
     const [isAddedToReadingList, setIsAddedToReadingList] = useState(formattedBookName.isReadingList);
     const [showModal, setShowModal] = useState(false);
@@ -77,6 +79,30 @@ function BookDetails() {
         fetchChapterDetails();
     }, [formattedBookName]);
 
+    const handleListNameChange = (e) => {
+        setNewListName(e.target.value);
+    }
+
+    const newReadingList = async (listName, formattedBookName) => {
+        try {
+            const response = await axios.post(
+                `http://localhost:3000/reading-list/list/${listName}`,
+                { formattedBookName },
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    },
+                }
+            );
+            console.log("Kitap eklendi:", response.data);
+            handleNewListClose();
+            fetchUserLists();
+        } catch (error) {
+            console.error("Kitap eklenirken hata oluştu:", error);
+            alert(error.response?.data?.message || "Kitap eklenirken hata oluştu.");
+        }
+    }
+    
     const handleAddToLibrary = async () => {
         const previousState = isAddedToLibrary; 
         setIsAddedToLibrary(!previousState); 
@@ -105,32 +131,7 @@ function BookDetails() {
 
     const handleAddToReadingList = async () => {
         setShowModal(true);
-
-        /*try {
-            const response = await axios.post(
-                `http://localhost:3000/reading-list/${bookDetails[0]?.id}`,
-                { name: bookDetails[0]?.title },
-                {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('token')}`,
-                    },
-                }
-            );
-    
-            if (response.data.message === "Kitap okuma listesine eklendi.") {
-                setIsAddedToReadingList(true);
-            } else if (response.data.message === "Kitap okuma listesinden çıkarıldı.") {
-                setIsAddedToReadingList(false);
-            }
-    
-            setBookDetails((prevDetails) => {
-                const updatedDetails = [...prevDetails];
-                updatedDetails[0].isReadingList = !isAddedToReadingList;
-                return updatedDetails;
-            });
-        } catch (error) {
-            console.error("Error adding/removing from reading list:", error);
-        }*/
+        fetchUserLists();
     };
 
     const handleProfileClick = (username) => {
@@ -258,31 +259,39 @@ function BookDetails() {
         window.scrollTo(0,0);
     }, [])
 
-    const readingList = [
-        {
-            id: 1,
-            name: "En sevdiklerim",
-            img: "/images/seker-portakali.jpg"
-        },
-        {
-            id: 2,
-            name: "Okumaya devam ettiklerim",
-            img: "/images/book.jpg"
-        },
-        {
-            id: 3,
-            name: "Canlarımm",
-            img: "/images/ask-ve-gurur.jpg"
-        },
-        {
-            id: 4,
-            name: "Canlarımmm2",
-            img: "/images/ask-ve-gurur.jpg"
-        },
-    ]
+    const fetchUserLists = async () => {
+        try {
+            const response = await axios.get(`http://localhost:3000/reading-list/list`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+            });
+            console.log(response.data);
+            setReadingList(response.data);
+        } catch (error) {
+            console.error("Kitap listeleri alınırken bir hata oluştu:", error);
+        }
+    };
 
-    const handleReadingListClick = (id) => {
-        setSelectedListId(selectedListId === id ? null : id);
+    const handleReadingListClick = async (listId, formattedBookName ) => {
+        try {
+            const response = await axios.post(
+                `http://localhost:3000/reading-list/${listId}`,
+                { formattedBookName },
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    },
+                }
+            );
+            console.log("Kitap eklendi:", response.data);
+            setSelectedListId(selectedListId === listId ? null : listId);
+            setNewListName("");
+            handleClose();
+        } catch (error) {
+            console.error("Kitap eklenirken hata oluştu:", error);
+            alert(error.response?.data?.message || "Kitap eklenirken hata oluştu.");
+        }
     }
 
     return (
@@ -325,7 +334,7 @@ function BookDetails() {
                                     </Button>
                                 ) : (
                                     <Button className="btn-book" onClick={handleAddToReadingList}>
-                                        <i className="bi bi-bookmark me-1"></i> Okuma Listesine Ekle
+                                        <i className="bi bi-bookmark me-1" ></i> Okuma Listesine Ekle
                                     </Button>
                                 )}
                             </div>
@@ -337,12 +346,21 @@ function BookDetails() {
                             </Modal.Header>
                             <Modal.Body>
                                 <div className="add-read-list-button">
-                                    <Button className='d-flex gap-1' onClick={handleNewListOpen}><i class="bi bi-bookmark-check-fill"></i> Yeni Okuma Listesi Oluştur</Button>
+                                    <Button className='d-flex gap-1' onClick={handleNewListOpen}><i className="bi bi-bookmark-check-fill"></i> Yeni Okuma Listesi Oluştur</Button>
                                 </div>
                                 <div className='d-flex flex-wrap justify-content-center'>
                                     {readingList.map((list) => (
-                                        <div className="d-flex flex-column read-list" key={list.id} onClick={() => handleReadingListClick(list.id)}>
-                                            <img src={list.img} alt=""/>
+                                        <div className="d-flex flex-column read-list" key={list.id} onClick={() => handleReadingListClick(list.id, formattedBookName)}>
+                                            <img 
+                                                src={
+                                                    list?.image
+                                                        ? list?.image.startsWith('uploads')
+                                                            ? `${backendBaseUrl}/${list.image}`
+                                                            : list.image
+                                                        : 'default-background.jpg' 
+                                                }
+                                                alt=""
+                                            />
                                             <span>{list.name}</span>
                                             {selectedListId === list.id && (
                                                 <i 
@@ -364,13 +382,15 @@ function BookDetails() {
                                         <Form.Control
                                             type='text'
                                             placeholder='Ör: En sevdiğim kitaplar...'
+                                            value={newListName}
+                                            onChange={handleListNameChange}
                                             className='text-center'
                                         />
                                     </Form.Group>
                                 </Form>         
                             </Modal.Body>
                             <Modal.Footer>
-                                <Button onClick={handleNewListClose}>Oluştur</Button>
+                                <Button onClick={() => newReadingList(newListName, formattedBookName)}>Oluştur</Button>
                             </Modal.Footer>
                         </Modal>
                     

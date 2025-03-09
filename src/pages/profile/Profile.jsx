@@ -80,23 +80,6 @@ function Profile() {
     }, []);
 
     useEffect(() => {
-        const fetchReadingList = async () => {
-            try {
-                const response = await axios.get(`http://localhost:3000/reading-list`, {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('token')}`,
-                    },
-                });
-                setBooks(response.data || []);
-            } catch (error) {
-                console.error("Error fetching comments:", error);
-            }
-        }; 
-
-        fetchReadingList();
-    }, []);
-
-    useEffect(() => {
         const fetchAnons = async () => {
             try {
                 const response = await axios.get(`http://localhost:3000/anons/allAnons`, {
@@ -213,37 +196,102 @@ function Profile() {
     }, []);
 
     const fetchBooksInList = async (listName) => {
-        try {
-            const response = await axios.get(`http://localhost:3000/reading-list/list/${listName}`, {
+        try { 
+            const formattedListName = formatBookNameForURL(listName);
+            const url = `http://localhost:3000/reading-list/list/${encodeURIComponent(formattedListName)}`;
+            
+            const response = await axios.get(url, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("token")}`,
                 },
             });
-            setListBooks(response.data);
+            
+            if (response.data) {
+                const updatedData = {
+                    ...response.data,
+                    books: Array.isArray(response.data.books) ? response.data.books : [response.data.books] || []
+                };       
+                setSelectedStory(updatedData);
+            } else {
+                setSelectedStory({
+                    name: listName,
+                    books: []
+                });
+            }
+            
             setSelectedList(listName);
         } catch (error) {
-            console.error("Liste kitapları alınırken bir hata oluştu:", error);
+            console.error("Liste kitapları alınırken bir hata oluştu:", error);            
+            setSelectedStory({
+                name: listName,
+                books: []
+            });
         }
     };
-
+    
     const handleListModalClose = () => setShowListModal(false)
 
-    const handleListModalOpen = (story) => {
-        setSelectedStory(story);
+    const handleListModalOpen = (listName) => {
+        setSelectedStory({ name: listName, books: [] }); 
         setShowListModal(true);
-    }
+        fetchBooksInList(listName);
+    };
 
     const handleEditClick = () => {
         setEditMode(true);
         setNewListName(selectedStory.name);
     }
+
+    const updateListName = async (listName, newListName) => {
+        const formattedListName = formatBookNameForURL(listName);
+        try { 
+            const response = await axios.put(
+                `http://localhost:3000/reading-list/${encodeURIComponent(formattedListName)}`,
+                { newListName },
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
+                }
+            );
+            console.log(response.data);
+            return response.data; 
+        }
+        catch {
+            console.error("Liste adı güncellenirken bir hata oluştu:", error);
+            throw error;
+        }
+    }
     
-    const handleSaveClick = () => {
-        setEditMode(false);
-        setSelectedStory({ ...selectedStory, name: newListName });
-        const updatedReadingLists = readingLists.map((list) =>
-            list.id === selectedStory.id ? { ...list, name: newListName } : list
-        );
+    const handleSaveClick = async () => {
+        if (!newListName || newListName.trim() === '') {
+            alert('Liste adı boş olamaz');
+            return;
+        }
+
+        if (!selectedStory || !selectedStory.name) {
+            alert('Güncellenecek liste bulunamadı');
+            return;
+        }
+
+        try {
+            const result = await updateListName(selectedStory.name, newListName);
+            
+            if (result && result.success) {
+                setSelectedStory(prevState => ({
+                    ...prevState,
+                    name: newListName
+                }));
+                setSelectedList(newListName);
+                setEditMode(false);
+                alert(result.message || 'Liste adı başarıyla güncellendi');
+            } else {
+                alert(result.message || 'Liste adı güncellenemedi');
+            }
+        } catch (error) {
+            console.error("Hata detayı:", error);
+            alert(error.response?.data?.message || 'Bir hata oluştu');
+        } 
     }
 
     const handleListNameChange = (e) => {
@@ -387,46 +435,63 @@ function Profile() {
         navigate(`/book-details/${formattedBookName}`)
     }  
 
-    const [readingLists, setReadingLists] = useState([
-        {
-            id: 1,
-            name: "Favorilerim",
-            books: [
-                {id: 101, storyName: "Aşk ve Gurur", image: "/images/ask-ve-gurur.jpg"},
-                {id: 102, storyName: "Şeker Portakalı", image: "/images/seker-portakali.jpg"},
-                {id: 103, storyName: "Simyacı", image: "/images/simyaci.jpg"},
-            ],
-        },
-        {
-            id: 2,
-            name: "Bilim Kurgu",
-            books: [
-                {id: 201, storyName: "Şeker Portakalı", image: "/images/seker-portakali.jpg"},
-                {id: 202, storyName: "Simyacı", image: "/images/simyaci.jpg"},
-            ],
-        }
-    ].map(list => ({
-        ...list,
-        cover: list.books.length > 0 ? list.books[0].image : "/images/default-cover.jpg",
-    })));
+    const handleDeleteList = async () => {
+        if(!listToDelete) return;   
 
-    const handleDeleteList = () => {
-        if (listToDelete) {
-            setReadingLists((prevLists) =>
-                prevLists.filter((list) => list.id !== listToDelete.id)
-            );
-            setShowDeleteModal(false);
+        const listId = listToDelete.id;
+        try {
+            const response = await axios.delete(`http://localhost:3000/reading-list/list/${listId}`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+            });
+    
+            if (response.status === 200 || response.status === 201) {
+                setUserLists((prevLists) =>
+                    prevLists.filter((list) => list.id !== listToDelete.id)
+                );
+                setShowDeleteModal(false);
+            }
+    
+        } catch (error) {
+            console.error("Liste silme hatası:", error);
+            alert("Liste silinirken bir hata oluştu!");
         }
     };  
 
-    const handleDeleteBook = () => {
-        if (bookToDelete) {
-            const updatedBooks = selectedStory.books.filter((book) => book.id !== bookToDelete.id);
-
-            const updatedStory = { ...selectedStory, books: updatedBooks };
-            setSelectedStory(updatedStory);
-            setShowBookDeleteModal(false);
-            setBookToDelete(null);
+    const handleDeleteBook = async () => {
+        if(!bookToDelete) return;   
+    
+        try {
+            let params = {
+                listName: selectedStory.name
+            };
+            
+            if (bookToDelete.type === "book") {
+                params.bookId = bookToDelete.id;
+            } else if (bookToDelete.type === "audiobook") {
+                params.audioBookId = bookToDelete.id;
+            }
+            
+            const response = await axios.delete(`http://localhost:3000/reading-list`, {
+                params: params,
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+            });
+    
+            if (response.status === 200 || response.status === 201) {
+                const updatedBooks = selectedStory.books.filter((book) => book.id !== bookToDelete.id);
+                const updatedStory = { ...selectedStory, books: updatedBooks };
+        
+                setSelectedStory(updatedStory);
+                setShowBookDeleteModal(false);
+                setBookToDelete(null);
+            }
+    
+        } catch (error) {
+            console.error("Kitap silme hatası:", error);
+            alert("Kitap silinirken bir hata oluştu!");
         }
     };
 
@@ -652,28 +717,22 @@ function Profile() {
                                 <div className="story mt-1" key={list.name}>
                                     <img 
                                         src={
-                                            list.cover
-                                                ? list.cover.startsWith("uploads")
-                                                    ? `${backendBaseUrl}/${list.cover}`
-                                                    : list.cover
+                                            list.image
+                                                ? list.image.startsWith("uploads")
+                                                    ? `${backendBaseUrl}/${list.image}`
+                                                    : list.image
                                                 : "default-book-cover.jpg"
                                         } 
                                         alt="" 
                                         width="100px" 
                                         height="140px" 
                                         className='object-fit-cover'
-                                        onClick={() => fetchBooksInList(list.name)}
+                                        onClick={() => handleListModalOpen(list.name)}
                                     />
                                     <span className='mt-1'>{list.name}</span>
-                                    <div className="statistics d-flex justify-content-between mt-1">
-                                        <p className='d-flex'><i className="bi bi-eye me-1"></i>{formatNumber(list.analysis?.[0]?.read_count ?? 0)}</p>
-                                        <p className='d-flex'><i className="bi bi-heart me-1"></i>{formatNumber(list.analysis?.[0]?.like_count ?? 0)}</p>
-                                        <p className='d-flex'><i className="bi bi-chat me-1"></i>{formatNumber(list.analysis?.[0]?.comment_count ?? 0)}</p>
-                                    </div>
                                 </div>
                             ))}
                         </div>
-
                         <Modal show={showReadListModal} onHide={handleReadListClose} centered>
                             <Modal.Header closeButton>
                                 <Modal.Title>
@@ -683,10 +742,20 @@ function Profile() {
                             <Modal.Body>
                                 <div className="book-list">
                                     <div className="d-flex flex-wrap justify-content-around">
-                                        {readingLists.map((story) => (
+                                        {userLists.map((story) => (
                                             <div className="book-item m-3 text-center d-flex flex-column gap-2" key={story.id}>
                                                 <>
-                                                    <img src={story.cover} width="100px" height="150px" className="object-fit-cover" />
+                                                    <img 
+                                                        src={
+                                                            story.image
+                                                                ? story.image.startsWith("uploads")
+                                                                    ? `${backendBaseUrl}/${story.image}`
+                                                                    : story.image
+                                                                : "default-book-cover.jpg"
+                                                        } 
+                                                        width="100px" 
+                                                        height="150px" 
+                                                        className="object-fit-cover" />
                                                     <i 
                                                         className="bi bi-trash-fill text-danger ms-2"
                                                         style={{ cursor: "pointer" }}
@@ -751,11 +820,31 @@ function Profile() {
                             </Modal.Header>
                             <Modal.Body>
                                 <div className="book-list">
-                                    {selectedStory?.books?.length > 0 ? (
-                                        <div className="d-flex flex-wrap justify-content-around">
-                                            {selectedStory.books.map((book) => (
-                                                <div className="book-item m-3 text-center d-flex flex-column gap-2" key={book.id} onClick={handleBookClick}>
-                                                    <img src={book.image} alt={book.storyName} width="100px" height="150px" className="object-fit-cover" />
+                                {selectedStory?.books && selectedStory.books.length > 0 ? (
+                                    <div className="d-flex flex-wrap justify-content-around">
+                                        {selectedStory?.books?.map((book) => (
+                                            <div className="book-item m-3 text-center d-flex flex-column gap-2" key={book.id}>
+                                                <div className="position-relative">
+                                                    <img 
+                                                        src={
+                                                            book.bookCover 
+                                                            ? book.bookCover.startsWith('uploads')
+                                                                ? `${backendBaseUrl}/${book.bookCover}`
+                                                                : book.bookCover
+                                                            : "default-book-cover.jpg"
+                                                        } 
+                                                        alt={book.title} 
+                                                        width="100px" 
+                                                        height="150px" 
+                                                        className="object-fit-cover" 
+                                                        onClick={() => handleBookClick(book.title)}
+                                                    />
+                                                    {book.type === "audiobook" && (
+                                                        <img
+                                                            src="/images/headphone-icon.svg"
+                                                            className="headphone-icon"
+                                                        />
+                                                    )}
                                                     <i
                                                         className="bi bi-trash-fill text-danger position-absolute"
                                                         style={{ top: '5px', right: '5px', cursor: 'pointer' }}
@@ -764,13 +853,14 @@ function Profile() {
                                                             handleBookDeleteModalOpen(book);
                                                         }}
                                                     ></i>
-                                                    <span className="mt-1">{book.storyName}</span>
                                                 </div>
-                                            ))}
-                                        </div>
-                                    ) : (
-                                        <p>Bu listede kitap bulunmamaktadır.</p>
-                                    )}
+                                                <span className="mt-1">{book.title}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <p>Bu listede kitap bulunmamaktadır.</p>
+                                )}
                                 </div>
                             </Modal.Body>
                         </Modal>
