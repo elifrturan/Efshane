@@ -757,7 +757,7 @@ function Profile() {
                                                         height="150px" 
                                                         className="object-fit-cover" />
                                                     <i 
-                                                        className="bi bi-trash-fill text-danger ms-2"
+                                                        className="bi bi-trash-fill delete-icon ms-2"
                                                         style={{ cursor: "pointer" }}
                                                         onClick={() => handleDeleteModalOpen(story)}
                                                     ></i>
@@ -846,7 +846,7 @@ function Profile() {
                                                         />
                                                     )}
                                                     <i
-                                                        className="bi bi-trash-fill text-danger position-absolute"
+                                                        className="bi bi-trash-fill delete-icon position-absolute"
                                                         style={{ top: '5px', right: '5px', cursor: 'pointer' }}
                                                         onClick={(e) => {
                                                             e.stopPropagation();

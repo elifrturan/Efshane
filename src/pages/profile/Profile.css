@@ -348,6 +348,10 @@
     transition: all 0.3s ease-in-out;
 }
 
+.read-list-modal input {
+    color: var(--black-color) !important;
+}
+
 .read-list-modal .modal-header .modal-title {
     font-size: 1.25rem;
     color: var(--black-color);
@@ -361,7 +365,8 @@
 }
 .read-list-modal .modal-body .book-list .book-item .headphone-icon {
     position: absolute;
-    left: 25px;
+    left: 2%;
+    top: 1%;
     width: 24px;
     height: 24px;
     pointer-events: none;
@@ -372,11 +377,24 @@
 
 .read-list-modal .modal-body .book-list .book-item span {
     font-size: 0.9rem;
+    max-width: 100px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    text-align: center;
+    white-space: normal;
 }
 
 .read-list-modal .modal-body .book-list .book-item:hover {
     transform: scale(1.1);
     cursor: pointer;
+}
+
+.read-list-modal .modal-body .book-list .book-item .delete-icon{
+    color: var(--red-color) !important;
+    background-color: rgba(255, 255, 255, 0.636);
+    padding: 2px;
+    font-size: 0.8rem;
+    border-radius: 10px;
 }
 
 .profile-page .profile-page-down .right .right-main .add-announcement {

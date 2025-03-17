@@ -158,6 +158,16 @@ main{
   font-size: 0.8rem !important;
 }
 
+.terms-modal .modal-body h5 {
+  font-weight: 600 !important;
+  font-size: 1rem;
+}
+
+.terms-modal .modal-body p {
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+
 .modal-content {
   background-color: var(--white-color);
   border: 1px solid var(--black-color) !important;

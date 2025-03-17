@@ -60,16 +60,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     transform: scale(1.05);
 }
 
-.signup-modal .modal-body h5 {
-    font-weight: 600 !important;
-    font-size: 1rem;
-}
-
-.signup-modal .modal-body p {
-    font-size: 0.8rem;
-    opacity: 0.8;
-}
-
 /* resposive */
 @media (max-width: 1024px) {
     .signup-page .signup-container {
