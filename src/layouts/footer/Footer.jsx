@@ -7,10 +7,14 @@ import { ThemeContext } from '../../contexts/ThemeContext';
 
 function Footer() {
   const [show, setShow] = useState(false);
+  const [kvkkShow, setKvkkShow] = useState(false);
   const { theme } = useContext(ThemeContext);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const handleKvkkClose = () => setKvkkShow(false);
+  const handleKvkkShow = () => setKvkkShow(true);
 
     return (
         <span style={{paddingRight: '5%', paddingLeft: '5%'}}>
@@ -19,6 +23,7 @@ function Footer() {
                     <li className="nav-item"><a href="/home" className="nav-link px-2">Ana Sayfa</a></li>
                     <li className="nav-item"><a href="/about-us" className="nav-link px-2">Hakkımızda</a></li>
                     <li className="nav-item"><a href="/contact-us" className="nav-link px-2">İletişim</a></li>
+                    <li className="nav-item"><a href="#" className="nav-link px-2" onClick={handleKvkkShow}>Kvkk</a></li>
                     <li className="nav-item"><a href="#" className="nav-link px-2" onClick={handleShow}>Şartlar & Koşullar</a></li>
                 </ul>
 
@@ -45,6 +50,102 @@ function Footer() {
             <Modal show={show} onHide={handleClose} animation={false} className='terms-modal'>
               <Modal.Header closeButton>
                 <Modal.Title>Şartlar & Koşullar</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <h5>Giriş</h5>
+                <p>
+                  Bu "Şartlar ve Koşullar", EFSHANE tarafından sunulan hizmetlerin kullanımını düzenler. 
+                  Uygulamanın kullanılması, bu şartların tamamının kabul edildiği anlamına gelir. 
+                  Şartlar, kullanıcıların haklarını, sorumluluklarını ve uygulamayla ilgili kuralları içerir.
+                </p>
+                <h5>Kullanıcı Kayıt ve Hesap Bilgileri</h5>
+                <p>
+                  Uygulamayı kullanmak için geçerli bir e-posta adresi, kullanıcı adı, doğum tarihi ve şifre 
+                  ile hesap oluşturmanız gerekmektedir. Kullanıcı, verdiği tüm bilgilerin doğru ve güncel olduğunu
+                  taahhüt eder. Yanlış bilgi verilmesi durumunda, uygulama yönetimi hesabınızı askıya alma veya 
+                  silme hakkını saklı tutar.
+                </p>
+                <h5>Hizmetler</h5>
+                <p>
+                  Uygulama, kullanıcılara çevrimiçi kitap okuma, yazarlarla etkileşim kurma, 
+                  hikaye yazma, sesli kitap dinleme gibi çeşitli hizmetler sunar. Uygulamanın sunduğu 
+                  tüm hizmetler, bu şartlar çerçevesinde kullanılmalıdır.
+                </p>
+                <h5>İçerik Kullanımı</h5>
+                <p>
+                  Uygulamada kullanıcılar tarafından oluşturulan hikayeler, yorumlar ve diğer içerikler aşağıdaki kurallara tabidir:
+                  <ul>
+                    <li>
+                      <b>Uygun İçerik:</b> Kullanıcılar, içerik oluştururken yasalarla uyumlu, saygılı ve topluluk kurallarına uygun içerikler üretmek zorundadır. İçeriklerde küfür, hakaret, müstehcenlik, nefret söylemi veya şiddet içeren dil kullanılmamalıdır.
+                    </li>
+                    <li>
+                      <b>İçerik Denetimi:</b> Uygulama yönetimi, kullanıcılar tarafından oluşturulan içerikleri düzenli olarak denetleme hakkını saklı tutar. Kurallara aykırı içerikler fark edildiğinde, kullanıcı önce uyarılacak, uyarıya rağmen kural ihlali devam ederse hesabı kalıcı olarak silinecektir.
+                    </li>
+                    <li>
+                      <b>İçerik Sorumluluğu:</b> Kullanıcılar tarafından oluşturulan içerikler tamamen kullanıcıların sorumluluğundadır. Uygulama, kullanıcıların oluşturduğu içeriklerden doğabilecek herhangi bir yasal sorumluluk kabul etmez.
+                    </li>
+                  </ul>
+                </p>
+                <h5>Kullanıcı Davranış Kuralları</h5>
+                <p>
+                  Kullanıcılar, uygulama içinde diğer kullanıcılara karşı saygılı ve nazik davranmalıdır. Her türlü taciz, nefret söylemi, tehdit veya kötüye kullanım yasaktır. Bu tür davranışlarda bulunan kullanıcılar aşağıdaki yaptırımlarla karşılaşabilir:
+                  <ul>
+                    <li><b>Uyarı:</b> İlk kural ihlalinde kullanıcı uyarılacaktır.</li>
+                    <li><b>Askıya Alma: </b>İkinci ihlalde kullanıcı geçici olarak askıya alınabilir.</li>
+                    <li><b>Kapatma:</b> Üçüncü ihlalde kullanıcı hesabı kapatılacaktır.</li>
+                  </ul>
+                </p>
+                <h5>Gizlilik</h5>
+                <p>
+                  Kişisel bilgilerinizin korunmasına önem veriyoruz. Verdiğiniz kişisel bilgiler, 
+                  yalnızca uygulamanın hizmetlerini sunmak amacıyla kullanılacak ve Gizlilik 
+                  Politikamızda belirtilen şartlara uygun olarak saklanacaktır.
+                </p>
+                <h5>Sorumluluğun Sınırlandırılması</h5>
+                <p>
+                  Uygulama, kullanıcıların içeriklerden doğabilecek herhangi bir maddi veya manevi zarardan sorumlu tutulamaz.
+                  Kullanıcılar, uygulamayı ve içeriklerini kendi sorumlulukları altında kullanırlar. 
+                  Uygulama, teknik sorunlar veya hatalar nedeniyle yaşanabilecek kesintiler için sorumlu tutulamaz.
+                </p>
+                <h5>Fikri Mülkiyet</h5>
+                <p>
+                  Uygulamada yer alan tüm içerik, grafikler, logolar, simgeler ve yazılımlar, ilgili hak sahiplerinin 
+                  fikri mülkiyetindedir. Bu materyallerin herhangi bir şekilde çoğaltılması, kopyalanması veya dağıtılması yasaktır.
+                </p>
+                <h5>Kullanıcı Hesabının Askıya Alınması veya Kapatılması</h5>
+                <p>
+                  Bu Şartlar ve Koşullara uymayan kullanıcıların hesapları geçici olarak askıya alınabilir veya kalıcı olarak silinebilir. Özellikle aşağıdaki durumlarda hesap askıya alınabilir veya kapatılabilir:
+                  <ul>
+                    <li>Uygunsuz içerik paylaşımı (küfür, hakaret, nefret söylemi vb.)</li>
+                    <li>Diğer kullanıcılara karşı saygısız davranış</li>
+                    <li>Yasalara aykırı eylemler</li>
+                  </ul>             
+                </p>
+                <h5>Değişiklikler</h5>
+                <p>
+                  Uygulama, bu Şartlar ve Koşulları herhangi bir zamanda güncelleme hakkına sahiptir. 
+                  Değişiklikler yapıldığında, kullanıcılar güncellenmiş şartlar hakkında bilgilendirilecektir ve 
+                  uygulamanın kullanılmaya devam edilmesi, yeni şartların kabul edildiği anlamına gelir.
+                </p>
+                <h5>Yasal Yükümlülükler ve İhtilaflar</h5>
+                <p>
+                  Bu Şartlar ve Koşullar, Türkiye yasalarına tabidir. 
+                </p>
+                <h5>İletişim Bilgileri</h5>
+                <p>
+                  efshaneapp@gmail.com
+                </p>
+              </Modal.Body>
+              <Modal.Footer>
+                <Button variant="secondary" onClick={handleClose}>
+                  Kapat
+                </Button>
+              </Modal.Footer>
+            </Modal>
+
+            <Modal show={kvkkShow} onHide={handleKvkkClose} animation={false} className='terms-modal'>
+              <Modal.Header closeButton>
+                <Modal.Title>KVKK</Modal.Title>
               </Modal.Header>
               <Modal.Body>
                 <h6>VERİ TEMİN ETME VE VERİ SAKLAMA POLİTİKA PROTOKOLÜMÜZ</h6>
@@ -194,13 +295,12 @@ function Footer() {
                 </p>            
               </Modal.Body>
               <Modal.Footer>
-                <Button variant="secondary" onClick={handleClose}>
+                <Button variant="secondary" onClick={handleKvkkClose}>
                   Kapat
                 </Button>
               </Modal.Footer>
             </Modal>
         </span>  
-
     );
 }
 
